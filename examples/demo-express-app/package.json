@@ -1,0 +1,28 @@
+{
+  "name": "demo-express-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "start": "tsx src/main.ts",
+    "dev": "tsx --watch src/main.ts",
+    "lint": "eslint --ext .ts src"
+  },
+  "dependencies": {
+    "@sunra/client": "workspace:*",
+    "@sunra/server-proxy": "workspace:*",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.5",
+    "tsx": "^4.19.3"
+  },
+  "author": "",
+  "license": "ISC"
+}

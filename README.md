@@ -1,84 +1,106 @@
-# Turborepo starter
+# The sunra.ai JS client
 
-This Turborepo starter is maintained by the Turborepo core team.
+![@sunra-ai/client npm package](https://img.shields.io/npm/v/@sunra-ai/client?color=%237527D7&label=client&style=flat-square)
+![@sunra-ai/server-proxy npm package](https://img.shields.io/npm/v/@sunra-ai/server-proxy?color=%237527D7&label=proxy&style=flat-square)
+![Build](https://img.shields.io/github/actions/workflow/status/sunra-ai/sunra-js/build.yml?style=flat-square)
+![License](https://img.shields.io/github/license/sunra-ai/sunra-js?style=flat-square)
 
-## Using this example
+## About the Project
 
-Run the following command:
+The sunra JavaScript/TypeScript Client is a robust and user-friendly library designed for seamless integration of sunra endpoints in Web, Node.js, and React Native applications. Developed in TypeScript, it provides developers with type safety right from the start.
 
-```sh
-npx create-turbo@latest
-```
+## Getting Started
 
-## What's inside?
+The `@sunra-ai/client` library serves as a client for sunra apps hosted on sunra. For guidance on consuming and creating apps, refer to the [quickstart guide](https://sunra.ai/docs).
 
-This Turborepo includes the following packages/apps:
+### Client Library
 
-### Apps and Packages
+This client library is crafted as a lightweight layer atop platform standards like `fetch`. This ensures a hassle-free integration into your existing codebase. Moreover, it addresses platform disparities, guaranteeing flawless operation across various JavaScript runtimes.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+> **Note:**
+> Ensure you've reviewed the [getting started guide](https://sunra.ai/docs) to acquire your credentials, browser existing APIs, or create your custom functions.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+1. Install the client library
+   ```sh
+   npm install --save @sunra-ai/client
+   ```
+2. Start by configuring your credentials:
 
-### Utilities
+   ```ts
+   import { sunra } from "@sunra-ai/client";
 
-This Turborepo has some additional tools already setup for you:
+   sunra.config({
+     // Can also be auto-configured using environment variables:
+     credentials: "SUNRA_KEY",
+   });
+   ```
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+3. Retrieve your function id and execute it:
+   ```ts
+   const result = await sunra.run("user/app-alias");
+   ```
 
-### Build
+The result's type is contingent upon your Python function's output. Types in Python are mapped to their corresponding types in JavaScript.
 
-To build all apps and packages, run the following command:
+See the available [model APIs](https://sunra.ai/models) for more details.
 
-```
-cd my-turborepo
-pnpm build
-```
+### The sunra client proxy
 
-### Develop
+Although the sunra client is designed to work in any JS environment, including directly in your browser, **it is not recommended** to store your credentials in your client source code. The common practice is to use your own server to serve as a proxy to sunra APIs. Luckily sunra supports that out-of-the-box with plug-and-play proxy functions for the most common engines/frameworks.
 
-To develop all apps and packages, run the following command:
+For example, if you are using Next.js, you can:
 
-```
-cd my-turborepo
-pnpm dev
-```
+1. Instal the proxy library
+   ```sh
+   npm install --save @sunra-ai/server-proxy
+   ```
+2. Add the proxy as an API endpoint of your app, see an example here in [pages/api/sunra/proxy.ts](https://github.com/sunra-ai/sunra-js/blob/main/apps/demo-nextjs-page-router/pages/api/sunra/proxy.ts)
+   ```ts
+   export { handler as default } from "@sunra-ai/server-proxy/nextjs";
+   ```
+3. Configure the client to use the proxy:
+   ```ts
+   import { sunra } from "@sunra-ai/client";
+   sunra.config({
+     proxyUrl: "/api/sunra/proxy",
+   });
+   ```
+4. Make sure your server has `SUNRA_KEY` as environment variable with a valid API Key. That's it! Now your client calls will route through your server proxy, so your credentials are protected.
 
-### Remote Caching
+See [libs/proxy](./libs/proxy/) for more details.
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+### The example Next.js app
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+You can find a minimal Next.js + sunra application examples in [apps/demo-nextjs-page-router/](https://github.com/sunra-ai/sunra-js/blob/main/apps/demo-nextjs-page-router).
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+1. Run `npm install` on the repository root.
+2. Create a `.env.local` file and add your API Key as `SUNRA_KEY` environment variable (or export it any other way your prefer).
+3. Run `npx nx serve demo-nextjs-page-router` to start the Next.js app (`demo-nextjs-app-router` is also available if you're interested in the app router version).
 
-```
-cd my-turborepo
-npx turbo login
-```
+Check our [Next.js integration docs](https://sunra.ai/docs/integrations/nextjs) for more details.
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Roadmap
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+See the [open feature requests](https://github.com/sunra-ai/sunra-js/labels/enhancement) for a list of proposed features and join the discussion.
 
-```
-npx turbo link
-```
+## Contributing
 
-## Useful Links
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-Learn more about the power of Turborepo:
+1. Make sure you read our [Code of Conduct](https://github.com/sunra-ai/sunra-js/blob/main/CODE_OF_CONDUCT.md)
+2. Fork the project and clone your fork
+3. Setup the local environment with `npm install`
+4. Create a feature branch (`git checkout -b feature/add-cool-thing`) or a bugfix branch (`git checkout -b fix/smash-that-bug`)
+5. Commit the changes (`git commit -m 'feat(client): added a cool thing'`) - use [conventional commits](https://conventionalcommits.org)
+6. Push to the branch (`git push --set-upstream origin feature/add-cool-thing`)
+7. Open a Pull Request
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+Check the [good first issue queue](https://github.com/sunra-ai/sunra-js/labels/good+first+issue), your contribution will be welcome!
+
+## License
+
+Distributed under the MIT License. See [LICENSE](https://github.com/sunra-ai/sunra-js/blob/main/LICENSE) for more information.
+
+## Credits
+
+This project is derived from [fal-ai/fal-js](https://github.com/fal-ai/fal-js) and adapted to work with sunra.ai. The original project is licensed under the MIT License. We extend our gratitude to the original authors for their contributions.

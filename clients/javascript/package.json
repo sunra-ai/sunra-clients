@@ -1,0 +1,49 @@
+{
+  "name": "@sunra/client",
+  "description": "The sunra client for JavaScript and TypeScript",
+  "version": "1.2.3",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sunra/sunra-js.git",
+    "directory": "libs/client"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsc -p ./tsconfig.lib.json",
+    "dev": "tsc  -p ./tsconfig.lib.json --watch",
+    "lint": "eslint --ext .ts src"
+  },
+  "keywords": [
+    "sunra",
+    "client",
+    "ai",
+    "ml",
+    "typescript"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./endpoints": "./dist/types/endpoints.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@msgpack/msgpack": "^3.0.0-beta2",
+    "eventsource-parser": "^1.1.2",
+    "robot3": "^0.4.1"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.13.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
