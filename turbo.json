@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": ["SUNRA_QUEUE_DOMAIN", "SUNRA_KEY", "SUNRA_KEY_ID", "SUNRA_KEY_SECRET", "PORT", "SUNRA_API_ENDPOINT"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
