@@ -129,6 +129,14 @@ export async function handleRequest<ResponseType>(
     }
   });
 
+  try {
+    EXCLUDED_HEADERS.forEach((key) => {
+      res.headers.delete(key)
+    })
+  } catch {
+    // do nothing
+  }
+
   return behavior.sendResponse(res);
 }
 

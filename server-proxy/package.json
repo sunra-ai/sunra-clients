@@ -16,6 +16,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "tsc -p ./tsconfig.lib.json",
     "dev": "tsc -p ./tsconfig.lib.json --watch",
     "lint": "eslint --ext .ts src"
