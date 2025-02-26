@@ -1,11 +1,12 @@
 import { getUserAgent, isBrowser } from "./runtime";
+import { describe, expect, test } from 'vitest'
 
 describe("the runtime test suite", () => {
-  it("should return false when calling isBrowser() on a test", () => {
+  test("should return false when calling isBrowser() on a test", () => {
     expect(isBrowser()).toBe(false);
   });
 
-  it("should return true when calling isBrowser() and window is present", () => {
+  test("should return true when calling isBrowser() and window is present", () => {
     global.window = {
       document: {},
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,7 +14,7 @@ describe("the runtime test suite", () => {
     expect(isBrowser()).toBe(true);
   });
 
-  it("should create the correct user agent identifier", () => {
+  test("should create the correct user agent identifier", () => {
     expect(getUserAgent()).toMatch(/@sunra\/client/);
   });
 });

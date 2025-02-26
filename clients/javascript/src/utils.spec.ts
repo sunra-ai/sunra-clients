@@ -1,22 +1,23 @@
 import { ensureEndpointIdFormat, parseEndpointId } from "./utils";
+import { describe, expect, test } from 'vitest'
 
 describe("The utils test suite", () => {
-  it("shoud match a current appOwner/appId format", () => {
+  test("shoud match a current appOwner/appId format", () => {
     const id = "sunra/fast-sdxl";
     expect(ensureEndpointIdFormat(id)).toBe(id);
   });
 
-  it("shoud match a current appOwner/appId/path format", () => {
+  test("shoud match a current appOwner/appId/path format", () => {
     const id = "sunra/fast-sdxl/image-to-image";
     expect(ensureEndpointIdFormat(id)).toBe(id);
   });
 
-  it("should throw on an invalid app id format", () => {
+  test("should throw on an invalid app id format", () => {
     const id = "just-an-id";
     expect(() => ensureEndpointIdFormat(id)).toThrowError();
   });
 
-  it("should parse a current app id", () => {
+  test("should parse a current app id", () => {
     const id = "sunra/fast-sdxl";
     const parsed = parseEndpointId(id);
     expect(parsed).toEqual({
@@ -25,7 +26,7 @@ describe("The utils test suite", () => {
     });
   });
 
-  it("should parse a current app id with path", () => {
+  test("should parse a current app id with path", () => {
     const id = "sunra/fast-sdxl/image-to-image";
     const parsed = parseEndpointId(id);
     expect(parsed).toEqual({
@@ -35,7 +36,7 @@ describe("The utils test suite", () => {
     });
   });
 
-  it("should parse a current app id with namespace", () => {
+  test("should parse a current app id with namespace", () => {
     const id = "workflows/sunra/fast-sdxl";
     const parsed = parseEndpointId(id);
     expect(parsed).toEqual({

@@ -1,7 +1,8 @@
 import { createConfig } from "./config";
+import { describe, expect, test } from 'vitest'
 
 describe("The config test suite", () => {
-  it("should set the config variables accordingly", () => {
+  test("should set the config variables accordingly", () => {
     const newConfig = {
       credentials: "key-id:key-secret",
     };

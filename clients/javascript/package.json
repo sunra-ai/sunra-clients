@@ -19,7 +19,8 @@
     "prepublishOnly": "npm run build",
     "build": "tsc -p ./tsconfig.lib.json",
     "dev": "tsc -p ./tsconfig.lib.json --watch",
-    "lint": "eslint --ext .ts src"
+    "lint": "eslint --ext .ts src",
+    "test": "vitest run --dir ."
   },
   "keywords": [
     "sunra",
@@ -41,7 +42,8 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.13.5"
+    "@types/node": "^22.13.5",
+    "vitest": "^3.0.7"
   },
   "engines": {
     "node": ">=18.0.0"
