@@ -1,3 +1,5 @@
+import { debug } from "./utils";
+
 export const TARGET_URL_HEADER = "x-sunra-target-url";
 
 export const DEFAULT_PROXY_ROUTE = "/api/sunra/proxy";
@@ -71,6 +73,7 @@ export async function handleRequest<ResponseType>(
   behavior: ProxyBehavior<ResponseType>,
 ) {
   const targetUrl = singleHeaderValue(behavior.getHeader(TARGET_URL_HEADER));
+  debug("targetUrl: ", targetUrl);
   if (!targetUrl) {
     return behavior.respondWith(400, `Missing the ${TARGET_URL_HEADER} header`);
   }
@@ -96,6 +99,8 @@ export async function handleRequest<ResponseType>(
   });
 
   const proxyUserAgent = `@sunra/server-proxy/${behavior.id}`;
+  debug('proxyUserAgent: ', proxyUserAgent);
+
   const userAgent = singleHeaderValue(behavior.getHeader("user-agent"));
   const res = await fetch(targetUrl, {
     method: behavior.method,
@@ -114,6 +119,8 @@ export async function handleRequest<ResponseType>(
         ? undefined
         : await behavior.getRequestBody(),
   });
+
+  debug("response: ", res);
 
   // copy headers from sunra to the proxied response
   res.headers.forEach((value, key) => {
