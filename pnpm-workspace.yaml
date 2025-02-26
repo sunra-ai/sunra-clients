@@ -2,6 +2,6 @@ packages:
   - "apps/*"
   - "packages/*"
   - "clients/*"
-  - "create-app/*"
+  - "create-app"
   - "examples/*"
   - "server-proxy"

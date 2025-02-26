@@ -1,7 +1,7 @@
 {
   "name": "@sunra/client",
   "description": "The sunra client for JavaScript and TypeScript",
-  "version": "1.2.3",
+  "version": "0.1.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "tsc -p ./tsconfig.lib.json",
-    "dev": "tsc  -p ./tsconfig.lib.json --watch",
+    "dev": "tsc -p ./tsconfig.lib.json --watch",
     "lint": "eslint --ext .ts src"
   },
   "keywords": [
