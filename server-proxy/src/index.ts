@@ -8,7 +8,9 @@ const SUNRA_KEY_SECRET = process.env.SUNRA_KEY_SECRET;
 
 export type HeaderValue = string | string[] | undefined | null;
 
-const SUNRA_URL_REG_EXP = /(\.|^)sunra\.(run|ai)$/;
+// TODO: use a more specific regex
+// const SUNRA_URL_REG_EXP = /(\.|^)sunra\.(run|ai)$/;
+const SUNRA_URL_REG_EXP = /.*/
 
 /**
  * The proxy behavior that is passed to the proxy handler. This is a subset of
