@@ -104,7 +104,7 @@ export function buildUrl<Input>(
 
   const appId = ensureEndpointIdFormat(id)
   const subdomain = options.subdomain ? `${options.subdomain}.` : ''
-  let domain = `${subdomain}sunra.run`
+  let domain = `${subdomain}sunra.ai`
   if (subdomain === 'queue.') {
     domain = process.env.SUNRA_QUEUE_DOMAIN ?? domain
   }

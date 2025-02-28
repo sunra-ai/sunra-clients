@@ -1,6 +1,6 @@
 import { debug } from './utils'
 import fetchToCurl from 'fetch-to-curl'
-// import { HttpsProxyAgent } from 'https-proxy-agent'
+import { HttpsProxyAgent } from 'https-proxy-agent'
 
 export const TARGET_URL_HEADER = 'x-sunra-target-url'
 export const DEFAULT_PROXY_ROUTE = '/api/sunra/proxy'
@@ -15,6 +15,8 @@ export type HeaderValue = string | string[] | undefined | null;
 // const SUNRA_URL_REG_EXP = /(\.|^)sunra\.(run|ai)$/;
 const SUNRA_URL_REG_EXP = /.*/
 
+const agent = process.env.HTTPS_PROXY ? new HttpsProxyAgent(process.env.HTTPS_PROXY) : undefined
+
 /**
  * The proxy behavior that is passed to the proxy handler. This is a subset of
  * request objects that are used by different frameworks, like Express and NextJS.
@@ -22,7 +24,7 @@ const SUNRA_URL_REG_EXP = /.*/
 export interface ProxyBehavior<ResponseType> {
   id: string;
   method: string;
-   
+
   respondWith(status: number, data: string | any): ResponseType;
   sendResponse(response: Response): Promise<ResponseType>;
   getHeaders(): Record<string, HeaderValue>;
@@ -120,7 +122,8 @@ export async function handleRequest<ResponseType>(
   const fetchParams = {
     method: behavior.method,
     headers: realHeaders,
-    body
+    body,
+    agent
   }
 
   debug('fetch to curl: ', fetchToCurl(targetUrl, fetchParams))
