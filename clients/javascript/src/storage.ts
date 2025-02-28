@@ -1,6 +1,6 @@
-import { getRestApiUrl, RequiredConfig } from "./config";
-import { dispatchRequest } from "./request";
-import { isPlainObject } from "./utils";
+import { getRestApiUrl, RequiredConfig } from './config'
+import { dispatchRequest } from './request'
+import { isPlainObject } from './utils'
 /**
  * File support for the client. This interface establishes the contract for
  * uploading files to the server and transforming the input to replace file
@@ -23,7 +23,7 @@ export interface StorageClient {
    * @param input the input to transform.
    * @returns the transformed input.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   transformInput: (input: Record<string, any>) => Promise<Record<string, any>>;
 }
 
@@ -45,8 +45,8 @@ type InitiateUploadData = {
  * @returns the file extension or `bin` if the content type is not recognized.
  */
 function getExtensionFromContentType(contentType: string): string {
-  const [_, fileType] = contentType.split("/");
-  return fileType?.split(/[-;]/)[0] ?? "bin";
+  const [, fileType] = contentType.split('/')
+  return fileType?.split(/[-;]/)[0] ?? 'bin'
 }
 
 /**
@@ -59,10 +59,10 @@ async function initiateUpload(
   contentType: string,
 ): Promise<InitiateUploadResult> {
   const filename =
-    (file as File).name || `${Date.now()}.${getExtensionFromContentType(contentType)}`;
+    (file as File).name || `${Date.now()}.${getExtensionFromContentType(contentType)}`
 
   return await dispatchRequest<InitiateUploadData, InitiateUploadResult>({
-    method: "POST",
+    method: 'POST',
     // NOTE: We want to test V3 without making it the default at the API level
     targetUrl: `${getRestApiUrl()}/storage/upload/initiate?storage_type=sunra-cdn-v3`,
     input: {
@@ -70,7 +70,7 @@ async function initiateUpload(
       file_name: filename,
     },
     config,
-  });
+  })
 }
 
 /**
@@ -83,17 +83,17 @@ async function initiateMultipartUpload(
   contentType: string,
 ): Promise<InitiateUploadResult> {
   const filename =
-    (file as File).name || `${Date.now()}.${getExtensionFromContentType(contentType)}`;
+    (file as File).name || `${Date.now()}.${getExtensionFromContentType(contentType)}`
 
   return await dispatchRequest<InitiateUploadData, InitiateUploadResult>({
-    method: "POST",
+    method: 'POST',
     targetUrl: `${getRestApiUrl()}/storage/upload/initiate-multipart?storage_type=sunra-cdn-v3`,
     input: {
       content_type: contentType,
       file_name: filename,
     },
     config,
-  });
+  })
 }
 
 type MultipartObject = {
@@ -108,20 +108,20 @@ async function partUploadRetries(
   tries = 3,
 ): Promise<MultipartObject> {
   if (tries === 0) {
-    throw new Error("Part upload failed, retries exhausted");
+    throw new Error('Part upload failed, retries exhausted')
   }
 
-  const { fetch, responseHandler } = config;
+  const { fetch, responseHandler } = config
 
   try {
     const response = await fetch(uploadUrl, {
-      method: "PUT",
+      method: 'PUT',
       body: chunk,
-    });
+    })
 
-    return (await responseHandler(response)) as MultipartObject;
-  } catch (error) {
-    return await partUploadRetries(uploadUrl, chunk, config, tries - 1);
+    return (await responseHandler(response)) as MultipartObject
+  } catch {
+    return await partUploadRetries(uploadUrl, chunk, config, tries - 1)
   }
 }
 
@@ -129,38 +129,38 @@ async function multipartUpload(
   file: Blob,
   config: RequiredConfig,
 ): Promise<string> {
-  const { fetch, responseHandler } = config;
-  const contentType = file.type || "application/octet-stream";
+  const { fetch, responseHandler } = config
+  const contentType = file.type || 'application/octet-stream'
   const { upload_url: uploadUrl, file_url: url } =
-    await initiateMultipartUpload(file, config, contentType);
+    await initiateMultipartUpload(file, config, contentType)
 
   // Break the file into 10MB chunks
-  const chunkSize = 10 * 1024 * 1024;
-  const chunks = Math.ceil(file.size / chunkSize);
+  const chunkSize = 10 * 1024 * 1024
+  const chunks = Math.ceil(file.size / chunkSize)
 
-  const parsedUrl = new URL(uploadUrl);
+  const parsedUrl = new URL(uploadUrl)
 
-  const responses: MultipartObject[] = [];
+  const responses: MultipartObject[] = []
 
   for (let i = 0; i < chunks; i++) {
-    const start = i * chunkSize;
-    const end = Math.min(start + chunkSize, file.size);
+    const start = i * chunkSize
+    const end = Math.min(start + chunkSize, file.size)
 
-    const chunk = file.slice(start, end);
+    const chunk = file.slice(start, end)
 
-    const partNumber = i + 1;
+    const partNumber = i + 1
     // {uploadUrl}/{part_number}?uploadUrlParams=...
-    const partUploadUrl = `${parsedUrl.origin}${parsedUrl.pathname}/${partNumber}${parsedUrl.search}`;
+    const partUploadUrl = `${parsedUrl.origin}${parsedUrl.pathname}/${partNumber}${parsedUrl.search}`
 
-    responses.push(await partUploadRetries(partUploadUrl, chunk, config));
+    responses.push(await partUploadRetries(partUploadUrl, chunk, config))
   }
 
   // Complete the upload
-  const completeUrl = `${parsedUrl.origin}${parsedUrl.pathname}/complete${parsedUrl.search}`;
+  const completeUrl = `${parsedUrl.origin}${parsedUrl.pathname}/complete${parsedUrl.search}`
   const response = await fetch(completeUrl, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       parts: responses.map((mpart) => ({
@@ -168,13 +168,13 @@ async function multipartUpload(
         etag: mpart.etag,
       })),
     }),
-  });
-  await responseHandler(response);
+  })
+  await responseHandler(response)
 
-  return url;
+  return url
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 type KeyValuePair = [string, any];
 
 type StorageClientDependencies = {
@@ -188,47 +188,47 @@ export function createStorageClient({
     upload: async (file: Blob) => {
       // Check for 90+ MB file size to do multipart upload
       if (file.size > 90 * 1024 * 1024) {
-        return await multipartUpload(file, config);
+        return await multipartUpload(file, config)
       }
 
-      const contentType = file.type || "application/octet-stream";
+      const contentType = file.type || 'application/octet-stream'
 
-      const { fetch, responseHandler } = config;
+      const { fetch, responseHandler } = config
       const { upload_url: uploadUrl, file_url: url } = await initiateUpload(
         file,
         config,
         contentType,
-      );
+      )
       const response = await fetch(uploadUrl, {
-        method: "PUT",
+        method: 'PUT',
         body: file,
         headers: {
-          "Content-Type": file.type || "application/octet-stream",
+          'Content-Type': file.type || 'application/octet-stream',
         },
-      });
-      await responseHandler(response);
-      return url;
+      })
+      await responseHandler(response)
+      return url
     },
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     transformInput: async (input: any): Promise<any> => {
       if (Array.isArray(input)) {
-        return Promise.all(input.map((item) => ref.transformInput(item)));
+        return Promise.all(input.map((item) => ref.transformInput(item)))
       } else if (input instanceof Blob) {
-        return await ref.upload(input);
+        return await ref.upload(input)
       } else if (isPlainObject(input)) {
-        const inputObject = input as Record<string, any>;
+        const inputObject = input as Record<string, any>
         const promises = Object.entries(inputObject).map(
           async ([key, value]): Promise<KeyValuePair> => {
-            return [key, await ref.transformInput(value)];
+            return [key, await ref.transformInput(value)]
           },
-        );
-        const results = await Promise.all(promises);
-        return Object.fromEntries(results);
+        )
+        const results = await Promise.all(promises)
+        return Object.fromEntries(results)
       }
       // Return the input as is if it's neither an object nor a file/blob/data URI
-      return input;
+      return input
     },
-  };
-  return ref;
+  }
+  return ref
 }

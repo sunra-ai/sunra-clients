@@ -1,16 +1,16 @@
-import { NextResponse, type NextRequest } from "next/server";
-import type { NextApiHandler } from "next/types";
+import { NextResponse, type NextRequest } from 'next/server'
+import type { NextApiHandler } from 'next/types'
 import {
   DEFAULT_PROXY_ROUTE,
   fromHeaders,
   handleRequest,
   responsePassthrough,
-} from "./index";
+} from './index'
 
 /**
  * The default Next API route for the sunra client proxy.
  */
-export const PROXY_ROUTE = DEFAULT_PROXY_ROUTE;
+export const PROXY_ROUTE = DEFAULT_PROXY_ROUTE
 
 /**
  * The Next API route handler for the sunra client proxy.
@@ -24,21 +24,21 @@ export const PROXY_ROUTE = DEFAULT_PROXY_ROUTE;
  */
 export const handler: NextApiHandler = async (request, response) => {
   return handleRequest({
-    id: "nextjs-page-router",
-    method: request.method || "POST",
+    id: 'nextjs-page-router',
+    method: request.method || 'POST',
     getRequestBody: async () => JSON.stringify(request.body),
     getHeaders: () => request.headers,
     getHeader: (name) => request.headers[name],
     sendHeader: (name, value) => response.setHeader(name, value),
     respondWith: (status, data) => response.status(status).json(data),
     sendResponse: async (res) => {
-      if (res.headers.get("content-type")?.includes("application/json")) {
-        return response.status(res.status).json(await res.json());
+      if (res.headers.get('content-type')?.includes('application/json')) {
+        return response.status(res.status).json(await res.json())
       }
-      return response.status(res.status).send(await res.text());
+      return response.status(res.status).send(await res.text())
     },
-  });
-};
+  })
+}
 
 /**
  * The Next API route handler for the sunra client proxy on App Router apps.
@@ -47,9 +47,9 @@ export const handler: NextApiHandler = async (request, response) => {
  * @returns a promise that resolves when the request is handled.
  */
 async function routeHandler(request: NextRequest) {
-  const responseHeaders = new Headers();
+  const responseHeaders = new Headers()
   return await handleRequest({
-    id: "nextjs-app-router",
+    id: 'nextjs-app-router',
     method: request.method,
     getRequestBody: async () => request.text(),
     getHeaders: () => fromHeaders(request.headers),
@@ -61,7 +61,7 @@ async function routeHandler(request: NextRequest) {
         headers: responseHeaders,
       }),
     sendResponse: responsePassthrough,
-  });
+  })
 }
 
 export const route = {
@@ -69,4 +69,4 @@ export const route = {
   GET: routeHandler,
   POST: routeHandler,
   PUT: routeHandler,
-};
+}

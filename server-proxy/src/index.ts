@@ -1,12 +1,13 @@
-import { debug } from "./utils";
+import { debug } from './utils'
+import fetchToCurl from 'fetch-to-curl'
+// import { HttpsProxyAgent } from 'https-proxy-agent'
 
-export const TARGET_URL_HEADER = "x-sunra-target-url";
+export const TARGET_URL_HEADER = 'x-sunra-target-url'
+export const DEFAULT_PROXY_ROUTE = '/api/sunra/proxy'
 
-export const DEFAULT_PROXY_ROUTE = "/api/sunra/proxy";
-
-const SUNRA_KEY = process.env.SUNRA_KEY;
-const SUNRA_KEY_ID = process.env.SUNRA_KEY_ID;
-const SUNRA_KEY_SECRET = process.env.SUNRA_KEY_SECRET;
+const SUNRA_KEY = process.env.SUNRA_KEY
+const SUNRA_KEY_ID = process.env.SUNRA_KEY_ID
+const SUNRA_KEY_SECRET = process.env.SUNRA_KEY_SECRET
 
 export type HeaderValue = string | string[] | undefined | null;
 
@@ -21,7 +22,7 @@ const SUNRA_URL_REG_EXP = /.*/
 export interface ProxyBehavior<ResponseType> {
   id: string;
   method: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   respondWith(status: number, data: string | any): ResponseType;
   sendResponse(response: Response): Promise<ResponseType>;
   getHeaders(): Record<string, HeaderValue>;
@@ -40,25 +41,25 @@ export interface ProxyBehavior<ResponseType> {
  */
 function singleHeaderValue(value: HeaderValue): string | undefined {
   if (!value) {
-    return undefined;
+    return undefined
   }
   if (Array.isArray(value)) {
-    return value[0];
+    return value[0]
   }
-  return value;
+  return value
 }
 
 function getSunraKey(): string | undefined {
   if (SUNRA_KEY) {
-    return SUNRA_KEY;
+    return SUNRA_KEY
   }
   if (SUNRA_KEY_ID && SUNRA_KEY_SECRET) {
-    return `${SUNRA_KEY_ID}:${SUNRA_KEY_SECRET}`;
+    return `${SUNRA_KEY_ID}:${SUNRA_KEY_SECRET}`
   }
-  return undefined;
+  return undefined
 }
 
-const EXCLUDED_HEADERS = ["content-length", "content-encoding"];
+const EXCLUDED_HEADERS = ['content-length', 'content-encoding']
 
 /**
  * A request handler that proxies the request to the sunra API
@@ -72,62 +73,68 @@ const EXCLUDED_HEADERS = ["content-length", "content-encoding"];
 export async function handleRequest<ResponseType>(
   behavior: ProxyBehavior<ResponseType>,
 ) {
-  const targetUrl = singleHeaderValue(behavior.getHeader(TARGET_URL_HEADER));
-  debug("targetUrl: ", targetUrl);
+  const targetUrl = singleHeaderValue(behavior.getHeader(TARGET_URL_HEADER))
+  debug('targetUrl: ', targetUrl)
   if (!targetUrl) {
-    return behavior.respondWith(400, `Missing the ${TARGET_URL_HEADER} header`);
+    return behavior.respondWith(400, `Missing the ${TARGET_URL_HEADER} header`)
   }
 
-  const urlHost = new URL(targetUrl).host;
+  const urlHost = new URL(targetUrl).host
   if (!SUNRA_URL_REG_EXP.test(urlHost)) {
-    return behavior.respondWith(412, `Invalid ${TARGET_URL_HEADER} header`);
+    return behavior.respondWith(412, `Invalid ${TARGET_URL_HEADER} header`)
   }
 
   const sunraKey = behavior.resolveApiKey
     ? await behavior.resolveApiKey()
-    : getSunraKey();
+    : getSunraKey()
   if (!sunraKey) {
-    return behavior.respondWith(401, "Missing sunra credentials");
+    return behavior.respondWith(401, 'Missing sunra credentials')
   }
 
   // pass over headers prefixed with x-sunra-*
-  const headers: Record<string, HeaderValue> = {};
+  const headers: Record<string, HeaderValue> = {}
   Object.keys(behavior.getHeaders()).forEach((key) => {
-    if (key.toLowerCase().startsWith("x-sunra-")) {
-      headers[key.toLowerCase()] = behavior.getHeader(key);
+    if (key.toLowerCase().startsWith('x-sunra-')) {
+      headers[key.toLowerCase()] = behavior.getHeader(key)
     }
-  });
+  })
 
-  const proxyUserAgent = `@sunra/server-proxy/${behavior.id}`;
-  debug('proxyUserAgent: ', proxyUserAgent);
+  const proxyUserAgent = `@sunra/server-proxy/${behavior.id}`
+  const userAgent = singleHeaderValue(behavior.getHeader('user-agent'))
 
-  const userAgent = singleHeaderValue(behavior.getHeader("user-agent"));
-  const res = await fetch(targetUrl, {
+  const realHeaders = {
+    ...headers,
+    authorization:
+      singleHeaderValue(behavior.getHeader('authorization')) ??
+      `Key ${sunraKey}`,
+    accept: 'application/json',
+    'content-type': 'application/json',
+    'user-agent': userAgent,
+    'x-sunra-client-proxy': proxyUserAgent,
+  } as HeadersInit
+
+  const body = behavior.method?.toUpperCase() === 'GET'
+    ? undefined
+    : await behavior.getRequestBody()
+
+  const fetchParams = {
     method: behavior.method,
-    headers: {
-      ...headers,
-      authorization:
-        singleHeaderValue(behavior.getHeader("authorization")) ??
-        `Key ${sunraKey}`,
-      accept: "application/json",
-      "content-type": "application/json",
-      "user-agent": userAgent,
-      "x-sunra-client-proxy": proxyUserAgent,
-    } as HeadersInit,
-    body:
-      behavior.method?.toUpperCase() === "GET"
-        ? undefined
-        : await behavior.getRequestBody(),
-  });
+    headers: realHeaders,
+    body
+  }
 
-  debug("response: ", res);
+  debug('fetch to curl: ', fetchToCurl(targetUrl, fetchParams))
+
+  const res = await fetch(targetUrl, fetchParams)
+
+  debug('response: ', res)
 
   // copy headers from sunra to the proxied response
   res.headers.forEach((value, key) => {
     if (!EXCLUDED_HEADERS.includes(key.toLowerCase())) {
-      behavior.sendHeader(key, value);
+      behavior.sendHeader(key, value)
     }
-  });
+  })
 
   try {
     EXCLUDED_HEADERS.forEach((key) => {
@@ -137,7 +144,7 @@ export async function handleRequest<ResponseType>(
     // do nothing
   }
 
-  return behavior.sendResponse(res);
+  return behavior.sendResponse(res)
 }
 
 export function fromHeaders(
@@ -145,13 +152,13 @@ export function fromHeaders(
 ): Record<string, string | string[]> {
   // TODO once Header.entries() is available, use that instead
   // Object.fromEntries(headers.entries());
-  const result: Record<string, string | string[]> = {};
+  const result: Record<string, string | string[]> = {}
   headers.forEach((value, key) => {
-    result[key] = value;
-  });
-  return result;
+    result[key] = value
+  })
+  return result
 }
 
-export const responsePassthrough = (res: Response) => Promise.resolve(res);
+export const responsePassthrough = (res: Response) => Promise.resolve(res)
 
-export const resolveApiKeyFromEnv = () => Promise.resolve(getSunraKey());
+export const resolveApiKeyFromEnv = () => Promise.resolve(getSunraKey())

@@ -172,7 +172,7 @@ export default function ComfyImageToImagePage() {
         <div className="flex w-full flex-col space-y-4">
           <div className="mx-auto">
             {video && (
-              // eslint-disable-next-line @next/next/no-img-element
+               
               <img src={video.url} alt="" />
             )}
           </div>

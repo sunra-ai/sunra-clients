@@ -4,13 +4,13 @@ import type {
   LoaderFunction,
   LoaderFunctionArgs,
   json as jsonFunction,
-} from "@remix-run/node";
+} from '@remix-run/node'
 import {
   fromHeaders,
   handleRequest,
   resolveApiKeyFromEnv,
   responsePassthrough,
-} from "./index";
+} from './index'
 
 export type SunraRemixProxy = {
   action: ActionFunction;
@@ -37,9 +37,9 @@ export function createProxy({
   const proxy = async ({
     request,
   }: ActionFunctionArgs | LoaderFunctionArgs) => {
-    const responseHeaders = new Headers();
+    const responseHeaders = new Headers()
     return handleRequest({
-      id: "remix",
+      id: 'remix',
       method: request.method,
       respondWith: (status, data) =>
         json(data, { status, headers: responseHeaders }),
@@ -49,10 +49,10 @@ export function createProxy({
       getRequestBody: async () => JSON.stringify(await request.json()),
       sendResponse: responsePassthrough,
       resolveApiKey,
-    });
-  };
+    })
+  }
   return {
     action: proxy,
     loader: proxy,
-  };
+  }
 }

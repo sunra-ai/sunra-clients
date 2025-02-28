@@ -19,7 +19,8 @@
     "prepublishOnly": "npm run build",
     "build": "tsc -p ./tsconfig.lib.json",
     "dev": "tsc -p ./tsconfig.lib.json --watch",
-    "lint": "eslint --ext .ts src"
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
@@ -100,6 +101,8 @@
     }
   },
   "dependencies": {
-    "debug": "^4.4.0"
+    "debug": "^4.4.0",
+    "fetch-to-curl": "^0.6.0",
+    "https-proxy-agent": "^7.0.6"
   }
 }

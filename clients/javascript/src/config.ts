@@ -2,22 +2,22 @@ import {
   withMiddleware,
   withProxy,
   type RequestMiddleware,
-} from "./middleware";
-import type { ResponseHandler } from "./response";
-import { defaultResponseHandler } from "./response";
-import { isBrowser } from "./runtime";
+} from './middleware'
+import type { ResponseHandler } from './response'
+import { defaultResponseHandler } from './response'
+import { isBrowser } from './runtime'
 
 export type CredentialsResolver = () => string | undefined;
 
 type FetchType = typeof fetch;
 
 export function resolveDefaultFetch(): FetchType {
-  if (typeof fetch === "undefined") {
+  if (typeof fetch === 'undefined') {
     throw new Error(
-      "Your environment does not support fetch. Please provide your own fetch implementation.",
-    );
+      'Your environment does not support fetch. Please provide your own fetch implementation.',
+    )
   }
-  return fetch;
+  return fetch
 }
 
 export type Config = {
@@ -71,34 +71,34 @@ export type RequiredConfig = Required<Config>;
  */
 function hasEnvVariables(): boolean {
   return (
-    typeof process !== "undefined" &&
+    typeof process !== 'undefined' &&
     process.env &&
-    (typeof process.env.SUNRA_KEY !== "undefined" ||
-      (typeof process.env.SUNRA_KEY_ID !== "undefined" &&
-        typeof process.env.SUNRA_KEY_SECRET !== "undefined"))
-  );
+    (typeof process.env.SUNRA_KEY !== 'undefined' ||
+      (typeof process.env.SUNRA_KEY_ID !== 'undefined' &&
+        typeof process.env.SUNRA_KEY_SECRET !== 'undefined'))
+  )
 }
 
 export const credentialsFromEnv: CredentialsResolver = () => {
   if (!hasEnvVariables()) {
-    return undefined;
+    return undefined
   }
 
-  if (typeof process.env.SUNRA_KEY !== "undefined") {
-    return process.env.SUNRA_KEY;
+  if (typeof process.env.SUNRA_KEY !== 'undefined') {
+    return process.env.SUNRA_KEY
   }
 
   return process.env.SUNRA_KEY_ID
     ? `${process.env.SUNRA_KEY_ID}:${process.env.SUNRA_KEY_SECRET}`
-    : undefined;
-};
+    : undefined
+}
 
 const DEFAULT_CONFIG: Partial<Config> = {
   credentials: credentialsFromEnv,
   suppressLocalCredentialsWarning: false,
   requestMiddleware: (request) => Promise.resolve(request),
   responseHandler: defaultResponseHandler,
-};
+}
 
 /**
  * Configures the sunra client.
@@ -110,7 +110,7 @@ export function createConfig(config: Config): RequiredConfig {
     ...DEFAULT_CONFIG,
     ...config,
     fetch: config.fetch ?? resolveDefaultFetch(),
-  } as RequiredConfig;
+  } as RequiredConfig
   if (config.proxyUrl) {
     configuration = {
       ...configuration,
@@ -118,26 +118,26 @@ export function createConfig(config: Config): RequiredConfig {
         configuration.requestMiddleware,
         withProxy({ targetUrl: config.proxyUrl }),
       ),
-    };
+    }
   }
   const { credentials: resolveCredentials, suppressLocalCredentialsWarning } =
-    configuration;
+    configuration
   const credentials =
-    typeof resolveCredentials === "function"
+    typeof resolveCredentials === 'function'
       ? resolveCredentials()
-      : resolveCredentials;
+      : resolveCredentials
   if (isBrowser() && credentials && !suppressLocalCredentialsWarning) {
     console.warn(
-      "The sunra credentials are exposed in the browser's environment. " +
-        "That's not recommended for production use cases.",
-    );
+      'The sunra credentials are exposed in the browser\'s environment. ' +
+        'That\'s not recommended for production use cases.',
+    )
   }
-  return configuration;
+  return configuration
 }
 
 /**
  * @returns the URL of the sunra REST api endpoint.
  */
 export function getRestApiUrl(): string {
-  return process.env.SUNRA_API_ENDPOINT ?? "https://rest.alpha.sunra.ai";
+  return process.env.SUNRA_API_ENDPOINT ?? 'https://apiv1.sunra.ai'
 }

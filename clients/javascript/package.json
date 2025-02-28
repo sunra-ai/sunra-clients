@@ -20,6 +20,7 @@
     "build": "tsc -p ./tsconfig.lib.json",
     "dev": "tsc -p ./tsconfig.lib.json --watch",
     "lint": "eslint --ext .ts src",
+    "lint:fix": "npm run lint -- --fix",
     "test": "vitest run --dir ."
   },
   "keywords": [

@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import packageInfo from '../package.json'
 
 export function isBrowser(): boolean {
   return (
-    typeof window !== "undefined" && typeof window.document !== "undefined"
-  );
+    typeof window !== 'undefined' && typeof window.document !== 'undefined'
+  )
 }
 
-let memoizedUserAgent: string | null = null;
+let memoizedUserAgent: string | null = null
 
 export function getUserAgent(): string {
   if (memoizedUserAgent !== null) {
-    return memoizedUserAgent;
+    return memoizedUserAgent
   }
-  const packageInfo = require("../package.json");
-  memoizedUserAgent = `${packageInfo.name}/${packageInfo.version}`;
-  return memoizedUserAgent;
+  memoizedUserAgent = `${packageInfo.name}/${packageInfo.version}`
+  return memoizedUserAgent
 }

@@ -3,5 +3,28 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "editor.formatOnSave": false,
+  "[tailwindcss]": {
+    "editor.formatOnSave": true
+  },
+  "[css]": {
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  },
+  "eslint.format.enable": true
 }

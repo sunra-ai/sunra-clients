@@ -1,12 +1,12 @@
-import { Config, createConfig } from "./config";
-import { createQueueClient, QueueClient, QueueSubscribeOptions } from "./queue";
-import { createRealtimeClient, RealtimeClient } from "./realtime";
-import { buildUrl, dispatchRequest } from "./request";
-import { resultResponseHandler } from "./response";
-import { createStorageClient, StorageClient } from "./storage";
-import { createStreamingClient, StreamingClient } from "./streaming";
-import { EndpointType, InputType, OutputType } from "./types/client";
-import { Result, RunOptions } from "./types/common";
+import { Config, createConfig } from './config'
+import { createQueueClient, QueueClient, QueueSubscribeOptions } from './queue'
+import { createRealtimeClient, RealtimeClient } from './realtime'
+import { buildUrl, dispatchRequest } from './request'
+import { resultResponseHandler } from './response'
+import { createStorageClient, StorageClient } from './storage'
+import { createStreamingClient, StreamingClient } from './streaming'
+import { EndpointType, InputType, OutputType } from './types/client'
+import { Result, RunOptions } from './types/common'
 
 /**
  * The main client type, it provides access to simple API model usage,
@@ -71,7 +71,7 @@ export interface SunraClient {
    * @param options the request options, including the input payload.
    * @returns the `SunraStream` instance.
    */
-  stream: StreamingClient["stream"];
+  stream: StreamingClient['stream'];
 }
 
 /**
@@ -80,11 +80,11 @@ export interface SunraClient {
  * @returns a new instance of the `SunraClient`.
  */
 export function createSunraClient(userConfig: Config = {}): SunraClient {
-  const config = createConfig(userConfig);
-  const storage = createStorageClient({ config });
-  const queue = createQueueClient({ config, storage });
-  const streaming = createStreamingClient({ config, storage });
-  const realtime = createRealtimeClient({ config });
+  const config = createConfig(userConfig)
+  const storage = createStorageClient({ config })
+  const queue = createQueueClient({ config, storage })
+  const streaming = createStreamingClient({ config, storage })
+  const realtime = createRealtimeClient({ config })
   return {
     queue,
     realtime,
@@ -97,7 +97,7 @@ export function createSunraClient(userConfig: Config = {}): SunraClient {
     ): Promise<Result<OutputType<Id>>> {
       const input = options.input
         ? await storage.transformInput(options.input)
-        : undefined;
+        : undefined
       return dispatchRequest<InputType<Id>, Result<OutputType<Id>>>({
         method: options.method,
         targetUrl: buildUrl(endpointId, options),
@@ -109,15 +109,15 @@ export function createSunraClient(userConfig: Config = {}): SunraClient {
         options: {
           signal: options.abortSignal,
         },
-      });
+      })
     },
     subscribe: async (endpointId, options) => {
-      const { request_id: requestId } = await queue.submit(endpointId, options);
+      const { request_id: requestId } = await queue.submit(endpointId, options)
       if (options.onEnqueue) {
-        options.onEnqueue(requestId);
+        options.onEnqueue(requestId)
       }
-      await queue.subscribeToStatus(endpointId, { requestId, ...options });
-      return queue.result(endpointId, { requestId });
+      await queue.subscribeToStatus(endpointId, { requestId, ...options })
+      return queue.result(endpointId, { requestId })
     },
-  };
+  }
 }

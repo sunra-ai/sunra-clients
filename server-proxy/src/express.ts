@@ -1,10 +1,10 @@
-import type { RequestHandler } from "express";
-import { DEFAULT_PROXY_ROUTE, handleRequest } from "./index";
+import type { RequestHandler } from 'express'
+import { DEFAULT_PROXY_ROUTE, handleRequest } from './index'
 
 /**
  * The default Express route for the sunra client proxy.
  */
-export const route = DEFAULT_PROXY_ROUTE;
+export const route = DEFAULT_PROXY_ROUTE
 
 /**
  * The Express route handler for the sunra client proxy.
@@ -15,7 +15,7 @@ export const route = DEFAULT_PROXY_ROUTE;
  */
 export const handler: RequestHandler = async (request, response, next) => {
   await handleRequest({
-    id: "express",
+    id: 'express',
     method: request.method,
     getRequestBody: async () => JSON.stringify(request.body),
     getHeaders: () => request.headers,
@@ -24,30 +24,30 @@ export const handler: RequestHandler = async (request, response, next) => {
     respondWith: (status, data) => response.status(status).json(data),
     sendResponse: async (res) => {
       if (res.body instanceof ReadableStream) {
-        const reader = res.body.getReader();
+        const reader = res.body.getReader()
         const stream = async () => {
-          const { done, value } = await reader.read();
+          const { done, value } = await reader.read()
           if (done) {
-            response.end();
-            return response;
+            response.end()
+            return response
           }
-          response.write(value);
-          return await stream();
-        };
+          response.write(value)
+          return await stream()
+        }
 
         return await stream().catch((error) => {
           if (!response.headersSent) {
-            response.status(500).send(error.message);
+            response.status(500).send(error.message)
           } else {
-            response.end();
+            response.end()
           }
-        });
+        })
       }
-      if (res.headers.get("content-type")?.includes("application/json")) {
-        return response.status(res.status).json(await res.json());
+      if (res.headers.get('content-type')?.includes('application/json')) {
+        return response.status(res.status).json(await res.json())
       }
-      return response.status(res.status).send(await res.text());
+      return response.status(res.status).send(await res.text())
     },
-  });
-  next();
-};
+  })
+  next()
+}
