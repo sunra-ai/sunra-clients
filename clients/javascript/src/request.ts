@@ -2,7 +2,8 @@ import { RequiredConfig } from './config'
 import { ResponseHandler } from './response'
 import { getUserAgent, isBrowser } from './runtime'
 import { RunOptions, UrlOptions } from './types/common'
-import { ensureEndpointIdFormat, isValidUrl } from './utils'
+import { debug, ensureEndpointIdFormat, isValidUrl } from './utils'
+import fetchToCurl from 'fetch-to-curl'
 
 const isCloudflareWorkers =
   typeof navigator !== 'undefined' &&
@@ -52,7 +53,7 @@ export async function dispatchRequest<Input, Output>(
   } as HeadersInit
 
   const { responseHandler: customResponseHandler, ...requestInit } = options
-  const response = await fetch(url, {
+  const fetchParams: RequestInit = {
     ...requestInit,
     method,
     headers: {
@@ -65,7 +66,11 @@ export async function dispatchRequest<Input, Output>(
       method.toLowerCase() !== 'get' && input
         ? JSON.stringify(input)
         : undefined,
-  })
+  }
+  const curlCommand = fetchToCurl(url, fetchParams)
+  debug('fetch to curl: ', curlCommand)
+
+  const response = await fetch(url, fetchParams)
   const handleResponse = customResponseHandler ?? responseHandler
   return await handleResponse(response)
 }

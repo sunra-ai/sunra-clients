@@ -1,3 +1,6 @@
+import { debug as createDebug } from 'debug'
+export const debug = createDebug('sunra')
+
 export function ensureEndpointIdFormat(id: string): string {
   const parts = id.split('/')
   if (parts.length > 1) {

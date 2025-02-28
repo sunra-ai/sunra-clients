@@ -27,6 +27,7 @@ app.get('/api', (req, res) => {
 })
 
 app.get('/sunra-on-server', async (req, res) => {
+  // TODO: change the default model id
   const result = await sunra.run('110602490-lcm', {
     input: {
       prompt:

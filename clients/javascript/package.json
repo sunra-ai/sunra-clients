@@ -38,11 +38,14 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@msgpack/msgpack": "^3.0.0-beta2",
+    "debug": "^4.4.0",
     "eventsource-parser": "^1.1.2",
+    "fetch-to-curl": "^0.6.0",
     "robot3": "^0.4.1"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@types/debug": "^4.1.12",
     "@types/node": "^22.13.5",
     "vitest": "^3.0.7"
   },
