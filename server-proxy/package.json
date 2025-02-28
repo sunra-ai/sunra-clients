@@ -16,12 +16,15 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "tsc -p ./tsconfig.lib.json",
     "dev": "tsc -p ./tsconfig.lib.json --watch",
-    "lint": "eslint --ext .ts src"
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@types/debug": "^4.1.12",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.5",
     "vitest": "^3.0.7"
@@ -96,5 +99,10 @@
     "react-dom": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "debug": "^4.4.0",
+    "fetch-to-curl": "^0.6.0",
+    "https-proxy-agent": "^7.0.6"
   }
 }

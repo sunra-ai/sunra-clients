@@ -1,18 +1,21 @@
+import { debug as createDebug } from 'debug'
+export const debug = createDebug('sunra')
+
 export function ensureEndpointIdFormat(id: string): string {
-  const parts = id.split("/");
+  const parts = id.split('/')
   if (parts.length > 1) {
-    return id;
+    return id
   }
-  const [, appOwner, appId] = /^([0-9]+)-([a-zA-Z0-9-]+)$/.exec(id) || [];
+  const [, appOwner, appId] = /^([0-9]+)-([a-zA-Z0-9-]+)$/.exec(id) || []
   if (appOwner && appId) {
-    return `${appOwner}/${appId}`;
+    return `${appOwner}/${appId}`
   }
   throw new Error(
     `Invalid app id: ${id}. Must be in the format <appOwner>/<appId>`,
-  );
+  )
 }
 
-const ENDPOINT_NAMESPACES = ["workflows", "comfy"] as const;
+const ENDPOINT_NAMESPACES = ['workflows', 'comfy'] as const
 
 type EndpointNamespace = (typeof ENDPOINT_NAMESPACES)[number];
 
@@ -24,64 +27,64 @@ export type EndpointId = {
 };
 
 export function parseEndpointId(id: string): EndpointId {
-  const normalizedId = ensureEndpointIdFormat(id);
-  const parts = normalizedId.split("/");
+  const normalizedId = ensureEndpointIdFormat(id)
+  const parts = normalizedId.split('/')
   if (ENDPOINT_NAMESPACES.includes(parts[0] as any)) {
     return {
       owner: parts[1] as string,
       alias: parts[2] as string,
-      path: parts.slice(3).join("/") || undefined,
+      path: parts.slice(3).join('/') || undefined,
       namespace: parts[0] as EndpointNamespace,
-    };
+    }
   }
   return {
     owner: parts[0] as string,
     alias: parts[1] as string,
-    path: parts.slice(2).join("/") || undefined,
-  };
+    path: parts.slice(2).join('/') || undefined,
+  }
 }
 
 export function isValidUrl(url: string) {
   try {
-    const { host } = new URL(url);
-    return /(sunra\.(ai|run))$/.test(host);
-  } catch (_) {
-    return false;
+    const { host } = new URL(url)
+    return /(sunra\.(ai|run))$/.test(host)
+  } catch {
+    return false
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export function throttle<T extends (...args: any[]) => any>(
   func: T,
   limit: number,
   leading = false,
 ): (...funcArgs: Parameters<T>) => ReturnType<T> | void {
-  let lastFunc: NodeJS.Timeout | null;
-  let lastRan: number;
+  let lastFunc: NodeJS.Timeout | null
+  let lastRan: number
 
   return (...args: Parameters<T>): ReturnType<T> | void => {
     if (!lastRan && leading) {
-      func(...args);
-      lastRan = Date.now();
+      func(...args)
+      lastRan = Date.now()
     } else {
       if (lastFunc) {
-        clearTimeout(lastFunc);
+        clearTimeout(lastFunc)
       }
 
       lastFunc = setTimeout(
         () => {
           if (Date.now() - lastRan >= limit) {
-            func(...args);
-            lastRan = Date.now();
+            func(...args)
+            lastRan = Date.now()
           }
         },
         limit - (Date.now() - lastRan),
-      );
+      )
     }
-  };
+  }
 }
 
-let isRunningInReact: boolean | undefined;
+let isRunningInReact: boolean | undefined
 
 /**
  * Not really the most optimal way to detect if we're running in React,
@@ -94,13 +97,13 @@ let isRunningInReact: boolean | undefined;
  */
 export function isReact() {
   if (isRunningInReact === undefined) {
-    const stack = new Error().stack;
+    const stack = new Error().stack
     isRunningInReact =
       !!stack &&
-      (stack.includes("node_modules/react-dom/") ||
-        stack.includes("node_modules/next/"));
+      (stack.includes('node_modules/react-dom/') ||
+        stack.includes('node_modules/next/'))
   }
-  return isRunningInReact;
+  return isRunningInReact
 }
 
 /**
@@ -109,5 +112,5 @@ export function isReact() {
  * @returns `true` if the value is a plain object, `false` otherwise.
  */
 export function isPlainObject(value: any): boolean {
-  return !!value && Object.getPrototypeOf(value) === Object.prototype;
+  return !!value && Object.getPrototypeOf(value) === Object.prototype
 }

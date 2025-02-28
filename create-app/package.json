@@ -25,7 +25,8 @@
     "start": "tsx ./src/index.ts",
     "build": "tsc -p ./tsconfig.lib.json",
     "dev": "tsc -p ./tsconfig.lib.json --watch",
-    "lint": "eslint --ext .ts src"
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

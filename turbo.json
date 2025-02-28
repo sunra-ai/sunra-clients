@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": ["SUNRA_QUEUE_DOMAIN", "SUNRA_KEY", "SUNRA_KEY_ID", "SUNRA_KEY_SECRET", "PORT", "SUNRA_API_ENDPOINT", "HTTPS_PROXY"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -10,6 +11,9 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"]
+    },
     "test": {
       "dependsOn": ["^test"]
     },
@@ -18,7 +22,8 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^dev"]
     }
   }
 }

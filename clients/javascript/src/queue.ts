@@ -1,9 +1,9 @@
-import { RequiredConfig } from "./config";
-import { buildUrl, dispatchRequest } from "./request";
-import { resultResponseHandler } from "./response";
-import { StorageClient } from "./storage";
-import { SunraStream, StreamingConnectionMode } from "./streaming";
-import { EndpointType, InputType, OutputType } from "./types/client";
+import { RequiredConfig } from './config'
+import { buildUrl, dispatchRequest } from './request'
+import { resultResponseHandler } from './response'
+import { StorageClient } from './storage'
+import { SunraStream, StreamingConnectionMode } from './streaming'
+import { EndpointType, InputType, OutputType } from './types/client'
 import {
   CompletedQueueStatus,
   InQueueQueueStatus,
@@ -11,16 +11,16 @@ import {
   RequestLog,
   Result,
   RunOptions,
-} from "./types/common";
-import { parseEndpointId } from "./utils";
+} from './types/common'
+import { parseEndpointId } from './utils'
 
-export type QueuePriority = "low" | "normal";
+export type QueuePriority = 'low' | 'normal';
 export type QueueStatusSubscriptionOptions = QueueStatusOptions &
-  Omit<QueueSubscribeOptions, "onEnqueue" | "webhookUrl">;
+  Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'>;
 
 type TimeoutId = ReturnType<typeof setTimeout> | undefined;
 
-const DEFAULT_POLL_INTERVAL = 500;
+const DEFAULT_POLL_INTERVAL = 500
 
 /**
  * Options for subscribing to the request queue.
@@ -35,7 +35,7 @@ export type QueueSubscribeOptions = {
    *
    * @see pollInterval
    */
-  mode?: "polling" | "streaming";
+  mode?: 'polling' | 'streaming';
 
   /**
    * Callback function that is called when a request is enqueued.
@@ -81,7 +81,7 @@ export type QueueSubscribeOptions = {
   priority?: QueuePriority;
 } & (
   | {
-      mode?: "polling";
+      mode?: 'polling';
       /**
        * The interval (in milliseconds) at which to poll for updates.
        * If not provided, a default value of `500` will be used.
@@ -91,7 +91,7 @@ export type QueueSubscribeOptions = {
       pollInterval?: number;
     }
   | {
-      mode: "streaming";
+      mode: 'streaming';
 
       /**
        * The connection mode to use for streaming updates. It defaults to `server`.
@@ -235,155 +235,155 @@ export const createQueueClient = ({
       endpointId: string,
       options: SubmitOptions<Input>,
     ): Promise<InQueueQueueStatus> {
-      const { webhookUrl, priority, ...runOptions } = options;
+      const { webhookUrl, priority, ...runOptions } = options
       const input = options.input
         ? await storage.transformInput(options.input)
-        : undefined;
+        : undefined
       return dispatchRequest<Input, InQueueQueueStatus>({
         method: options.method,
         targetUrl: buildUrl(endpointId, {
           ...runOptions,
-          subdomain: "queue",
+          subdomain: 'queue',
           query: webhookUrl ? { sunra_webhook: webhookUrl } : undefined,
         }),
         headers: {
-          "x-sunra-queue-priority": priority ?? "normal",
+          'x-sunra-queue-priority': priority ?? 'normal',
         },
         input: input as Input,
         config,
         options: {
           signal: options.abortSignal,
         },
-      });
+      })
     },
     async status(
       endpointId: string,
       { requestId, logs = false, abortSignal }: QueueStatusOptions,
     ): Promise<QueueStatus> {
-      const appId = parseEndpointId(endpointId);
-      const prefix = appId.namespace ? `${appId.namespace}/` : "";
+      const appId = parseEndpointId(endpointId)
+      const prefix = appId.namespace ? `${appId.namespace}/` : ''
       return dispatchRequest<unknown, QueueStatus>({
-        method: "get",
+        method: 'get',
         targetUrl: buildUrl(`${prefix}${appId.owner}/${appId.alias}`, {
-          subdomain: "queue",
-          query: { logs: logs ? "1" : "0" },
+          subdomain: 'queue',
+          query: { logs: logs ? '1' : '0' },
           path: `/requests/${requestId}/status`,
         }),
         config,
         options: {
           signal: abortSignal,
         },
-      });
+      })
     },
 
     async streamStatus(
       endpointId: string,
       { requestId, logs = false, connectionMode }: QueueStatusStreamOptions,
     ): Promise<SunraStream<unknown, QueueStatus>> {
-      const appId = parseEndpointId(endpointId);
-      const prefix = appId.namespace ? `${appId.namespace}/` : "";
+      const appId = parseEndpointId(endpointId)
+      const prefix = appId.namespace ? `${appId.namespace}/` : ''
 
       const queryParams = {
-        logs: logs ? "1" : "0",
-      };
+        logs: logs ? '1' : '0',
+      }
 
       const url = buildUrl(`${prefix}${appId.owner}/${appId.alias}`, {
-        subdomain: "queue",
+        subdomain: 'queue',
         path: `/requests/${requestId}/status/stream`,
         query: queryParams,
-      });
+      })
 
       return new SunraStream<unknown, QueueStatus>(endpointId, config, {
         url,
-        method: "get",
+        method: 'get',
         connectionMode,
         queryParams,
-      });
+      })
     },
 
     async subscribeToStatus(
       endpointId,
       options,
     ): Promise<CompletedQueueStatus> {
-      const requestId = options.requestId;
-      const timeout = options.timeout;
-      let timeoutId: TimeoutId = undefined;
+      const requestId = options.requestId
+      const timeout = options.timeout
+      let timeoutId: TimeoutId = undefined
 
       const handleCancelError = () => {
         // Ignore errors as the client will follow through with the timeout
         // regardless of the server response. In case cancelation fails, we
         // still want to reject the promise and consider the client call canceled.
-      };
-      if (options.mode === "streaming") {
+      }
+      if (options.mode === 'streaming') {
         const status = await ref.streamStatus(endpointId, {
           requestId,
           logs: options.logs,
           connectionMode:
-            "connectionMode" in options
+            'connectionMode' in options
               ? (options.connectionMode as StreamingConnectionMode)
               : undefined,
-        });
-        const logs: RequestLog[] = [];
+        })
+        const logs: RequestLog[] = []
         if (timeout) {
           timeoutId = setTimeout(() => {
-            status.abort();
-            ref.cancel(endpointId, { requestId }).catch(handleCancelError);
+            status.abort()
+            ref.cancel(endpointId, { requestId }).catch(handleCancelError)
             // TODO this error cannot bubble up to the user since it's thrown in
             // a closure in the global scope due to setTimeout behavior.
             // User will get a platform error instead. We should find a way to
             // make this behavior aligned with polling.
             throw new Error(
               `Client timed out waiting for the request to complete after ${timeout}ms`,
-            );
-          }, timeout);
+            )
+          }, timeout)
         }
-        status.on("data", (data: QueueStatus) => {
+        status.on('data', (data: QueueStatus) => {
           if (options.onQueueUpdate) {
             // accumulate logs to match previous polling behavior
             if (
-              "logs" in data &&
+              'logs' in data &&
               Array.isArray(data.logs) &&
               data.logs.length > 0
             ) {
-              logs.push(...data.logs);
+              logs.push(...data.logs)
             }
-            options.onQueueUpdate("logs" in data ? { ...data, logs } : data);
+            options.onQueueUpdate('logs' in data ? { ...data, logs } : data)
           }
-        });
-        const doneStatus = await status.done();
+        })
+        const doneStatus = await status.done()
         if (timeoutId) {
-          clearTimeout(timeoutId);
+          clearTimeout(timeoutId)
         }
-        return doneStatus as CompletedQueueStatus;
+        return doneStatus as CompletedQueueStatus
       }
       // default to polling until status streaming is stable and faster
       return new Promise<CompletedQueueStatus>((resolve, reject) => {
-        let pollingTimeoutId: TimeoutId;
+        let pollingTimeoutId: TimeoutId
         // type resolution isn't great in this case, so check for its presence
         // and and type so the typechecker behaves as expected
         const pollInterval =
-          "pollInterval" in options && typeof options.pollInterval === "number"
+          'pollInterval' in options && typeof options.pollInterval === 'number'
             ? (options.pollInterval ?? DEFAULT_POLL_INTERVAL)
-            : DEFAULT_POLL_INTERVAL;
+            : DEFAULT_POLL_INTERVAL
 
         const clearScheduledTasks = () => {
           if (timeoutId) {
-            clearTimeout(timeoutId);
+            clearTimeout(timeoutId)
           }
           if (pollingTimeoutId) {
-            clearTimeout(pollingTimeoutId);
+            clearTimeout(pollingTimeoutId)
           }
-        };
+        }
         if (timeout) {
           timeoutId = setTimeout(() => {
-            clearScheduledTasks();
-            ref.cancel(endpointId, { requestId }).catch(handleCancelError);
+            clearScheduledTasks()
+            ref.cancel(endpointId, { requestId }).catch(handleCancelError)
             reject(
               new Error(
                 `Client timed out waiting for the request to complete after ${timeout}ms`,
               ),
-            );
-          }, timeout);
+            )
+          }, timeout)
         }
         const poll = async () => {
           try {
@@ -391,35 +391,35 @@ export const createQueueClient = ({
               requestId,
               logs: options.logs ?? false,
               abortSignal: options.abortSignal,
-            });
+            })
             if (options.onQueueUpdate) {
-              options.onQueueUpdate(requestStatus);
+              options.onQueueUpdate(requestStatus)
             }
-            if (requestStatus.status === "COMPLETED") {
-              clearScheduledTasks();
-              resolve(requestStatus);
-              return;
+            if (requestStatus.status === 'COMPLETED') {
+              clearScheduledTasks()
+              resolve(requestStatus)
+              return
             }
-            pollingTimeoutId = setTimeout(poll, pollInterval);
+            pollingTimeoutId = setTimeout(poll, pollInterval)
           } catch (error) {
-            clearScheduledTasks();
-            reject(error);
+            clearScheduledTasks()
+            reject(error)
           }
-        };
-        poll().catch(reject);
-      });
+        }
+        poll().catch(reject)
+      })
     },
 
     async result<Output>(
       endpointId: string,
       { requestId, abortSignal }: BaseQueueOptions,
     ): Promise<Result<Output>> {
-      const appId = parseEndpointId(endpointId);
-      const prefix = appId.namespace ? `${appId.namespace}/` : "";
+      const appId = parseEndpointId(endpointId)
+      const prefix = appId.namespace ? `${appId.namespace}/` : ''
       return dispatchRequest<unknown, Result<Output>>({
-        method: "get",
+        method: 'get',
         targetUrl: buildUrl(`${prefix}${appId.owner}/${appId.alias}`, {
-          subdomain: "queue",
+          subdomain: 'queue',
           path: `/requests/${requestId}`,
         }),
         config: {
@@ -429,27 +429,27 @@ export const createQueueClient = ({
         options: {
           signal: abortSignal,
         },
-      });
+      })
     },
 
     async cancel(
       endpointId: string,
       { requestId, abortSignal }: BaseQueueOptions,
     ): Promise<void> {
-      const appId = parseEndpointId(endpointId);
-      const prefix = appId.namespace ? `${appId.namespace}/` : "";
+      const appId = parseEndpointId(endpointId)
+      const prefix = appId.namespace ? `${appId.namespace}/` : ''
       await dispatchRequest<unknown, void>({
-        method: "put",
+        method: 'put',
         targetUrl: buildUrl(`${prefix}${appId.owner}/${appId.alias}`, {
-          subdomain: "queue",
+          subdomain: 'queue',
           path: `/requests/${requestId}/cancel`,
         }),
         config,
         options: {
           signal: abortSignal,
         },
-      });
+      })
     },
-  };
-  return ref;
-};
+  }
+  return ref
+}

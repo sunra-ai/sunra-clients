@@ -2,7 +2,7 @@ export type Audio = {
   /**
    * Type of media (always 'audio') Default value: `"audio"`
    */
-  media_type?: "audio";
+  media_type?: 'audio';
   /**
    * URL where the media file can be accessed
    */
@@ -175,7 +175,7 @@ export type ControlLoraWeight = {
   /**
    * Type of preprocessing to apply to the input image. Default value: `"None"`
    */
-  preprocess?: "canny" | "depth" | "None";
+  preprocess?: 'canny' | 'depth' | 'None';
 };
 export type ControlNet = {
   /**
@@ -297,15 +297,15 @@ export type FastTextToImageRequest = {
    * The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored. Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "1:1"
-    | "2:3"
-    | "3:2"
-    | "3:4"
-    | "4:3"
-    | "4:5"
-    | "5:4"
-    | "9:16"
-    | "16:9";
+    | '1:1'
+    | '2:3'
+    | '3:2'
+    | '3:4'
+    | '4:3'
+    | '4:5'
+    | '5:4'
+    | '9:16'
+    | '16:9';
   /**
    * The same seed and the same prompt given to the same version of the model
    * will output the same image every time.
@@ -327,7 +327,7 @@ export type FastTextToImageRequest = {
   /**
    * Which medium should be included in your generated images. This parameter is optional.
    */
-  medium?: "photography" | "art";
+  medium?: 'photography' | 'art';
   /**
    * Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference. Default value: ``
    */
@@ -365,12 +365,12 @@ export type FluxProRedux = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -398,11 +398,11 @@ export type FluxProRedux = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
@@ -435,15 +435,15 @@ export type FluxProUltraTextToImageInputRedux = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The aspect ratio of the generated image. Default value: `"16:9"`
    */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "9:21";
+  aspect_ratio?: '21:9' | '16:9' | '4:3' | '1:1' | '3:4' | '9:16' | '9:21';
   /**
    * Generate less processed, more natural-looking images.
    */
@@ -479,15 +479,15 @@ export type HunyuanV2VRequest = {
   /**
    * The aspect ratio of the video to generate. Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16";
+  aspect_ratio?: '16:9' | '9:16';
   /**
    * The resolution of the video to generate. Default value: `"720p"`
    */
-  resolution?: "480p" | "580p" | "720p";
+  resolution?: '480p' | '580p' | '720p';
   /**
    * The number of frames to generate. Default value: `"129"`
    */
-  num_frames?: "129" | "85";
+  num_frames?: '129' | '85';
   /**
    * The LoRAs to use for the image generation. You can use any number of LoRAs
    * and they will be merged together to generate the final image. Default value: ``
@@ -540,7 +540,7 @@ export type ImagePrompt = {
   /**
    *  Default value: `"ImagePrompt"`
    */
-  type?: "ImagePrompt" | "PyraCanny" | "CPDS" | "FaceSwap";
+  type?: 'ImagePrompt' | 'PyraCanny' | 'CPDS' | 'FaceSwap';
   /**
    *
    */
@@ -576,11 +576,11 @@ export type ImageToVideoRequest = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type InputV2 = {
   /**
@@ -602,19 +602,19 @@ export type InputV2 = {
    * - 'Portrait': BiRefNet-portrait-TR_P3M_10k-epoch_120.pth Default value: `"General Use (Light)"`
    */
   model?:
-    | "General Use (Light)"
-    | "General Use (Light 2K)"
-    | "General Use (Heavy)"
-    | "Matting"
-    | "Portrait";
+    | 'General Use (Light)'
+    | 'General Use (Light 2K)'
+    | 'General Use (Heavy)'
+    | 'Matting'
+    | 'Portrait';
   /**
    * The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. Default value: `"1024x1024"`
    */
-  operating_resolution?: "1024x1024" | "2048x2048";
+  operating_resolution?: '1024x1024' | '2048x2048';
   /**
    * The format of the output image Default value: `"png"`
    */
-  output_format?: "webp" | "png";
+  output_format?: 'webp' | 'png';
   /**
    * Whether to output the mask used to remove the background
    */
@@ -759,7 +759,7 @@ export type PointPrompt = {
   /**
    * Label of the prompt. 1 for foreground, 0 for background Default value: `"1"`
    */
-  label?: "0" | "1";
+  label?: '0' | '1';
 };
 export type Polygon = {
   /**
@@ -789,7 +789,7 @@ export type Ray2TextToVideoRequest = {
   /**
    * The aspect ratio of the generated video Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "4:3" | "3:4" | "21:9" | "9:21";
+  aspect_ratio?: '16:9' | '9:16' | '4:3' | '3:4' | '21:9' | '9:21';
   /**
    * Whether the video should loop (end of video is blended with the beginning)
    */
@@ -797,11 +797,11 @@ export type Ray2TextToVideoRequest = {
   /**
    *  Default value: `"540p"`
    */
-  resolution?: "540p" | "720p";
+  resolution?: '540p' | '720p';
   /**
    *  Default value: `"5s"`
    */
-  duration?: "5s" | "9s";
+  duration?: '5s' | '9s';
 };
 export type ReferenceFace = {
   /**
@@ -886,15 +886,15 @@ export type TextToImageRequest = {
    * The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored. Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "1:1"
-    | "2:3"
-    | "3:2"
-    | "3:4"
-    | "4:3"
-    | "4:5"
-    | "5:4"
-    | "9:16"
-    | "16:9";
+    | '1:1'
+    | '2:3'
+    | '3:2'
+    | '3:4'
+    | '4:3'
+    | '4:5'
+    | '5:4'
+    | '9:16'
+    | '16:9';
   /**
    * The same seed and the same prompt given to the same version of the model
    * will output the same image every time.
@@ -916,7 +916,7 @@ export type TextToImageRequest = {
   /**
    * Which medium should be included in your generated images. This parameter is optional.
    */
-  medium?: "photography" | "art";
+  medium?: 'photography' | 'art';
   /**
    * Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference. Default value: ``
    */
@@ -940,11 +940,11 @@ export type TextToVideoRequest = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type Track = {
   /**
@@ -964,7 +964,7 @@ export type Video = {
   /**
    * Type of media (always 'video') Default value: `"video"`
    */
-  media_type?: "video";
+  media_type?: 'video';
   /**
    * URL where the media file can be accessed
    */
@@ -1146,7 +1146,7 @@ export type AnimatediffSparsectrlLcmInput = {
   /**
    * The type of controlnet to use for generating the video. The controlnet determines how the video will be animated. Default value: `"scribble"`
    */
-  controlnet_type?: "scribble" | "rgb";
+  controlnet_type?: 'scribble' | 'rgb';
   /**
    * Increasing the amount of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image. Default value: `4`
    */
@@ -1232,19 +1232,19 @@ export type AnimateDiffT2VInput = {
    * The motions to apply to the video.
    */
   motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+    'zoom-out' | 'zoom-in' | 'pan-left' | 'pan-right' | 'tilt-up' | 'tilt-down'
   >;
   /**
    * The size of the video to generate. Default value: `square`
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
 };
 export type AnimateDiffT2VOutput = {
   /**
@@ -1292,19 +1292,19 @@ export type AnimateDiffT2VTurboInput = {
    * The motions to apply to the video.
    */
   motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+    'zoom-out' | 'zoom-in' | 'pan-left' | 'pan-right' | 'tilt-up' | 'tilt-down'
   >;
   /**
    * The size of the video to generate. Default value: `square`
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
 };
 export type AnimatediffV2vInput = {
   /**
@@ -1334,7 +1334,7 @@ export type AnimatediffV2vInput = {
   /**
    * Base model to use for animation generation. Default value: `"cardosAnimev20"`
    */
-  base_model?: "darkSushiMixMix_colorful" | "cardosAnimev20";
+  base_model?: 'darkSushiMixMix_colorful' | 'cardosAnimev20';
   /**
    * The list of LoRA weights to use. Default value: ``
    */
@@ -1396,7 +1396,7 @@ export type AnimateDiffV2VInput = {
    * The motions to apply to the video.
    */
   motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+    'zoom-out' | 'zoom-in' | 'pan-left' | 'pan-right' | 'tilt-up' | 'tilt-down'
   >;
 };
 export type AnimatediffV2vOutput = {
@@ -1508,7 +1508,7 @@ export type AnimateDiffV2VTurboInput = {
    * The motions to apply to the video.
    */
   motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+    'zoom-out' | 'zoom-in' | 'pan-left' | 'pan-right' | 'tilt-up' | 'tilt-down'
   >;
 };
 export type AnimatediffV2vTurboOutput = {
@@ -1544,19 +1544,19 @@ export type AnyLlmInput = {
    * Name of the model to use. Premium models are charged at 10x the rate of standard models, they include: openai/gpt-4o, anthropic/claude-3.5-sonnet, meta-llama/llama-3.2-90b-vision-instruct, google/gemini-pro-1.5, anthropic/claude-3-5-haiku. Default value: `"google/gemini-flash-1.5"`
    */
   model?:
-    | "anthropic/claude-3.5-sonnet"
-    | "anthropic/claude-3-5-haiku"
-    | "anthropic/claude-3-haiku"
-    | "google/gemini-pro-1.5"
-    | "google/gemini-flash-1.5"
-    | "google/gemini-flash-1.5-8b"
-    | "meta-llama/llama-3.2-1b-instruct"
-    | "meta-llama/llama-3.2-3b-instruct"
-    | "meta-llama/llama-3.1-8b-instruct"
-    | "meta-llama/llama-3.1-70b-instruct"
-    | "openai/gpt-4o-mini"
-    | "openai/gpt-4o"
-    | "deepseek/deepseek-r1";
+    | 'anthropic/claude-3.5-sonnet'
+    | 'anthropic/claude-3-5-haiku'
+    | 'anthropic/claude-3-haiku'
+    | 'google/gemini-pro-1.5'
+    | 'google/gemini-flash-1.5'
+    | 'google/gemini-flash-1.5-8b'
+    | 'meta-llama/llama-3.2-1b-instruct'
+    | 'meta-llama/llama-3.2-3b-instruct'
+    | 'meta-llama/llama-3.1-8b-instruct'
+    | 'meta-llama/llama-3.1-70b-instruct'
+    | 'openai/gpt-4o-mini'
+    | 'openai/gpt-4o'
+    | 'deepseek/deepseek-r1';
   /**
    * Prompt to be used for the chat completion
    */
@@ -1585,13 +1585,13 @@ export type AnyLlmVisionInput = {
    * Name of the model to use. Premium models are charged at 3x the rate of standard models, they include: openai/gpt-4o, anthropic/claude-3.5-sonnet, meta-llama/llama-3.2-90b-vision-instruct, google/gemini-pro-1.5, anthropic/claude-3-5-haiku. Default value: `"google/gemini-flash-1.5"`
    */
   model?:
-    | "anthropic/claude-3.5-sonnet"
-    | "anthropic/claude-3-haiku"
-    | "google/gemini-pro-1.5"
-    | "google/gemini-flash-1.5"
-    | "google/gemini-flash-1.5-8b"
-    | "openai/gpt-4o"
-    | "meta-llama/llama-3.2-90b-vision-instruct";
+    | 'anthropic/claude-3.5-sonnet'
+    | 'anthropic/claude-3-haiku'
+    | 'google/gemini-pro-1.5'
+    | 'google/gemini-flash-1.5'
+    | 'google/gemini-flash-1.5-8b'
+    | 'openai/gpt-4o'
+    | 'meta-llama/llama-3.2-90b-vision-instruct';
   /**
    * Prompt to be used for the image
    */
@@ -1679,7 +1679,7 @@ export type AuraSrInput = {
   /**
    * Upscaling factor. More coming soon. Default value: `"4"`
    */
-  upscaling_factor?: "4";
+  upscaling_factor?: '4';
   /**
    * Whether to use overlapping tiles for upscaling. Setting this to true helps remove seams but doubles the inference time.
    */
@@ -1687,7 +1687,7 @@ export type AuraSrInput = {
   /**
    * Checkpoint to use for upscaling. More coming soon. Default value: `"v1"`
    */
-  checkpoint?: "v1" | "v2";
+  checkpoint?: 'v1' | 'v2';
 };
 export type AuraSrOutput = {
   /**
@@ -1749,12 +1749,12 @@ export type BaseInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The negative prompt to generate video from Default value: `""`
    */
@@ -1880,15 +1880,15 @@ export type BirefnetInput = {
    * - 'General Use (Heavy)': BiRefNet-massive-epoch_240.pth
    * - 'Portrait': BiRefNet-portrait-TR_P3M_10k-epoch_120.pth Default value: `"General Use (Light)"`
    */
-  model?: "General Use (Light)" | "General Use (Heavy)" | "Portrait";
+  model?: 'General Use (Light)' | 'General Use (Heavy)' | 'Portrait';
   /**
    * The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. Default value: `"1024x1024"`
    */
-  operating_resolution?: "1024x1024" | "2048x2048";
+  operating_resolution?: '1024x1024' | '2048x2048';
   /**
    * The format of the output image Default value: `"png"`
    */
-  output_format?: "webp" | "png";
+  output_format?: 'webp' | 'png';
   /**
    * Whether to output the mask used to remove the background
    */
@@ -1928,19 +1928,19 @@ export type BirefnetV2Input = {
    * - 'Portrait': BiRefNet-portrait-TR_P3M_10k-epoch_120.pth Default value: `"General Use (Light)"`
    */
   model?:
-    | "General Use (Light)"
-    | "General Use (Light 2K)"
-    | "General Use (Heavy)"
-    | "Matting"
-    | "Portrait";
+    | 'General Use (Light)'
+    | 'General Use (Light 2K)'
+    | 'General Use (Heavy)'
+    | 'Matting'
+    | 'Portrait';
   /**
    * The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. Default value: `"1024x1024"`
    */
-  operating_resolution?: "1024x1024" | "2048x2048";
+  operating_resolution?: '1024x1024' | '2048x2048';
   /**
    * The format of the output image Default value: `"png"`
    */
-  output_format?: "webp" | "png";
+  output_format?: 'webp' | 'png';
   /**
    * Whether to output the mask used to remove the background
    */
@@ -2045,7 +2045,7 @@ export type BriaEraserInput = {
   /**
    * You can use this parameter to specify the type of the input mask from the list. 'manual' opttion should be used in cases in which the mask had been generated by a user (e.g. with a brush tool), and 'automatic' mask type should be used when mask had been generated by an algorithm like 'SAM'. Default value: `"manual"`
    */
-  mask_type?: "manual" | "automatic";
+  mask_type?: 'manual' | 'automatic';
 };
 export type BriaEraserOutput = {
   /**
@@ -2159,10 +2159,10 @@ export type BriaProductShotInput = {
    * This parameter allows you to control the positioning of the product in the image. Choosing 'original' will preserve the original position of the product in the image. Choosing 'automatic' will generate results with the 10 recommended positions for the product. Choosing 'manual_placement' will allow you to select predefined positions (using the parameter 'manual_placement_selection'). Selecting 'manual_padding' will allow you to control the position and size of the image by defining the desired padding in pixels around the product. Default value: `"manual_placement"`
    */
   placement_type?:
-    | "original"
-    | "automatic"
-    | "manual_placement"
-    | "manual_padding";
+    | 'original'
+    | 'automatic'
+    | 'manual_placement'
+    | 'manual_padding';
   /**
    * This flag is only relevant when placement_type=original. If true, the output image retains the original input image's size; otherwise, the image is scaled to 1 megapixel (1MP) while preserving its aspect ratio.
    */
@@ -2175,16 +2175,16 @@ export type BriaProductShotInput = {
    * If you've selected placement_type=manual_placement, you should use this parameter to specify which placements/positions you would like to use from the list. You can select more than one placement in one request. Default value: `"bottom_center"`
    */
   manual_placement_selection?:
-    | "upper_left"
-    | "upper_right"
-    | "bottom_left"
-    | "bottom_right"
-    | "right_center"
-    | "left_center"
-    | "upper_center"
-    | "bottom_center"
-    | "center_vertical"
-    | "center_horizontal";
+    | 'upper_left'
+    | 'upper_right'
+    | 'bottom_left'
+    | 'bottom_right'
+    | 'right_center'
+    | 'left_center'
+    | 'upper_center'
+    | 'bottom_center'
+    | 'center_vertical'
+    | 'center_horizontal';
   /**
    * The desired padding in pixels around the product, when using placement_type=manual_padding. The order of the values is [left, right, top, bottom]. For optimal results, the total number of pixels, including padding, should be around 1,000,000. It is recommended to first use the product cutout API, get the cutout and understand the size of the result, and then define the required padding and use the cutout as an input for this API.
    */
@@ -2213,15 +2213,15 @@ export type BriaTextToImageBaseInput = {
    * The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored. Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "1:1"
-    | "2:3"
-    | "3:2"
-    | "3:4"
-    | "4:3"
-    | "4:5"
-    | "5:4"
-    | "9:16"
-    | "16:9";
+    | '1:1'
+    | '2:3'
+    | '3:2'
+    | '3:4'
+    | '4:3'
+    | '4:5'
+    | '5:4'
+    | '9:16'
+    | '16:9';
   /**
    * The same seed and the same prompt given to the same version of the model
    * will output the same image every time.
@@ -2243,7 +2243,7 @@ export type BriaTextToImageBaseInput = {
   /**
    * Which medium should be included in your generated images. This parameter is optional.
    */
-  medium?: "photography" | "art";
+  medium?: 'photography' | 'art';
   /**
    * Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference. Default value: ``
    */
@@ -2276,15 +2276,15 @@ export type BriaTextToImageFastInput = {
    * The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored. Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "1:1"
-    | "2:3"
-    | "3:2"
-    | "3:4"
-    | "4:3"
-    | "4:5"
-    | "5:4"
-    | "9:16"
-    | "16:9";
+    | '1:1'
+    | '2:3'
+    | '3:2'
+    | '3:4'
+    | '4:3'
+    | '4:5'
+    | '5:4'
+    | '9:16'
+    | '16:9';
   /**
    * The same seed and the same prompt given to the same version of the model
    * will output the same image every time.
@@ -2306,7 +2306,7 @@ export type BriaTextToImageFastInput = {
   /**
    * Which medium should be included in your generated images. This parameter is optional.
    */
-  medium?: "photography" | "art";
+  medium?: 'photography' | 'art';
   /**
    * Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference. Default value: ``
    */
@@ -2339,15 +2339,15 @@ export type BriaTextToImageHdInput = {
    * The aspect ratio of the image. When a guidance method is being used, the aspect ratio is defined by the guidance image and this parameter is ignored. Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "1:1"
-    | "2:3"
-    | "3:2"
-    | "3:4"
-    | "4:3"
-    | "4:5"
-    | "5:4"
-    | "9:16"
-    | "16:9";
+    | '1:1'
+    | '2:3'
+    | '3:2'
+    | '3:4'
+    | '4:3'
+    | '4:5'
+    | '5:4'
+    | '9:16'
+    | '16:9';
   /**
    * The same seed and the same prompt given to the same version of the model
    * will output the same image every time.
@@ -2369,7 +2369,7 @@ export type BriaTextToImageHdInput = {
   /**
    * Which medium should be included in your generated images. This parameter is optional.
    */
-  medium?: "photography" | "art";
+  medium?: 'photography' | 'art';
   /**
    * Guidance images to use for the generation. Up to 4 guidance methods can be combined during a single inference. Default value: ``
    */
@@ -2424,18 +2424,18 @@ export type CatVtonInput = {
    * inner: Inner cloth, like T-shirt inside a jacket
    * outer: Outer cloth, like a jacket over a T-shirt
    */
-  cloth_type: "upper" | "lower" | "overall" | "inner" | "outer";
+  cloth_type: 'upper' | 'lower' | 'overall' | 'inner' | 'outer';
   /**
    * The size of the generated image. Default value: `portrait_4_3`
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `30`
    */
@@ -2469,7 +2469,7 @@ export type CcsrInput = {
   /**
    * If specified, a patch-based sampling strategy will be used for sampling. Default value: `"none"`
    */
-  tile_diffusion?: "none" | "mix" | "gaussian";
+  tile_diffusion?: 'none' | 'mix' | 'gaussian';
   /**
    * Size of patch. Default value: `1024`
    */
@@ -2505,7 +2505,7 @@ export type CcsrInput = {
   /**
    * Type of color correction for samples. Default value: `"adain"`
    */
-  color_fix_type?: "none" | "wavelet" | "adain";
+  color_fix_type?: 'none' | 'wavelet' | 'adain';
   /**
    * Seed for reproducibility. Different seeds will make slightly different results.
    */
@@ -2526,19 +2526,19 @@ export type ChatInput = {
    * Name of the model to use. Premium models are charged at 10x the rate of standard models, they include: openai/gpt-4o, anthropic/claude-3.5-sonnet, meta-llama/llama-3.2-90b-vision-instruct, google/gemini-pro-1.5, anthropic/claude-3-5-haiku. Default value: `"google/gemini-flash-1.5"`
    */
   model?:
-    | "anthropic/claude-3.5-sonnet"
-    | "anthropic/claude-3-5-haiku"
-    | "anthropic/claude-3-haiku"
-    | "google/gemini-pro-1.5"
-    | "google/gemini-flash-1.5"
-    | "google/gemini-flash-1.5-8b"
-    | "meta-llama/llama-3.2-1b-instruct"
-    | "meta-llama/llama-3.2-3b-instruct"
-    | "meta-llama/llama-3.1-8b-instruct"
-    | "meta-llama/llama-3.1-70b-instruct"
-    | "openai/gpt-4o-mini"
-    | "openai/gpt-4o"
-    | "deepseek/deepseek-r1";
+    | 'anthropic/claude-3.5-sonnet'
+    | 'anthropic/claude-3-5-haiku'
+    | 'anthropic/claude-3-haiku'
+    | 'google/gemini-pro-1.5'
+    | 'google/gemini-flash-1.5'
+    | 'google/gemini-flash-1.5-8b'
+    | 'meta-llama/llama-3.2-1b-instruct'
+    | 'meta-llama/llama-3.2-3b-instruct'
+    | 'meta-llama/llama-3.1-8b-instruct'
+    | 'meta-llama/llama-3.1-70b-instruct'
+    | 'openai/gpt-4o-mini'
+    | 'openai/gpt-4o'
+    | 'deepseek/deepseek-r1';
   /**
    * Prompt to be used for the chat completion
    */
@@ -2618,12 +2618,12 @@ export type Cogvideox5bImageToVideoInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The negative prompt to generate video from Default value: `""`
    */
@@ -2684,12 +2684,12 @@ export type Cogvideox5bInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The negative prompt to generate video from Default value: `""`
    */
@@ -2746,12 +2746,12 @@ export type Cogvideox5bVideoToVideoInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The negative prompt to generate video from Default value: `""`
    */
@@ -2913,13 +2913,13 @@ export type ControlNetUnionInput = {
    * - low-quality: Converts the image to a low-quality image.
    */
   control_mode:
-    | "canny"
-    | "tile"
-    | "depth"
-    | "blur"
-    | "pose"
-    | "gray"
-    | "low-quality";
+    | 'canny'
+    | 'tile'
+    | 'depth'
+    | 'blur'
+    | 'pose'
+    | 'gray'
+    | 'low-quality';
   /**
    * The scale of the control net weight. This is used to scale the control net weight
    * before merging it with the base model. Default value: `1`
@@ -3006,7 +3006,7 @@ export type CreativeUpscalerInput = {
   /**
    * The type of model to use for the upscaling. Default is SD_1_5 Default value: `"SD_1_5"`
    */
-  model_type?: "SD_1_5" | "SDXL";
+  model_type?: 'SD_1_5' | 'SDXL';
   /**
    * The image to upscale.
    */
@@ -3143,7 +3143,7 @@ export type DetectionInput = {
   /**
    * Type of detection to perform
    */
-  task_type: "bbox_detection" | "point_detection" | "gaze_detection";
+  task_type: 'bbox_detection' | 'point_detection' | 'gaze_detection';
   /**
    * Text description of what to detect
    */
@@ -3215,12 +3215,12 @@ export type DevReduxInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -3260,12 +3260,12 @@ export type DevTextToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -3305,12 +3305,12 @@ export type DifferentialDiffusionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -3425,9 +3425,9 @@ export type DreamshaperImageToImageInput = {
    * The Dreamshaper model to use.
    */
   model_name?:
-    | "Lykon/dreamshaper-xl-1-0"
-    | "Lykon/dreamshaper-xl-v2-turbo"
-    | "Lykon/dreamshaper-8";
+    | 'Lykon/dreamshaper-xl-1-0'
+    | 'Lykon/dreamshaper-xl-v2-turbo'
+    | 'Lykon/dreamshaper-8';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -3443,12 +3443,12 @@ export type DreamshaperImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -3492,7 +3492,7 @@ export type DreamshaperImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -3504,16 +3504,16 @@ export type DreamshaperImageToImageInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type DreamshaperInpaintingInput = {
   /**
    * The Dreamshaper model to use.
    */
   model_name?:
-    | "Lykon/dreamshaper-xl-1-0"
-    | "Lykon/dreamshaper-xl-v2-turbo"
-    | "Lykon/dreamshaper-8";
+    | 'Lykon/dreamshaper-xl-1-0'
+    | 'Lykon/dreamshaper-xl-v2-turbo'
+    | 'Lykon/dreamshaper-8';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -3529,12 +3529,12 @@ export type DreamshaperInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -3578,7 +3578,7 @@ export type DreamshaperInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -3594,16 +3594,16 @@ export type DreamshaperInpaintingInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type DreamshaperInput = {
   /**
    * The Dreamshaper model to use.
    */
   model_name?:
-    | "Lykon/dreamshaper-xl-1-0"
-    | "Lykon/dreamshaper-xl-v2-turbo"
-    | "Lykon/dreamshaper-8";
+    | 'Lykon/dreamshaper-xl-1-0'
+    | 'Lykon/dreamshaper-xl-v2-turbo'
+    | 'Lykon/dreamshaper-8';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -3617,12 +3617,12 @@ export type DreamshaperInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -3665,11 +3665,11 @@ export type DreamshaperInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type DreamshaperOutput = {
   /**
@@ -3702,7 +3702,7 @@ export type DubbingInput = {
   /**
    * Target language to dub the video to Default value: `"hindi"`
    */
-  target_language?: "hindi" | "turkish" | "english";
+  target_language?: 'hindi' | 'turkish' | 'english';
   /**
    * Whether to lip sync the audio to the video Default value: `true`
    */
@@ -3746,7 +3746,7 @@ export type EditImageInput = {
   /**
    * The style of the generated image Default value: `"auto"`
    */
-  style?: "auto" | "general" | "realistic" | "design" | "render_3D" | "anime";
+  style?: 'auto' | 'general' | 'realistic' | 'design' | 'render_3D' | 'anime';
   /**
    * Whether to expand the prompt with MagicPrompt functionality. Default value: `true`
    */
@@ -3804,7 +3804,7 @@ export type EraserInput = {
   /**
    * You can use this parameter to specify the type of the input mask from the list. 'manual' opttion should be used in cases in which the mask had been generated by a user (e.g. with a brush tool), and 'automatic' mask type should be used when mask had been generated by an algorithm like 'SAM'. Default value: `"manual"`
    */
-  mask_type?: "manual" | "automatic";
+  mask_type?: 'manual' | 'automatic';
 };
 export type EraserOutput = {
   /**
@@ -3833,16 +3833,16 @@ export type EsrganInput = {
    * Model to use for upscaling Default value: `"RealESRGAN_x4plus"`
    */
   model?:
-    | "RealESRGAN_x4plus"
-    | "RealESRGAN_x2plus"
-    | "RealESRGAN_x4plus_anime_6B"
-    | "RealESRGAN_x4_v3"
-    | "RealESRGAN_x4_wdn_v3"
-    | "RealESRGAN_x4_anime_v3";
+    | 'RealESRGAN_x4plus'
+    | 'RealESRGAN_x2plus'
+    | 'RealESRGAN_x4plus_anime_6B'
+    | 'RealESRGAN_x4_v3'
+    | 'RealESRGAN_x4_wdn_v3'
+    | 'RealESRGAN_x4_anime_v3';
   /**
    * Output image format (png or jpeg) Default value: `"png"`
    */
-  output_format?: "png" | "jpeg";
+  output_format?: 'png' | 'jpeg';
 };
 export type EsrganOutput = {
   /**
@@ -3866,7 +3866,7 @@ export type F5TtsInput = {
   /**
    * The name of the model to be used for TTS.
    */
-  model_type: "F5-TTS" | "E2-TTS";
+  model_type: 'F5-TTS' | 'E2-TTS';
   /**
    * Whether to remove the silence from the audio file. Default value: `true`
    */
@@ -3920,12 +3920,12 @@ export type FaceToStickerInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * Whether to upscale the image 2x.
    */
@@ -4004,19 +4004,19 @@ export type FastAnimatediffTextToVideoInput = {
    * The motions to apply to the video.
    */
   motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+    'zoom-out' | 'zoom-in' | 'pan-left' | 'pan-right' | 'tilt-up' | 'tilt-down'
   >;
   /**
    * The size of the video to generate. Default value: `square`
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
 };
 export type FastAnimatediffTextToVideoOutput = {
   /**
@@ -4064,19 +4064,19 @@ export type FastAnimatediffTurboTextToVideoInput = {
    * The motions to apply to the video.
    */
   motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+    'zoom-out' | 'zoom-in' | 'pan-left' | 'pan-right' | 'tilt-up' | 'tilt-down'
   >;
   /**
    * The size of the video to generate. Default value: `square`
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
 };
 export type FastAnimatediffTurboTextToVideoOutput = {
   /**
@@ -4132,7 +4132,7 @@ export type FastAnimatediffTurboVideoToVideoInput = {
    * The motions to apply to the video.
    */
   motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+    'zoom-out' | 'zoom-in' | 'pan-left' | 'pan-right' | 'tilt-up' | 'tilt-down'
   >;
 };
 export type FastAnimatediffTurboVideoToVideoOutput = {
@@ -4190,7 +4190,7 @@ export type FastAnimatediffVideoToVideoInput = {
    * The motions to apply to the video.
    */
   motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+    'zoom-out' | 'zoom-in' | 'pan-left' | 'pan-right' | 'tilt-up' | 'tilt-down'
   >;
 };
 export type FastAnimatediffVideoToVideoOutput = {
@@ -4223,12 +4223,12 @@ export type FastFooocusSdxlImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `8`
    */
@@ -4262,7 +4262,7 @@ export type FastFooocusSdxlImageToImageInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts. Default value: `true`
    */
@@ -4270,7 +4270,7 @@ export type FastFooocusSdxlImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -4319,12 +4319,12 @@ export type FastFooocusSdxlInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `8`
    */
@@ -4354,7 +4354,7 @@ export type FastFooocusSdxlInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts. Default value: `true`
    */
@@ -4362,7 +4362,7 @@ export type FastFooocusSdxlInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -4400,8 +4400,8 @@ export type FastLcmDiffusionImageToImageInput = {
    * The name of the model to use. Default value: `"stabilityai/stable-diffusion-xl-base-1.0"`
    */
   model_name?:
-    | "stabilityai/stable-diffusion-xl-base-1.0"
-    | "runwayml/stable-diffusion-v1-5";
+    | 'stabilityai/stable-diffusion-xl-base-1.0'
+    | 'runwayml/stable-diffusion-v1-5';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -4421,12 +4421,12 @@ export type FastLcmDiffusionImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `6`
    */
@@ -4462,7 +4462,7 @@ export type FastLcmDiffusionImageToImageInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -4470,7 +4470,7 @@ export type FastLcmDiffusionImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -4509,8 +4509,8 @@ export type FastLcmDiffusionInpaintingInput = {
    * The name of the model to use. Default value: `"stabilityai/stable-diffusion-xl-base-1.0"`
    */
   model_name?:
-    | "stabilityai/stable-diffusion-xl-base-1.0"
-    | "runwayml/stable-diffusion-v1-5";
+    | 'stabilityai/stable-diffusion-xl-base-1.0'
+    | 'runwayml/stable-diffusion-v1-5';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -4534,12 +4534,12 @@ export type FastLcmDiffusionInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `6`
    */
@@ -4575,7 +4575,7 @@ export type FastLcmDiffusionInpaintingInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -4583,7 +4583,7 @@ export type FastLcmDiffusionInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -4622,8 +4622,8 @@ export type FastLcmDiffusionInput = {
    * The name of the model to use. Default value: `"stabilityai/stable-diffusion-xl-base-1.0"`
    */
   model_name?:
-    | "stabilityai/stable-diffusion-xl-base-1.0"
-    | "runwayml/stable-diffusion-v1-5";
+    | 'stabilityai/stable-diffusion-xl-base-1.0'
+    | 'runwayml/stable-diffusion-v1-5';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -4639,12 +4639,12 @@ export type FastLcmDiffusionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `6`
    */
@@ -4676,7 +4676,7 @@ export type FastLcmDiffusionInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -4684,7 +4684,7 @@ export type FastLcmDiffusionInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -4732,16 +4732,16 @@ export type FastLightningSdxlImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"4"`
    */
-  num_inference_steps?: "1" | "2" | "4" | "8";
+  num_inference_steps?: '1' | '2' | '4' | '8';
   /**
    * determines how much the generated image resembles the initial image Default value: `0.95`
    */
@@ -4776,7 +4776,7 @@ export type FastLightningSdxlImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type FastLightningSdxlImageToImageOutput = {
   /**
@@ -4819,16 +4819,16 @@ export type FastLightningSdxlInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"4"`
    */
-  num_inference_steps?: "1" | "2" | "4" | "8";
+  num_inference_steps?: '1' | '2' | '4' | '8';
   /**
    * determines how much the generated image resembles the initial image Default value: `0.95`
    */
@@ -4863,7 +4863,7 @@ export type FastLightningSdxlInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type FastLightningSdxlInpaintingOutput = {
   /**
@@ -4898,16 +4898,16 @@ export type FastLightningSdxlInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"4"`
    */
-  num_inference_steps?: "1" | "2" | "4" | "8";
+  num_inference_steps?: '1' | '2' | '4' | '8';
   /**
    * The same seed and the same prompt given to the same version of Stable Diffusion
    * will output the same image every time.
@@ -4938,7 +4938,7 @@ export type FastLightningSdxlInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type FastLightningSdxlOutput = {
   /**
@@ -4991,12 +4991,12 @@ export type FastSdxlControlnetCannyImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -5089,12 +5089,12 @@ export type FastSdxlControlnetCannyInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -5179,12 +5179,12 @@ export type FastSdxlControlnetCannyInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -5265,12 +5265,12 @@ export type FastSdxlImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -5314,7 +5314,7 @@ export type FastSdxlImageToImageInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -5322,7 +5322,7 @@ export type FastSdxlImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -5376,12 +5376,12 @@ export type FastSdxlInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -5425,7 +5425,7 @@ export type FastSdxlInpaintingInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -5433,7 +5433,7 @@ export type FastSdxlInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -5479,12 +5479,12 @@ export type FastSdxlInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -5524,7 +5524,7 @@ export type FastSdxlInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -5532,7 +5532,7 @@ export type FastSdxlInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -5676,12 +5676,12 @@ export type FastSvdLcmTextToVideoInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
 };
 export type FastSvdLcmTextToVideoOutput = {
   /**
@@ -5731,12 +5731,12 @@ export type FastSVDTextInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
 };
 export type FastSvdTextToVideoInput = {
   /**
@@ -5770,7 +5770,7 @@ export type FastSvdTextToVideoInput = {
    * faster, but might sometimes degrade overall quality. The higher the setting, the
    * faster the execution will be, but the more quality might be lost. Default value: `"none"`
    */
-  deep_cache?: "none" | "minimum" | "medium" | "high";
+  deep_cache?: 'none' | 'minimum' | 'medium' | 'high';
   /**
    * The FPS of the generated video. The higher the number, the faster the video will
    * play. Total video length is 25 frames. Default value: `10`
@@ -5785,12 +5785,12 @@ export type FastSvdTextToVideoInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
 };
 export type FastSvdTextToVideoOutput = {
   /**
@@ -5807,7 +5807,7 @@ export type FastTurboDiffusionImageToImageInput = {
   /**
    * The name of the model to use. Default value: `"stabilityai/sdxl-turbo"`
    */
-  model_name?: "stabilityai/sdxl-turbo" | "stabilityai/sd-turbo";
+  model_name?: 'stabilityai/sdxl-turbo' | 'stabilityai/sd-turbo';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -5827,12 +5827,12 @@ export type FastTurboDiffusionImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `2`
    */
@@ -5893,7 +5893,7 @@ export type FastTurboDiffusionInpaintingInput = {
   /**
    * The name of the model to use. Default value: `"stabilityai/sdxl-turbo"`
    */
-  model_name?: "stabilityai/sdxl-turbo" | "stabilityai/sd-turbo";
+  model_name?: 'stabilityai/sdxl-turbo' | 'stabilityai/sd-turbo';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -5917,12 +5917,12 @@ export type FastTurboDiffusionInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `2`
    */
@@ -5983,7 +5983,7 @@ export type FastTurboDiffusionInput = {
   /**
    * The name of the model to use. Default value: `"stabilityai/sdxl-turbo"`
    */
-  model_name?: "stabilityai/sdxl-turbo" | "stabilityai/sd-turbo";
+  model_name?: 'stabilityai/sdxl-turbo' | 'stabilityai/sd-turbo';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -5999,12 +5999,12 @@ export type FastTurboDiffusionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `2`
    */
@@ -6424,12 +6424,12 @@ export type FluxDevInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -6492,12 +6492,12 @@ export type FluxDevReduxInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -6629,12 +6629,12 @@ export type FluxGeneralDifferentialDiffusionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -6765,12 +6765,12 @@ export type FluxGeneralImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -6897,12 +6897,12 @@ export type FluxGeneralInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7033,12 +7033,12 @@ export type FluxGeneralInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7157,12 +7157,12 @@ export type FluxGeneralRfInversionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7257,9 +7257,9 @@ export type FluxGeneralRfInversionInput = {
    * Scheduler for applying reverse guidance. Default value: `"constant"`
    */
   reverse_guidance_schedule?:
-    | "constant"
-    | "linear_increase"
-    | "linear_decrease";
+    | 'constant'
+    | 'linear_increase'
+    | 'linear_decrease';
 };
 export type FluxGeneralRfInversionOutput = {
   /**
@@ -7294,12 +7294,12 @@ export type FluxLoraCannyInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7336,7 +7336,7 @@ export type FluxLoraCannyInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * URL of image to use for canny input
    */
@@ -7375,12 +7375,12 @@ export type FluxLoraDepthInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7417,7 +7417,7 @@ export type FluxLoraDepthInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * URL of image to use for depth input
    */
@@ -7503,12 +7503,12 @@ export type FluxLoraFillInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7545,7 +7545,7 @@ export type FluxLoraFillInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * URL of image to use for fill operation
    */
@@ -7592,12 +7592,12 @@ export type FluxLoraImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7634,7 +7634,7 @@ export type FluxLoraImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * URL of image to use for inpainting. or img2img
    */
@@ -7677,12 +7677,12 @@ export type FluxLoraInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7719,7 +7719,7 @@ export type FluxLoraInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * URL of image to use for inpainting. or img2img
    */
@@ -7766,12 +7766,12 @@ export type FluxLoraInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7808,7 +7808,7 @@ export type FluxLoraInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type FluxLoraOutput = {
   /**
@@ -7892,12 +7892,12 @@ export type FluxProCannyControlFinetunedInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7925,11 +7925,11 @@ export type FluxProCannyControlFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The control image URL to generate the Canny edge map from.
    */
@@ -7955,12 +7955,12 @@ export type FluxProCannyControlInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -7988,11 +7988,11 @@ export type FluxProCannyControlInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The control image URL to generate the Canny edge map from.
    */
@@ -8008,12 +8008,12 @@ export type FluxProDepthControlFinetunedInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -8041,11 +8041,11 @@ export type FluxProDepthControlFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The control image URL to generate the depth map from.
    */
@@ -8071,12 +8071,12 @@ export type FluxProDepthControlInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -8104,11 +8104,11 @@ export type FluxProDepthControlInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The control image URL to generate the depth map from.
    */
@@ -8137,11 +8137,11 @@ export type FluxProFillFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
@@ -8184,11 +8184,11 @@ export type FluxProFillInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
@@ -8208,12 +8208,12 @@ export type FluxProNewInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -8241,11 +8241,11 @@ export type FluxProNewInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type FluxProNewOutput = {
   /**
@@ -8293,11 +8293,11 @@ export type FluxProOutpaintInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The image URL to expand using outpainting
    */
@@ -8329,12 +8329,12 @@ export type FluxProPlusTextToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The same seed and the same prompt given to the same version of the model
    * will output the same image every time.
@@ -8357,11 +8357,11 @@ export type FluxProPlusTextToImageInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type FluxProTextToImageFinetunedInput = {
   /**
@@ -8373,12 +8373,12 @@ export type FluxProTextToImageFinetunedInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -8406,11 +8406,11 @@ export type FluxProTextToImageFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * References your specific model
    */
@@ -8432,12 +8432,12 @@ export type FluxProTextToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -8465,11 +8465,11 @@ export type FluxProTextToImageInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type FluxProTrainerInput = {
   /**
@@ -8479,7 +8479,7 @@ export type FluxProTrainerInput = {
   /**
    * Determines the finetuning approach based on your concept Default value: `"character"`
    */
-  mode?: "character" | "product" | "style" | "general";
+  mode?: 'character' | 'product' | 'style' | 'general';
   /**
    * Descriptive note to identify your fine-tune since names are UUIDs. Will be displayed in finetune_details.
    */
@@ -8495,7 +8495,7 @@ export type FluxProTrainerInput = {
   /**
    * The speed priority will improve training and inference speed Default value: `"quality"`
    */
-  priority?: "speed" | "quality";
+  priority?: 'speed' | 'quality';
   /**
    * Enables/disables automatic image captioning Default value: `true`
    */
@@ -8511,7 +8511,7 @@ export type FluxProTrainerInput = {
   /**
    * Choose between 'full' for a full finetuning + post hoc extraction of the trained weights into a LoRA or 'lora' for a raw LoRA training Default value: `"full"`
    */
-  finetune_type?: "full" | "lora";
+  finetune_type?: 'full' | 'lora';
 };
 export type FluxProTrainerOutput = {
   /**
@@ -8546,15 +8546,15 @@ export type FluxProUltraTextToImageFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The aspect ratio of the generated image. Default value: `"16:9"`
    */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "9:21";
+  aspect_ratio?: '21:9' | '16:9' | '4:3' | '1:1' | '3:4' | '9:16' | '9:21';
   /**
    * Generate less processed, more natural-looking images.
    */
@@ -8597,15 +8597,15 @@ export type FluxProUltraTextToImageInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The aspect ratio of the generated image. Default value: `"16:9"`
    */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "9:21";
+  aspect_ratio?: '21:9' | '16:9' | '4:3' | '1:1' | '3:4' | '9:16' | '9:21';
   /**
    * Generate less processed, more natural-looking images.
    */
@@ -8621,12 +8621,12 @@ export type FluxProV11Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The same seed and the same prompt given to the same version of the model
    * will output the same image every time.
@@ -8649,11 +8649,11 @@ export type FluxProV11Input = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type FluxProV11Output = {
   /**
@@ -8688,12 +8688,12 @@ export type FluxProV11ReduxInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -8721,11 +8721,11 @@ export type FluxProV11ReduxInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
@@ -8781,15 +8781,15 @@ export type FluxProV11UltraFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The aspect ratio of the generated image. Default value: `"16:9"`
    */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "9:21";
+  aspect_ratio?: '21:9' | '16:9' | '4:3' | '1:1' | '3:4' | '9:16' | '9:21';
   /**
    * Generate less processed, more natural-looking images.
    */
@@ -8855,15 +8855,15 @@ export type FluxProV11UltraInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The aspect ratio of the generated image. Default value: `"16:9"`
    */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "9:21";
+  aspect_ratio?: '21:9' | '16:9' | '4:3' | '1:1' | '3:4' | '9:16' | '9:21';
   /**
    * Generate less processed, more natural-looking images.
    */
@@ -8919,15 +8919,15 @@ export type FluxProV11UltraReduxInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The aspect ratio of the generated image. Default value: `"16:9"`
    */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "9:21";
+  aspect_ratio?: '21:9' | '16:9' | '4:3' | '1:1' | '3:4' | '9:16' | '9:21';
   /**
    * Generate less processed, more natural-looking images.
    */
@@ -8974,12 +8974,12 @@ export type FluxProV1CannyFinetunedInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -9007,11 +9007,11 @@ export type FluxProV1CannyFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The control image URL to generate the Canny edge map from.
    */
@@ -9060,12 +9060,12 @@ export type FluxProV1CannyInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -9093,11 +9093,11 @@ export type FluxProV1CannyInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The control image URL to generate the Canny edge map from.
    */
@@ -9136,12 +9136,12 @@ export type FluxProV1DepthFinetunedInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -9169,11 +9169,11 @@ export type FluxProV1DepthFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The control image URL to generate the depth map from.
    */
@@ -9222,12 +9222,12 @@ export type FluxProV1DepthInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -9255,11 +9255,11 @@ export type FluxProV1DepthInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The control image URL to generate the depth map from.
    */
@@ -9311,11 +9311,11 @@ export type FluxProV1FillFinetunedInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
@@ -9381,11 +9381,11 @@ export type FluxProV1FillInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
@@ -9428,12 +9428,12 @@ export type FluxProV1ReduxInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -9461,11 +9461,11 @@ export type FluxProV1ReduxInput = {
   /**
    * The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default value: `"2"`
    */
-  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  safety_tolerance?: '1' | '2' | '3' | '4' | '5' | '6';
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
@@ -9508,12 +9508,12 @@ export type FluxPulidInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `20`
    */
@@ -9557,7 +9557,7 @@ export type FluxPulidInput = {
   /**
    * The maximum sequence length for the model. Default value: `"128"`
    */
-  max_sequence_length?: "128" | "256" | "512";
+  max_sequence_length?: '128' | '256' | '512';
 };
 export type FluxPulidOutput = {
   /**
@@ -9592,12 +9592,12 @@ export type FluxSchnellInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `4`
    */
@@ -9655,12 +9655,12 @@ export type FluxSchnellReduxInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `4`
    */
@@ -9722,12 +9722,12 @@ export type FluxSubjectInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `8`
    */
@@ -9759,7 +9759,7 @@ export type FluxSubjectInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type FluxSubjectOutput = {
   /**
@@ -9799,288 +9799,288 @@ export type FooocusImagePromptInput = {
    * The style to use. Default value: `Fooocus Enhance,Fooocus V2,Fooocus Sharp`
    */
   styles?: Array<
-    | "Fooocus V2"
-    | "Fooocus Enhance"
-    | "Fooocus Sharp"
-    | "Fooocus Semi Realistic"
-    | "Fooocus Masterpiece"
-    | "Fooocus Photograph"
-    | "Fooocus Negative"
-    | "Fooocus Cinematic"
-    | "SAI 3D Model"
-    | "SAI Analog Film"
-    | "SAI Anime"
-    | "SAI Cinematic"
-    | "SAI Comic Book"
-    | "SAI Craft Clay"
-    | "SAI Digital Art"
-    | "SAI Enhance"
-    | "SAI Fantasy Art"
-    | "SAI Isometric"
-    | "SAI Line Art"
-    | "SAI Lowpoly"
-    | "SAI Neonpunk"
-    | "SAI Origami"
-    | "SAI Photographic"
-    | "SAI Pixel Art"
-    | "SAI Texture"
-    | "MRE Cinematic Dynamic"
-    | "MRE Spontaneous Picture"
-    | "MRE Artistic Vision"
-    | "MRE Dark Dream"
-    | "MRE Gloomy Art"
-    | "MRE Bad Dream"
-    | "MRE Underground"
-    | "MRE Surreal Painting"
-    | "MRE Dynamic Illustration"
-    | "MRE Undead Art"
-    | "MRE Elemental Art"
-    | "MRE Space Art"
-    | "MRE Ancient Illustration"
-    | "MRE Brave Art"
-    | "MRE Heroic Fantasy"
-    | "MRE Dark Cyberpunk"
-    | "MRE Lyrical Geometry"
-    | "MRE Sumi E Symbolic"
-    | "MRE Sumi E Detailed"
-    | "MRE Manga"
-    | "MRE Anime"
-    | "MRE Comic"
-    | "Ads Advertising"
-    | "Ads Automotive"
-    | "Ads Corporate"
-    | "Ads Fashion Editorial"
-    | "Ads Food Photography"
-    | "Ads Gourmet Food Photography"
-    | "Ads Luxury"
-    | "Ads Real Estate"
-    | "Ads Retail"
-    | "Artstyle Abstract"
-    | "Artstyle Abstract Expressionism"
-    | "Artstyle Art Deco"
-    | "Artstyle Art Nouveau"
-    | "Artstyle Constructivist"
-    | "Artstyle Cubist"
-    | "Artstyle Expressionist"
-    | "Artstyle Graffiti"
-    | "Artstyle Hyperrealism"
-    | "Artstyle Impressionist"
-    | "Artstyle Pointillism"
-    | "Artstyle Pop Art"
-    | "Artstyle Psychedelic"
-    | "Artstyle Renaissance"
-    | "Artstyle Steampunk"
-    | "Artstyle Surrealist"
-    | "Artstyle Typography"
-    | "Artstyle Watercolor"
-    | "Futuristic Biomechanical"
-    | "Futuristic Biomechanical Cyberpunk"
-    | "Futuristic Cybernetic"
-    | "Futuristic Cybernetic Robot"
-    | "Futuristic Cyberpunk Cityscape"
-    | "Futuristic Futuristic"
-    | "Futuristic Retro Cyberpunk"
-    | "Futuristic Retro Futurism"
-    | "Futuristic Sci Fi"
-    | "Futuristic Vaporwave"
-    | "Game Bubble Bobble"
-    | "Game Cyberpunk Game"
-    | "Game Fighting Game"
-    | "Game Gta"
-    | "Game Mario"
-    | "Game Minecraft"
-    | "Game Pokemon"
-    | "Game Retro Arcade"
-    | "Game Retro Game"
-    | "Game Rpg Fantasy Game"
-    | "Game Strategy Game"
-    | "Game Streetfighter"
-    | "Game Zelda"
-    | "Misc Architectural"
-    | "Misc Disco"
-    | "Misc Dreamscape"
-    | "Misc Dystopian"
-    | "Misc Fairy Tale"
-    | "Misc Gothic"
-    | "Misc Grunge"
-    | "Misc Horror"
-    | "Misc Kawaii"
-    | "Misc Lovecraftian"
-    | "Misc Macabre"
-    | "Misc Manga"
-    | "Misc Metropolis"
-    | "Misc Minimalist"
-    | "Misc Monochrome"
-    | "Misc Nautical"
-    | "Misc Space"
-    | "Misc Stained Glass"
-    | "Misc Techwear Fashion"
-    | "Misc Tribal"
-    | "Misc Zentangle"
-    | "Papercraft Collage"
-    | "Papercraft Flat Papercut"
-    | "Papercraft Kirigami"
-    | "Papercraft Paper Mache"
-    | "Papercraft Paper Quilling"
-    | "Papercraft Papercut Collage"
-    | "Papercraft Papercut Shadow Box"
-    | "Papercraft Stacked Papercut"
-    | "Papercraft Thick Layered Papercut"
-    | "Photo Alien"
-    | "Photo Film Noir"
-    | "Photo Glamour"
-    | "Photo Hdr"
-    | "Photo Iphone Photographic"
-    | "Photo Long Exposure"
-    | "Photo Neon Noir"
-    | "Photo Silhouette"
-    | "Photo Tilt Shift"
-    | "Cinematic Diva"
-    | "Abstract Expressionism"
-    | "Academia"
-    | "Action Figure"
-    | "Adorable 3D Character"
-    | "Adorable Kawaii"
-    | "Art Deco"
-    | "Art Nouveau"
-    | "Astral Aura"
-    | "Avant Garde"
-    | "Baroque"
-    | "Bauhaus Style Poster"
-    | "Blueprint Schematic Drawing"
-    | "Caricature"
-    | "Cel Shaded Art"
-    | "Character Design Sheet"
-    | "Classicism Art"
-    | "Color Field Painting"
-    | "Colored Pencil Art"
-    | "Conceptual Art"
-    | "Constructivism"
-    | "Cubism"
-    | "Dadaism"
-    | "Dark Fantasy"
-    | "Dark Moody Atmosphere"
-    | "Dmt Art Style"
-    | "Doodle Art"
-    | "Double Exposure"
-    | "Dripping Paint Splatter Art"
-    | "Expressionism"
-    | "Faded Polaroid Photo"
-    | "Fauvism"
-    | "Flat 2d Art"
-    | "Fortnite Art Style"
-    | "Futurism"
-    | "Glitchcore"
-    | "Glo Fi"
-    | "Googie Art Style"
-    | "Graffiti Art"
-    | "Harlem Renaissance Art"
-    | "High Fashion"
-    | "Idyllic"
-    | "Impressionism"
-    | "Infographic Drawing"
-    | "Ink Dripping Drawing"
-    | "Japanese Ink Drawing"
-    | "Knolling Photography"
-    | "Light Cheery Atmosphere"
-    | "Logo Design"
-    | "Luxurious Elegance"
-    | "Macro Photography"
-    | "Mandola Art"
-    | "Marker Drawing"
-    | "Medievalism"
-    | "Minimalism"
-    | "Neo Baroque"
-    | "Neo Byzantine"
-    | "Neo Futurism"
-    | "Neo Impressionism"
-    | "Neo Rococo"
-    | "Neoclassicism"
-    | "Op Art"
-    | "Ornate And Intricate"
-    | "Pencil Sketch Drawing"
-    | "Pop Art 2"
-    | "Rococo"
-    | "Silhouette Art"
-    | "Simple Vector Art"
-    | "Sketchup"
-    | "Steampunk 2"
-    | "Surrealism"
-    | "Suprematism"
-    | "Terragen"
-    | "Tranquil Relaxing Atmosphere"
-    | "Sticker Designs"
-    | "Vibrant Rim Light"
-    | "Volumetric Lighting"
-    | "Watercolor 2"
-    | "Whimsical And Playful"
-    | "Mk Chromolithography"
-    | "Mk Cross Processing Print"
-    | "Mk Dufaycolor Photograph"
-    | "Mk Herbarium"
-    | "Mk Punk Collage"
-    | "Mk Mosaic"
-    | "Mk Van Gogh"
-    | "Mk Coloring Book"
-    | "Mk Singer Sargent"
-    | "Mk Pollock"
-    | "Mk Basquiat"
-    | "Mk Andy Warhol"
-    | "Mk Halftone Print"
-    | "Mk Gond Painting"
-    | "Mk Albumen Print"
-    | "Mk Aquatint Print"
-    | "Mk Anthotype Print"
-    | "Mk Inuit Carving"
-    | "Mk Bromoil Print"
-    | "Mk Calotype Print"
-    | "Mk Color Sketchnote"
-    | "Mk Cibulak Porcelain"
-    | "Mk Alcohol Ink Art"
-    | "Mk One Line Art"
-    | "Mk Blacklight Paint"
-    | "Mk Carnival Glass"
-    | "Mk Cyanotype Print"
-    | "Mk Cross Stitching"
-    | "Mk Encaustic Paint"
-    | "Mk Embroidery"
-    | "Mk Gyotaku"
-    | "Mk Luminogram"
-    | "Mk Lite Brite Art"
-    | "Mk Mokume Gane"
-    | "Pebble Art"
-    | "Mk Palekh"
-    | "Mk Suminagashi"
-    | "Mk Scrimshaw"
-    | "Mk Shibori"
-    | "Mk Vitreous Enamel"
-    | "Mk Ukiyo E"
-    | "Mk Vintage Airline Poster"
-    | "Mk Vintage Travel Poster"
-    | "Mk Bauhaus Style"
-    | "Mk Afrofuturism"
-    | "Mk Atompunk"
-    | "Mk Constructivism"
-    | "Mk Chicano Art"
-    | "Mk De Stijl"
-    | "Mk Dayak Art"
-    | "Mk Fayum Portrait"
-    | "Mk Illuminated Manuscript"
-    | "Mk Kalighat Painting"
-    | "Mk Madhubani Painting"
-    | "Mk Pictorialism"
-    | "Mk Pichwai Painting"
-    | "Mk Patachitra Painting"
-    | "Mk Samoan Art Inspired"
-    | "Mk Tlingit Art"
-    | "Mk Adnate Style"
-    | "Mk Ron English Style"
-    | "Mk Shepard Fairey Style"
+    | 'Fooocus V2'
+    | 'Fooocus Enhance'
+    | 'Fooocus Sharp'
+    | 'Fooocus Semi Realistic'
+    | 'Fooocus Masterpiece'
+    | 'Fooocus Photograph'
+    | 'Fooocus Negative'
+    | 'Fooocus Cinematic'
+    | 'SAI 3D Model'
+    | 'SAI Analog Film'
+    | 'SAI Anime'
+    | 'SAI Cinematic'
+    | 'SAI Comic Book'
+    | 'SAI Craft Clay'
+    | 'SAI Digital Art'
+    | 'SAI Enhance'
+    | 'SAI Fantasy Art'
+    | 'SAI Isometric'
+    | 'SAI Line Art'
+    | 'SAI Lowpoly'
+    | 'SAI Neonpunk'
+    | 'SAI Origami'
+    | 'SAI Photographic'
+    | 'SAI Pixel Art'
+    | 'SAI Texture'
+    | 'MRE Cinematic Dynamic'
+    | 'MRE Spontaneous Picture'
+    | 'MRE Artistic Vision'
+    | 'MRE Dark Dream'
+    | 'MRE Gloomy Art'
+    | 'MRE Bad Dream'
+    | 'MRE Underground'
+    | 'MRE Surreal Painting'
+    | 'MRE Dynamic Illustration'
+    | 'MRE Undead Art'
+    | 'MRE Elemental Art'
+    | 'MRE Space Art'
+    | 'MRE Ancient Illustration'
+    | 'MRE Brave Art'
+    | 'MRE Heroic Fantasy'
+    | 'MRE Dark Cyberpunk'
+    | 'MRE Lyrical Geometry'
+    | 'MRE Sumi E Symbolic'
+    | 'MRE Sumi E Detailed'
+    | 'MRE Manga'
+    | 'MRE Anime'
+    | 'MRE Comic'
+    | 'Ads Advertising'
+    | 'Ads Automotive'
+    | 'Ads Corporate'
+    | 'Ads Fashion Editorial'
+    | 'Ads Food Photography'
+    | 'Ads Gourmet Food Photography'
+    | 'Ads Luxury'
+    | 'Ads Real Estate'
+    | 'Ads Retail'
+    | 'Artstyle Abstract'
+    | 'Artstyle Abstract Expressionism'
+    | 'Artstyle Art Deco'
+    | 'Artstyle Art Nouveau'
+    | 'Artstyle Constructivist'
+    | 'Artstyle Cubist'
+    | 'Artstyle Expressionist'
+    | 'Artstyle Graffiti'
+    | 'Artstyle Hyperrealism'
+    | 'Artstyle Impressionist'
+    | 'Artstyle Pointillism'
+    | 'Artstyle Pop Art'
+    | 'Artstyle Psychedelic'
+    | 'Artstyle Renaissance'
+    | 'Artstyle Steampunk'
+    | 'Artstyle Surrealist'
+    | 'Artstyle Typography'
+    | 'Artstyle Watercolor'
+    | 'Futuristic Biomechanical'
+    | 'Futuristic Biomechanical Cyberpunk'
+    | 'Futuristic Cybernetic'
+    | 'Futuristic Cybernetic Robot'
+    | 'Futuristic Cyberpunk Cityscape'
+    | 'Futuristic Futuristic'
+    | 'Futuristic Retro Cyberpunk'
+    | 'Futuristic Retro Futurism'
+    | 'Futuristic Sci Fi'
+    | 'Futuristic Vaporwave'
+    | 'Game Bubble Bobble'
+    | 'Game Cyberpunk Game'
+    | 'Game Fighting Game'
+    | 'Game Gta'
+    | 'Game Mario'
+    | 'Game Minecraft'
+    | 'Game Pokemon'
+    | 'Game Retro Arcade'
+    | 'Game Retro Game'
+    | 'Game Rpg Fantasy Game'
+    | 'Game Strategy Game'
+    | 'Game Streetfighter'
+    | 'Game Zelda'
+    | 'Misc Architectural'
+    | 'Misc Disco'
+    | 'Misc Dreamscape'
+    | 'Misc Dystopian'
+    | 'Misc Fairy Tale'
+    | 'Misc Gothic'
+    | 'Misc Grunge'
+    | 'Misc Horror'
+    | 'Misc Kawaii'
+    | 'Misc Lovecraftian'
+    | 'Misc Macabre'
+    | 'Misc Manga'
+    | 'Misc Metropolis'
+    | 'Misc Minimalist'
+    | 'Misc Monochrome'
+    | 'Misc Nautical'
+    | 'Misc Space'
+    | 'Misc Stained Glass'
+    | 'Misc Techwear Fashion'
+    | 'Misc Tribal'
+    | 'Misc Zentangle'
+    | 'Papercraft Collage'
+    | 'Papercraft Flat Papercut'
+    | 'Papercraft Kirigami'
+    | 'Papercraft Paper Mache'
+    | 'Papercraft Paper Quilling'
+    | 'Papercraft Papercut Collage'
+    | 'Papercraft Papercut Shadow Box'
+    | 'Papercraft Stacked Papercut'
+    | 'Papercraft Thick Layered Papercut'
+    | 'Photo Alien'
+    | 'Photo Film Noir'
+    | 'Photo Glamour'
+    | 'Photo Hdr'
+    | 'Photo Iphone Photographic'
+    | 'Photo Long Exposure'
+    | 'Photo Neon Noir'
+    | 'Photo Silhouette'
+    | 'Photo Tilt Shift'
+    | 'Cinematic Diva'
+    | 'Abstract Expressionism'
+    | 'Academia'
+    | 'Action Figure'
+    | 'Adorable 3D Character'
+    | 'Adorable Kawaii'
+    | 'Art Deco'
+    | 'Art Nouveau'
+    | 'Astral Aura'
+    | 'Avant Garde'
+    | 'Baroque'
+    | 'Bauhaus Style Poster'
+    | 'Blueprint Schematic Drawing'
+    | 'Caricature'
+    | 'Cel Shaded Art'
+    | 'Character Design Sheet'
+    | 'Classicism Art'
+    | 'Color Field Painting'
+    | 'Colored Pencil Art'
+    | 'Conceptual Art'
+    | 'Constructivism'
+    | 'Cubism'
+    | 'Dadaism'
+    | 'Dark Fantasy'
+    | 'Dark Moody Atmosphere'
+    | 'Dmt Art Style'
+    | 'Doodle Art'
+    | 'Double Exposure'
+    | 'Dripping Paint Splatter Art'
+    | 'Expressionism'
+    | 'Faded Polaroid Photo'
+    | 'Fauvism'
+    | 'Flat 2d Art'
+    | 'Fortnite Art Style'
+    | 'Futurism'
+    | 'Glitchcore'
+    | 'Glo Fi'
+    | 'Googie Art Style'
+    | 'Graffiti Art'
+    | 'Harlem Renaissance Art'
+    | 'High Fashion'
+    | 'Idyllic'
+    | 'Impressionism'
+    | 'Infographic Drawing'
+    | 'Ink Dripping Drawing'
+    | 'Japanese Ink Drawing'
+    | 'Knolling Photography'
+    | 'Light Cheery Atmosphere'
+    | 'Logo Design'
+    | 'Luxurious Elegance'
+    | 'Macro Photography'
+    | 'Mandola Art'
+    | 'Marker Drawing'
+    | 'Medievalism'
+    | 'Minimalism'
+    | 'Neo Baroque'
+    | 'Neo Byzantine'
+    | 'Neo Futurism'
+    | 'Neo Impressionism'
+    | 'Neo Rococo'
+    | 'Neoclassicism'
+    | 'Op Art'
+    | 'Ornate And Intricate'
+    | 'Pencil Sketch Drawing'
+    | 'Pop Art 2'
+    | 'Rococo'
+    | 'Silhouette Art'
+    | 'Simple Vector Art'
+    | 'Sketchup'
+    | 'Steampunk 2'
+    | 'Surrealism'
+    | 'Suprematism'
+    | 'Terragen'
+    | 'Tranquil Relaxing Atmosphere'
+    | 'Sticker Designs'
+    | 'Vibrant Rim Light'
+    | 'Volumetric Lighting'
+    | 'Watercolor 2'
+    | 'Whimsical And Playful'
+    | 'Mk Chromolithography'
+    | 'Mk Cross Processing Print'
+    | 'Mk Dufaycolor Photograph'
+    | 'Mk Herbarium'
+    | 'Mk Punk Collage'
+    | 'Mk Mosaic'
+    | 'Mk Van Gogh'
+    | 'Mk Coloring Book'
+    | 'Mk Singer Sargent'
+    | 'Mk Pollock'
+    | 'Mk Basquiat'
+    | 'Mk Andy Warhol'
+    | 'Mk Halftone Print'
+    | 'Mk Gond Painting'
+    | 'Mk Albumen Print'
+    | 'Mk Aquatint Print'
+    | 'Mk Anthotype Print'
+    | 'Mk Inuit Carving'
+    | 'Mk Bromoil Print'
+    | 'Mk Calotype Print'
+    | 'Mk Color Sketchnote'
+    | 'Mk Cibulak Porcelain'
+    | 'Mk Alcohol Ink Art'
+    | 'Mk One Line Art'
+    | 'Mk Blacklight Paint'
+    | 'Mk Carnival Glass'
+    | 'Mk Cyanotype Print'
+    | 'Mk Cross Stitching'
+    | 'Mk Encaustic Paint'
+    | 'Mk Embroidery'
+    | 'Mk Gyotaku'
+    | 'Mk Luminogram'
+    | 'Mk Lite Brite Art'
+    | 'Mk Mokume Gane'
+    | 'Pebble Art'
+    | 'Mk Palekh'
+    | 'Mk Suminagashi'
+    | 'Mk Scrimshaw'
+    | 'Mk Shibori'
+    | 'Mk Vitreous Enamel'
+    | 'Mk Ukiyo E'
+    | 'Mk Vintage Airline Poster'
+    | 'Mk Vintage Travel Poster'
+    | 'Mk Bauhaus Style'
+    | 'Mk Afrofuturism'
+    | 'Mk Atompunk'
+    | 'Mk Constructivism'
+    | 'Mk Chicano Art'
+    | 'Mk De Stijl'
+    | 'Mk Dayak Art'
+    | 'Mk Fayum Portrait'
+    | 'Mk Illuminated Manuscript'
+    | 'Mk Kalighat Painting'
+    | 'Mk Madhubani Painting'
+    | 'Mk Pictorialism'
+    | 'Mk Pichwai Painting'
+    | 'Mk Patachitra Painting'
+    | 'Mk Samoan Art Inspired'
+    | 'Mk Tlingit Art'
+    | 'Mk Adnate Style'
+    | 'Mk Ron English Style'
+    | 'Mk Shepard Fairey Style'
   >;
   /**
    * You can choose Speed or Quality Default value: `"Extreme Speed"`
    */
-  performance?: "Speed" | "Quality" | "Extreme Speed" | "Lightning";
+  performance?: 'Speed' | 'Quality' | 'Extreme Speed' | 'Lightning';
   /**
    * The CFG (Classifier Free Guidance) scale is a measure of how close you want
    * the model to stick to your prompt when looking for a related image to show you. Default value: `4`
@@ -10108,7 +10108,7 @@ export type FooocusImagePromptInput = {
   /**
    * Refiner (SDXL or SD 1.5) Default value: `"None"`
    */
-  refiner_model?: "None" | "realisticVisionV60B1_v51VAE.safetensors";
+  refiner_model?: 'None' | 'realisticVisionV60B1_v51VAE.safetensors';
   /**
    * Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models
    * 0.8 for XL-refiners; or any value for switching two SDXL models. Default value: `0.8`
@@ -10117,7 +10117,7 @@ export type FooocusImagePromptInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "png" | "jpeg" | "webp";
+  output_format?: 'png' | 'jpeg' | 'webp';
   /**
    * If set to true, the function will wait for the image to be generated and uploaded
    * before returning the response. This will increase the latency of the function but
@@ -10157,9 +10157,9 @@ export type FooocusImagePromptInput = {
    * The mode to use for inpainting. Default value: `"Inpaint or Outpaint (default)"`
    */
   inpaint_mode?:
-    | "Inpaint or Outpaint (default)"
-    | "Improve Detail (face, hand, eyes, etc.)"
-    | "Modify Content (add objects, change background, etc.)";
+    | 'Inpaint or Outpaint (default)'
+    | 'Improve Detail (face, hand, eyes, etc.)'
+    | 'Modify Content (add objects, change background, etc.)';
   /**
    * Describe what you want to inpaint. Default value: `""`
    */
@@ -10167,7 +10167,7 @@ export type FooocusImagePromptInput = {
   /**
    * The directions to outpaint. Default value: ``
    */
-  outpaint_selections?: Array<"Left" | "Right" | "Top" | "Bottom">;
+  outpaint_selections?: Array<'Left' | 'Right' | 'Top' | 'Bottom'>;
   /**
    * Mixing Image Prompt and Inpaint
    */
@@ -10180,12 +10180,12 @@ export type FooocusImagePromptInput = {
    * The method to use for upscaling or varying. Default value: `"Disabled"`
    */
   uov_method?:
-    | "Disabled"
-    | "Vary (Subtle)"
-    | "Vary (Strong)"
-    | "Upscale (1.5x)"
-    | "Upscale (2x)"
-    | "Upscale (Fast 2x)";
+    | 'Disabled'
+    | 'Vary (Subtle)'
+    | 'Vary (Strong)'
+    | 'Upscale (1.5x)'
+    | 'Upscale (2x)'
+    | 'Upscale (Fast 2x)';
   /**
    * Mixing Image Prompt and Vary/Upscale
    */
@@ -10224,288 +10224,288 @@ export type FooocusInpaintInput = {
    * The style to use. Default value: `Fooocus Enhance,Fooocus V2,Fooocus Sharp`
    */
   styles?: Array<
-    | "Fooocus V2"
-    | "Fooocus Enhance"
-    | "Fooocus Sharp"
-    | "Fooocus Semi Realistic"
-    | "Fooocus Masterpiece"
-    | "Fooocus Photograph"
-    | "Fooocus Negative"
-    | "Fooocus Cinematic"
-    | "SAI 3D Model"
-    | "SAI Analog Film"
-    | "SAI Anime"
-    | "SAI Cinematic"
-    | "SAI Comic Book"
-    | "SAI Craft Clay"
-    | "SAI Digital Art"
-    | "SAI Enhance"
-    | "SAI Fantasy Art"
-    | "SAI Isometric"
-    | "SAI Line Art"
-    | "SAI Lowpoly"
-    | "SAI Neonpunk"
-    | "SAI Origami"
-    | "SAI Photographic"
-    | "SAI Pixel Art"
-    | "SAI Texture"
-    | "MRE Cinematic Dynamic"
-    | "MRE Spontaneous Picture"
-    | "MRE Artistic Vision"
-    | "MRE Dark Dream"
-    | "MRE Gloomy Art"
-    | "MRE Bad Dream"
-    | "MRE Underground"
-    | "MRE Surreal Painting"
-    | "MRE Dynamic Illustration"
-    | "MRE Undead Art"
-    | "MRE Elemental Art"
-    | "MRE Space Art"
-    | "MRE Ancient Illustration"
-    | "MRE Brave Art"
-    | "MRE Heroic Fantasy"
-    | "MRE Dark Cyberpunk"
-    | "MRE Lyrical Geometry"
-    | "MRE Sumi E Symbolic"
-    | "MRE Sumi E Detailed"
-    | "MRE Manga"
-    | "MRE Anime"
-    | "MRE Comic"
-    | "Ads Advertising"
-    | "Ads Automotive"
-    | "Ads Corporate"
-    | "Ads Fashion Editorial"
-    | "Ads Food Photography"
-    | "Ads Gourmet Food Photography"
-    | "Ads Luxury"
-    | "Ads Real Estate"
-    | "Ads Retail"
-    | "Artstyle Abstract"
-    | "Artstyle Abstract Expressionism"
-    | "Artstyle Art Deco"
-    | "Artstyle Art Nouveau"
-    | "Artstyle Constructivist"
-    | "Artstyle Cubist"
-    | "Artstyle Expressionist"
-    | "Artstyle Graffiti"
-    | "Artstyle Hyperrealism"
-    | "Artstyle Impressionist"
-    | "Artstyle Pointillism"
-    | "Artstyle Pop Art"
-    | "Artstyle Psychedelic"
-    | "Artstyle Renaissance"
-    | "Artstyle Steampunk"
-    | "Artstyle Surrealist"
-    | "Artstyle Typography"
-    | "Artstyle Watercolor"
-    | "Futuristic Biomechanical"
-    | "Futuristic Biomechanical Cyberpunk"
-    | "Futuristic Cybernetic"
-    | "Futuristic Cybernetic Robot"
-    | "Futuristic Cyberpunk Cityscape"
-    | "Futuristic Futuristic"
-    | "Futuristic Retro Cyberpunk"
-    | "Futuristic Retro Futurism"
-    | "Futuristic Sci Fi"
-    | "Futuristic Vaporwave"
-    | "Game Bubble Bobble"
-    | "Game Cyberpunk Game"
-    | "Game Fighting Game"
-    | "Game Gta"
-    | "Game Mario"
-    | "Game Minecraft"
-    | "Game Pokemon"
-    | "Game Retro Arcade"
-    | "Game Retro Game"
-    | "Game Rpg Fantasy Game"
-    | "Game Strategy Game"
-    | "Game Streetfighter"
-    | "Game Zelda"
-    | "Misc Architectural"
-    | "Misc Disco"
-    | "Misc Dreamscape"
-    | "Misc Dystopian"
-    | "Misc Fairy Tale"
-    | "Misc Gothic"
-    | "Misc Grunge"
-    | "Misc Horror"
-    | "Misc Kawaii"
-    | "Misc Lovecraftian"
-    | "Misc Macabre"
-    | "Misc Manga"
-    | "Misc Metropolis"
-    | "Misc Minimalist"
-    | "Misc Monochrome"
-    | "Misc Nautical"
-    | "Misc Space"
-    | "Misc Stained Glass"
-    | "Misc Techwear Fashion"
-    | "Misc Tribal"
-    | "Misc Zentangle"
-    | "Papercraft Collage"
-    | "Papercraft Flat Papercut"
-    | "Papercraft Kirigami"
-    | "Papercraft Paper Mache"
-    | "Papercraft Paper Quilling"
-    | "Papercraft Papercut Collage"
-    | "Papercraft Papercut Shadow Box"
-    | "Papercraft Stacked Papercut"
-    | "Papercraft Thick Layered Papercut"
-    | "Photo Alien"
-    | "Photo Film Noir"
-    | "Photo Glamour"
-    | "Photo Hdr"
-    | "Photo Iphone Photographic"
-    | "Photo Long Exposure"
-    | "Photo Neon Noir"
-    | "Photo Silhouette"
-    | "Photo Tilt Shift"
-    | "Cinematic Diva"
-    | "Abstract Expressionism"
-    | "Academia"
-    | "Action Figure"
-    | "Adorable 3D Character"
-    | "Adorable Kawaii"
-    | "Art Deco"
-    | "Art Nouveau"
-    | "Astral Aura"
-    | "Avant Garde"
-    | "Baroque"
-    | "Bauhaus Style Poster"
-    | "Blueprint Schematic Drawing"
-    | "Caricature"
-    | "Cel Shaded Art"
-    | "Character Design Sheet"
-    | "Classicism Art"
-    | "Color Field Painting"
-    | "Colored Pencil Art"
-    | "Conceptual Art"
-    | "Constructivism"
-    | "Cubism"
-    | "Dadaism"
-    | "Dark Fantasy"
-    | "Dark Moody Atmosphere"
-    | "Dmt Art Style"
-    | "Doodle Art"
-    | "Double Exposure"
-    | "Dripping Paint Splatter Art"
-    | "Expressionism"
-    | "Faded Polaroid Photo"
-    | "Fauvism"
-    | "Flat 2d Art"
-    | "Fortnite Art Style"
-    | "Futurism"
-    | "Glitchcore"
-    | "Glo Fi"
-    | "Googie Art Style"
-    | "Graffiti Art"
-    | "Harlem Renaissance Art"
-    | "High Fashion"
-    | "Idyllic"
-    | "Impressionism"
-    | "Infographic Drawing"
-    | "Ink Dripping Drawing"
-    | "Japanese Ink Drawing"
-    | "Knolling Photography"
-    | "Light Cheery Atmosphere"
-    | "Logo Design"
-    | "Luxurious Elegance"
-    | "Macro Photography"
-    | "Mandola Art"
-    | "Marker Drawing"
-    | "Medievalism"
-    | "Minimalism"
-    | "Neo Baroque"
-    | "Neo Byzantine"
-    | "Neo Futurism"
-    | "Neo Impressionism"
-    | "Neo Rococo"
-    | "Neoclassicism"
-    | "Op Art"
-    | "Ornate And Intricate"
-    | "Pencil Sketch Drawing"
-    | "Pop Art 2"
-    | "Rococo"
-    | "Silhouette Art"
-    | "Simple Vector Art"
-    | "Sketchup"
-    | "Steampunk 2"
-    | "Surrealism"
-    | "Suprematism"
-    | "Terragen"
-    | "Tranquil Relaxing Atmosphere"
-    | "Sticker Designs"
-    | "Vibrant Rim Light"
-    | "Volumetric Lighting"
-    | "Watercolor 2"
-    | "Whimsical And Playful"
-    | "Mk Chromolithography"
-    | "Mk Cross Processing Print"
-    | "Mk Dufaycolor Photograph"
-    | "Mk Herbarium"
-    | "Mk Punk Collage"
-    | "Mk Mosaic"
-    | "Mk Van Gogh"
-    | "Mk Coloring Book"
-    | "Mk Singer Sargent"
-    | "Mk Pollock"
-    | "Mk Basquiat"
-    | "Mk Andy Warhol"
-    | "Mk Halftone Print"
-    | "Mk Gond Painting"
-    | "Mk Albumen Print"
-    | "Mk Aquatint Print"
-    | "Mk Anthotype Print"
-    | "Mk Inuit Carving"
-    | "Mk Bromoil Print"
-    | "Mk Calotype Print"
-    | "Mk Color Sketchnote"
-    | "Mk Cibulak Porcelain"
-    | "Mk Alcohol Ink Art"
-    | "Mk One Line Art"
-    | "Mk Blacklight Paint"
-    | "Mk Carnival Glass"
-    | "Mk Cyanotype Print"
-    | "Mk Cross Stitching"
-    | "Mk Encaustic Paint"
-    | "Mk Embroidery"
-    | "Mk Gyotaku"
-    | "Mk Luminogram"
-    | "Mk Lite Brite Art"
-    | "Mk Mokume Gane"
-    | "Pebble Art"
-    | "Mk Palekh"
-    | "Mk Suminagashi"
-    | "Mk Scrimshaw"
-    | "Mk Shibori"
-    | "Mk Vitreous Enamel"
-    | "Mk Ukiyo E"
-    | "Mk Vintage Airline Poster"
-    | "Mk Vintage Travel Poster"
-    | "Mk Bauhaus Style"
-    | "Mk Afrofuturism"
-    | "Mk Atompunk"
-    | "Mk Constructivism"
-    | "Mk Chicano Art"
-    | "Mk De Stijl"
-    | "Mk Dayak Art"
-    | "Mk Fayum Portrait"
-    | "Mk Illuminated Manuscript"
-    | "Mk Kalighat Painting"
-    | "Mk Madhubani Painting"
-    | "Mk Pictorialism"
-    | "Mk Pichwai Painting"
-    | "Mk Patachitra Painting"
-    | "Mk Samoan Art Inspired"
-    | "Mk Tlingit Art"
-    | "Mk Adnate Style"
-    | "Mk Ron English Style"
-    | "Mk Shepard Fairey Style"
+    | 'Fooocus V2'
+    | 'Fooocus Enhance'
+    | 'Fooocus Sharp'
+    | 'Fooocus Semi Realistic'
+    | 'Fooocus Masterpiece'
+    | 'Fooocus Photograph'
+    | 'Fooocus Negative'
+    | 'Fooocus Cinematic'
+    | 'SAI 3D Model'
+    | 'SAI Analog Film'
+    | 'SAI Anime'
+    | 'SAI Cinematic'
+    | 'SAI Comic Book'
+    | 'SAI Craft Clay'
+    | 'SAI Digital Art'
+    | 'SAI Enhance'
+    | 'SAI Fantasy Art'
+    | 'SAI Isometric'
+    | 'SAI Line Art'
+    | 'SAI Lowpoly'
+    | 'SAI Neonpunk'
+    | 'SAI Origami'
+    | 'SAI Photographic'
+    | 'SAI Pixel Art'
+    | 'SAI Texture'
+    | 'MRE Cinematic Dynamic'
+    | 'MRE Spontaneous Picture'
+    | 'MRE Artistic Vision'
+    | 'MRE Dark Dream'
+    | 'MRE Gloomy Art'
+    | 'MRE Bad Dream'
+    | 'MRE Underground'
+    | 'MRE Surreal Painting'
+    | 'MRE Dynamic Illustration'
+    | 'MRE Undead Art'
+    | 'MRE Elemental Art'
+    | 'MRE Space Art'
+    | 'MRE Ancient Illustration'
+    | 'MRE Brave Art'
+    | 'MRE Heroic Fantasy'
+    | 'MRE Dark Cyberpunk'
+    | 'MRE Lyrical Geometry'
+    | 'MRE Sumi E Symbolic'
+    | 'MRE Sumi E Detailed'
+    | 'MRE Manga'
+    | 'MRE Anime'
+    | 'MRE Comic'
+    | 'Ads Advertising'
+    | 'Ads Automotive'
+    | 'Ads Corporate'
+    | 'Ads Fashion Editorial'
+    | 'Ads Food Photography'
+    | 'Ads Gourmet Food Photography'
+    | 'Ads Luxury'
+    | 'Ads Real Estate'
+    | 'Ads Retail'
+    | 'Artstyle Abstract'
+    | 'Artstyle Abstract Expressionism'
+    | 'Artstyle Art Deco'
+    | 'Artstyle Art Nouveau'
+    | 'Artstyle Constructivist'
+    | 'Artstyle Cubist'
+    | 'Artstyle Expressionist'
+    | 'Artstyle Graffiti'
+    | 'Artstyle Hyperrealism'
+    | 'Artstyle Impressionist'
+    | 'Artstyle Pointillism'
+    | 'Artstyle Pop Art'
+    | 'Artstyle Psychedelic'
+    | 'Artstyle Renaissance'
+    | 'Artstyle Steampunk'
+    | 'Artstyle Surrealist'
+    | 'Artstyle Typography'
+    | 'Artstyle Watercolor'
+    | 'Futuristic Biomechanical'
+    | 'Futuristic Biomechanical Cyberpunk'
+    | 'Futuristic Cybernetic'
+    | 'Futuristic Cybernetic Robot'
+    | 'Futuristic Cyberpunk Cityscape'
+    | 'Futuristic Futuristic'
+    | 'Futuristic Retro Cyberpunk'
+    | 'Futuristic Retro Futurism'
+    | 'Futuristic Sci Fi'
+    | 'Futuristic Vaporwave'
+    | 'Game Bubble Bobble'
+    | 'Game Cyberpunk Game'
+    | 'Game Fighting Game'
+    | 'Game Gta'
+    | 'Game Mario'
+    | 'Game Minecraft'
+    | 'Game Pokemon'
+    | 'Game Retro Arcade'
+    | 'Game Retro Game'
+    | 'Game Rpg Fantasy Game'
+    | 'Game Strategy Game'
+    | 'Game Streetfighter'
+    | 'Game Zelda'
+    | 'Misc Architectural'
+    | 'Misc Disco'
+    | 'Misc Dreamscape'
+    | 'Misc Dystopian'
+    | 'Misc Fairy Tale'
+    | 'Misc Gothic'
+    | 'Misc Grunge'
+    | 'Misc Horror'
+    | 'Misc Kawaii'
+    | 'Misc Lovecraftian'
+    | 'Misc Macabre'
+    | 'Misc Manga'
+    | 'Misc Metropolis'
+    | 'Misc Minimalist'
+    | 'Misc Monochrome'
+    | 'Misc Nautical'
+    | 'Misc Space'
+    | 'Misc Stained Glass'
+    | 'Misc Techwear Fashion'
+    | 'Misc Tribal'
+    | 'Misc Zentangle'
+    | 'Papercraft Collage'
+    | 'Papercraft Flat Papercut'
+    | 'Papercraft Kirigami'
+    | 'Papercraft Paper Mache'
+    | 'Papercraft Paper Quilling'
+    | 'Papercraft Papercut Collage'
+    | 'Papercraft Papercut Shadow Box'
+    | 'Papercraft Stacked Papercut'
+    | 'Papercraft Thick Layered Papercut'
+    | 'Photo Alien'
+    | 'Photo Film Noir'
+    | 'Photo Glamour'
+    | 'Photo Hdr'
+    | 'Photo Iphone Photographic'
+    | 'Photo Long Exposure'
+    | 'Photo Neon Noir'
+    | 'Photo Silhouette'
+    | 'Photo Tilt Shift'
+    | 'Cinematic Diva'
+    | 'Abstract Expressionism'
+    | 'Academia'
+    | 'Action Figure'
+    | 'Adorable 3D Character'
+    | 'Adorable Kawaii'
+    | 'Art Deco'
+    | 'Art Nouveau'
+    | 'Astral Aura'
+    | 'Avant Garde'
+    | 'Baroque'
+    | 'Bauhaus Style Poster'
+    | 'Blueprint Schematic Drawing'
+    | 'Caricature'
+    | 'Cel Shaded Art'
+    | 'Character Design Sheet'
+    | 'Classicism Art'
+    | 'Color Field Painting'
+    | 'Colored Pencil Art'
+    | 'Conceptual Art'
+    | 'Constructivism'
+    | 'Cubism'
+    | 'Dadaism'
+    | 'Dark Fantasy'
+    | 'Dark Moody Atmosphere'
+    | 'Dmt Art Style'
+    | 'Doodle Art'
+    | 'Double Exposure'
+    | 'Dripping Paint Splatter Art'
+    | 'Expressionism'
+    | 'Faded Polaroid Photo'
+    | 'Fauvism'
+    | 'Flat 2d Art'
+    | 'Fortnite Art Style'
+    | 'Futurism'
+    | 'Glitchcore'
+    | 'Glo Fi'
+    | 'Googie Art Style'
+    | 'Graffiti Art'
+    | 'Harlem Renaissance Art'
+    | 'High Fashion'
+    | 'Idyllic'
+    | 'Impressionism'
+    | 'Infographic Drawing'
+    | 'Ink Dripping Drawing'
+    | 'Japanese Ink Drawing'
+    | 'Knolling Photography'
+    | 'Light Cheery Atmosphere'
+    | 'Logo Design'
+    | 'Luxurious Elegance'
+    | 'Macro Photography'
+    | 'Mandola Art'
+    | 'Marker Drawing'
+    | 'Medievalism'
+    | 'Minimalism'
+    | 'Neo Baroque'
+    | 'Neo Byzantine'
+    | 'Neo Futurism'
+    | 'Neo Impressionism'
+    | 'Neo Rococo'
+    | 'Neoclassicism'
+    | 'Op Art'
+    | 'Ornate And Intricate'
+    | 'Pencil Sketch Drawing'
+    | 'Pop Art 2'
+    | 'Rococo'
+    | 'Silhouette Art'
+    | 'Simple Vector Art'
+    | 'Sketchup'
+    | 'Steampunk 2'
+    | 'Surrealism'
+    | 'Suprematism'
+    | 'Terragen'
+    | 'Tranquil Relaxing Atmosphere'
+    | 'Sticker Designs'
+    | 'Vibrant Rim Light'
+    | 'Volumetric Lighting'
+    | 'Watercolor 2'
+    | 'Whimsical And Playful'
+    | 'Mk Chromolithography'
+    | 'Mk Cross Processing Print'
+    | 'Mk Dufaycolor Photograph'
+    | 'Mk Herbarium'
+    | 'Mk Punk Collage'
+    | 'Mk Mosaic'
+    | 'Mk Van Gogh'
+    | 'Mk Coloring Book'
+    | 'Mk Singer Sargent'
+    | 'Mk Pollock'
+    | 'Mk Basquiat'
+    | 'Mk Andy Warhol'
+    | 'Mk Halftone Print'
+    | 'Mk Gond Painting'
+    | 'Mk Albumen Print'
+    | 'Mk Aquatint Print'
+    | 'Mk Anthotype Print'
+    | 'Mk Inuit Carving'
+    | 'Mk Bromoil Print'
+    | 'Mk Calotype Print'
+    | 'Mk Color Sketchnote'
+    | 'Mk Cibulak Porcelain'
+    | 'Mk Alcohol Ink Art'
+    | 'Mk One Line Art'
+    | 'Mk Blacklight Paint'
+    | 'Mk Carnival Glass'
+    | 'Mk Cyanotype Print'
+    | 'Mk Cross Stitching'
+    | 'Mk Encaustic Paint'
+    | 'Mk Embroidery'
+    | 'Mk Gyotaku'
+    | 'Mk Luminogram'
+    | 'Mk Lite Brite Art'
+    | 'Mk Mokume Gane'
+    | 'Pebble Art'
+    | 'Mk Palekh'
+    | 'Mk Suminagashi'
+    | 'Mk Scrimshaw'
+    | 'Mk Shibori'
+    | 'Mk Vitreous Enamel'
+    | 'Mk Ukiyo E'
+    | 'Mk Vintage Airline Poster'
+    | 'Mk Vintage Travel Poster'
+    | 'Mk Bauhaus Style'
+    | 'Mk Afrofuturism'
+    | 'Mk Atompunk'
+    | 'Mk Constructivism'
+    | 'Mk Chicano Art'
+    | 'Mk De Stijl'
+    | 'Mk Dayak Art'
+    | 'Mk Fayum Portrait'
+    | 'Mk Illuminated Manuscript'
+    | 'Mk Kalighat Painting'
+    | 'Mk Madhubani Painting'
+    | 'Mk Pictorialism'
+    | 'Mk Pichwai Painting'
+    | 'Mk Patachitra Painting'
+    | 'Mk Samoan Art Inspired'
+    | 'Mk Tlingit Art'
+    | 'Mk Adnate Style'
+    | 'Mk Ron English Style'
+    | 'Mk Shepard Fairey Style'
   >;
   /**
    * You can choose Speed or Quality Default value: `"Extreme Speed"`
    */
-  performance?: "Speed" | "Quality" | "Extreme Speed" | "Lightning";
+  performance?: 'Speed' | 'Quality' | 'Extreme Speed' | 'Lightning';
   /**
    * The CFG (Classifier Free Guidance) scale is a measure of how close you want
    * the model to stick to your prompt when looking for a related image to show you. Default value: `4`
@@ -10533,7 +10533,7 @@ export type FooocusInpaintInput = {
   /**
    * Refiner (SDXL or SD 1.5) Default value: `"None"`
    */
-  refiner_model?: "None" | "realisticVisionV60B1_v51VAE.safetensors";
+  refiner_model?: 'None' | 'realisticVisionV60B1_v51VAE.safetensors';
   /**
    * Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models
    * 0.8 for XL-refiners; or any value for switching two SDXL models. Default value: `0.8`
@@ -10542,7 +10542,7 @@ export type FooocusInpaintInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "png" | "jpeg" | "webp";
+  output_format?: 'png' | 'jpeg' | 'webp';
   /**
    * If set to true, the function will wait for the image to be generated and uploaded
    * before returning the response. This will increase the latency of the function but
@@ -10566,9 +10566,9 @@ export type FooocusInpaintInput = {
    * The mode to use for inpainting. Default value: `"Inpaint or Outpaint (default)"`
    */
   inpaint_mode?:
-    | "Inpaint or Outpaint (default)"
-    | "Improve Detail (face, hand, eyes, etc.)"
-    | "Modify Content (add objects, change background, etc.)";
+    | 'Inpaint or Outpaint (default)'
+    | 'Improve Detail (face, hand, eyes, etc.)'
+    | 'Modify Content (add objects, change background, etc.)';
   /**
    * Describe what you want to inpaint. Default value: `""`
    */
@@ -10576,7 +10576,7 @@ export type FooocusInpaintInput = {
   /**
    * The directions to outpaint. Default value: ``
    */
-  outpaint_selections?: Array<"Left" | "Right" | "Top" | "Bottom">;
+  outpaint_selections?: Array<'Left' | 'Right' | 'Top' | 'Bottom'>;
   /**
    * If set to true, the advanced inpaint options ('inpaint_disable_initial_latent',
    * 'inpaint_engine', 'inpaint_strength', 'inpaint_respective_field',
@@ -10591,7 +10591,7 @@ export type FooocusInpaintInput = {
   /**
    * Version of Fooocus inpaint model Default value: `"v2.6"`
    */
-  inpaint_engine?: "None" | "v1" | "v2.5" | "v2.6";
+  inpaint_engine?: 'None' | 'v1' | 'v2.5' | 'v2.6';
   /**
    * Same as the denoising strength in A1111 inpaint. Only used in inpaint, not
    * used in outpaint. (Outpaint always use 1.0) Default value: `1`
@@ -10667,288 +10667,288 @@ export type FooocusInput = {
    * The style to use. Default value: `Fooocus Enhance,Fooocus V2,Fooocus Sharp`
    */
   styles?: Array<
-    | "Fooocus V2"
-    | "Fooocus Enhance"
-    | "Fooocus Sharp"
-    | "Fooocus Semi Realistic"
-    | "Fooocus Masterpiece"
-    | "Fooocus Photograph"
-    | "Fooocus Negative"
-    | "Fooocus Cinematic"
-    | "SAI 3D Model"
-    | "SAI Analog Film"
-    | "SAI Anime"
-    | "SAI Cinematic"
-    | "SAI Comic Book"
-    | "SAI Craft Clay"
-    | "SAI Digital Art"
-    | "SAI Enhance"
-    | "SAI Fantasy Art"
-    | "SAI Isometric"
-    | "SAI Line Art"
-    | "SAI Lowpoly"
-    | "SAI Neonpunk"
-    | "SAI Origami"
-    | "SAI Photographic"
-    | "SAI Pixel Art"
-    | "SAI Texture"
-    | "MRE Cinematic Dynamic"
-    | "MRE Spontaneous Picture"
-    | "MRE Artistic Vision"
-    | "MRE Dark Dream"
-    | "MRE Gloomy Art"
-    | "MRE Bad Dream"
-    | "MRE Underground"
-    | "MRE Surreal Painting"
-    | "MRE Dynamic Illustration"
-    | "MRE Undead Art"
-    | "MRE Elemental Art"
-    | "MRE Space Art"
-    | "MRE Ancient Illustration"
-    | "MRE Brave Art"
-    | "MRE Heroic Fantasy"
-    | "MRE Dark Cyberpunk"
-    | "MRE Lyrical Geometry"
-    | "MRE Sumi E Symbolic"
-    | "MRE Sumi E Detailed"
-    | "MRE Manga"
-    | "MRE Anime"
-    | "MRE Comic"
-    | "Ads Advertising"
-    | "Ads Automotive"
-    | "Ads Corporate"
-    | "Ads Fashion Editorial"
-    | "Ads Food Photography"
-    | "Ads Gourmet Food Photography"
-    | "Ads Luxury"
-    | "Ads Real Estate"
-    | "Ads Retail"
-    | "Artstyle Abstract"
-    | "Artstyle Abstract Expressionism"
-    | "Artstyle Art Deco"
-    | "Artstyle Art Nouveau"
-    | "Artstyle Constructivist"
-    | "Artstyle Cubist"
-    | "Artstyle Expressionist"
-    | "Artstyle Graffiti"
-    | "Artstyle Hyperrealism"
-    | "Artstyle Impressionist"
-    | "Artstyle Pointillism"
-    | "Artstyle Pop Art"
-    | "Artstyle Psychedelic"
-    | "Artstyle Renaissance"
-    | "Artstyle Steampunk"
-    | "Artstyle Surrealist"
-    | "Artstyle Typography"
-    | "Artstyle Watercolor"
-    | "Futuristic Biomechanical"
-    | "Futuristic Biomechanical Cyberpunk"
-    | "Futuristic Cybernetic"
-    | "Futuristic Cybernetic Robot"
-    | "Futuristic Cyberpunk Cityscape"
-    | "Futuristic Futuristic"
-    | "Futuristic Retro Cyberpunk"
-    | "Futuristic Retro Futurism"
-    | "Futuristic Sci Fi"
-    | "Futuristic Vaporwave"
-    | "Game Bubble Bobble"
-    | "Game Cyberpunk Game"
-    | "Game Fighting Game"
-    | "Game Gta"
-    | "Game Mario"
-    | "Game Minecraft"
-    | "Game Pokemon"
-    | "Game Retro Arcade"
-    | "Game Retro Game"
-    | "Game Rpg Fantasy Game"
-    | "Game Strategy Game"
-    | "Game Streetfighter"
-    | "Game Zelda"
-    | "Misc Architectural"
-    | "Misc Disco"
-    | "Misc Dreamscape"
-    | "Misc Dystopian"
-    | "Misc Fairy Tale"
-    | "Misc Gothic"
-    | "Misc Grunge"
-    | "Misc Horror"
-    | "Misc Kawaii"
-    | "Misc Lovecraftian"
-    | "Misc Macabre"
-    | "Misc Manga"
-    | "Misc Metropolis"
-    | "Misc Minimalist"
-    | "Misc Monochrome"
-    | "Misc Nautical"
-    | "Misc Space"
-    | "Misc Stained Glass"
-    | "Misc Techwear Fashion"
-    | "Misc Tribal"
-    | "Misc Zentangle"
-    | "Papercraft Collage"
-    | "Papercraft Flat Papercut"
-    | "Papercraft Kirigami"
-    | "Papercraft Paper Mache"
-    | "Papercraft Paper Quilling"
-    | "Papercraft Papercut Collage"
-    | "Papercraft Papercut Shadow Box"
-    | "Papercraft Stacked Papercut"
-    | "Papercraft Thick Layered Papercut"
-    | "Photo Alien"
-    | "Photo Film Noir"
-    | "Photo Glamour"
-    | "Photo Hdr"
-    | "Photo Iphone Photographic"
-    | "Photo Long Exposure"
-    | "Photo Neon Noir"
-    | "Photo Silhouette"
-    | "Photo Tilt Shift"
-    | "Cinematic Diva"
-    | "Abstract Expressionism"
-    | "Academia"
-    | "Action Figure"
-    | "Adorable 3D Character"
-    | "Adorable Kawaii"
-    | "Art Deco"
-    | "Art Nouveau"
-    | "Astral Aura"
-    | "Avant Garde"
-    | "Baroque"
-    | "Bauhaus Style Poster"
-    | "Blueprint Schematic Drawing"
-    | "Caricature"
-    | "Cel Shaded Art"
-    | "Character Design Sheet"
-    | "Classicism Art"
-    | "Color Field Painting"
-    | "Colored Pencil Art"
-    | "Conceptual Art"
-    | "Constructivism"
-    | "Cubism"
-    | "Dadaism"
-    | "Dark Fantasy"
-    | "Dark Moody Atmosphere"
-    | "Dmt Art Style"
-    | "Doodle Art"
-    | "Double Exposure"
-    | "Dripping Paint Splatter Art"
-    | "Expressionism"
-    | "Faded Polaroid Photo"
-    | "Fauvism"
-    | "Flat 2d Art"
-    | "Fortnite Art Style"
-    | "Futurism"
-    | "Glitchcore"
-    | "Glo Fi"
-    | "Googie Art Style"
-    | "Graffiti Art"
-    | "Harlem Renaissance Art"
-    | "High Fashion"
-    | "Idyllic"
-    | "Impressionism"
-    | "Infographic Drawing"
-    | "Ink Dripping Drawing"
-    | "Japanese Ink Drawing"
-    | "Knolling Photography"
-    | "Light Cheery Atmosphere"
-    | "Logo Design"
-    | "Luxurious Elegance"
-    | "Macro Photography"
-    | "Mandola Art"
-    | "Marker Drawing"
-    | "Medievalism"
-    | "Minimalism"
-    | "Neo Baroque"
-    | "Neo Byzantine"
-    | "Neo Futurism"
-    | "Neo Impressionism"
-    | "Neo Rococo"
-    | "Neoclassicism"
-    | "Op Art"
-    | "Ornate And Intricate"
-    | "Pencil Sketch Drawing"
-    | "Pop Art 2"
-    | "Rococo"
-    | "Silhouette Art"
-    | "Simple Vector Art"
-    | "Sketchup"
-    | "Steampunk 2"
-    | "Surrealism"
-    | "Suprematism"
-    | "Terragen"
-    | "Tranquil Relaxing Atmosphere"
-    | "Sticker Designs"
-    | "Vibrant Rim Light"
-    | "Volumetric Lighting"
-    | "Watercolor 2"
-    | "Whimsical And Playful"
-    | "Mk Chromolithography"
-    | "Mk Cross Processing Print"
-    | "Mk Dufaycolor Photograph"
-    | "Mk Herbarium"
-    | "Mk Punk Collage"
-    | "Mk Mosaic"
-    | "Mk Van Gogh"
-    | "Mk Coloring Book"
-    | "Mk Singer Sargent"
-    | "Mk Pollock"
-    | "Mk Basquiat"
-    | "Mk Andy Warhol"
-    | "Mk Halftone Print"
-    | "Mk Gond Painting"
-    | "Mk Albumen Print"
-    | "Mk Aquatint Print"
-    | "Mk Anthotype Print"
-    | "Mk Inuit Carving"
-    | "Mk Bromoil Print"
-    | "Mk Calotype Print"
-    | "Mk Color Sketchnote"
-    | "Mk Cibulak Porcelain"
-    | "Mk Alcohol Ink Art"
-    | "Mk One Line Art"
-    | "Mk Blacklight Paint"
-    | "Mk Carnival Glass"
-    | "Mk Cyanotype Print"
-    | "Mk Cross Stitching"
-    | "Mk Encaustic Paint"
-    | "Mk Embroidery"
-    | "Mk Gyotaku"
-    | "Mk Luminogram"
-    | "Mk Lite Brite Art"
-    | "Mk Mokume Gane"
-    | "Pebble Art"
-    | "Mk Palekh"
-    | "Mk Suminagashi"
-    | "Mk Scrimshaw"
-    | "Mk Shibori"
-    | "Mk Vitreous Enamel"
-    | "Mk Ukiyo E"
-    | "Mk Vintage Airline Poster"
-    | "Mk Vintage Travel Poster"
-    | "Mk Bauhaus Style"
-    | "Mk Afrofuturism"
-    | "Mk Atompunk"
-    | "Mk Constructivism"
-    | "Mk Chicano Art"
-    | "Mk De Stijl"
-    | "Mk Dayak Art"
-    | "Mk Fayum Portrait"
-    | "Mk Illuminated Manuscript"
-    | "Mk Kalighat Painting"
-    | "Mk Madhubani Painting"
-    | "Mk Pictorialism"
-    | "Mk Pichwai Painting"
-    | "Mk Patachitra Painting"
-    | "Mk Samoan Art Inspired"
-    | "Mk Tlingit Art"
-    | "Mk Adnate Style"
-    | "Mk Ron English Style"
-    | "Mk Shepard Fairey Style"
+    | 'Fooocus V2'
+    | 'Fooocus Enhance'
+    | 'Fooocus Sharp'
+    | 'Fooocus Semi Realistic'
+    | 'Fooocus Masterpiece'
+    | 'Fooocus Photograph'
+    | 'Fooocus Negative'
+    | 'Fooocus Cinematic'
+    | 'SAI 3D Model'
+    | 'SAI Analog Film'
+    | 'SAI Anime'
+    | 'SAI Cinematic'
+    | 'SAI Comic Book'
+    | 'SAI Craft Clay'
+    | 'SAI Digital Art'
+    | 'SAI Enhance'
+    | 'SAI Fantasy Art'
+    | 'SAI Isometric'
+    | 'SAI Line Art'
+    | 'SAI Lowpoly'
+    | 'SAI Neonpunk'
+    | 'SAI Origami'
+    | 'SAI Photographic'
+    | 'SAI Pixel Art'
+    | 'SAI Texture'
+    | 'MRE Cinematic Dynamic'
+    | 'MRE Spontaneous Picture'
+    | 'MRE Artistic Vision'
+    | 'MRE Dark Dream'
+    | 'MRE Gloomy Art'
+    | 'MRE Bad Dream'
+    | 'MRE Underground'
+    | 'MRE Surreal Painting'
+    | 'MRE Dynamic Illustration'
+    | 'MRE Undead Art'
+    | 'MRE Elemental Art'
+    | 'MRE Space Art'
+    | 'MRE Ancient Illustration'
+    | 'MRE Brave Art'
+    | 'MRE Heroic Fantasy'
+    | 'MRE Dark Cyberpunk'
+    | 'MRE Lyrical Geometry'
+    | 'MRE Sumi E Symbolic'
+    | 'MRE Sumi E Detailed'
+    | 'MRE Manga'
+    | 'MRE Anime'
+    | 'MRE Comic'
+    | 'Ads Advertising'
+    | 'Ads Automotive'
+    | 'Ads Corporate'
+    | 'Ads Fashion Editorial'
+    | 'Ads Food Photography'
+    | 'Ads Gourmet Food Photography'
+    | 'Ads Luxury'
+    | 'Ads Real Estate'
+    | 'Ads Retail'
+    | 'Artstyle Abstract'
+    | 'Artstyle Abstract Expressionism'
+    | 'Artstyle Art Deco'
+    | 'Artstyle Art Nouveau'
+    | 'Artstyle Constructivist'
+    | 'Artstyle Cubist'
+    | 'Artstyle Expressionist'
+    | 'Artstyle Graffiti'
+    | 'Artstyle Hyperrealism'
+    | 'Artstyle Impressionist'
+    | 'Artstyle Pointillism'
+    | 'Artstyle Pop Art'
+    | 'Artstyle Psychedelic'
+    | 'Artstyle Renaissance'
+    | 'Artstyle Steampunk'
+    | 'Artstyle Surrealist'
+    | 'Artstyle Typography'
+    | 'Artstyle Watercolor'
+    | 'Futuristic Biomechanical'
+    | 'Futuristic Biomechanical Cyberpunk'
+    | 'Futuristic Cybernetic'
+    | 'Futuristic Cybernetic Robot'
+    | 'Futuristic Cyberpunk Cityscape'
+    | 'Futuristic Futuristic'
+    | 'Futuristic Retro Cyberpunk'
+    | 'Futuristic Retro Futurism'
+    | 'Futuristic Sci Fi'
+    | 'Futuristic Vaporwave'
+    | 'Game Bubble Bobble'
+    | 'Game Cyberpunk Game'
+    | 'Game Fighting Game'
+    | 'Game Gta'
+    | 'Game Mario'
+    | 'Game Minecraft'
+    | 'Game Pokemon'
+    | 'Game Retro Arcade'
+    | 'Game Retro Game'
+    | 'Game Rpg Fantasy Game'
+    | 'Game Strategy Game'
+    | 'Game Streetfighter'
+    | 'Game Zelda'
+    | 'Misc Architectural'
+    | 'Misc Disco'
+    | 'Misc Dreamscape'
+    | 'Misc Dystopian'
+    | 'Misc Fairy Tale'
+    | 'Misc Gothic'
+    | 'Misc Grunge'
+    | 'Misc Horror'
+    | 'Misc Kawaii'
+    | 'Misc Lovecraftian'
+    | 'Misc Macabre'
+    | 'Misc Manga'
+    | 'Misc Metropolis'
+    | 'Misc Minimalist'
+    | 'Misc Monochrome'
+    | 'Misc Nautical'
+    | 'Misc Space'
+    | 'Misc Stained Glass'
+    | 'Misc Techwear Fashion'
+    | 'Misc Tribal'
+    | 'Misc Zentangle'
+    | 'Papercraft Collage'
+    | 'Papercraft Flat Papercut'
+    | 'Papercraft Kirigami'
+    | 'Papercraft Paper Mache'
+    | 'Papercraft Paper Quilling'
+    | 'Papercraft Papercut Collage'
+    | 'Papercraft Papercut Shadow Box'
+    | 'Papercraft Stacked Papercut'
+    | 'Papercraft Thick Layered Papercut'
+    | 'Photo Alien'
+    | 'Photo Film Noir'
+    | 'Photo Glamour'
+    | 'Photo Hdr'
+    | 'Photo Iphone Photographic'
+    | 'Photo Long Exposure'
+    | 'Photo Neon Noir'
+    | 'Photo Silhouette'
+    | 'Photo Tilt Shift'
+    | 'Cinematic Diva'
+    | 'Abstract Expressionism'
+    | 'Academia'
+    | 'Action Figure'
+    | 'Adorable 3D Character'
+    | 'Adorable Kawaii'
+    | 'Art Deco'
+    | 'Art Nouveau'
+    | 'Astral Aura'
+    | 'Avant Garde'
+    | 'Baroque'
+    | 'Bauhaus Style Poster'
+    | 'Blueprint Schematic Drawing'
+    | 'Caricature'
+    | 'Cel Shaded Art'
+    | 'Character Design Sheet'
+    | 'Classicism Art'
+    | 'Color Field Painting'
+    | 'Colored Pencil Art'
+    | 'Conceptual Art'
+    | 'Constructivism'
+    | 'Cubism'
+    | 'Dadaism'
+    | 'Dark Fantasy'
+    | 'Dark Moody Atmosphere'
+    | 'Dmt Art Style'
+    | 'Doodle Art'
+    | 'Double Exposure'
+    | 'Dripping Paint Splatter Art'
+    | 'Expressionism'
+    | 'Faded Polaroid Photo'
+    | 'Fauvism'
+    | 'Flat 2d Art'
+    | 'Fortnite Art Style'
+    | 'Futurism'
+    | 'Glitchcore'
+    | 'Glo Fi'
+    | 'Googie Art Style'
+    | 'Graffiti Art'
+    | 'Harlem Renaissance Art'
+    | 'High Fashion'
+    | 'Idyllic'
+    | 'Impressionism'
+    | 'Infographic Drawing'
+    | 'Ink Dripping Drawing'
+    | 'Japanese Ink Drawing'
+    | 'Knolling Photography'
+    | 'Light Cheery Atmosphere'
+    | 'Logo Design'
+    | 'Luxurious Elegance'
+    | 'Macro Photography'
+    | 'Mandola Art'
+    | 'Marker Drawing'
+    | 'Medievalism'
+    | 'Minimalism'
+    | 'Neo Baroque'
+    | 'Neo Byzantine'
+    | 'Neo Futurism'
+    | 'Neo Impressionism'
+    | 'Neo Rococo'
+    | 'Neoclassicism'
+    | 'Op Art'
+    | 'Ornate And Intricate'
+    | 'Pencil Sketch Drawing'
+    | 'Pop Art 2'
+    | 'Rococo'
+    | 'Silhouette Art'
+    | 'Simple Vector Art'
+    | 'Sketchup'
+    | 'Steampunk 2'
+    | 'Surrealism'
+    | 'Suprematism'
+    | 'Terragen'
+    | 'Tranquil Relaxing Atmosphere'
+    | 'Sticker Designs'
+    | 'Vibrant Rim Light'
+    | 'Volumetric Lighting'
+    | 'Watercolor 2'
+    | 'Whimsical And Playful'
+    | 'Mk Chromolithography'
+    | 'Mk Cross Processing Print'
+    | 'Mk Dufaycolor Photograph'
+    | 'Mk Herbarium'
+    | 'Mk Punk Collage'
+    | 'Mk Mosaic'
+    | 'Mk Van Gogh'
+    | 'Mk Coloring Book'
+    | 'Mk Singer Sargent'
+    | 'Mk Pollock'
+    | 'Mk Basquiat'
+    | 'Mk Andy Warhol'
+    | 'Mk Halftone Print'
+    | 'Mk Gond Painting'
+    | 'Mk Albumen Print'
+    | 'Mk Aquatint Print'
+    | 'Mk Anthotype Print'
+    | 'Mk Inuit Carving'
+    | 'Mk Bromoil Print'
+    | 'Mk Calotype Print'
+    | 'Mk Color Sketchnote'
+    | 'Mk Cibulak Porcelain'
+    | 'Mk Alcohol Ink Art'
+    | 'Mk One Line Art'
+    | 'Mk Blacklight Paint'
+    | 'Mk Carnival Glass'
+    | 'Mk Cyanotype Print'
+    | 'Mk Cross Stitching'
+    | 'Mk Encaustic Paint'
+    | 'Mk Embroidery'
+    | 'Mk Gyotaku'
+    | 'Mk Luminogram'
+    | 'Mk Lite Brite Art'
+    | 'Mk Mokume Gane'
+    | 'Pebble Art'
+    | 'Mk Palekh'
+    | 'Mk Suminagashi'
+    | 'Mk Scrimshaw'
+    | 'Mk Shibori'
+    | 'Mk Vitreous Enamel'
+    | 'Mk Ukiyo E'
+    | 'Mk Vintage Airline Poster'
+    | 'Mk Vintage Travel Poster'
+    | 'Mk Bauhaus Style'
+    | 'Mk Afrofuturism'
+    | 'Mk Atompunk'
+    | 'Mk Constructivism'
+    | 'Mk Chicano Art'
+    | 'Mk De Stijl'
+    | 'Mk Dayak Art'
+    | 'Mk Fayum Portrait'
+    | 'Mk Illuminated Manuscript'
+    | 'Mk Kalighat Painting'
+    | 'Mk Madhubani Painting'
+    | 'Mk Pictorialism'
+    | 'Mk Pichwai Painting'
+    | 'Mk Patachitra Painting'
+    | 'Mk Samoan Art Inspired'
+    | 'Mk Tlingit Art'
+    | 'Mk Adnate Style'
+    | 'Mk Ron English Style'
+    | 'Mk Shepard Fairey Style'
   >;
   /**
    * You can choose Speed or Quality Default value: `"Extreme Speed"`
    */
-  performance?: "Speed" | "Quality" | "Extreme Speed" | "Lightning";
+  performance?: 'Speed' | 'Quality' | 'Extreme Speed' | 'Lightning';
   /**
    * The CFG (Classifier Free Guidance) scale is a measure of how close you want
    * the model to stick to your prompt when looking for a related image to show you. Default value: `4`
@@ -10976,7 +10976,7 @@ export type FooocusInput = {
   /**
    * Refiner (SDXL or SD 1.5) Default value: `"None"`
    */
-  refiner_model?: "None" | "realisticVisionV60B1_v51VAE.safetensors";
+  refiner_model?: 'None' | 'realisticVisionV60B1_v51VAE.safetensors';
   /**
    * Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models
    * 0.8 for XL-refiners; or any value for switching two SDXL models. Default value: `0.8`
@@ -10985,7 +10985,7 @@ export type FooocusInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "png" | "jpeg" | "webp";
+  output_format?: 'png' | 'jpeg' | 'webp';
   /**
    * If set to true, the function will wait for the image to be generated and uploaded
    * before returning the response. This will increase the latency of the function but
@@ -11004,7 +11004,7 @@ export type FooocusInput = {
   /**
    * The type of image control Default value: `"PyraCanny"`
    */
-  control_type?: "ImagePrompt" | "PyraCanny" | "CPDS" | "FaceSwap";
+  control_type?: 'ImagePrompt' | 'PyraCanny' | 'CPDS' | 'FaceSwap';
   /**
    * The strength of the control image. Use it to control how much the generated image
    * should look like the control image. Default value: `1`
@@ -11047,288 +11047,288 @@ export type FooocusLegacyInput = {
    * The style to use. Default value: `Fooocus Enhance,Fooocus V2,Fooocus Sharp`
    */
   styles?: Array<
-    | "Fooocus V2"
-    | "Fooocus Enhance"
-    | "Fooocus Sharp"
-    | "Fooocus Semi Realistic"
-    | "Fooocus Masterpiece"
-    | "Fooocus Photograph"
-    | "Fooocus Negative"
-    | "Fooocus Cinematic"
-    | "SAI 3D Model"
-    | "SAI Analog Film"
-    | "SAI Anime"
-    | "SAI Cinematic"
-    | "SAI Comic Book"
-    | "SAI Craft Clay"
-    | "SAI Digital Art"
-    | "SAI Enhance"
-    | "SAI Fantasy Art"
-    | "SAI Isometric"
-    | "SAI Line Art"
-    | "SAI Lowpoly"
-    | "SAI Neonpunk"
-    | "SAI Origami"
-    | "SAI Photographic"
-    | "SAI Pixel Art"
-    | "SAI Texture"
-    | "MRE Cinematic Dynamic"
-    | "MRE Spontaneous Picture"
-    | "MRE Artistic Vision"
-    | "MRE Dark Dream"
-    | "MRE Gloomy Art"
-    | "MRE Bad Dream"
-    | "MRE Underground"
-    | "MRE Surreal Painting"
-    | "MRE Dynamic Illustration"
-    | "MRE Undead Art"
-    | "MRE Elemental Art"
-    | "MRE Space Art"
-    | "MRE Ancient Illustration"
-    | "MRE Brave Art"
-    | "MRE Heroic Fantasy"
-    | "MRE Dark Cyberpunk"
-    | "MRE Lyrical Geometry"
-    | "MRE Sumi E Symbolic"
-    | "MRE Sumi E Detailed"
-    | "MRE Manga"
-    | "MRE Anime"
-    | "MRE Comic"
-    | "Ads Advertising"
-    | "Ads Automotive"
-    | "Ads Corporate"
-    | "Ads Fashion Editorial"
-    | "Ads Food Photography"
-    | "Ads Gourmet Food Photography"
-    | "Ads Luxury"
-    | "Ads Real Estate"
-    | "Ads Retail"
-    | "Artstyle Abstract"
-    | "Artstyle Abstract Expressionism"
-    | "Artstyle Art Deco"
-    | "Artstyle Art Nouveau"
-    | "Artstyle Constructivist"
-    | "Artstyle Cubist"
-    | "Artstyle Expressionist"
-    | "Artstyle Graffiti"
-    | "Artstyle Hyperrealism"
-    | "Artstyle Impressionist"
-    | "Artstyle Pointillism"
-    | "Artstyle Pop Art"
-    | "Artstyle Psychedelic"
-    | "Artstyle Renaissance"
-    | "Artstyle Steampunk"
-    | "Artstyle Surrealist"
-    | "Artstyle Typography"
-    | "Artstyle Watercolor"
-    | "Futuristic Biomechanical"
-    | "Futuristic Biomechanical Cyberpunk"
-    | "Futuristic Cybernetic"
-    | "Futuristic Cybernetic Robot"
-    | "Futuristic Cyberpunk Cityscape"
-    | "Futuristic Futuristic"
-    | "Futuristic Retro Cyberpunk"
-    | "Futuristic Retro Futurism"
-    | "Futuristic Sci Fi"
-    | "Futuristic Vaporwave"
-    | "Game Bubble Bobble"
-    | "Game Cyberpunk Game"
-    | "Game Fighting Game"
-    | "Game Gta"
-    | "Game Mario"
-    | "Game Minecraft"
-    | "Game Pokemon"
-    | "Game Retro Arcade"
-    | "Game Retro Game"
-    | "Game Rpg Fantasy Game"
-    | "Game Strategy Game"
-    | "Game Streetfighter"
-    | "Game Zelda"
-    | "Misc Architectural"
-    | "Misc Disco"
-    | "Misc Dreamscape"
-    | "Misc Dystopian"
-    | "Misc Fairy Tale"
-    | "Misc Gothic"
-    | "Misc Grunge"
-    | "Misc Horror"
-    | "Misc Kawaii"
-    | "Misc Lovecraftian"
-    | "Misc Macabre"
-    | "Misc Manga"
-    | "Misc Metropolis"
-    | "Misc Minimalist"
-    | "Misc Monochrome"
-    | "Misc Nautical"
-    | "Misc Space"
-    | "Misc Stained Glass"
-    | "Misc Techwear Fashion"
-    | "Misc Tribal"
-    | "Misc Zentangle"
-    | "Papercraft Collage"
-    | "Papercraft Flat Papercut"
-    | "Papercraft Kirigami"
-    | "Papercraft Paper Mache"
-    | "Papercraft Paper Quilling"
-    | "Papercraft Papercut Collage"
-    | "Papercraft Papercut Shadow Box"
-    | "Papercraft Stacked Papercut"
-    | "Papercraft Thick Layered Papercut"
-    | "Photo Alien"
-    | "Photo Film Noir"
-    | "Photo Glamour"
-    | "Photo Hdr"
-    | "Photo Iphone Photographic"
-    | "Photo Long Exposure"
-    | "Photo Neon Noir"
-    | "Photo Silhouette"
-    | "Photo Tilt Shift"
-    | "Cinematic Diva"
-    | "Abstract Expressionism"
-    | "Academia"
-    | "Action Figure"
-    | "Adorable 3D Character"
-    | "Adorable Kawaii"
-    | "Art Deco"
-    | "Art Nouveau"
-    | "Astral Aura"
-    | "Avant Garde"
-    | "Baroque"
-    | "Bauhaus Style Poster"
-    | "Blueprint Schematic Drawing"
-    | "Caricature"
-    | "Cel Shaded Art"
-    | "Character Design Sheet"
-    | "Classicism Art"
-    | "Color Field Painting"
-    | "Colored Pencil Art"
-    | "Conceptual Art"
-    | "Constructivism"
-    | "Cubism"
-    | "Dadaism"
-    | "Dark Fantasy"
-    | "Dark Moody Atmosphere"
-    | "Dmt Art Style"
-    | "Doodle Art"
-    | "Double Exposure"
-    | "Dripping Paint Splatter Art"
-    | "Expressionism"
-    | "Faded Polaroid Photo"
-    | "Fauvism"
-    | "Flat 2d Art"
-    | "Fortnite Art Style"
-    | "Futurism"
-    | "Glitchcore"
-    | "Glo Fi"
-    | "Googie Art Style"
-    | "Graffiti Art"
-    | "Harlem Renaissance Art"
-    | "High Fashion"
-    | "Idyllic"
-    | "Impressionism"
-    | "Infographic Drawing"
-    | "Ink Dripping Drawing"
-    | "Japanese Ink Drawing"
-    | "Knolling Photography"
-    | "Light Cheery Atmosphere"
-    | "Logo Design"
-    | "Luxurious Elegance"
-    | "Macro Photography"
-    | "Mandola Art"
-    | "Marker Drawing"
-    | "Medievalism"
-    | "Minimalism"
-    | "Neo Baroque"
-    | "Neo Byzantine"
-    | "Neo Futurism"
-    | "Neo Impressionism"
-    | "Neo Rococo"
-    | "Neoclassicism"
-    | "Op Art"
-    | "Ornate And Intricate"
-    | "Pencil Sketch Drawing"
-    | "Pop Art 2"
-    | "Rococo"
-    | "Silhouette Art"
-    | "Simple Vector Art"
-    | "Sketchup"
-    | "Steampunk 2"
-    | "Surrealism"
-    | "Suprematism"
-    | "Terragen"
-    | "Tranquil Relaxing Atmosphere"
-    | "Sticker Designs"
-    | "Vibrant Rim Light"
-    | "Volumetric Lighting"
-    | "Watercolor 2"
-    | "Whimsical And Playful"
-    | "Mk Chromolithography"
-    | "Mk Cross Processing Print"
-    | "Mk Dufaycolor Photograph"
-    | "Mk Herbarium"
-    | "Mk Punk Collage"
-    | "Mk Mosaic"
-    | "Mk Van Gogh"
-    | "Mk Coloring Book"
-    | "Mk Singer Sargent"
-    | "Mk Pollock"
-    | "Mk Basquiat"
-    | "Mk Andy Warhol"
-    | "Mk Halftone Print"
-    | "Mk Gond Painting"
-    | "Mk Albumen Print"
-    | "Mk Aquatint Print"
-    | "Mk Anthotype Print"
-    | "Mk Inuit Carving"
-    | "Mk Bromoil Print"
-    | "Mk Calotype Print"
-    | "Mk Color Sketchnote"
-    | "Mk Cibulak Porcelain"
-    | "Mk Alcohol Ink Art"
-    | "Mk One Line Art"
-    | "Mk Blacklight Paint"
-    | "Mk Carnival Glass"
-    | "Mk Cyanotype Print"
-    | "Mk Cross Stitching"
-    | "Mk Encaustic Paint"
-    | "Mk Embroidery"
-    | "Mk Gyotaku"
-    | "Mk Luminogram"
-    | "Mk Lite Brite Art"
-    | "Mk Mokume Gane"
-    | "Pebble Art"
-    | "Mk Palekh"
-    | "Mk Suminagashi"
-    | "Mk Scrimshaw"
-    | "Mk Shibori"
-    | "Mk Vitreous Enamel"
-    | "Mk Ukiyo E"
-    | "Mk Vintage Airline Poster"
-    | "Mk Vintage Travel Poster"
-    | "Mk Bauhaus Style"
-    | "Mk Afrofuturism"
-    | "Mk Atompunk"
-    | "Mk Constructivism"
-    | "Mk Chicano Art"
-    | "Mk De Stijl"
-    | "Mk Dayak Art"
-    | "Mk Fayum Portrait"
-    | "Mk Illuminated Manuscript"
-    | "Mk Kalighat Painting"
-    | "Mk Madhubani Painting"
-    | "Mk Pictorialism"
-    | "Mk Pichwai Painting"
-    | "Mk Patachitra Painting"
-    | "Mk Samoan Art Inspired"
-    | "Mk Tlingit Art"
-    | "Mk Adnate Style"
-    | "Mk Ron English Style"
-    | "Mk Shepard Fairey Style"
+    | 'Fooocus V2'
+    | 'Fooocus Enhance'
+    | 'Fooocus Sharp'
+    | 'Fooocus Semi Realistic'
+    | 'Fooocus Masterpiece'
+    | 'Fooocus Photograph'
+    | 'Fooocus Negative'
+    | 'Fooocus Cinematic'
+    | 'SAI 3D Model'
+    | 'SAI Analog Film'
+    | 'SAI Anime'
+    | 'SAI Cinematic'
+    | 'SAI Comic Book'
+    | 'SAI Craft Clay'
+    | 'SAI Digital Art'
+    | 'SAI Enhance'
+    | 'SAI Fantasy Art'
+    | 'SAI Isometric'
+    | 'SAI Line Art'
+    | 'SAI Lowpoly'
+    | 'SAI Neonpunk'
+    | 'SAI Origami'
+    | 'SAI Photographic'
+    | 'SAI Pixel Art'
+    | 'SAI Texture'
+    | 'MRE Cinematic Dynamic'
+    | 'MRE Spontaneous Picture'
+    | 'MRE Artistic Vision'
+    | 'MRE Dark Dream'
+    | 'MRE Gloomy Art'
+    | 'MRE Bad Dream'
+    | 'MRE Underground'
+    | 'MRE Surreal Painting'
+    | 'MRE Dynamic Illustration'
+    | 'MRE Undead Art'
+    | 'MRE Elemental Art'
+    | 'MRE Space Art'
+    | 'MRE Ancient Illustration'
+    | 'MRE Brave Art'
+    | 'MRE Heroic Fantasy'
+    | 'MRE Dark Cyberpunk'
+    | 'MRE Lyrical Geometry'
+    | 'MRE Sumi E Symbolic'
+    | 'MRE Sumi E Detailed'
+    | 'MRE Manga'
+    | 'MRE Anime'
+    | 'MRE Comic'
+    | 'Ads Advertising'
+    | 'Ads Automotive'
+    | 'Ads Corporate'
+    | 'Ads Fashion Editorial'
+    | 'Ads Food Photography'
+    | 'Ads Gourmet Food Photography'
+    | 'Ads Luxury'
+    | 'Ads Real Estate'
+    | 'Ads Retail'
+    | 'Artstyle Abstract'
+    | 'Artstyle Abstract Expressionism'
+    | 'Artstyle Art Deco'
+    | 'Artstyle Art Nouveau'
+    | 'Artstyle Constructivist'
+    | 'Artstyle Cubist'
+    | 'Artstyle Expressionist'
+    | 'Artstyle Graffiti'
+    | 'Artstyle Hyperrealism'
+    | 'Artstyle Impressionist'
+    | 'Artstyle Pointillism'
+    | 'Artstyle Pop Art'
+    | 'Artstyle Psychedelic'
+    | 'Artstyle Renaissance'
+    | 'Artstyle Steampunk'
+    | 'Artstyle Surrealist'
+    | 'Artstyle Typography'
+    | 'Artstyle Watercolor'
+    | 'Futuristic Biomechanical'
+    | 'Futuristic Biomechanical Cyberpunk'
+    | 'Futuristic Cybernetic'
+    | 'Futuristic Cybernetic Robot'
+    | 'Futuristic Cyberpunk Cityscape'
+    | 'Futuristic Futuristic'
+    | 'Futuristic Retro Cyberpunk'
+    | 'Futuristic Retro Futurism'
+    | 'Futuristic Sci Fi'
+    | 'Futuristic Vaporwave'
+    | 'Game Bubble Bobble'
+    | 'Game Cyberpunk Game'
+    | 'Game Fighting Game'
+    | 'Game Gta'
+    | 'Game Mario'
+    | 'Game Minecraft'
+    | 'Game Pokemon'
+    | 'Game Retro Arcade'
+    | 'Game Retro Game'
+    | 'Game Rpg Fantasy Game'
+    | 'Game Strategy Game'
+    | 'Game Streetfighter'
+    | 'Game Zelda'
+    | 'Misc Architectural'
+    | 'Misc Disco'
+    | 'Misc Dreamscape'
+    | 'Misc Dystopian'
+    | 'Misc Fairy Tale'
+    | 'Misc Gothic'
+    | 'Misc Grunge'
+    | 'Misc Horror'
+    | 'Misc Kawaii'
+    | 'Misc Lovecraftian'
+    | 'Misc Macabre'
+    | 'Misc Manga'
+    | 'Misc Metropolis'
+    | 'Misc Minimalist'
+    | 'Misc Monochrome'
+    | 'Misc Nautical'
+    | 'Misc Space'
+    | 'Misc Stained Glass'
+    | 'Misc Techwear Fashion'
+    | 'Misc Tribal'
+    | 'Misc Zentangle'
+    | 'Papercraft Collage'
+    | 'Papercraft Flat Papercut'
+    | 'Papercraft Kirigami'
+    | 'Papercraft Paper Mache'
+    | 'Papercraft Paper Quilling'
+    | 'Papercraft Papercut Collage'
+    | 'Papercraft Papercut Shadow Box'
+    | 'Papercraft Stacked Papercut'
+    | 'Papercraft Thick Layered Papercut'
+    | 'Photo Alien'
+    | 'Photo Film Noir'
+    | 'Photo Glamour'
+    | 'Photo Hdr'
+    | 'Photo Iphone Photographic'
+    | 'Photo Long Exposure'
+    | 'Photo Neon Noir'
+    | 'Photo Silhouette'
+    | 'Photo Tilt Shift'
+    | 'Cinematic Diva'
+    | 'Abstract Expressionism'
+    | 'Academia'
+    | 'Action Figure'
+    | 'Adorable 3D Character'
+    | 'Adorable Kawaii'
+    | 'Art Deco'
+    | 'Art Nouveau'
+    | 'Astral Aura'
+    | 'Avant Garde'
+    | 'Baroque'
+    | 'Bauhaus Style Poster'
+    | 'Blueprint Schematic Drawing'
+    | 'Caricature'
+    | 'Cel Shaded Art'
+    | 'Character Design Sheet'
+    | 'Classicism Art'
+    | 'Color Field Painting'
+    | 'Colored Pencil Art'
+    | 'Conceptual Art'
+    | 'Constructivism'
+    | 'Cubism'
+    | 'Dadaism'
+    | 'Dark Fantasy'
+    | 'Dark Moody Atmosphere'
+    | 'Dmt Art Style'
+    | 'Doodle Art'
+    | 'Double Exposure'
+    | 'Dripping Paint Splatter Art'
+    | 'Expressionism'
+    | 'Faded Polaroid Photo'
+    | 'Fauvism'
+    | 'Flat 2d Art'
+    | 'Fortnite Art Style'
+    | 'Futurism'
+    | 'Glitchcore'
+    | 'Glo Fi'
+    | 'Googie Art Style'
+    | 'Graffiti Art'
+    | 'Harlem Renaissance Art'
+    | 'High Fashion'
+    | 'Idyllic'
+    | 'Impressionism'
+    | 'Infographic Drawing'
+    | 'Ink Dripping Drawing'
+    | 'Japanese Ink Drawing'
+    | 'Knolling Photography'
+    | 'Light Cheery Atmosphere'
+    | 'Logo Design'
+    | 'Luxurious Elegance'
+    | 'Macro Photography'
+    | 'Mandola Art'
+    | 'Marker Drawing'
+    | 'Medievalism'
+    | 'Minimalism'
+    | 'Neo Baroque'
+    | 'Neo Byzantine'
+    | 'Neo Futurism'
+    | 'Neo Impressionism'
+    | 'Neo Rococo'
+    | 'Neoclassicism'
+    | 'Op Art'
+    | 'Ornate And Intricate'
+    | 'Pencil Sketch Drawing'
+    | 'Pop Art 2'
+    | 'Rococo'
+    | 'Silhouette Art'
+    | 'Simple Vector Art'
+    | 'Sketchup'
+    | 'Steampunk 2'
+    | 'Surrealism'
+    | 'Suprematism'
+    | 'Terragen'
+    | 'Tranquil Relaxing Atmosphere'
+    | 'Sticker Designs'
+    | 'Vibrant Rim Light'
+    | 'Volumetric Lighting'
+    | 'Watercolor 2'
+    | 'Whimsical And Playful'
+    | 'Mk Chromolithography'
+    | 'Mk Cross Processing Print'
+    | 'Mk Dufaycolor Photograph'
+    | 'Mk Herbarium'
+    | 'Mk Punk Collage'
+    | 'Mk Mosaic'
+    | 'Mk Van Gogh'
+    | 'Mk Coloring Book'
+    | 'Mk Singer Sargent'
+    | 'Mk Pollock'
+    | 'Mk Basquiat'
+    | 'Mk Andy Warhol'
+    | 'Mk Halftone Print'
+    | 'Mk Gond Painting'
+    | 'Mk Albumen Print'
+    | 'Mk Aquatint Print'
+    | 'Mk Anthotype Print'
+    | 'Mk Inuit Carving'
+    | 'Mk Bromoil Print'
+    | 'Mk Calotype Print'
+    | 'Mk Color Sketchnote'
+    | 'Mk Cibulak Porcelain'
+    | 'Mk Alcohol Ink Art'
+    | 'Mk One Line Art'
+    | 'Mk Blacklight Paint'
+    | 'Mk Carnival Glass'
+    | 'Mk Cyanotype Print'
+    | 'Mk Cross Stitching'
+    | 'Mk Encaustic Paint'
+    | 'Mk Embroidery'
+    | 'Mk Gyotaku'
+    | 'Mk Luminogram'
+    | 'Mk Lite Brite Art'
+    | 'Mk Mokume Gane'
+    | 'Pebble Art'
+    | 'Mk Palekh'
+    | 'Mk Suminagashi'
+    | 'Mk Scrimshaw'
+    | 'Mk Shibori'
+    | 'Mk Vitreous Enamel'
+    | 'Mk Ukiyo E'
+    | 'Mk Vintage Airline Poster'
+    | 'Mk Vintage Travel Poster'
+    | 'Mk Bauhaus Style'
+    | 'Mk Afrofuturism'
+    | 'Mk Atompunk'
+    | 'Mk Constructivism'
+    | 'Mk Chicano Art'
+    | 'Mk De Stijl'
+    | 'Mk Dayak Art'
+    | 'Mk Fayum Portrait'
+    | 'Mk Illuminated Manuscript'
+    | 'Mk Kalighat Painting'
+    | 'Mk Madhubani Painting'
+    | 'Mk Pictorialism'
+    | 'Mk Pichwai Painting'
+    | 'Mk Patachitra Painting'
+    | 'Mk Samoan Art Inspired'
+    | 'Mk Tlingit Art'
+    | 'Mk Adnate Style'
+    | 'Mk Ron English Style'
+    | 'Mk Shepard Fairey Style'
   >;
   /**
    * You can choose Speed or Quality Default value: `"Extreme Speed"`
    */
-  performance?: "Speed" | "Quality" | "Extreme Speed" | "Lightning";
+  performance?: 'Speed' | 'Quality' | 'Extreme Speed' | 'Lightning';
   /**
    * The CFG (Classifier Free Guidance) scale is a measure of how close you want
    * the model to stick to your prompt when looking for a related image to show you. Default value: `4`
@@ -11356,7 +11356,7 @@ export type FooocusLegacyInput = {
   /**
    * Refiner (SDXL or SD 1.5) Default value: `"None"`
    */
-  refiner_model?: "None" | "realisticVisionV60B1_v51VAE.safetensors";
+  refiner_model?: 'None' | 'realisticVisionV60B1_v51VAE.safetensors';
   /**
    * Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models
    * 0.8 for XL-refiners; or any value for switching two SDXL models. Default value: `0.8`
@@ -11365,7 +11365,7 @@ export type FooocusLegacyInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "png" | "jpeg" | "webp";
+  output_format?: 'png' | 'jpeg' | 'webp';
   /**
    * If set to true, the function will wait for the image to be generated and uploaded
    * before returning the response. This will increase the latency of the function but
@@ -11384,7 +11384,7 @@ export type FooocusLegacyInput = {
   /**
    * The type of image control Default value: `"PyraCanny"`
    */
-  control_type?: "ImagePrompt" | "PyraCanny" | "CPDS" | "FaceSwap";
+  control_type?: 'ImagePrompt' | 'PyraCanny' | 'CPDS' | 'FaceSwap';
   /**
    * The strength of the control image. Use it to control how much the generated image
    * should look like the control image. Default value: `1`
@@ -11441,288 +11441,288 @@ export type FooocusUpscaleOrVaryInput = {
    * The style to use. Default value: `Fooocus Enhance,Fooocus V2,Fooocus Sharp`
    */
   styles?: Array<
-    | "Fooocus V2"
-    | "Fooocus Enhance"
-    | "Fooocus Sharp"
-    | "Fooocus Semi Realistic"
-    | "Fooocus Masterpiece"
-    | "Fooocus Photograph"
-    | "Fooocus Negative"
-    | "Fooocus Cinematic"
-    | "SAI 3D Model"
-    | "SAI Analog Film"
-    | "SAI Anime"
-    | "SAI Cinematic"
-    | "SAI Comic Book"
-    | "SAI Craft Clay"
-    | "SAI Digital Art"
-    | "SAI Enhance"
-    | "SAI Fantasy Art"
-    | "SAI Isometric"
-    | "SAI Line Art"
-    | "SAI Lowpoly"
-    | "SAI Neonpunk"
-    | "SAI Origami"
-    | "SAI Photographic"
-    | "SAI Pixel Art"
-    | "SAI Texture"
-    | "MRE Cinematic Dynamic"
-    | "MRE Spontaneous Picture"
-    | "MRE Artistic Vision"
-    | "MRE Dark Dream"
-    | "MRE Gloomy Art"
-    | "MRE Bad Dream"
-    | "MRE Underground"
-    | "MRE Surreal Painting"
-    | "MRE Dynamic Illustration"
-    | "MRE Undead Art"
-    | "MRE Elemental Art"
-    | "MRE Space Art"
-    | "MRE Ancient Illustration"
-    | "MRE Brave Art"
-    | "MRE Heroic Fantasy"
-    | "MRE Dark Cyberpunk"
-    | "MRE Lyrical Geometry"
-    | "MRE Sumi E Symbolic"
-    | "MRE Sumi E Detailed"
-    | "MRE Manga"
-    | "MRE Anime"
-    | "MRE Comic"
-    | "Ads Advertising"
-    | "Ads Automotive"
-    | "Ads Corporate"
-    | "Ads Fashion Editorial"
-    | "Ads Food Photography"
-    | "Ads Gourmet Food Photography"
-    | "Ads Luxury"
-    | "Ads Real Estate"
-    | "Ads Retail"
-    | "Artstyle Abstract"
-    | "Artstyle Abstract Expressionism"
-    | "Artstyle Art Deco"
-    | "Artstyle Art Nouveau"
-    | "Artstyle Constructivist"
-    | "Artstyle Cubist"
-    | "Artstyle Expressionist"
-    | "Artstyle Graffiti"
-    | "Artstyle Hyperrealism"
-    | "Artstyle Impressionist"
-    | "Artstyle Pointillism"
-    | "Artstyle Pop Art"
-    | "Artstyle Psychedelic"
-    | "Artstyle Renaissance"
-    | "Artstyle Steampunk"
-    | "Artstyle Surrealist"
-    | "Artstyle Typography"
-    | "Artstyle Watercolor"
-    | "Futuristic Biomechanical"
-    | "Futuristic Biomechanical Cyberpunk"
-    | "Futuristic Cybernetic"
-    | "Futuristic Cybernetic Robot"
-    | "Futuristic Cyberpunk Cityscape"
-    | "Futuristic Futuristic"
-    | "Futuristic Retro Cyberpunk"
-    | "Futuristic Retro Futurism"
-    | "Futuristic Sci Fi"
-    | "Futuristic Vaporwave"
-    | "Game Bubble Bobble"
-    | "Game Cyberpunk Game"
-    | "Game Fighting Game"
-    | "Game Gta"
-    | "Game Mario"
-    | "Game Minecraft"
-    | "Game Pokemon"
-    | "Game Retro Arcade"
-    | "Game Retro Game"
-    | "Game Rpg Fantasy Game"
-    | "Game Strategy Game"
-    | "Game Streetfighter"
-    | "Game Zelda"
-    | "Misc Architectural"
-    | "Misc Disco"
-    | "Misc Dreamscape"
-    | "Misc Dystopian"
-    | "Misc Fairy Tale"
-    | "Misc Gothic"
-    | "Misc Grunge"
-    | "Misc Horror"
-    | "Misc Kawaii"
-    | "Misc Lovecraftian"
-    | "Misc Macabre"
-    | "Misc Manga"
-    | "Misc Metropolis"
-    | "Misc Minimalist"
-    | "Misc Monochrome"
-    | "Misc Nautical"
-    | "Misc Space"
-    | "Misc Stained Glass"
-    | "Misc Techwear Fashion"
-    | "Misc Tribal"
-    | "Misc Zentangle"
-    | "Papercraft Collage"
-    | "Papercraft Flat Papercut"
-    | "Papercraft Kirigami"
-    | "Papercraft Paper Mache"
-    | "Papercraft Paper Quilling"
-    | "Papercraft Papercut Collage"
-    | "Papercraft Papercut Shadow Box"
-    | "Papercraft Stacked Papercut"
-    | "Papercraft Thick Layered Papercut"
-    | "Photo Alien"
-    | "Photo Film Noir"
-    | "Photo Glamour"
-    | "Photo Hdr"
-    | "Photo Iphone Photographic"
-    | "Photo Long Exposure"
-    | "Photo Neon Noir"
-    | "Photo Silhouette"
-    | "Photo Tilt Shift"
-    | "Cinematic Diva"
-    | "Abstract Expressionism"
-    | "Academia"
-    | "Action Figure"
-    | "Adorable 3D Character"
-    | "Adorable Kawaii"
-    | "Art Deco"
-    | "Art Nouveau"
-    | "Astral Aura"
-    | "Avant Garde"
-    | "Baroque"
-    | "Bauhaus Style Poster"
-    | "Blueprint Schematic Drawing"
-    | "Caricature"
-    | "Cel Shaded Art"
-    | "Character Design Sheet"
-    | "Classicism Art"
-    | "Color Field Painting"
-    | "Colored Pencil Art"
-    | "Conceptual Art"
-    | "Constructivism"
-    | "Cubism"
-    | "Dadaism"
-    | "Dark Fantasy"
-    | "Dark Moody Atmosphere"
-    | "Dmt Art Style"
-    | "Doodle Art"
-    | "Double Exposure"
-    | "Dripping Paint Splatter Art"
-    | "Expressionism"
-    | "Faded Polaroid Photo"
-    | "Fauvism"
-    | "Flat 2d Art"
-    | "Fortnite Art Style"
-    | "Futurism"
-    | "Glitchcore"
-    | "Glo Fi"
-    | "Googie Art Style"
-    | "Graffiti Art"
-    | "Harlem Renaissance Art"
-    | "High Fashion"
-    | "Idyllic"
-    | "Impressionism"
-    | "Infographic Drawing"
-    | "Ink Dripping Drawing"
-    | "Japanese Ink Drawing"
-    | "Knolling Photography"
-    | "Light Cheery Atmosphere"
-    | "Logo Design"
-    | "Luxurious Elegance"
-    | "Macro Photography"
-    | "Mandola Art"
-    | "Marker Drawing"
-    | "Medievalism"
-    | "Minimalism"
-    | "Neo Baroque"
-    | "Neo Byzantine"
-    | "Neo Futurism"
-    | "Neo Impressionism"
-    | "Neo Rococo"
-    | "Neoclassicism"
-    | "Op Art"
-    | "Ornate And Intricate"
-    | "Pencil Sketch Drawing"
-    | "Pop Art 2"
-    | "Rococo"
-    | "Silhouette Art"
-    | "Simple Vector Art"
-    | "Sketchup"
-    | "Steampunk 2"
-    | "Surrealism"
-    | "Suprematism"
-    | "Terragen"
-    | "Tranquil Relaxing Atmosphere"
-    | "Sticker Designs"
-    | "Vibrant Rim Light"
-    | "Volumetric Lighting"
-    | "Watercolor 2"
-    | "Whimsical And Playful"
-    | "Mk Chromolithography"
-    | "Mk Cross Processing Print"
-    | "Mk Dufaycolor Photograph"
-    | "Mk Herbarium"
-    | "Mk Punk Collage"
-    | "Mk Mosaic"
-    | "Mk Van Gogh"
-    | "Mk Coloring Book"
-    | "Mk Singer Sargent"
-    | "Mk Pollock"
-    | "Mk Basquiat"
-    | "Mk Andy Warhol"
-    | "Mk Halftone Print"
-    | "Mk Gond Painting"
-    | "Mk Albumen Print"
-    | "Mk Aquatint Print"
-    | "Mk Anthotype Print"
-    | "Mk Inuit Carving"
-    | "Mk Bromoil Print"
-    | "Mk Calotype Print"
-    | "Mk Color Sketchnote"
-    | "Mk Cibulak Porcelain"
-    | "Mk Alcohol Ink Art"
-    | "Mk One Line Art"
-    | "Mk Blacklight Paint"
-    | "Mk Carnival Glass"
-    | "Mk Cyanotype Print"
-    | "Mk Cross Stitching"
-    | "Mk Encaustic Paint"
-    | "Mk Embroidery"
-    | "Mk Gyotaku"
-    | "Mk Luminogram"
-    | "Mk Lite Brite Art"
-    | "Mk Mokume Gane"
-    | "Pebble Art"
-    | "Mk Palekh"
-    | "Mk Suminagashi"
-    | "Mk Scrimshaw"
-    | "Mk Shibori"
-    | "Mk Vitreous Enamel"
-    | "Mk Ukiyo E"
-    | "Mk Vintage Airline Poster"
-    | "Mk Vintage Travel Poster"
-    | "Mk Bauhaus Style"
-    | "Mk Afrofuturism"
-    | "Mk Atompunk"
-    | "Mk Constructivism"
-    | "Mk Chicano Art"
-    | "Mk De Stijl"
-    | "Mk Dayak Art"
-    | "Mk Fayum Portrait"
-    | "Mk Illuminated Manuscript"
-    | "Mk Kalighat Painting"
-    | "Mk Madhubani Painting"
-    | "Mk Pictorialism"
-    | "Mk Pichwai Painting"
-    | "Mk Patachitra Painting"
-    | "Mk Samoan Art Inspired"
-    | "Mk Tlingit Art"
-    | "Mk Adnate Style"
-    | "Mk Ron English Style"
-    | "Mk Shepard Fairey Style"
+    | 'Fooocus V2'
+    | 'Fooocus Enhance'
+    | 'Fooocus Sharp'
+    | 'Fooocus Semi Realistic'
+    | 'Fooocus Masterpiece'
+    | 'Fooocus Photograph'
+    | 'Fooocus Negative'
+    | 'Fooocus Cinematic'
+    | 'SAI 3D Model'
+    | 'SAI Analog Film'
+    | 'SAI Anime'
+    | 'SAI Cinematic'
+    | 'SAI Comic Book'
+    | 'SAI Craft Clay'
+    | 'SAI Digital Art'
+    | 'SAI Enhance'
+    | 'SAI Fantasy Art'
+    | 'SAI Isometric'
+    | 'SAI Line Art'
+    | 'SAI Lowpoly'
+    | 'SAI Neonpunk'
+    | 'SAI Origami'
+    | 'SAI Photographic'
+    | 'SAI Pixel Art'
+    | 'SAI Texture'
+    | 'MRE Cinematic Dynamic'
+    | 'MRE Spontaneous Picture'
+    | 'MRE Artistic Vision'
+    | 'MRE Dark Dream'
+    | 'MRE Gloomy Art'
+    | 'MRE Bad Dream'
+    | 'MRE Underground'
+    | 'MRE Surreal Painting'
+    | 'MRE Dynamic Illustration'
+    | 'MRE Undead Art'
+    | 'MRE Elemental Art'
+    | 'MRE Space Art'
+    | 'MRE Ancient Illustration'
+    | 'MRE Brave Art'
+    | 'MRE Heroic Fantasy'
+    | 'MRE Dark Cyberpunk'
+    | 'MRE Lyrical Geometry'
+    | 'MRE Sumi E Symbolic'
+    | 'MRE Sumi E Detailed'
+    | 'MRE Manga'
+    | 'MRE Anime'
+    | 'MRE Comic'
+    | 'Ads Advertising'
+    | 'Ads Automotive'
+    | 'Ads Corporate'
+    | 'Ads Fashion Editorial'
+    | 'Ads Food Photography'
+    | 'Ads Gourmet Food Photography'
+    | 'Ads Luxury'
+    | 'Ads Real Estate'
+    | 'Ads Retail'
+    | 'Artstyle Abstract'
+    | 'Artstyle Abstract Expressionism'
+    | 'Artstyle Art Deco'
+    | 'Artstyle Art Nouveau'
+    | 'Artstyle Constructivist'
+    | 'Artstyle Cubist'
+    | 'Artstyle Expressionist'
+    | 'Artstyle Graffiti'
+    | 'Artstyle Hyperrealism'
+    | 'Artstyle Impressionist'
+    | 'Artstyle Pointillism'
+    | 'Artstyle Pop Art'
+    | 'Artstyle Psychedelic'
+    | 'Artstyle Renaissance'
+    | 'Artstyle Steampunk'
+    | 'Artstyle Surrealist'
+    | 'Artstyle Typography'
+    | 'Artstyle Watercolor'
+    | 'Futuristic Biomechanical'
+    | 'Futuristic Biomechanical Cyberpunk'
+    | 'Futuristic Cybernetic'
+    | 'Futuristic Cybernetic Robot'
+    | 'Futuristic Cyberpunk Cityscape'
+    | 'Futuristic Futuristic'
+    | 'Futuristic Retro Cyberpunk'
+    | 'Futuristic Retro Futurism'
+    | 'Futuristic Sci Fi'
+    | 'Futuristic Vaporwave'
+    | 'Game Bubble Bobble'
+    | 'Game Cyberpunk Game'
+    | 'Game Fighting Game'
+    | 'Game Gta'
+    | 'Game Mario'
+    | 'Game Minecraft'
+    | 'Game Pokemon'
+    | 'Game Retro Arcade'
+    | 'Game Retro Game'
+    | 'Game Rpg Fantasy Game'
+    | 'Game Strategy Game'
+    | 'Game Streetfighter'
+    | 'Game Zelda'
+    | 'Misc Architectural'
+    | 'Misc Disco'
+    | 'Misc Dreamscape'
+    | 'Misc Dystopian'
+    | 'Misc Fairy Tale'
+    | 'Misc Gothic'
+    | 'Misc Grunge'
+    | 'Misc Horror'
+    | 'Misc Kawaii'
+    | 'Misc Lovecraftian'
+    | 'Misc Macabre'
+    | 'Misc Manga'
+    | 'Misc Metropolis'
+    | 'Misc Minimalist'
+    | 'Misc Monochrome'
+    | 'Misc Nautical'
+    | 'Misc Space'
+    | 'Misc Stained Glass'
+    | 'Misc Techwear Fashion'
+    | 'Misc Tribal'
+    | 'Misc Zentangle'
+    | 'Papercraft Collage'
+    | 'Papercraft Flat Papercut'
+    | 'Papercraft Kirigami'
+    | 'Papercraft Paper Mache'
+    | 'Papercraft Paper Quilling'
+    | 'Papercraft Papercut Collage'
+    | 'Papercraft Papercut Shadow Box'
+    | 'Papercraft Stacked Papercut'
+    | 'Papercraft Thick Layered Papercut'
+    | 'Photo Alien'
+    | 'Photo Film Noir'
+    | 'Photo Glamour'
+    | 'Photo Hdr'
+    | 'Photo Iphone Photographic'
+    | 'Photo Long Exposure'
+    | 'Photo Neon Noir'
+    | 'Photo Silhouette'
+    | 'Photo Tilt Shift'
+    | 'Cinematic Diva'
+    | 'Abstract Expressionism'
+    | 'Academia'
+    | 'Action Figure'
+    | 'Adorable 3D Character'
+    | 'Adorable Kawaii'
+    | 'Art Deco'
+    | 'Art Nouveau'
+    | 'Astral Aura'
+    | 'Avant Garde'
+    | 'Baroque'
+    | 'Bauhaus Style Poster'
+    | 'Blueprint Schematic Drawing'
+    | 'Caricature'
+    | 'Cel Shaded Art'
+    | 'Character Design Sheet'
+    | 'Classicism Art'
+    | 'Color Field Painting'
+    | 'Colored Pencil Art'
+    | 'Conceptual Art'
+    | 'Constructivism'
+    | 'Cubism'
+    | 'Dadaism'
+    | 'Dark Fantasy'
+    | 'Dark Moody Atmosphere'
+    | 'Dmt Art Style'
+    | 'Doodle Art'
+    | 'Double Exposure'
+    | 'Dripping Paint Splatter Art'
+    | 'Expressionism'
+    | 'Faded Polaroid Photo'
+    | 'Fauvism'
+    | 'Flat 2d Art'
+    | 'Fortnite Art Style'
+    | 'Futurism'
+    | 'Glitchcore'
+    | 'Glo Fi'
+    | 'Googie Art Style'
+    | 'Graffiti Art'
+    | 'Harlem Renaissance Art'
+    | 'High Fashion'
+    | 'Idyllic'
+    | 'Impressionism'
+    | 'Infographic Drawing'
+    | 'Ink Dripping Drawing'
+    | 'Japanese Ink Drawing'
+    | 'Knolling Photography'
+    | 'Light Cheery Atmosphere'
+    | 'Logo Design'
+    | 'Luxurious Elegance'
+    | 'Macro Photography'
+    | 'Mandola Art'
+    | 'Marker Drawing'
+    | 'Medievalism'
+    | 'Minimalism'
+    | 'Neo Baroque'
+    | 'Neo Byzantine'
+    | 'Neo Futurism'
+    | 'Neo Impressionism'
+    | 'Neo Rococo'
+    | 'Neoclassicism'
+    | 'Op Art'
+    | 'Ornate And Intricate'
+    | 'Pencil Sketch Drawing'
+    | 'Pop Art 2'
+    | 'Rococo'
+    | 'Silhouette Art'
+    | 'Simple Vector Art'
+    | 'Sketchup'
+    | 'Steampunk 2'
+    | 'Surrealism'
+    | 'Suprematism'
+    | 'Terragen'
+    | 'Tranquil Relaxing Atmosphere'
+    | 'Sticker Designs'
+    | 'Vibrant Rim Light'
+    | 'Volumetric Lighting'
+    | 'Watercolor 2'
+    | 'Whimsical And Playful'
+    | 'Mk Chromolithography'
+    | 'Mk Cross Processing Print'
+    | 'Mk Dufaycolor Photograph'
+    | 'Mk Herbarium'
+    | 'Mk Punk Collage'
+    | 'Mk Mosaic'
+    | 'Mk Van Gogh'
+    | 'Mk Coloring Book'
+    | 'Mk Singer Sargent'
+    | 'Mk Pollock'
+    | 'Mk Basquiat'
+    | 'Mk Andy Warhol'
+    | 'Mk Halftone Print'
+    | 'Mk Gond Painting'
+    | 'Mk Albumen Print'
+    | 'Mk Aquatint Print'
+    | 'Mk Anthotype Print'
+    | 'Mk Inuit Carving'
+    | 'Mk Bromoil Print'
+    | 'Mk Calotype Print'
+    | 'Mk Color Sketchnote'
+    | 'Mk Cibulak Porcelain'
+    | 'Mk Alcohol Ink Art'
+    | 'Mk One Line Art'
+    | 'Mk Blacklight Paint'
+    | 'Mk Carnival Glass'
+    | 'Mk Cyanotype Print'
+    | 'Mk Cross Stitching'
+    | 'Mk Encaustic Paint'
+    | 'Mk Embroidery'
+    | 'Mk Gyotaku'
+    | 'Mk Luminogram'
+    | 'Mk Lite Brite Art'
+    | 'Mk Mokume Gane'
+    | 'Pebble Art'
+    | 'Mk Palekh'
+    | 'Mk Suminagashi'
+    | 'Mk Scrimshaw'
+    | 'Mk Shibori'
+    | 'Mk Vitreous Enamel'
+    | 'Mk Ukiyo E'
+    | 'Mk Vintage Airline Poster'
+    | 'Mk Vintage Travel Poster'
+    | 'Mk Bauhaus Style'
+    | 'Mk Afrofuturism'
+    | 'Mk Atompunk'
+    | 'Mk Constructivism'
+    | 'Mk Chicano Art'
+    | 'Mk De Stijl'
+    | 'Mk Dayak Art'
+    | 'Mk Fayum Portrait'
+    | 'Mk Illuminated Manuscript'
+    | 'Mk Kalighat Painting'
+    | 'Mk Madhubani Painting'
+    | 'Mk Pictorialism'
+    | 'Mk Pichwai Painting'
+    | 'Mk Patachitra Painting'
+    | 'Mk Samoan Art Inspired'
+    | 'Mk Tlingit Art'
+    | 'Mk Adnate Style'
+    | 'Mk Ron English Style'
+    | 'Mk Shepard Fairey Style'
   >;
   /**
    * You can choose Speed or Quality Default value: `"Extreme Speed"`
    */
-  performance?: "Speed" | "Quality" | "Extreme Speed" | "Lightning";
+  performance?: 'Speed' | 'Quality' | 'Extreme Speed' | 'Lightning';
   /**
    * The CFG (Classifier Free Guidance) scale is a measure of how close you want
    * the model to stick to your prompt when looking for a related image to show you. Default value: `4`
@@ -11750,7 +11750,7 @@ export type FooocusUpscaleOrVaryInput = {
   /**
    * Refiner (SDXL or SD 1.5) Default value: `"None"`
    */
-  refiner_model?: "None" | "realisticVisionV60B1_v51VAE.safetensors";
+  refiner_model?: 'None' | 'realisticVisionV60B1_v51VAE.safetensors';
   /**
    * Use 0.4 for SD1.5 realistic models; 0.667 for SD1.5 anime models
    * 0.8 for XL-refiners; or any value for switching two SDXL models. Default value: `0.8`
@@ -11759,7 +11759,7 @@ export type FooocusUpscaleOrVaryInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "png" | "jpeg" | "webp";
+  output_format?: 'png' | 'jpeg' | 'webp';
   /**
    * If set to true, the function will wait for the image to be generated and uploaded
    * before returning the response. This will increase the latency of the function but
@@ -11779,12 +11779,12 @@ export type FooocusUpscaleOrVaryInput = {
    * The method to use for upscaling or varying. Default value: `"Vary (Strong)"`
    */
   uov_method?:
-    | "Disabled"
-    | "Vary (Subtle)"
-    | "Vary (Strong)"
-    | "Upscale (1.5x)"
-    | "Upscale (2x)"
-    | "Upscale (Fast 2x)";
+    | 'Disabled'
+    | 'Vary (Subtle)'
+    | 'Vary (Strong)'
+    | 'Upscale (1.5x)'
+    | 'Upscale (2x)'
+    | 'Upscale (Fast 2x)';
   /**
    *
    */
@@ -11886,10 +11886,10 @@ export type GuidanceInput = {
    * Which guidance type you would like to include in the generation. Up to 4 guidance methods can be combined during a single inference. This parameter is optional.
    */
   method?:
-    | "controlnet_canny"
-    | "controlnet_depth"
-    | "controlnet_recoloring"
-    | "controlnet_color_grid";
+    | 'controlnet_canny'
+    | 'controlnet_depth'
+    | 'controlnet_recoloring'
+    | 'controlnet_color_grid';
   /**
    * Impact of the guidance. Default value: `1`
    */
@@ -11903,7 +11903,7 @@ export type HaiperVideoV25FastInput = {
   /**
    * The duration of the generated video in seconds Default value: `"4"`
    */
-  duration?: "4" | "6";
+  duration?: '4' | '6';
   /**
    * Whether to use the model's prompt enhancer Default value: `true`
    */
@@ -11928,7 +11928,7 @@ export type HaiperVideoV25ImageToVideoFastInput = {
   /**
    * The duration of the generated video in seconds Default value: `"4"`
    */
-  duration?: "4" | "6";
+  duration?: '4' | '6';
   /**
    * Whether to use the model's prompt enhancer Default value: `true`
    */
@@ -11957,7 +11957,7 @@ export type HaiperVideoV2ImageToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"4"`
    */
-  duration?: "4" | "6";
+  duration?: '4' | '6';
   /**
    * Whether to use the model's prompt enhancer Default value: `true`
    */
@@ -11986,7 +11986,7 @@ export type HaiperVideoV2Input = {
   /**
    * The duration of the generated video in seconds Default value: `"4"`
    */
-  duration?: "4" | "6";
+  duration?: '4' | '6';
   /**
    * Whether to use the model's prompt enhancer Default value: `true`
    */
@@ -12043,15 +12043,15 @@ export type HunyuanVideoInput = {
   /**
    * The aspect ratio of the video to generate. Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16";
+  aspect_ratio?: '16:9' | '9:16';
   /**
    * The resolution of the video to generate. Default value: `"720p"`
    */
-  resolution?: "480p" | "580p" | "720p";
+  resolution?: '480p' | '580p' | '720p';
   /**
    * The number of frames to generate. Default value: `"129"`
    */
-  num_frames?: "129" | "85";
+  num_frames?: '129' | '85';
 };
 export type HunyuanVideoLoraInput = {
   /**
@@ -12069,15 +12069,15 @@ export type HunyuanVideoLoraInput = {
   /**
    * The aspect ratio of the video to generate. Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16";
+  aspect_ratio?: '16:9' | '9:16';
   /**
    * The resolution of the video to generate. Default value: `"720p"`
    */
-  resolution?: "480p" | "580p" | "720p";
+  resolution?: '480p' | '580p' | '720p';
   /**
    * The number of frames to generate. Default value: `"129"`
    */
-  num_frames?: "129" | "85";
+  num_frames?: '129' | '85';
   /**
    * The LoRAs to use for the image generation. You can use any number of LoRAs
    * and they will be merged together to generate the final image. Default value: ``
@@ -12158,7 +12158,7 @@ export type Hyper3dRodinInput = {
   /**
    * For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model.(You can upload multi-view images in any order, regardless of the order of view.) Default value: `"concat"`
    */
-  condition_mode?: "fuse" | "concat";
+  condition_mode?: 'fuse' | 'concat';
   /**
    * Seed value for randomization, ranging from 0 to 65535. Optional.
    */
@@ -12166,15 +12166,15 @@ export type Hyper3dRodinInput = {
   /**
    * Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb. Default value: `"glb"`
    */
-  geometry_file_format?: "glb" | "usdz" | "fbx" | "obj" | "stl";
+  geometry_file_format?: 'glb' | 'usdz' | 'fbx' | 'obj' | 'stl';
   /**
    * Material type. Possible values: PBR, Shaded. Default is PBR. Default value: `"PBR"`
    */
-  material?: "PBR" | "Shaded";
+  material?: 'PBR' | 'Shaded';
   /**
    * Generation quality. Possible values: high, medium, low, extra-low. Default is medium. Default value: `"medium"`
    */
-  quality?: "high" | "medium" | "low" | "extra-low";
+  quality?: 'high' | 'medium' | 'low' | 'extra-low';
   /**
    * Whether to export the model using hyper mode. Default is false.
    */
@@ -12182,7 +12182,7 @@ export type Hyper3dRodinInput = {
   /**
    * Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular. Default value: `"Regular"`
    */
-  tier?: "Regular" | "Sketch";
+  tier?: 'Regular' | 'Sketch';
   /**
    * When generating the human-like model, this parameter control the generation result to T/A Pose.
    */
@@ -12224,16 +12224,16 @@ export type HyperSdxlImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"1"`
    */
-  num_inference_steps?: "1" | "2" | "4";
+  num_inference_steps?: '1' | '2' | '4';
   /**
    * determines how much the generated image resembles the initial image Default value: `0.95`
    */
@@ -12268,7 +12268,7 @@ export type HyperSdxlImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type HyperSdxlImageToImageOutput = {
   /**
@@ -12311,16 +12311,16 @@ export type HyperSdxlInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"1"`
    */
-  num_inference_steps?: "1" | "2" | "4";
+  num_inference_steps?: '1' | '2' | '4';
   /**
    * determines how much the generated image resembles the initial image Default value: `0.95`
    */
@@ -12355,7 +12355,7 @@ export type HyperSdxlInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type HyperSdxlInpaintingOutput = {
   /**
@@ -12390,16 +12390,16 @@ export type HyperSdxlInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"1"`
    */
-  num_inference_steps?: "1" | "2" | "4";
+  num_inference_steps?: '1' | '2' | '4';
   /**
    * The same seed and the same prompt given to the same version of Stable Diffusion
    * will output the same image every time.
@@ -12430,7 +12430,7 @@ export type HyperSdxlInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type HyperSdxlOutput = {
   /**
@@ -12493,12 +12493,12 @@ export type IclightV2Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -12511,7 +12511,7 @@ export type IclightV2Input = {
   /**
    * Provide lighting conditions for the model Default value: `"None"`
    */
-  initial_latent?: "None" | "Left" | "Right" | "Top" | "Bottom";
+  initial_latent?: 'None' | 'Left' | 'Right' | 'Top' | 'Bottom';
   /**
    * Use HR fix
    */
@@ -12554,7 +12554,7 @@ export type IclightV2Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type IclightV2Output = {
   /**
@@ -12599,7 +12599,7 @@ export type IdeogramV2EditInput = {
   /**
    * The style of the generated image Default value: `"auto"`
    */
-  style?: "auto" | "general" | "realistic" | "design" | "render_3D" | "anime";
+  style?: 'auto' | 'general' | 'realistic' | 'design' | 'render_3D' | 'anime';
   /**
    * Whether to expand the prompt with MagicPrompt functionality. Default value: `true`
    */
@@ -12624,17 +12624,17 @@ export type IdeogramV2Input = {
    * The aspect ratio of the generated image Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "10:16"
-    | "16:10"
-    | "9:16"
-    | "16:9"
-    | "4:3"
-    | "3:4"
-    | "1:1"
-    | "1:3"
-    | "3:1"
-    | "3:2"
-    | "2:3";
+    | '10:16'
+    | '16:10'
+    | '9:16'
+    | '16:9'
+    | '4:3'
+    | '3:4'
+    | '1:1'
+    | '1:3'
+    | '3:1'
+    | '3:2'
+    | '2:3';
   /**
    * Whether to expand the prompt with MagicPrompt functionality. Default value: `true`
    */
@@ -12646,7 +12646,7 @@ export type IdeogramV2Input = {
   /**
    * The style of the generated image Default value: `"auto"`
    */
-  style?: "auto" | "general" | "realistic" | "design" | "render_3D" | "anime";
+  style?: 'auto' | 'general' | 'realistic' | 'design' | 'render_3D' | 'anime';
   /**
    * A negative prompt to avoid in the generated image Default value: `""`
    */
@@ -12675,17 +12675,17 @@ export type IdeogramV2RemixInput = {
    * The aspect ratio of the generated image Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "10:16"
-    | "16:10"
-    | "9:16"
-    | "16:9"
-    | "4:3"
-    | "3:4"
-    | "1:1"
-    | "1:3"
-    | "3:1"
-    | "3:2"
-    | "2:3";
+    | '10:16'
+    | '16:10'
+    | '9:16'
+    | '16:9'
+    | '4:3'
+    | '3:4'
+    | '1:1'
+    | '1:3'
+    | '3:1'
+    | '3:2'
+    | '2:3';
   /**
    * Strength of the input image in the remix Default value: `0.8`
    */
@@ -12701,7 +12701,7 @@ export type IdeogramV2RemixInput = {
   /**
    * The style of the generated image Default value: `"auto"`
    */
-  style?: "auto" | "general" | "realistic" | "design" | "render_3D" | "anime";
+  style?: 'auto' | 'general' | 'realistic' | 'design' | 'render_3D' | 'anime';
 };
 export type IdeogramV2RemixOutput = {
   /**
@@ -12733,7 +12733,7 @@ export type IdeogramV2TurboEditInput = {
   /**
    * The style of the generated image Default value: `"auto"`
    */
-  style?: "auto" | "general" | "realistic" | "design" | "render_3D" | "anime";
+  style?: 'auto' | 'general' | 'realistic' | 'design' | 'render_3D' | 'anime';
   /**
    * Whether to expand the prompt with MagicPrompt functionality. Default value: `true`
    */
@@ -12758,17 +12758,17 @@ export type IdeogramV2TurboInput = {
    * The aspect ratio of the generated image Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "10:16"
-    | "16:10"
-    | "9:16"
-    | "16:9"
-    | "4:3"
-    | "3:4"
-    | "1:1"
-    | "1:3"
-    | "3:1"
-    | "3:2"
-    | "2:3";
+    | '10:16'
+    | '16:10'
+    | '9:16'
+    | '16:9'
+    | '4:3'
+    | '3:4'
+    | '1:1'
+    | '1:3'
+    | '3:1'
+    | '3:2'
+    | '2:3';
   /**
    * Whether to expand the prompt with MagicPrompt functionality. Default value: `true`
    */
@@ -12780,7 +12780,7 @@ export type IdeogramV2TurboInput = {
   /**
    * The style of the generated image Default value: `"auto"`
    */
-  style?: "auto" | "general" | "realistic" | "design" | "render_3D" | "anime";
+  style?: 'auto' | 'general' | 'realistic' | 'design' | 'render_3D' | 'anime';
   /**
    * A negative prompt to avoid in the generated image Default value: `""`
    */
@@ -12809,17 +12809,17 @@ export type IdeogramV2TurboRemixInput = {
    * The aspect ratio of the generated image Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "10:16"
-    | "16:10"
-    | "9:16"
-    | "16:9"
-    | "4:3"
-    | "3:4"
-    | "1:1"
-    | "1:3"
-    | "3:1"
-    | "3:2"
-    | "2:3";
+    | '10:16'
+    | '16:10'
+    | '9:16'
+    | '16:9'
+    | '4:3'
+    | '3:4'
+    | '1:1'
+    | '1:3'
+    | '3:1'
+    | '3:2'
+    | '2:3';
   /**
    * Strength of the input image in the remix Default value: `0.8`
    */
@@ -12835,7 +12835,7 @@ export type IdeogramV2TurboRemixInput = {
   /**
    * The style of the generated image Default value: `"auto"`
    */
-  style?: "auto" | "general" | "realistic" | "design" | "render_3D" | "anime";
+  style?: 'auto' | 'general' | 'realistic' | 'design' | 'render_3D' | 'anime';
 };
 export type IdeogramV2TurboRemixOutput = {
   /**
@@ -12887,7 +12887,7 @@ export type IllusionDiffusionInput = {
   /**
    * Scheduler / sampler to use for the image denoising process. Default value: `"Euler"`
    */
-  scheduler?: "DPM++ Karras SDE" | "Euler";
+  scheduler?: 'DPM++ Karras SDE' | 'Euler';
   /**
    * Increasing the amount of steps tells Stable Diffusion that it should take more steps
    * to generate your final result which can increase the amount of detail in your image. Default value: `40`
@@ -12899,12 +12899,12 @@ export type IllusionDiffusionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
 };
 export type IllusionDiffusionOutput = {
   /**
@@ -13103,7 +13103,7 @@ export type ImagePreprocessorsScribbleInput = {
   /**
    * The model to use for the Scribble detector Default value: `"HED"`
    */
-  model?: "HED" | "PiDi";
+  model?: 'HED' | 'PiDi';
   /**
    * Whether to use the safe version of the Scribble detector
    */
@@ -13173,12 +13173,12 @@ export type ImageToImageControlNetInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -13244,12 +13244,12 @@ export type ImageToImageControlNetUnionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -13293,7 +13293,7 @@ export type ImageToImageControlNetUnionInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -13301,7 +13301,7 @@ export type ImageToImageControlNetUnionInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -13376,12 +13376,12 @@ export type ImageToImageFooocusInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `8`
    */
@@ -13415,7 +13415,7 @@ export type ImageToImageFooocusInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts. Default value: `true`
    */
@@ -13423,7 +13423,7 @@ export type ImageToImageFooocusInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -13447,16 +13447,16 @@ export type ImageToImageHyperInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"1"`
    */
-  num_inference_steps?: "1" | "2" | "4";
+  num_inference_steps?: '1' | '2' | '4';
   /**
    * determines how much the generated image resembles the initial image Default value: `0.95`
    */
@@ -13491,7 +13491,7 @@ export type ImageToImageHyperInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type ImageToImageInput = {
   /**
@@ -13601,17 +13601,17 @@ export type ImageToImageInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "Euler"
-    | "Euler A"
-    | "Euler (trailing timesteps)"
-    | "LCM"
-    | "LCM (trailing timesteps)"
-    | "DDIM"
-    | "TCD";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'Euler'
+    | 'Euler A'
+    | 'Euler (trailing timesteps)'
+    | 'LCM'
+    | 'LCM (trailing timesteps)'
+    | 'DDIM'
+    | 'TCD';
   /**
    * Optionally override the timesteps to use for the denoising process. Only works with schedulers which support the `timesteps` argument in their `set_timesteps` method.
    * Defaults to not overriding, in which case the scheduler automatically sets the timesteps based on the `num_inference_steps` parameter.
@@ -13628,7 +13628,7 @@ export type ImageToImageInput = {
    * The type of prediction to use for the image generation.
    * The `epsilon` is the default. Default value: `"epsilon"`
    */
-  prediction_type?: "v_prediction" | "epsilon";
+  prediction_type?: 'v_prediction' | 'epsilon';
   /**
    * Whether to set the rescale_betas_snr_zero option or not for the sampler
    */
@@ -13636,7 +13636,7 @@ export type ImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  image_format?: "jpeg" | "png";
+  image_format?: 'jpeg' | 'png';
   /**
    * Number of images to generate in one request. Note that the higher the batch size,
    * the longer it will take to generate the images. Default value: `1`
@@ -13680,8 +13680,8 @@ export type ImageToImageLCMInput = {
    * The name of the model to use. Default value: `"stabilityai/stable-diffusion-xl-base-1.0"`
    */
   model_name?:
-    | "stabilityai/stable-diffusion-xl-base-1.0"
-    | "runwayml/stable-diffusion-v1-5";
+    | 'stabilityai/stable-diffusion-xl-base-1.0'
+    | 'runwayml/stable-diffusion-v1-5';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -13701,12 +13701,12 @@ export type ImageToImageLCMInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `6`
    */
@@ -13742,7 +13742,7 @@ export type ImageToImageLCMInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -13750,7 +13750,7 @@ export type ImageToImageLCMInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -13775,16 +13775,16 @@ export type ImageToImageLightningInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"4"`
    */
-  num_inference_steps?: "1" | "2" | "4" | "8";
+  num_inference_steps?: '1' | '2' | '4' | '8';
   /**
    * determines how much the generated image resembles the initial image Default value: `0.95`
    */
@@ -13819,7 +13819,7 @@ export type ImageToImageLightningInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type ImageToImagePlaygroundv25Input = {
   /**
@@ -13841,12 +13841,12 @@ export type ImageToImagePlaygroundv25Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -13880,7 +13880,7 @@ export type ImageToImagePlaygroundv25Input = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -13888,7 +13888,7 @@ export type ImageToImagePlaygroundv25Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -13914,12 +13914,12 @@ export type ImageToImageSD15Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -13967,13 +13967,13 @@ export type ImageToImageSD15Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type ImageToImageTurboInput = {
   /**
    * The name of the model to use. Default value: `"stabilityai/sdxl-turbo"`
    */
-  model_name?: "stabilityai/sdxl-turbo" | "stabilityai/sd-turbo";
+  model_name?: 'stabilityai/sdxl-turbo' | 'stabilityai/sd-turbo';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -13993,12 +13993,12 @@ export type ImageToImageTurboInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `2`
    */
@@ -14256,12 +14256,12 @@ export type InpaintingControlNetInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -14331,12 +14331,12 @@ export type InpaintingControlNetUnionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -14380,7 +14380,7 @@ export type InpaintingControlNetUnionInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -14388,7 +14388,7 @@ export type InpaintingControlNetUnionInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -14467,12 +14467,12 @@ export type InpaintingFooocusInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `8`
    */
@@ -14506,7 +14506,7 @@ export type InpaintingFooocusInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts. Default value: `true`
    */
@@ -14514,7 +14514,7 @@ export type InpaintingFooocusInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -14542,16 +14542,16 @@ export type InpaintingHyperInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"1"`
    */
-  num_inference_steps?: "1" | "2" | "4";
+  num_inference_steps?: '1' | '2' | '4';
   /**
    * determines how much the generated image resembles the initial image Default value: `0.95`
    */
@@ -14586,7 +14586,7 @@ export type InpaintingHyperInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type InpaintingInput = {
   /**
@@ -14612,12 +14612,12 @@ export type InpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -14661,7 +14661,7 @@ export type InpaintingInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -14669,7 +14669,7 @@ export type InpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -14681,8 +14681,8 @@ export type InpaintingLCMInput = {
    * The name of the model to use. Default value: `"stabilityai/stable-diffusion-xl-base-1.0"`
    */
   model_name?:
-    | "stabilityai/stable-diffusion-xl-base-1.0"
-    | "runwayml/stable-diffusion-v1-5";
+    | 'stabilityai/stable-diffusion-xl-base-1.0'
+    | 'runwayml/stable-diffusion-v1-5';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -14706,12 +14706,12 @@ export type InpaintingLCMInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `6`
    */
@@ -14747,7 +14747,7 @@ export type InpaintingLCMInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -14755,7 +14755,7 @@ export type InpaintingLCMInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -14784,16 +14784,16 @@ export type InpaintingLightningInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"4"`
    */
-  num_inference_steps?: "1" | "2" | "4" | "8";
+  num_inference_steps?: '1' | '2' | '4' | '8';
   /**
    * determines how much the generated image resembles the initial image Default value: `0.95`
    */
@@ -14828,7 +14828,7 @@ export type InpaintingLightningInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type InpaintingPlaygroundv25Input = {
   /**
@@ -14854,12 +14854,12 @@ export type InpaintingPlaygroundv25Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -14893,7 +14893,7 @@ export type InpaintingPlaygroundv25Input = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -14901,7 +14901,7 @@ export type InpaintingPlaygroundv25Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -14931,12 +14931,12 @@ export type InpaintingSD15Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -14984,13 +14984,13 @@ export type InpaintingSD15Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type InpaintingTurboInput = {
   /**
    * The name of the model to use. Default value: `"stabilityai/sdxl-turbo"`
    */
-  model_name?: "stabilityai/sdxl-turbo" | "stabilityai/sd-turbo";
+  model_name?: 'stabilityai/sdxl-turbo' | 'stabilityai/sd-turbo';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -15014,12 +15014,12 @@ export type InpaintingTurboInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `2`
    */
@@ -15169,17 +15169,17 @@ export type InpaintInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "Euler"
-    | "Euler A"
-    | "Euler (trailing timesteps)"
-    | "LCM"
-    | "LCM (trailing timesteps)"
-    | "DDIM"
-    | "TCD";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'Euler'
+    | 'Euler A'
+    | 'Euler (trailing timesteps)'
+    | 'LCM'
+    | 'LCM (trailing timesteps)'
+    | 'DDIM'
+    | 'TCD';
   /**
    * Optionally override the timesteps to use for the denoising process. Only works with schedulers which support the `timesteps` argument in their `set_timesteps` method.
    * Defaults to not overriding, in which case the scheduler automatically sets the timesteps based on the `num_inference_steps` parameter.
@@ -15196,7 +15196,7 @@ export type InpaintInput = {
    * The type of prediction to use for the image generation.
    * The `epsilon` is the default. Default value: `"epsilon"`
    */
-  prediction_type?: "v_prediction" | "epsilon";
+  prediction_type?: 'v_prediction' | 'epsilon';
   /**
    * Whether to set the rescale_betas_snr_zero option or not for the sampler
    */
@@ -15204,7 +15204,7 @@ export type InpaintInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  image_format?: "jpeg" | "png";
+  image_format?: 'jpeg' | 'png';
   /**
    * Number of images to generate in one request. Note that the higher the batch size,
    * the longer it will take to generate the images. Default value: `1`
@@ -15296,18 +15296,18 @@ export type InpaintTurboInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The size of the generated image. Defaults to landscape_4_3 if no controlnet has been passed, otherwise defaults to the size of the controlnet conditioning image.
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * URL of Image for inpainting
    */
@@ -15412,12 +15412,12 @@ export type IpAdapterFaceIdInput = {
    * The model type to use. 1_5 is the default and is recommended for most use cases. Default value: `"1_5-v1"`
    */
   model_type?:
-    | "1_5-v1"
-    | "1_5-v1-plus"
-    | "1_5-v2-plus"
-    | "SDXL-v1"
-    | "SDXL-v2-plus"
-    | "1_5-auraface-v1";
+    | '1_5-v1'
+    | '1_5-v1-plus'
+    | '1_5-v2-plus'
+    | 'SDXL-v1'
+    | 'SDXL-v2-plus'
+    | '1_5-auraface-v1';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -15520,11 +15520,11 @@ export type KlingVideoV15ProImageToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV15ProImageToVideoOutput = {
   /**
@@ -15540,11 +15540,11 @@ export type KlingVideoV15ProTextToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV15ProTextToVideoOutput = {
   /**
@@ -15564,11 +15564,11 @@ export type KlingVideoV16ProImageToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV16ProImageToVideoOutput = {
   /**
@@ -15588,11 +15588,11 @@ export type KlingVideoV16StandardImageToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV16StandardImageToVideoOutput = {
   /**
@@ -15608,11 +15608,11 @@ export type KlingVideoV16StandardTextToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV16StandardTextToVideoOutput = {
   /**
@@ -15632,11 +15632,11 @@ export type KlingVideoV1ProImageToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV1ProImageToVideoOutput = {
   /**
@@ -15652,11 +15652,11 @@ export type KlingVideoV1ProTextToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV1ProTextToVideoOutput = {
   /**
@@ -15676,11 +15676,11 @@ export type KlingVideoV1StandardImageToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV1StandardImageToVideoOutput = {
   /**
@@ -15696,11 +15696,11 @@ export type KlingVideoV1StandardTextToVideoInput = {
   /**
    * The duration of the generated video in seconds Default value: `"5"`
    */
-  duration?: "5" | "10";
+  duration?: '5' | '10';
   /**
    * The aspect ratio of the generated video frame Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  aspect_ratio?: '16:9' | '9:16' | '1:1';
 };
 export type KlingVideoV1StandardTextToVideoOutput = {
   /**
@@ -15753,26 +15753,26 @@ export type KolorsImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The scheduler to use for the model. Default value: `"EulerDiscreteScheduler"`
    */
   scheduler?:
-    | "EulerDiscreteScheduler"
-    | "EulerAncestralDiscreteScheduler"
-    | "DPMSolverMultistepScheduler"
-    | "DPMSolverMultistepScheduler_SDE_karras"
-    | "UniPCMultistepScheduler"
-    | "DEISMultistepScheduler";
+    | 'EulerDiscreteScheduler'
+    | 'EulerAncestralDiscreteScheduler'
+    | 'DPMSolverMultistepScheduler'
+    | 'DPMSolverMultistepScheduler_SDE_karras'
+    | 'UniPCMultistepScheduler'
+    | 'DEISMultistepScheduler';
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * URL of image to use for image to image
    */
@@ -15850,26 +15850,26 @@ export type KolorsImg2ImgInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The scheduler to use for the model. Default value: `"EulerDiscreteScheduler"`
    */
   scheduler?:
-    | "EulerDiscreteScheduler"
-    | "EulerAncestralDiscreteScheduler"
-    | "DPMSolverMultistepScheduler"
-    | "DPMSolverMultistepScheduler_SDE_karras"
-    | "UniPCMultistepScheduler"
-    | "DEISMultistepScheduler";
+    | 'EulerDiscreteScheduler'
+    | 'EulerAncestralDiscreteScheduler'
+    | 'DPMSolverMultistepScheduler'
+    | 'DPMSolverMultistepScheduler_SDE_karras'
+    | 'UniPCMultistepScheduler'
+    | 'DEISMultistepScheduler';
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * URL of image to use for image to image
    */
@@ -15925,26 +15925,26 @@ export type KolorsInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The scheduler to use for the model. Default value: `"EulerDiscreteScheduler"`
    */
   scheduler?:
-    | "EulerDiscreteScheduler"
-    | "EulerAncestralDiscreteScheduler"
-    | "DPMSolverMultistepScheduler"
-    | "DPMSolverMultistepScheduler_SDE_karras"
-    | "UniPCMultistepScheduler"
-    | "DEISMultistepScheduler";
+    | 'EulerDiscreteScheduler'
+    | 'EulerAncestralDiscreteScheduler'
+    | 'DPMSolverMultistepScheduler'
+    | 'DPMSolverMultistepScheduler_SDE_karras'
+    | 'UniPCMultistepScheduler'
+    | 'DEISMultistepScheduler';
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type KolorsOutput = {
   /**
@@ -16034,7 +16034,7 @@ export type LcmInput = {
   /**
    * The model to use for generating the image. Default value: `"sdv1-5"`
    */
-  model?: "sdxl" | "sdv1-5";
+  model?: 'sdxl' | 'sdv1-5';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -16098,12 +16098,12 @@ export type LcmInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * If set to true, the function will wait for the image to be generated and uploaded
    * before returning the response. This will increase the latency of the function but
@@ -16330,7 +16330,7 @@ export type LeffaPoseTransferInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * Url for the human image.
    */
@@ -16382,7 +16382,7 @@ export type LeffaVirtualTryonInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * Url for the human image.
    */
@@ -16426,12 +16426,12 @@ export type LightningModelsImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `5`
    */
@@ -16453,19 +16453,19 @@ export type LightningModelsImageToImageInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "DPM++ SDE"
-    | "DPM++ SDE Karras"
-    | "KDPM 2A"
-    | "Euler"
-    | "Euler (trailing timesteps)"
-    | "Euler A"
-    | "LCM"
-    | "EDMDPMSolverMultistepScheduler"
-    | "TCDScheduler";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'DPM++ SDE'
+    | 'DPM++ SDE Karras'
+    | 'KDPM 2A'
+    | 'Euler'
+    | 'Euler (trailing timesteps)'
+    | 'Euler A'
+    | 'LCM'
+    | 'EDMDPMSolverMultistepScheduler'
+    | 'TCDScheduler';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -16492,7 +16492,7 @@ export type LightningModelsImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -16504,7 +16504,7 @@ export type LightningModelsImageToImageInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type LightningModelsInpaintingInput = {
   /**
@@ -16526,12 +16526,12 @@ export type LightningModelsInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `5`
    */
@@ -16553,19 +16553,19 @@ export type LightningModelsInpaintingInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "DPM++ SDE"
-    | "DPM++ SDE Karras"
-    | "KDPM 2A"
-    | "Euler"
-    | "Euler (trailing timesteps)"
-    | "Euler A"
-    | "LCM"
-    | "EDMDPMSolverMultistepScheduler"
-    | "TCDScheduler";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'DPM++ SDE'
+    | 'DPM++ SDE Karras'
+    | 'KDPM 2A'
+    | 'Euler'
+    | 'Euler (trailing timesteps)'
+    | 'Euler A'
+    | 'LCM'
+    | 'EDMDPMSolverMultistepScheduler'
+    | 'TCDScheduler';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -16592,7 +16592,7 @@ export type LightningModelsInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -16608,7 +16608,7 @@ export type LightningModelsInpaintingInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type LightningModelsInput = {
   /**
@@ -16628,12 +16628,12 @@ export type LightningModelsInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `5`
    */
@@ -16655,19 +16655,19 @@ export type LightningModelsInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "DPM++ SDE"
-    | "DPM++ SDE Karras"
-    | "KDPM 2A"
-    | "Euler"
-    | "Euler (trailing timesteps)"
-    | "Euler A"
-    | "LCM"
-    | "EDMDPMSolverMultistepScheduler"
-    | "TCDScheduler";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'DPM++ SDE'
+    | 'DPM++ SDE Karras'
+    | 'KDPM 2A'
+    | 'Euler'
+    | 'Euler (trailing timesteps)'
+    | 'Euler A'
+    | 'LCM'
+    | 'EDMDPMSolverMultistepScheduler'
+    | 'TCDScheduler';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -16694,11 +16694,11 @@ export type LightningModelsInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type LightningModelsOutput = {
   /**
@@ -16828,7 +16828,7 @@ export type LivePortraitImageInput = {
   /**
    * Output format Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type LivePortraitImageOutput = {
   /**
@@ -17129,17 +17129,17 @@ export type LoraImageToImageInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "Euler"
-    | "Euler A"
-    | "Euler (trailing timesteps)"
-    | "LCM"
-    | "LCM (trailing timesteps)"
-    | "DDIM"
-    | "TCD";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'Euler'
+    | 'Euler A'
+    | 'Euler (trailing timesteps)'
+    | 'LCM'
+    | 'LCM (trailing timesteps)'
+    | 'DDIM'
+    | 'TCD';
   /**
    * Optionally override the timesteps to use for the denoising process. Only works with schedulers which support the `timesteps` argument in their `set_timesteps` method.
    * Defaults to not overriding, in which case the scheduler automatically sets the timesteps based on the `num_inference_steps` parameter.
@@ -17156,7 +17156,7 @@ export type LoraImageToImageInput = {
    * The type of prediction to use for the image generation.
    * The `epsilon` is the default. Default value: `"epsilon"`
    */
-  prediction_type?: "v_prediction" | "epsilon";
+  prediction_type?: 'v_prediction' | 'epsilon';
   /**
    * Whether to set the rescale_betas_snr_zero option or not for the sampler
    */
@@ -17164,7 +17164,7 @@ export type LoraImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  image_format?: "jpeg" | "png";
+  image_format?: 'jpeg' | 'png';
   /**
    * Number of images to generate in one request. Note that the higher the batch size,
    * the longer it will take to generate the images. Default value: `1`
@@ -17338,17 +17338,17 @@ export type LoraInpaintInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "Euler"
-    | "Euler A"
-    | "Euler (trailing timesteps)"
-    | "LCM"
-    | "LCM (trailing timesteps)"
-    | "DDIM"
-    | "TCD";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'Euler'
+    | 'Euler A'
+    | 'Euler (trailing timesteps)'
+    | 'LCM'
+    | 'LCM (trailing timesteps)'
+    | 'DDIM'
+    | 'TCD';
   /**
    * Optionally override the timesteps to use for the denoising process. Only works with schedulers which support the `timesteps` argument in their `set_timesteps` method.
    * Defaults to not overriding, in which case the scheduler automatically sets the timesteps based on the `num_inference_steps` parameter.
@@ -17365,7 +17365,7 @@ export type LoraInpaintInput = {
    * The type of prediction to use for the image generation.
    * The `epsilon` is the default. Default value: `"epsilon"`
    */
-  prediction_type?: "v_prediction" | "epsilon";
+  prediction_type?: 'v_prediction' | 'epsilon';
   /**
    * Whether to set the rescale_betas_snr_zero option or not for the sampler
    */
@@ -17373,7 +17373,7 @@ export type LoraInpaintInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  image_format?: "jpeg" | "png";
+  image_format?: 'jpeg' | 'png';
   /**
    * Number of images to generate in one request. Note that the higher the batch size,
    * the longer it will take to generate the images. Default value: `1`
@@ -17522,12 +17522,12 @@ export type LoraInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * Increasing the amount of steps tells Stable Diffusion that it should take more steps
    * to generate your final result which can increase the amount of detail in your image. Default value: `30`
@@ -17547,17 +17547,17 @@ export type LoraInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "Euler"
-    | "Euler A"
-    | "Euler (trailing timesteps)"
-    | "LCM"
-    | "LCM (trailing timesteps)"
-    | "DDIM"
-    | "TCD";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'Euler'
+    | 'Euler A'
+    | 'Euler (trailing timesteps)'
+    | 'LCM'
+    | 'LCM (trailing timesteps)'
+    | 'DDIM'
+    | 'TCD';
   /**
    * Optionally override the timesteps to use for the denoising process. Only works with schedulers which support the `timesteps` argument in their `set_timesteps` method.
    * Defaults to not overriding, in which case the scheduler automatically sets the timesteps based on the `num_inference_steps` parameter.
@@ -17574,7 +17574,7 @@ export type LoraInput = {
    * The type of prediction to use for the image generation.
    * The `epsilon` is the default. Default value: `"epsilon"`
    */
-  prediction_type?: "v_prediction" | "epsilon";
+  prediction_type?: 'v_prediction' | 'epsilon';
   /**
    * Whether to set the rescale_betas_snr_zero option or not for the sampler
    */
@@ -17582,7 +17582,7 @@ export type LoraInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  image_format?: "jpeg" | "png";
+  image_format?: 'jpeg' | 'png';
   /**
    * Number of images to generate in one request. Note that the higher the batch size,
    * the longer it will take to generate the images. Default value: `1`
@@ -17728,7 +17728,7 @@ export type LumaDreamMachineImageToVideoInput = {
   /**
    * The aspect ratio of the generated video Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "4:3" | "3:4" | "21:9" | "9:21";
+  aspect_ratio?: '16:9' | '9:16' | '4:3' | '3:4' | '21:9' | '9:21';
   /**
    * Whether the video should loop (end of video is blended with the beginning)
    */
@@ -17748,7 +17748,7 @@ export type LumaDreamMachineInput = {
   /**
    * The aspect ratio of the generated video Default value: `"16:9"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "4:3" | "3:4" | "21:9" | "9:21";
+  aspect_ratio?: '16:9' | '9:16' | '4:3' | '3:4' | '21:9' | '9:21';
   /**
    * Whether the video should loop (end of video is blended with the beginning)
    */
@@ -17768,7 +17768,7 @@ export type LumaPhotonFlashInput = {
   /**
    * The aspect ratio of the generated video Default value: `"1:1"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:3" | "3:4" | "21:9" | "9:21";
+  aspect_ratio?: '16:9' | '9:16' | '1:1' | '4:3' | '3:4' | '21:9' | '9:21';
 };
 export type LumaPhotonFlashOutput = {
   /**
@@ -17784,7 +17784,7 @@ export type LumaPhotonInput = {
   /**
    * The aspect ratio of the generated video Default value: `"1:1"`
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:3" | "3:4" | "21:9" | "9:21";
+  aspect_ratio?: '16:9' | '9:16' | '1:1' | '4:3' | '3:4' | '21:9' | '9:21';
 };
 export type LumaPhotonOutput = {
   /**
@@ -18146,7 +18146,7 @@ export type MoondreamBatchedInput = {
   /**
    * Model ID to use for inference Default value: `"vikhyatk/moondream2"`
    */
-  model_id?: "vikhyatk/moondream2" | "sunra/moondream2-docci";
+  model_id?: 'vikhyatk/moondream2' | 'sunra/moondream2-docci';
   /**
    * List of input prompts and image URLs
    */
@@ -18218,7 +18218,7 @@ export type MoondreamNextDetectionInput = {
   /**
    * Type of detection to perform
    */
-  task_type: "bbox_detection" | "point_detection" | "gaze_detection";
+  task_type: 'bbox_detection' | 'point_detection' | 'gaze_detection';
   /**
    * Text description of what to detect
    */
@@ -18246,7 +18246,7 @@ export type MoondreamNextInput = {
   /**
    * Type of task to perform Default value: `"caption"`
    */
-  task_type?: "caption" | "query";
+  task_type?: 'caption' | 'query';
   /**
    * Prompt for query task
    */
@@ -18378,12 +18378,12 @@ export type OmnigenV1Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `50`
    */
@@ -18420,7 +18420,7 @@ export type OmnigenV1Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type OmnigenV1Output = {
   /**
@@ -18535,7 +18535,7 @@ export type PhotomakerInput = {
   /**
    * The base pipeline to use for generating the image. Default value: `"photomaker"`
    */
-  base_pipeline?: "photomaker" | "photomaker-style";
+  base_pipeline?: 'photomaker' | 'photomaker-style';
   /**
    * Optional initial image for img2img
    */
@@ -18548,17 +18548,17 @@ export type PhotomakerInput = {
    *  Default value: `"Photographic"`
    */
   style?:
-    | "(No style)"
-    | "Cinematic"
-    | "Disney Character"
-    | "Digital Art"
-    | "Photographic"
-    | "Fantasy art"
-    | "Neonpunk"
-    | "Enhance"
-    | "Comic book"
-    | "Lowpoly"
-    | "Line art";
+    | '(No style)'
+    | 'Cinematic'
+    | 'Disney Character'
+    | 'Digital Art'
+    | 'Photographic'
+    | 'Fantasy art'
+    | 'Neonpunk'
+    | 'Enhance'
+    | 'Comic book'
+    | 'Lowpoly'
+    | 'Line art';
   /**
    * The negative prompt to use.Use it to address details that you don't want
    * in the image. This could be colors, objects, scenery and even the small details
@@ -18639,27 +18639,27 @@ export type PixartSigmaInput = {
    * The style to apply to the image. Default value: `"(No style)"`
    */
   style?:
-    | "(No style)"
-    | "Cinematic"
-    | "Photographic"
-    | "Anime"
-    | "Manga"
-    | "Digital Art"
-    | "Pixel art"
-    | "Fantasy art"
-    | "Neonpunk"
-    | "3D Model";
+    | '(No style)'
+    | 'Cinematic'
+    | 'Photographic'
+    | 'Anime'
+    | 'Manga'
+    | 'Digital Art'
+    | 'Pixel art'
+    | 'Fantasy art'
+    | 'Neonpunk'
+    | '3D Model';
   /**
    * The size of the generated image. Default value: `square_hd`
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -18667,7 +18667,7 @@ export type PixartSigmaInput = {
   /**
    * The scheduler to use for the model. Default value: `"DPM-SOLVER"`
    */
-  scheduler?: "DPM-SOLVER" | "SA-SOLVER";
+  scheduler?: 'DPM-SOLVER' | 'SA-SOLVER';
   /**
    * The CFG (Classifier Free Guidance) scale is a measure of how close you want
    * the model to stick to your prompt when looking for a related image to show you. Default value: `4.5`
@@ -18780,12 +18780,12 @@ export type PlaygroundV25ImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -18819,7 +18819,7 @@ export type PlaygroundV25ImageToImageInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -18827,7 +18827,7 @@ export type PlaygroundV25ImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -18880,12 +18880,12 @@ export type PlaygroundV25InpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -18919,7 +18919,7 @@ export type PlaygroundV25InpaintingInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -18927,7 +18927,7 @@ export type PlaygroundV25InpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -18972,12 +18972,12 @@ export type PlaygroundV25Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -19007,7 +19007,7 @@ export type PlaygroundV25Input = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -19015,7 +19015,7 @@ export type PlaygroundV25Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -19078,7 +19078,7 @@ export type PoseTransferInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * Url for the human image.
    */
@@ -19131,10 +19131,10 @@ export type ProductShotInput = {
    * This parameter allows you to control the positioning of the product in the image. Choosing 'original' will preserve the original position of the product in the image. Choosing 'automatic' will generate results with the 10 recommended positions for the product. Choosing 'manual_placement' will allow you to select predefined positions (using the parameter 'manual_placement_selection'). Selecting 'manual_padding' will allow you to control the position and size of the image by defining the desired padding in pixels around the product. Default value: `"manual_placement"`
    */
   placement_type?:
-    | "original"
-    | "automatic"
-    | "manual_placement"
-    | "manual_padding";
+    | 'original'
+    | 'automatic'
+    | 'manual_placement'
+    | 'manual_padding';
   /**
    * This flag is only relevant when placement_type=original. If true, the output image retains the original input image's size; otherwise, the image is scaled to 1 megapixel (1MP) while preserving its aspect ratio.
    */
@@ -19147,16 +19147,16 @@ export type ProductShotInput = {
    * If you've selected placement_type=manual_placement, you should use this parameter to specify which placements/positions you would like to use from the list. You can select more than one placement in one request. Default value: `"bottom_center"`
    */
   manual_placement_selection?:
-    | "upper_left"
-    | "upper_right"
-    | "bottom_left"
-    | "bottom_right"
-    | "right_center"
-    | "left_center"
-    | "upper_center"
-    | "bottom_center"
-    | "center_vertical"
-    | "center_horizontal";
+    | 'upper_left'
+    | 'upper_right'
+    | 'bottom_left'
+    | 'bottom_right'
+    | 'right_center'
+    | 'left_center'
+    | 'upper_center'
+    | 'bottom_center'
+    | 'center_vertical'
+    | 'center_horizontal';
   /**
    * The desired padding in pixels around the product, when using placement_type=manual_padding. The order of the values is [left, right, top, bottom]. For optimal results, the total number of pixels, including padding, should be around 1,000,000. It is recommended to first use the product cutout API, get the cutout and understand the size of the result, and then define the required padding and use the cutout as an input for this API.
    */
@@ -19202,12 +19202,12 @@ export type PulidInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * ID scale Default value: `0.8`
    */
@@ -19215,7 +19215,7 @@ export type PulidInput = {
   /**
    * Mode of generation Default value: `"fidelity"`
    */
-  mode?: "fidelity" | "extreme style";
+  mode?: 'fidelity' | 'extreme style';
   /**
    * if you want to mix two ID image, please turn this on, otherwise, turn this off
    */
@@ -19239,7 +19239,7 @@ export type QueryInput = {
   /**
    * Type of task to perform Default value: `"caption"`
    */
-  task_type?: "caption" | "query";
+  task_type?: 'caption' | 'query';
   /**
    * Prompt for query task
    */
@@ -19275,12 +19275,12 @@ export type RealisticVisionImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -19324,7 +19324,7 @@ export type RealisticVisionImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -19336,7 +19336,7 @@ export type RealisticVisionImageToImageInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type RealisticVisionInpaintingInput = {
   /**
@@ -19358,12 +19358,12 @@ export type RealisticVisionInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -19407,7 +19407,7 @@ export type RealisticVisionInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The URL of the image to use as a starting point for the generation.
    */
@@ -19423,7 +19423,7 @@ export type RealisticVisionInpaintingInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type RealisticVisionInput = {
   /**
@@ -19443,12 +19443,12 @@ export type RealisticVisionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -19491,11 +19491,11 @@ export type RealisticVisionInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
 };
 export type RealisticVisionOutput = {
   /**
@@ -19530,63 +19530,63 @@ export type Recraft20bInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The style of the generated images. Vector images cost 2X as much. Default value: `"realistic_image"`
    */
   style?:
-    | "any"
-    | "realistic_image"
-    | "digital_illustration"
-    | "vector_illustration"
-    | "realistic_image/b_and_w"
-    | "realistic_image/enterprise"
-    | "realistic_image/hard_flash"
-    | "realistic_image/hdr"
-    | "realistic_image/motion_blur"
-    | "realistic_image/natural_light"
-    | "realistic_image/studio_portrait"
-    | "digital_illustration/2d_art_poster"
-    | "digital_illustration/2d_art_poster_2"
-    | "digital_illustration/3d"
-    | "digital_illustration/80s"
-    | "digital_illustration/engraving_color"
-    | "digital_illustration/glow"
-    | "digital_illustration/grain"
-    | "digital_illustration/hand_drawn"
-    | "digital_illustration/hand_drawn_outline"
-    | "digital_illustration/handmade_3d"
-    | "digital_illustration/infantile_sketch"
-    | "digital_illustration/kawaii"
-    | "digital_illustration/pixel_art"
-    | "digital_illustration/psychedelic"
-    | "digital_illustration/seamless"
-    | "digital_illustration/voxel"
-    | "digital_illustration/watercolor"
-    | "vector_illustration/cartoon"
-    | "vector_illustration/doodle_line_art"
-    | "vector_illustration/engraving"
-    | "vector_illustration/flat_2"
-    | "vector_illustration/kawaii"
-    | "vector_illustration/line_art"
-    | "vector_illustration/line_circuit"
-    | "vector_illustration/linocut"
-    | "vector_illustration/seamless"
-    | "icon/broken_line"
-    | "icon/colored_outline"
-    | "icon/colored_shapes"
-    | "icon/colored_shapes_gradient"
-    | "icon/doodle_fill"
-    | "icon/doodle_offset_fill"
-    | "icon/offset_fill"
-    | "icon/outline"
-    | "icon/outline_gradient"
-    | "icon/uneven_fill";
+    | 'any'
+    | 'realistic_image'
+    | 'digital_illustration'
+    | 'vector_illustration'
+    | 'realistic_image/b_and_w'
+    | 'realistic_image/enterprise'
+    | 'realistic_image/hard_flash'
+    | 'realistic_image/hdr'
+    | 'realistic_image/motion_blur'
+    | 'realistic_image/natural_light'
+    | 'realistic_image/studio_portrait'
+    | 'digital_illustration/2d_art_poster'
+    | 'digital_illustration/2d_art_poster_2'
+    | 'digital_illustration/3d'
+    | 'digital_illustration/80s'
+    | 'digital_illustration/engraving_color'
+    | 'digital_illustration/glow'
+    | 'digital_illustration/grain'
+    | 'digital_illustration/hand_drawn'
+    | 'digital_illustration/hand_drawn_outline'
+    | 'digital_illustration/handmade_3d'
+    | 'digital_illustration/infantile_sketch'
+    | 'digital_illustration/kawaii'
+    | 'digital_illustration/pixel_art'
+    | 'digital_illustration/psychedelic'
+    | 'digital_illustration/seamless'
+    | 'digital_illustration/voxel'
+    | 'digital_illustration/watercolor'
+    | 'vector_illustration/cartoon'
+    | 'vector_illustration/doodle_line_art'
+    | 'vector_illustration/engraving'
+    | 'vector_illustration/flat_2'
+    | 'vector_illustration/kawaii'
+    | 'vector_illustration/line_art'
+    | 'vector_illustration/line_circuit'
+    | 'vector_illustration/linocut'
+    | 'vector_illustration/seamless'
+    | 'icon/broken_line'
+    | 'icon/colored_outline'
+    | 'icon/colored_shapes'
+    | 'icon/colored_shapes_gradient'
+    | 'icon/doodle_fill'
+    | 'icon/doodle_offset_fill'
+    | 'icon/offset_fill'
+    | 'icon/outline'
+    | 'icon/outline_gradient'
+    | 'icon/uneven_fill';
   /**
    * An array of preferable colors Default value: ``
    */
@@ -19647,91 +19647,91 @@ export type RecraftV3CreateStyleInput = {
    * The base style of the generated images, this topic is covered above. Default value: `"digital_illustration"`
    */
   base_style?:
-    | "any"
-    | "realistic_image"
-    | "digital_illustration"
-    | "vector_illustration"
-    | "realistic_image/b_and_w"
-    | "realistic_image/hard_flash"
-    | "realistic_image/hdr"
-    | "realistic_image/natural_light"
-    | "realistic_image/studio_portrait"
-    | "realistic_image/enterprise"
-    | "realistic_image/motion_blur"
-    | "realistic_image/evening_light"
-    | "realistic_image/faded_nostalgia"
-    | "realistic_image/forest_life"
-    | "realistic_image/mystic_naturalism"
-    | "realistic_image/natural_tones"
-    | "realistic_image/organic_calm"
-    | "realistic_image/real_life_glow"
-    | "realistic_image/retro_realism"
-    | "realistic_image/retro_snapshot"
-    | "realistic_image/urban_drama"
-    | "realistic_image/village_realism"
-    | "realistic_image/warm_folk"
-    | "digital_illustration/pixel_art"
-    | "digital_illustration/hand_drawn"
-    | "digital_illustration/grain"
-    | "digital_illustration/infantile_sketch"
-    | "digital_illustration/2d_art_poster"
-    | "digital_illustration/handmade_3d"
-    | "digital_illustration/hand_drawn_outline"
-    | "digital_illustration/engraving_color"
-    | "digital_illustration/2d_art_poster_2"
-    | "digital_illustration/antiquarian"
-    | "digital_illustration/bold_fantasy"
-    | "digital_illustration/child_book"
-    | "digital_illustration/child_books"
-    | "digital_illustration/cover"
-    | "digital_illustration/crosshatch"
-    | "digital_illustration/digital_engraving"
-    | "digital_illustration/expressionism"
-    | "digital_illustration/freehand_details"
-    | "digital_illustration/grain_20"
-    | "digital_illustration/graphic_intensity"
-    | "digital_illustration/hard_comics"
-    | "digital_illustration/long_shadow"
-    | "digital_illustration/modern_folk"
-    | "digital_illustration/multicolor"
-    | "digital_illustration/neon_calm"
-    | "digital_illustration/noir"
-    | "digital_illustration/nostalgic_pastel"
-    | "digital_illustration/outline_details"
-    | "digital_illustration/pastel_gradient"
-    | "digital_illustration/pastel_sketch"
-    | "digital_illustration/pop_art"
-    | "digital_illustration/pop_renaissance"
-    | "digital_illustration/street_art"
-    | "digital_illustration/tablet_sketch"
-    | "digital_illustration/urban_glow"
-    | "digital_illustration/urban_sketching"
-    | "digital_illustration/vanilla_dreams"
-    | "digital_illustration/young_adult_book"
-    | "digital_illustration/young_adult_book_2"
-    | "vector_illustration/bold_stroke"
-    | "vector_illustration/chemistry"
-    | "vector_illustration/colored_stencil"
-    | "vector_illustration/contour_pop_art"
-    | "vector_illustration/cosmics"
-    | "vector_illustration/cutout"
-    | "vector_illustration/depressive"
-    | "vector_illustration/editorial"
-    | "vector_illustration/emotional_flat"
-    | "vector_illustration/infographical"
-    | "vector_illustration/marker_outline"
-    | "vector_illustration/mosaic"
-    | "vector_illustration/naivector"
-    | "vector_illustration/roundish_flat"
-    | "vector_illustration/segmented_colors"
-    | "vector_illustration/sharp_contrast"
-    | "vector_illustration/thin"
-    | "vector_illustration/vector_photo"
-    | "vector_illustration/vivid_shapes"
-    | "vector_illustration/engraving"
-    | "vector_illustration/line_art"
-    | "vector_illustration/line_circuit"
-    | "vector_illustration/linocut";
+    | 'any'
+    | 'realistic_image'
+    | 'digital_illustration'
+    | 'vector_illustration'
+    | 'realistic_image/b_and_w'
+    | 'realistic_image/hard_flash'
+    | 'realistic_image/hdr'
+    | 'realistic_image/natural_light'
+    | 'realistic_image/studio_portrait'
+    | 'realistic_image/enterprise'
+    | 'realistic_image/motion_blur'
+    | 'realistic_image/evening_light'
+    | 'realistic_image/faded_nostalgia'
+    | 'realistic_image/forest_life'
+    | 'realistic_image/mystic_naturalism'
+    | 'realistic_image/natural_tones'
+    | 'realistic_image/organic_calm'
+    | 'realistic_image/real_life_glow'
+    | 'realistic_image/retro_realism'
+    | 'realistic_image/retro_snapshot'
+    | 'realistic_image/urban_drama'
+    | 'realistic_image/village_realism'
+    | 'realistic_image/warm_folk'
+    | 'digital_illustration/pixel_art'
+    | 'digital_illustration/hand_drawn'
+    | 'digital_illustration/grain'
+    | 'digital_illustration/infantile_sketch'
+    | 'digital_illustration/2d_art_poster'
+    | 'digital_illustration/handmade_3d'
+    | 'digital_illustration/hand_drawn_outline'
+    | 'digital_illustration/engraving_color'
+    | 'digital_illustration/2d_art_poster_2'
+    | 'digital_illustration/antiquarian'
+    | 'digital_illustration/bold_fantasy'
+    | 'digital_illustration/child_book'
+    | 'digital_illustration/child_books'
+    | 'digital_illustration/cover'
+    | 'digital_illustration/crosshatch'
+    | 'digital_illustration/digital_engraving'
+    | 'digital_illustration/expressionism'
+    | 'digital_illustration/freehand_details'
+    | 'digital_illustration/grain_20'
+    | 'digital_illustration/graphic_intensity'
+    | 'digital_illustration/hard_comics'
+    | 'digital_illustration/long_shadow'
+    | 'digital_illustration/modern_folk'
+    | 'digital_illustration/multicolor'
+    | 'digital_illustration/neon_calm'
+    | 'digital_illustration/noir'
+    | 'digital_illustration/nostalgic_pastel'
+    | 'digital_illustration/outline_details'
+    | 'digital_illustration/pastel_gradient'
+    | 'digital_illustration/pastel_sketch'
+    | 'digital_illustration/pop_art'
+    | 'digital_illustration/pop_renaissance'
+    | 'digital_illustration/street_art'
+    | 'digital_illustration/tablet_sketch'
+    | 'digital_illustration/urban_glow'
+    | 'digital_illustration/urban_sketching'
+    | 'digital_illustration/vanilla_dreams'
+    | 'digital_illustration/young_adult_book'
+    | 'digital_illustration/young_adult_book_2'
+    | 'vector_illustration/bold_stroke'
+    | 'vector_illustration/chemistry'
+    | 'vector_illustration/colored_stencil'
+    | 'vector_illustration/contour_pop_art'
+    | 'vector_illustration/cosmics'
+    | 'vector_illustration/cutout'
+    | 'vector_illustration/depressive'
+    | 'vector_illustration/editorial'
+    | 'vector_illustration/emotional_flat'
+    | 'vector_illustration/infographical'
+    | 'vector_illustration/marker_outline'
+    | 'vector_illustration/mosaic'
+    | 'vector_illustration/naivector'
+    | 'vector_illustration/roundish_flat'
+    | 'vector_illustration/segmented_colors'
+    | 'vector_illustration/sharp_contrast'
+    | 'vector_illustration/thin'
+    | 'vector_illustration/vector_photo'
+    | 'vector_illustration/vivid_shapes'
+    | 'vector_illustration/engraving'
+    | 'vector_illustration/line_art'
+    | 'vector_illustration/line_circuit'
+    | 'vector_illustration/linocut';
 };
 export type RecraftV3CreateStyleOutput = {
   /**
@@ -19749,101 +19749,101 @@ export type RecraftV3Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The style of the generated images. Vector images cost 2X as much. Default value: `"realistic_image"`
    */
   style?:
-    | "any"
-    | "realistic_image"
-    | "digital_illustration"
-    | "vector_illustration"
-    | "realistic_image/b_and_w"
-    | "realistic_image/hard_flash"
-    | "realistic_image/hdr"
-    | "realistic_image/natural_light"
-    | "realistic_image/studio_portrait"
-    | "realistic_image/enterprise"
-    | "realistic_image/motion_blur"
-    | "realistic_image/evening_light"
-    | "realistic_image/faded_nostalgia"
-    | "realistic_image/forest_life"
-    | "realistic_image/mystic_naturalism"
-    | "realistic_image/natural_tones"
-    | "realistic_image/organic_calm"
-    | "realistic_image/real_life_glow"
-    | "realistic_image/retro_realism"
-    | "realistic_image/retro_snapshot"
-    | "realistic_image/urban_drama"
-    | "realistic_image/village_realism"
-    | "realistic_image/warm_folk"
-    | "digital_illustration/pixel_art"
-    | "digital_illustration/hand_drawn"
-    | "digital_illustration/grain"
-    | "digital_illustration/infantile_sketch"
-    | "digital_illustration/2d_art_poster"
-    | "digital_illustration/handmade_3d"
-    | "digital_illustration/hand_drawn_outline"
-    | "digital_illustration/engraving_color"
-    | "digital_illustration/2d_art_poster_2"
-    | "digital_illustration/antiquarian"
-    | "digital_illustration/bold_fantasy"
-    | "digital_illustration/child_book"
-    | "digital_illustration/child_books"
-    | "digital_illustration/cover"
-    | "digital_illustration/crosshatch"
-    | "digital_illustration/digital_engraving"
-    | "digital_illustration/expressionism"
-    | "digital_illustration/freehand_details"
-    | "digital_illustration/grain_20"
-    | "digital_illustration/graphic_intensity"
-    | "digital_illustration/hard_comics"
-    | "digital_illustration/long_shadow"
-    | "digital_illustration/modern_folk"
-    | "digital_illustration/multicolor"
-    | "digital_illustration/neon_calm"
-    | "digital_illustration/noir"
-    | "digital_illustration/nostalgic_pastel"
-    | "digital_illustration/outline_details"
-    | "digital_illustration/pastel_gradient"
-    | "digital_illustration/pastel_sketch"
-    | "digital_illustration/pop_art"
-    | "digital_illustration/pop_renaissance"
-    | "digital_illustration/street_art"
-    | "digital_illustration/tablet_sketch"
-    | "digital_illustration/urban_glow"
-    | "digital_illustration/urban_sketching"
-    | "digital_illustration/vanilla_dreams"
-    | "digital_illustration/young_adult_book"
-    | "digital_illustration/young_adult_book_2"
-    | "vector_illustration/bold_stroke"
-    | "vector_illustration/chemistry"
-    | "vector_illustration/colored_stencil"
-    | "vector_illustration/contour_pop_art"
-    | "vector_illustration/cosmics"
-    | "vector_illustration/cutout"
-    | "vector_illustration/depressive"
-    | "vector_illustration/editorial"
-    | "vector_illustration/emotional_flat"
-    | "vector_illustration/infographical"
-    | "vector_illustration/marker_outline"
-    | "vector_illustration/mosaic"
-    | "vector_illustration/naivector"
-    | "vector_illustration/roundish_flat"
-    | "vector_illustration/segmented_colors"
-    | "vector_illustration/sharp_contrast"
-    | "vector_illustration/thin"
-    | "vector_illustration/vector_photo"
-    | "vector_illustration/vivid_shapes"
-    | "vector_illustration/engraving"
-    | "vector_illustration/line_art"
-    | "vector_illustration/line_circuit"
-    | "vector_illustration/linocut";
+    | 'any'
+    | 'realistic_image'
+    | 'digital_illustration'
+    | 'vector_illustration'
+    | 'realistic_image/b_and_w'
+    | 'realistic_image/hard_flash'
+    | 'realistic_image/hdr'
+    | 'realistic_image/natural_light'
+    | 'realistic_image/studio_portrait'
+    | 'realistic_image/enterprise'
+    | 'realistic_image/motion_blur'
+    | 'realistic_image/evening_light'
+    | 'realistic_image/faded_nostalgia'
+    | 'realistic_image/forest_life'
+    | 'realistic_image/mystic_naturalism'
+    | 'realistic_image/natural_tones'
+    | 'realistic_image/organic_calm'
+    | 'realistic_image/real_life_glow'
+    | 'realistic_image/retro_realism'
+    | 'realistic_image/retro_snapshot'
+    | 'realistic_image/urban_drama'
+    | 'realistic_image/village_realism'
+    | 'realistic_image/warm_folk'
+    | 'digital_illustration/pixel_art'
+    | 'digital_illustration/hand_drawn'
+    | 'digital_illustration/grain'
+    | 'digital_illustration/infantile_sketch'
+    | 'digital_illustration/2d_art_poster'
+    | 'digital_illustration/handmade_3d'
+    | 'digital_illustration/hand_drawn_outline'
+    | 'digital_illustration/engraving_color'
+    | 'digital_illustration/2d_art_poster_2'
+    | 'digital_illustration/antiquarian'
+    | 'digital_illustration/bold_fantasy'
+    | 'digital_illustration/child_book'
+    | 'digital_illustration/child_books'
+    | 'digital_illustration/cover'
+    | 'digital_illustration/crosshatch'
+    | 'digital_illustration/digital_engraving'
+    | 'digital_illustration/expressionism'
+    | 'digital_illustration/freehand_details'
+    | 'digital_illustration/grain_20'
+    | 'digital_illustration/graphic_intensity'
+    | 'digital_illustration/hard_comics'
+    | 'digital_illustration/long_shadow'
+    | 'digital_illustration/modern_folk'
+    | 'digital_illustration/multicolor'
+    | 'digital_illustration/neon_calm'
+    | 'digital_illustration/noir'
+    | 'digital_illustration/nostalgic_pastel'
+    | 'digital_illustration/outline_details'
+    | 'digital_illustration/pastel_gradient'
+    | 'digital_illustration/pastel_sketch'
+    | 'digital_illustration/pop_art'
+    | 'digital_illustration/pop_renaissance'
+    | 'digital_illustration/street_art'
+    | 'digital_illustration/tablet_sketch'
+    | 'digital_illustration/urban_glow'
+    | 'digital_illustration/urban_sketching'
+    | 'digital_illustration/vanilla_dreams'
+    | 'digital_illustration/young_adult_book'
+    | 'digital_illustration/young_adult_book_2'
+    | 'vector_illustration/bold_stroke'
+    | 'vector_illustration/chemistry'
+    | 'vector_illustration/colored_stencil'
+    | 'vector_illustration/contour_pop_art'
+    | 'vector_illustration/cosmics'
+    | 'vector_illustration/cutout'
+    | 'vector_illustration/depressive'
+    | 'vector_illustration/editorial'
+    | 'vector_illustration/emotional_flat'
+    | 'vector_illustration/infographical'
+    | 'vector_illustration/marker_outline'
+    | 'vector_illustration/mosaic'
+    | 'vector_illustration/naivector'
+    | 'vector_illustration/roundish_flat'
+    | 'vector_illustration/segmented_colors'
+    | 'vector_illustration/sharp_contrast'
+    | 'vector_illustration/thin'
+    | 'vector_illustration/vector_photo'
+    | 'vector_illustration/vivid_shapes'
+    | 'vector_illustration/engraving'
+    | 'vector_illustration/line_art'
+    | 'vector_illustration/line_circuit'
+    | 'vector_illustration/linocut';
   /**
    * An array of preferable colors Default value: ``
    */
@@ -19881,7 +19881,7 @@ export type RemeshingInput = {
   /**
    * Output format for the 3D model. Default value: `"glb"`
    */
-  output_format?: "glb" | "fbx" | "obj" | "stl" | "usdc";
+  output_format?: 'glb' | 'fbx' | 'obj' | 'stl' | 'usdc';
   /**
    * Number of faces for remesh Default value: `5000`
    */
@@ -19908,17 +19908,17 @@ export type RemixImageInput = {
    * The aspect ratio of the generated image Default value: `"1:1"`
    */
   aspect_ratio?:
-    | "10:16"
-    | "16:10"
-    | "9:16"
-    | "16:9"
-    | "4:3"
-    | "3:4"
-    | "1:1"
-    | "1:3"
-    | "3:1"
-    | "3:2"
-    | "2:3";
+    | '10:16'
+    | '16:10'
+    | '9:16'
+    | '16:9'
+    | '4:3'
+    | '3:4'
+    | '1:1'
+    | '1:3'
+    | '3:1'
+    | '3:2'
+    | '2:3';
   /**
    * Strength of the input image in the remix Default value: `0.8`
    */
@@ -19934,7 +19934,7 @@ export type RemixImageInput = {
   /**
    * The style of the generated image Default value: `"auto"`
    */
-  style?: "auto" | "general" | "realistic" | "design" | "render_3D" | "anime";
+  style?: 'auto' | 'general' | 'realistic' | 'design' | 'render_3D' | 'anime';
 };
 export type RemoveBackgroundInput = {
   /**
@@ -19974,28 +19974,28 @@ export type ResizeImageInput = {
   /**
    * Resizing mode
    */
-  mode: "crop" | "pad" | "scale";
+  mode: 'crop' | 'pad' | 'scale';
   /**
    * Resizing strategy. Only used when mode is 'scale', default is nearest Default value: `"nearest"`
    */
-  resampling?: "nearest" | "bilinear" | "bicubic" | "lanczos";
+  resampling?: 'nearest' | 'bilinear' | 'bicubic' | 'lanczos';
   /**
    * Proportions of the image. Only used when mode is 'scale', default is fit Default value: `"fit"`
    */
-  scaling_proportions?: "fit" | "fill" | "stretch";
+  scaling_proportions?: 'fit' | 'fill' | 'stretch';
   /**
    * Position of cropping. Only used when mode is 'crop', default is center Default value: `"center"`
    */
   cropping_position?:
-    | "center"
-    | "top_left"
-    | "top_right"
-    | "bottom_left"
-    | "bottom_right";
+    | 'center'
+    | 'top_left'
+    | 'top_right'
+    | 'bottom_left'
+    | 'bottom_right';
   /**
    * Color of padding. Only used when mode is 'pad', default is black Default value: `"black"`
    */
-  padding_color?: "black" | "white" | "red" | "green" | "blue";
+  padding_color?: 'black' | 'white' | 'red' | 'green' | 'blue';
 };
 export type ResizeToPixelsInput = {
   /**
@@ -20041,12 +20041,12 @@ export type RFInversionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -20141,9 +20141,9 @@ export type RFInversionInput = {
    * Scheduler for applying reverse guidance. Default value: `"constant"`
    */
   reverse_guidance_schedule?:
-    | "constant"
-    | "linear_increase"
-    | "linear_decrease";
+    | 'constant'
+    | 'linear_increase'
+    | 'linear_decrease';
 };
 export type RGBAToRGBImageInput = {
   /**
@@ -20259,7 +20259,7 @@ export type SadtalkerInput = {
   /**
    * The resolution of the face model Default value: `"256"`
    */
-  face_model_resolution?: "256" | "512";
+  face_model_resolution?: '256' | '512';
   /**
    * The scale of the expression Default value: `1`
    */
@@ -20267,7 +20267,7 @@ export type SadtalkerInput = {
   /**
    * The type of face enhancer to use
    */
-  face_enhancer?: "gfpgan";
+  face_enhancer?: 'gfpgan';
   /**
    * Whether to use still mode. Fewer head motion, works with preprocess `full`.
    */
@@ -20275,7 +20275,7 @@ export type SadtalkerInput = {
   /**
    * The type of preprocessing to use Default value: `"crop"`
    */
-  preprocess?: "crop" | "extcrop" | "resize" | "full" | "extfull";
+  preprocess?: 'crop' | 'extcrop' | 'resize' | 'full' | 'extfull';
 };
 export type SadTalkerInput = {
   /**
@@ -20293,7 +20293,7 @@ export type SadTalkerInput = {
   /**
    * The resolution of the face model Default value: `"256"`
    */
-  face_model_resolution?: "256" | "512";
+  face_model_resolution?: '256' | '512';
   /**
    * The scale of the expression Default value: `1`
    */
@@ -20301,7 +20301,7 @@ export type SadTalkerInput = {
   /**
    * The type of face enhancer to use
    */
-  face_enhancer?: "gfpgan";
+  face_enhancer?: 'gfpgan';
   /**
    * Whether to use still mode. Fewer head motion, works with preprocess `full`.
    */
@@ -20309,7 +20309,7 @@ export type SadTalkerInput = {
   /**
    * The type of preprocessing to use Default value: `"crop"`
    */
-  preprocess?: "crop" | "extcrop" | "resize" | "full" | "extfull";
+  preprocess?: 'crop' | 'extcrop' | 'resize' | 'full' | 'extfull';
 };
 export type SadtalkerOutput = {
   /**
@@ -20337,7 +20337,7 @@ export type SadtalkerReferenceInput = {
   /**
    * The resolution of the face model Default value: `"256"`
    */
-  face_model_resolution?: "256" | "512";
+  face_model_resolution?: '256' | '512';
   /**
    * The scale of the expression Default value: `1`
    */
@@ -20345,7 +20345,7 @@ export type SadtalkerReferenceInput = {
   /**
    * The type of face enhancer to use
    */
-  face_enhancer?: "gfpgan";
+  face_enhancer?: 'gfpgan';
   /**
    * Whether to use still mode. Fewer head motion, works with preprocess `full`.
    */
@@ -20353,7 +20353,7 @@ export type SadtalkerReferenceInput = {
   /**
    * The type of preprocessing to use Default value: `"crop"`
    */
-  preprocess?: "crop" | "extcrop" | "resize" | "full" | "extfull";
+  preprocess?: 'crop' | 'extcrop' | 'resize' | 'full' | 'extfull';
 };
 export type SadtalkerReferenceOutput = {
   /**
@@ -20381,7 +20381,7 @@ export type SadTalkerRefVideoInput = {
   /**
    * The resolution of the face model Default value: `"256"`
    */
-  face_model_resolution?: "256" | "512";
+  face_model_resolution?: '256' | '512';
   /**
    * The scale of the expression Default value: `1`
    */
@@ -20389,7 +20389,7 @@ export type SadTalkerRefVideoInput = {
   /**
    * The type of face enhancer to use
    */
-  face_enhancer?: "gfpgan";
+  face_enhancer?: 'gfpgan';
   /**
    * Whether to use still mode. Fewer head motion, works with preprocess `full`.
    */
@@ -20397,7 +20397,7 @@ export type SadTalkerRefVideoInput = {
   /**
    * The type of preprocessing to use Default value: `"crop"`
    */
-  preprocess?: "crop" | "extcrop" | "resize" | "full" | "extfull";
+  preprocess?: 'crop' | 'extcrop' | 'resize' | 'full' | 'extfull';
 };
 export type Sam2ImageInput = {
   /**
@@ -20421,7 +20421,7 @@ export type Sam2ImageInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type SAM2ImageInput = {
   /**
@@ -20445,7 +20445,7 @@ export type SAM2ImageInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type Sam2ImageOutput = {
   /**
@@ -20563,12 +20563,12 @@ export type SanaInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `18`
    */
@@ -20600,21 +20600,21 @@ export type SanaInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * The style to generate the image in. Default value: `"(No style)"`
    */
   style_name?:
-    | "(No style)"
-    | "Cinematic"
-    | "Photographic"
-    | "Anime"
-    | "Manga"
-    | "Digital Art"
-    | "Pixel art"
-    | "Fantasy art"
-    | "Neonpunk"
-    | "3D Model";
+    | '(No style)'
+    | 'Cinematic'
+    | 'Photographic'
+    | 'Anime'
+    | 'Manga'
+    | 'Digital Art'
+    | 'Pixel art'
+    | 'Fantasy art'
+    | 'Neonpunk'
+    | '3D Model';
 };
 export type SanaOutput = {
   /**
@@ -20649,12 +20649,12 @@ export type SchnellReduxInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `4`
    */
@@ -20689,12 +20689,12 @@ export type SchnellTextToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `4`
    */
@@ -20727,7 +20727,7 @@ export type ScribbleInput = {
   /**
    * The model to use for the Scribble detector Default value: `"HED"`
    */
-  model?: "HED" | "PiDi";
+  model?: 'HED' | 'PiDi';
   /**
    * Whether to use the safe version of the Scribble detector
    */
@@ -20763,12 +20763,12 @@ export type Sd15DepthControlnetInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -20857,12 +20857,12 @@ export type SdxlControlnetUnionImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -20906,7 +20906,7 @@ export type SdxlControlnetUnionImageToImageInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -20914,7 +20914,7 @@ export type SdxlControlnetUnionImageToImageInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -21020,12 +21020,12 @@ export type SdxlControlnetUnionInpaintingInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -21069,7 +21069,7 @@ export type SdxlControlnetUnionInpaintingInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -21077,7 +21077,7 @@ export type SdxlControlnetUnionInpaintingInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -21175,12 +21175,12 @@ export type SdxlControlnetUnionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -21220,7 +21220,7 @@ export type SdxlControlnetUnionInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -21228,7 +21228,7 @@ export type SdxlControlnetUnionInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -21332,7 +21332,7 @@ export type SigmasInput = {
    * on the provided sigmas schedule in the `array` field.
    * Defaults to 'default' which means the scheduler will use the sigmas of the scheduler. Default value: `"default"`
    */
-  method?: "default" | "array";
+  method?: 'default' | 'array';
   /**
    * Sigmas schedule to be used if 'custom' method is selected. Default value: ``
    */
@@ -21372,12 +21372,12 @@ export type SoteDiffusionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The same seed and the same prompt given to the same version of Stable Cascade
    * will output the same image every time.
@@ -21454,12 +21454,12 @@ export type StableCascadeInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The same seed and the same prompt given to the same version of Stable Cascade
    * will output the same image every time.
@@ -21535,12 +21535,12 @@ export type StableCascadeSoteDiffusionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The same seed and the same prompt given to the same version of Stable Cascade
    * will output the same image every time.
@@ -21598,12 +21598,12 @@ export type StableDiffusionV15Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -21647,7 +21647,7 @@ export type StableDiffusionV15Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type StableDiffusionV15Output = {
   /**
@@ -21714,7 +21714,7 @@ export type StableDiffusionV35LargeInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * ControlNet for inference.
    */
@@ -21724,12 +21724,12 @@ export type StableDiffusionV35LargeInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The LoRAs to use for the image generation. You can use any number of LoRAs
    * and they will be merged together to generate the final image. Default value: ``
@@ -21779,12 +21779,12 @@ export type StableDiffusionV35MediumInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `40`
    */
@@ -21816,7 +21816,7 @@ export type StableDiffusionV35MediumInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type StableDiffusionV35MediumOutput = {
   /**
@@ -21863,12 +21863,12 @@ export type StableDiffusionV3MediumImageToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -21947,12 +21947,12 @@ export type StableDiffusionV3MediumInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `28`
    */
@@ -22055,91 +22055,91 @@ export type StyleReferenceInput = {
    * The base style of the generated images, this topic is covered above. Default value: `"digital_illustration"`
    */
   base_style?:
-    | "any"
-    | "realistic_image"
-    | "digital_illustration"
-    | "vector_illustration"
-    | "realistic_image/b_and_w"
-    | "realistic_image/hard_flash"
-    | "realistic_image/hdr"
-    | "realistic_image/natural_light"
-    | "realistic_image/studio_portrait"
-    | "realistic_image/enterprise"
-    | "realistic_image/motion_blur"
-    | "realistic_image/evening_light"
-    | "realistic_image/faded_nostalgia"
-    | "realistic_image/forest_life"
-    | "realistic_image/mystic_naturalism"
-    | "realistic_image/natural_tones"
-    | "realistic_image/organic_calm"
-    | "realistic_image/real_life_glow"
-    | "realistic_image/retro_realism"
-    | "realistic_image/retro_snapshot"
-    | "realistic_image/urban_drama"
-    | "realistic_image/village_realism"
-    | "realistic_image/warm_folk"
-    | "digital_illustration/pixel_art"
-    | "digital_illustration/hand_drawn"
-    | "digital_illustration/grain"
-    | "digital_illustration/infantile_sketch"
-    | "digital_illustration/2d_art_poster"
-    | "digital_illustration/handmade_3d"
-    | "digital_illustration/hand_drawn_outline"
-    | "digital_illustration/engraving_color"
-    | "digital_illustration/2d_art_poster_2"
-    | "digital_illustration/antiquarian"
-    | "digital_illustration/bold_fantasy"
-    | "digital_illustration/child_book"
-    | "digital_illustration/child_books"
-    | "digital_illustration/cover"
-    | "digital_illustration/crosshatch"
-    | "digital_illustration/digital_engraving"
-    | "digital_illustration/expressionism"
-    | "digital_illustration/freehand_details"
-    | "digital_illustration/grain_20"
-    | "digital_illustration/graphic_intensity"
-    | "digital_illustration/hard_comics"
-    | "digital_illustration/long_shadow"
-    | "digital_illustration/modern_folk"
-    | "digital_illustration/multicolor"
-    | "digital_illustration/neon_calm"
-    | "digital_illustration/noir"
-    | "digital_illustration/nostalgic_pastel"
-    | "digital_illustration/outline_details"
-    | "digital_illustration/pastel_gradient"
-    | "digital_illustration/pastel_sketch"
-    | "digital_illustration/pop_art"
-    | "digital_illustration/pop_renaissance"
-    | "digital_illustration/street_art"
-    | "digital_illustration/tablet_sketch"
-    | "digital_illustration/urban_glow"
-    | "digital_illustration/urban_sketching"
-    | "digital_illustration/vanilla_dreams"
-    | "digital_illustration/young_adult_book"
-    | "digital_illustration/young_adult_book_2"
-    | "vector_illustration/bold_stroke"
-    | "vector_illustration/chemistry"
-    | "vector_illustration/colored_stencil"
-    | "vector_illustration/contour_pop_art"
-    | "vector_illustration/cosmics"
-    | "vector_illustration/cutout"
-    | "vector_illustration/depressive"
-    | "vector_illustration/editorial"
-    | "vector_illustration/emotional_flat"
-    | "vector_illustration/infographical"
-    | "vector_illustration/marker_outline"
-    | "vector_illustration/mosaic"
-    | "vector_illustration/naivector"
-    | "vector_illustration/roundish_flat"
-    | "vector_illustration/segmented_colors"
-    | "vector_illustration/sharp_contrast"
-    | "vector_illustration/thin"
-    | "vector_illustration/vector_photo"
-    | "vector_illustration/vivid_shapes"
-    | "vector_illustration/engraving"
-    | "vector_illustration/line_art"
-    | "vector_illustration/line_circuit"
-    | "vector_illustration/linocut";
+    | 'any'
+    | 'realistic_image'
+    | 'digital_illustration'
+    | 'vector_illustration'
+    | 'realistic_image/b_and_w'
+    | 'realistic_image/hard_flash'
+    | 'realistic_image/hdr'
+    | 'realistic_image/natural_light'
+    | 'realistic_image/studio_portrait'
+    | 'realistic_image/enterprise'
+    | 'realistic_image/motion_blur'
+    | 'realistic_image/evening_light'
+    | 'realistic_image/faded_nostalgia'
+    | 'realistic_image/forest_life'
+    | 'realistic_image/mystic_naturalism'
+    | 'realistic_image/natural_tones'
+    | 'realistic_image/organic_calm'
+    | 'realistic_image/real_life_glow'
+    | 'realistic_image/retro_realism'
+    | 'realistic_image/retro_snapshot'
+    | 'realistic_image/urban_drama'
+    | 'realistic_image/village_realism'
+    | 'realistic_image/warm_folk'
+    | 'digital_illustration/pixel_art'
+    | 'digital_illustration/hand_drawn'
+    | 'digital_illustration/grain'
+    | 'digital_illustration/infantile_sketch'
+    | 'digital_illustration/2d_art_poster'
+    | 'digital_illustration/handmade_3d'
+    | 'digital_illustration/hand_drawn_outline'
+    | 'digital_illustration/engraving_color'
+    | 'digital_illustration/2d_art_poster_2'
+    | 'digital_illustration/antiquarian'
+    | 'digital_illustration/bold_fantasy'
+    | 'digital_illustration/child_book'
+    | 'digital_illustration/child_books'
+    | 'digital_illustration/cover'
+    | 'digital_illustration/crosshatch'
+    | 'digital_illustration/digital_engraving'
+    | 'digital_illustration/expressionism'
+    | 'digital_illustration/freehand_details'
+    | 'digital_illustration/grain_20'
+    | 'digital_illustration/graphic_intensity'
+    | 'digital_illustration/hard_comics'
+    | 'digital_illustration/long_shadow'
+    | 'digital_illustration/modern_folk'
+    | 'digital_illustration/multicolor'
+    | 'digital_illustration/neon_calm'
+    | 'digital_illustration/noir'
+    | 'digital_illustration/nostalgic_pastel'
+    | 'digital_illustration/outline_details'
+    | 'digital_illustration/pastel_gradient'
+    | 'digital_illustration/pastel_sketch'
+    | 'digital_illustration/pop_art'
+    | 'digital_illustration/pop_renaissance'
+    | 'digital_illustration/street_art'
+    | 'digital_illustration/tablet_sketch'
+    | 'digital_illustration/urban_glow'
+    | 'digital_illustration/urban_sketching'
+    | 'digital_illustration/vanilla_dreams'
+    | 'digital_illustration/young_adult_book'
+    | 'digital_illustration/young_adult_book_2'
+    | 'vector_illustration/bold_stroke'
+    | 'vector_illustration/chemistry'
+    | 'vector_illustration/colored_stencil'
+    | 'vector_illustration/contour_pop_art'
+    | 'vector_illustration/cosmics'
+    | 'vector_illustration/cutout'
+    | 'vector_illustration/depressive'
+    | 'vector_illustration/editorial'
+    | 'vector_illustration/emotional_flat'
+    | 'vector_illustration/infographical'
+    | 'vector_illustration/marker_outline'
+    | 'vector_illustration/mosaic'
+    | 'vector_illustration/naivector'
+    | 'vector_illustration/roundish_flat'
+    | 'vector_illustration/segmented_colors'
+    | 'vector_illustration/sharp_contrast'
+    | 'vector_illustration/thin'
+    | 'vector_illustration/vector_photo'
+    | 'vector_illustration/vivid_shapes'
+    | 'vector_illustration/engraving'
+    | 'vector_illustration/line_art'
+    | 'vector_illustration/line_circuit'
+    | 'vector_illustration/linocut';
 };
 export type StyleReferenceOutput = {
   /**
@@ -22215,7 +22215,7 @@ export type Switti512Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type Switti512Output = {
   /**
@@ -22302,7 +22302,7 @@ export type SwittiInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
 };
 export type SwittiOutput = {
   /**
@@ -22331,7 +22331,7 @@ export type SyncLipsyncInput = {
   /**
    * The model to use for lipsyncing Default value: `"lipsync-1.9.0-beta"`
    */
-  model?: "lipsync-1.8.0" | "lipsync-1.7.1" | "lipsync-1.9.0-beta";
+  model?: 'lipsync-1.8.0' | 'lipsync-1.7.1' | 'lipsync-1.9.0-beta';
   /**
    * URL of the input video
    */
@@ -22343,7 +22343,7 @@ export type SyncLipsyncInput = {
   /**
    * Lipsync mode when audio and video durations are out of sync. Default value: `"cut_off"`
    */
-  sync_mode?: "cut_off" | "loop" | "bounce";
+  sync_mode?: 'cut_off' | 'loop' | 'bounce';
 };
 export type SyncLipsyncOutput = {
   /**
@@ -22433,12 +22433,12 @@ export type TextInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The same seed and the same prompt given to the same version of Stable Diffusion
    * will output the same image every time.
@@ -22487,12 +22487,12 @@ export type TextToImageControlNetInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -22554,12 +22554,12 @@ export type TextToImageControlNetUnionInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `35`
    */
@@ -22599,7 +22599,7 @@ export type TextToImageControlNetUnionInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -22607,7 +22607,7 @@ export type TextToImageControlNetUnionInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * An id bound to a request, can be used with response to identify the request
    * itself. Default value: `""`
@@ -22678,12 +22678,12 @@ export type TextToImageFooocusInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `8`
    */
@@ -22713,7 +22713,7 @@ export type TextToImageFooocusInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts. Default value: `true`
    */
@@ -22721,7 +22721,7 @@ export type TextToImageFooocusInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -22741,16 +22741,16 @@ export type TextToImageHyperInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"1"`
    */
-  num_inference_steps?: "1" | "2" | "4";
+  num_inference_steps?: '1' | '2' | '4';
   /**
    * The same seed and the same prompt given to the same version of Stable Diffusion
    * will output the same image every time.
@@ -22781,7 +22781,7 @@ export type TextToImageHyperInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type TextToImageInput = {
   /**
@@ -22870,12 +22870,12 @@ export type TextToImageInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * Increasing the amount of steps tells Stable Diffusion that it should take more steps
    * to generate your final result which can increase the amount of detail in your image. Default value: `30`
@@ -22895,17 +22895,17 @@ export type TextToImageInput = {
    * Scheduler / sampler to use for the image denoising process.
    */
   scheduler?:
-    | "DPM++ 2M"
-    | "DPM++ 2M Karras"
-    | "DPM++ 2M SDE"
-    | "DPM++ 2M SDE Karras"
-    | "Euler"
-    | "Euler A"
-    | "Euler (trailing timesteps)"
-    | "LCM"
-    | "LCM (trailing timesteps)"
-    | "DDIM"
-    | "TCD";
+    | 'DPM++ 2M'
+    | 'DPM++ 2M Karras'
+    | 'DPM++ 2M SDE'
+    | 'DPM++ 2M SDE Karras'
+    | 'Euler'
+    | 'Euler A'
+    | 'Euler (trailing timesteps)'
+    | 'LCM'
+    | 'LCM (trailing timesteps)'
+    | 'DDIM'
+    | 'TCD';
   /**
    * Optionally override the timesteps to use for the denoising process. Only works with schedulers which support the `timesteps` argument in their `set_timesteps` method.
    * Defaults to not overriding, in which case the scheduler automatically sets the timesteps based on the `num_inference_steps` parameter.
@@ -22922,7 +22922,7 @@ export type TextToImageInput = {
    * The type of prediction to use for the image generation.
    * The `epsilon` is the default. Default value: `"epsilon"`
    */
-  prediction_type?: "v_prediction" | "epsilon";
+  prediction_type?: 'v_prediction' | 'epsilon';
   /**
    * Whether to set the rescale_betas_snr_zero option or not for the sampler
    */
@@ -22930,7 +22930,7 @@ export type TextToImageInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  image_format?: "jpeg" | "png";
+  image_format?: 'jpeg' | 'png';
   /**
    * Number of images to generate in one request. Note that the higher the batch size,
    * the longer it will take to generate the images. Default value: `1`
@@ -22974,8 +22974,8 @@ export type TextToImageLCMInput = {
    * The name of the model to use. Default value: `"stabilityai/stable-diffusion-xl-base-1.0"`
    */
   model_name?:
-    | "stabilityai/stable-diffusion-xl-base-1.0"
-    | "runwayml/stable-diffusion-v1-5";
+    | 'stabilityai/stable-diffusion-xl-base-1.0'
+    | 'runwayml/stable-diffusion-v1-5';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -22991,12 +22991,12 @@ export type TextToImageLCMInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `6`
    */
@@ -23028,7 +23028,7 @@ export type TextToImageLCMInput = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -23036,7 +23036,7 @@ export type TextToImageLCMInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -23057,16 +23057,16 @@ export type TextToImageLightningInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `"4"`
    */
-  num_inference_steps?: "1" | "2" | "4" | "8";
+  num_inference_steps?: '1' | '2' | '4' | '8';
   /**
    * The same seed and the same prompt given to the same version of Stable Diffusion
    * will output the same image every time.
@@ -23097,7 +23097,7 @@ export type TextToImageLightningInput = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
 };
 export type TextToImageOutput = {
   /**
@@ -23121,12 +23121,12 @@ export type TextToImagePlaygroundv25Input = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `25`
    */
@@ -23156,7 +23156,7 @@ export type TextToImagePlaygroundv25Input = {
   /**
    * The version of the safety checker to use. v1 is the default CompVis safety checker. v2 uses a custom ViT model. Default value: `"v1"`
    */
-  safety_checker_version?: "v1" | "v2";
+  safety_checker_version?: 'v1' | 'v2';
   /**
    * If set to true, the prompt will be expanded with additional prompts.
    */
@@ -23164,7 +23164,7 @@ export type TextToImagePlaygroundv25Input = {
   /**
    * The format of the generated image. Default value: `"jpeg"`
    */
-  format?: "jpeg" | "png";
+  format?: 'jpeg' | 'png';
   /**
    * The rescale factor for the CFG.
    */
@@ -23174,7 +23174,7 @@ export type TextToImageTurboInput = {
   /**
    * The name of the model to use. Default value: `"stabilityai/sdxl-turbo"`
    */
-  model_name?: "stabilityai/sdxl-turbo" | "stabilityai/sd-turbo";
+  model_name?: 'stabilityai/sdxl-turbo' | 'stabilityai/sd-turbo';
   /**
    * The prompt to use for generating the image. Be as descriptive as possible for best results.
    */
@@ -23190,12 +23190,12 @@ export type TextToImageTurboInput = {
    */
   image_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The number of inference steps to perform. Default value: `2`
    */
@@ -23257,7 +23257,7 @@ export type TimestepsInput = {
    * on the provided timesteps schedule in the `array` field.
    * Defaults to 'default' which means the scheduler will use the `num_inference_steps` parameter. Default value: `"default"`
    */
-  method?: "default" | "array";
+  method?: 'default' | 'array';
   /**
    * Timesteps schedule to be used if 'custom' method is selected. Default value: ``
    */
@@ -23368,7 +23368,7 @@ export type TrellisInput = {
   /**
    * Texture resolution Default value: `"1024"`
    */
-  texture_size?: "512" | "1024" | "1536" | "2048";
+  texture_size?: '512' | '1024' | '1536' | '2048';
 };
 export type TrellisOutput = {
   /**
@@ -23388,7 +23388,7 @@ export type TriposrInput = {
   /**
    * Output format for the 3D model. Default value: `"glb"`
    */
-  output_format?: "glb" | "obj";
+  output_format?: 'glb' | 'obj';
   /**
    * Whether to remove the background from the input image. Default value: `true`
    */
@@ -23428,11 +23428,11 @@ export type TryonInput = {
   /**
    * Category of the garment to try-on.
    */
-  category: "tops" | "bottoms" | "one-pieces";
+  category: 'tops' | 'bottoms' | 'one-pieces';
   /**
    * Specifies the type of garment photo to optimize internal parameters for better performance. 'model' is for photos of garments on a model, 'flat-lay' is for flat-lay or ghost mannequin images, and 'auto' attempts to automatically detect the photo type. Default value: `"auto"`
    */
-  garment_photo_type?: "auto" | "model" | "flat-lay";
+  garment_photo_type?: 'auto' | 'model' | 'flat-lay';
   /**
    * Runs NSFW content filter on inputs. Default value: `true`
    */
@@ -23501,16 +23501,16 @@ export type UpscaleInput = {
    * Model to use for upscaling Default value: `"RealESRGAN_x4plus"`
    */
   model?:
-    | "RealESRGAN_x4plus"
-    | "RealESRGAN_x2plus"
-    | "RealESRGAN_x4plus_anime_6B"
-    | "RealESRGAN_x4_v3"
-    | "RealESRGAN_x4_wdn_v3"
-    | "RealESRGAN_x4_anime_v3";
+    | 'RealESRGAN_x4plus'
+    | 'RealESRGAN_x2plus'
+    | 'RealESRGAN_x4plus_anime_6B'
+    | 'RealESRGAN_x4_v3'
+    | 'RealESRGAN_x4_wdn_v3'
+    | 'RealESRGAN_x4_anime_v3';
   /**
    * Output image format (png or jpeg) Default value: `"png"`
    */
-  output_format?: "png" | "jpeg";
+  output_format?: 'png' | 'jpeg';
 };
 export type UpscaleOutput = {
   /**
@@ -23564,12 +23564,12 @@ export type VideoToVideoInput = {
    */
   video_size?:
     | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
+    | 'square_hd'
+    | 'square'
+    | 'portrait_4_3'
+    | 'portrait_16_9'
+    | 'landscape_4_3'
+    | 'landscape_16_9';
   /**
    * The negative prompt to generate video from Default value: `""`
    */
@@ -23626,13 +23626,13 @@ export type VisionInput = {
    * Name of the model to use. Premium models are charged at 3x the rate of standard models, they include: openai/gpt-4o, anthropic/claude-3.5-sonnet, meta-llama/llama-3.2-90b-vision-instruct, google/gemini-pro-1.5, anthropic/claude-3-5-haiku. Default value: `"google/gemini-flash-1.5"`
    */
   model?:
-    | "anthropic/claude-3.5-sonnet"
-    | "anthropic/claude-3-haiku"
-    | "google/gemini-pro-1.5"
-    | "google/gemini-flash-1.5"
-    | "google/gemini-flash-1.5-8b"
-    | "openai/gpt-4o"
-    | "meta-llama/llama-3.2-90b-vision-instruct";
+    | 'anthropic/claude-3.5-sonnet'
+    | 'anthropic/claude-3-haiku'
+    | 'google/gemini-pro-1.5'
+    | 'google/gemini-flash-1.5'
+    | 'google/gemini-flash-1.5-8b'
+    | 'openai/gpt-4o'
+    | 'meta-llama/llama-3.2-90b-vision-instruct';
   /**
    * Prompt to be used for the image
    */
@@ -23674,7 +23674,7 @@ export type VTONInput = {
   /**
    * The format of the generated image. Default value: `"png"`
    */
-  output_format?: "jpeg" | "png";
+  output_format?: 'jpeg' | 'png';
   /**
    * Url for the human image.
    */
@@ -23742,7 +23742,7 @@ export type WhisperInput = {
   /**
    * Task to perform on the audio file. Either transcribe or translate. Default value: `"transcribe"`
    */
-  task?: "transcribe" | "translate";
+  task?: 'transcribe' | 'translate';
   /**
    * Language of the audio file. If set to null, the language will be
    * automatically detected. Defaults to null.
@@ -23751,106 +23751,106 @@ export type WhisperInput = {
    * English, regardless of the language selected.
    */
   language?:
-    | "af"
-    | "am"
-    | "ar"
-    | "as"
-    | "az"
-    | "ba"
-    | "be"
-    | "bg"
-    | "bn"
-    | "bo"
-    | "br"
-    | "bs"
-    | "ca"
-    | "cs"
-    | "cy"
-    | "da"
-    | "de"
-    | "el"
-    | "en"
-    | "es"
-    | "et"
-    | "eu"
-    | "fa"
-    | "fi"
-    | "fo"
-    | "fr"
-    | "gl"
-    | "gu"
-    | "ha"
-    | "haw"
-    | "he"
-    | "hi"
-    | "hr"
-    | "ht"
-    | "hu"
-    | "hy"
-    | "id"
-    | "is"
-    | "it"
-    | "ja"
-    | "jw"
-    | "ka"
-    | "kk"
-    | "km"
-    | "kn"
-    | "ko"
-    | "la"
-    | "lb"
-    | "ln"
-    | "lo"
-    | "lt"
-    | "lv"
-    | "mg"
-    | "mi"
-    | "mk"
-    | "ml"
-    | "mn"
-    | "mr"
-    | "ms"
-    | "mt"
-    | "my"
-    | "ne"
-    | "nl"
-    | "nn"
-    | "no"
-    | "oc"
-    | "pa"
-    | "pl"
-    | "ps"
-    | "pt"
-    | "ro"
-    | "ru"
-    | "sa"
-    | "sd"
-    | "si"
-    | "sk"
-    | "sl"
-    | "sn"
-    | "so"
-    | "sq"
-    | "sr"
-    | "su"
-    | "sv"
-    | "sw"
-    | "ta"
-    | "te"
-    | "tg"
-    | "th"
-    | "tk"
-    | "tl"
-    | "tr"
-    | "tt"
-    | "uk"
-    | "ur"
-    | "uz"
-    | "vi"
-    | "yi"
-    | "yo"
-    | "yue"
-    | "zh";
+    | 'af'
+    | 'am'
+    | 'ar'
+    | 'as'
+    | 'az'
+    | 'ba'
+    | 'be'
+    | 'bg'
+    | 'bn'
+    | 'bo'
+    | 'br'
+    | 'bs'
+    | 'ca'
+    | 'cs'
+    | 'cy'
+    | 'da'
+    | 'de'
+    | 'el'
+    | 'en'
+    | 'es'
+    | 'et'
+    | 'eu'
+    | 'fa'
+    | 'fi'
+    | 'fo'
+    | 'fr'
+    | 'gl'
+    | 'gu'
+    | 'ha'
+    | 'haw'
+    | 'he'
+    | 'hi'
+    | 'hr'
+    | 'ht'
+    | 'hu'
+    | 'hy'
+    | 'id'
+    | 'is'
+    | 'it'
+    | 'ja'
+    | 'jw'
+    | 'ka'
+    | 'kk'
+    | 'km'
+    | 'kn'
+    | 'ko'
+    | 'la'
+    | 'lb'
+    | 'ln'
+    | 'lo'
+    | 'lt'
+    | 'lv'
+    | 'mg'
+    | 'mi'
+    | 'mk'
+    | 'ml'
+    | 'mn'
+    | 'mr'
+    | 'ms'
+    | 'mt'
+    | 'my'
+    | 'ne'
+    | 'nl'
+    | 'nn'
+    | 'no'
+    | 'oc'
+    | 'pa'
+    | 'pl'
+    | 'ps'
+    | 'pt'
+    | 'ro'
+    | 'ru'
+    | 'sa'
+    | 'sd'
+    | 'si'
+    | 'sk'
+    | 'sl'
+    | 'sn'
+    | 'so'
+    | 'sq'
+    | 'sr'
+    | 'su'
+    | 'sv'
+    | 'sw'
+    | 'ta'
+    | 'te'
+    | 'tg'
+    | 'th'
+    | 'tk'
+    | 'tl'
+    | 'tr'
+    | 'tt'
+    | 'uk'
+    | 'ur'
+    | 'uz'
+    | 'vi'
+    | 'yi'
+    | 'yo'
+    | 'yue'
+    | 'zh';
   /**
    * Whether to diarize the audio file. Defaults to false.
    */
@@ -23858,11 +23858,11 @@ export type WhisperInput = {
   /**
    * Level of the chunks to return. Either segment or word. Default value: `"segment"`
    */
-  chunk_level?: "segment" | "word";
+  chunk_level?: 'segment' | 'word';
   /**
    * Version of the model to use. All of the models are the Whisper large variant. Default value: `"3"`
    */
-  version?: "3";
+  version?: '3';
   /**
    *  Default value: `64`
    */
@@ -23891,106 +23891,106 @@ export type WhisperOutput = {
    * List of languages that the audio file is inferred to be. Defaults to null.
    */
   inferred_languages: Array<
-    | "af"
-    | "am"
-    | "ar"
-    | "as"
-    | "az"
-    | "ba"
-    | "be"
-    | "bg"
-    | "bn"
-    | "bo"
-    | "br"
-    | "bs"
-    | "ca"
-    | "cs"
-    | "cy"
-    | "da"
-    | "de"
-    | "el"
-    | "en"
-    | "es"
-    | "et"
-    | "eu"
-    | "fa"
-    | "fi"
-    | "fo"
-    | "fr"
-    | "gl"
-    | "gu"
-    | "ha"
-    | "haw"
-    | "he"
-    | "hi"
-    | "hr"
-    | "ht"
-    | "hu"
-    | "hy"
-    | "id"
-    | "is"
-    | "it"
-    | "ja"
-    | "jw"
-    | "ka"
-    | "kk"
-    | "km"
-    | "kn"
-    | "ko"
-    | "la"
-    | "lb"
-    | "ln"
-    | "lo"
-    | "lt"
-    | "lv"
-    | "mg"
-    | "mi"
-    | "mk"
-    | "ml"
-    | "mn"
-    | "mr"
-    | "ms"
-    | "mt"
-    | "my"
-    | "ne"
-    | "nl"
-    | "nn"
-    | "no"
-    | "oc"
-    | "pa"
-    | "pl"
-    | "ps"
-    | "pt"
-    | "ro"
-    | "ru"
-    | "sa"
-    | "sd"
-    | "si"
-    | "sk"
-    | "sl"
-    | "sn"
-    | "so"
-    | "sq"
-    | "sr"
-    | "su"
-    | "sv"
-    | "sw"
-    | "ta"
-    | "te"
-    | "tg"
-    | "th"
-    | "tk"
-    | "tl"
-    | "tr"
-    | "tt"
-    | "uk"
-    | "ur"
-    | "uz"
-    | "vi"
-    | "yi"
-    | "yo"
-    | "yue"
-    | "zh"
+    | 'af'
+    | 'am'
+    | 'ar'
+    | 'as'
+    | 'az'
+    | 'ba'
+    | 'be'
+    | 'bg'
+    | 'bn'
+    | 'bo'
+    | 'br'
+    | 'bs'
+    | 'ca'
+    | 'cs'
+    | 'cy'
+    | 'da'
+    | 'de'
+    | 'el'
+    | 'en'
+    | 'es'
+    | 'et'
+    | 'eu'
+    | 'fa'
+    | 'fi'
+    | 'fo'
+    | 'fr'
+    | 'gl'
+    | 'gu'
+    | 'ha'
+    | 'haw'
+    | 'he'
+    | 'hi'
+    | 'hr'
+    | 'ht'
+    | 'hu'
+    | 'hy'
+    | 'id'
+    | 'is'
+    | 'it'
+    | 'ja'
+    | 'jw'
+    | 'ka'
+    | 'kk'
+    | 'km'
+    | 'kn'
+    | 'ko'
+    | 'la'
+    | 'lb'
+    | 'ln'
+    | 'lo'
+    | 'lt'
+    | 'lv'
+    | 'mg'
+    | 'mi'
+    | 'mk'
+    | 'ml'
+    | 'mn'
+    | 'mr'
+    | 'ms'
+    | 'mt'
+    | 'my'
+    | 'ne'
+    | 'nl'
+    | 'nn'
+    | 'no'
+    | 'oc'
+    | 'pa'
+    | 'pl'
+    | 'ps'
+    | 'pt'
+    | 'ro'
+    | 'ru'
+    | 'sa'
+    | 'sd'
+    | 'si'
+    | 'sk'
+    | 'sl'
+    | 'sn'
+    | 'so'
+    | 'sq'
+    | 'sr'
+    | 'su'
+    | 'sv'
+    | 'sw'
+    | 'ta'
+    | 'te'
+    | 'tg'
+    | 'th'
+    | 'tk'
+    | 'tl'
+    | 'tr'
+    | 'tt'
+    | 'uk'
+    | 'ur'
+    | 'uz'
+    | 'vi'
+    | 'yi'
+    | 'yo'
+    | 'yue'
+    | 'zh'
   >;
   /**
    * Speaker diarization segments of the audio file. Only present if diarization is enabled.
@@ -24005,121 +24005,121 @@ export type WizperInput = {
   /**
    * Task to perform on the audio file. Either transcribe or translate. Default value: `"transcribe"`
    */
-  task?: "transcribe" | "translate";
+  task?: 'transcribe' | 'translate';
   /**
    * Language of the audio file.
    * If translate is selected as the task, the audio will be translated to
    * English, regardless of the language selected. Default value: `"en"`
    */
   language?:
-    | "af"
-    | "am"
-    | "ar"
-    | "as"
-    | "az"
-    | "ba"
-    | "be"
-    | "bg"
-    | "bn"
-    | "bo"
-    | "br"
-    | "bs"
-    | "ca"
-    | "cs"
-    | "cy"
-    | "da"
-    | "de"
-    | "el"
-    | "en"
-    | "es"
-    | "et"
-    | "eu"
-    | "fa"
-    | "fi"
-    | "fo"
-    | "fr"
-    | "gl"
-    | "gu"
-    | "ha"
-    | "haw"
-    | "he"
-    | "hi"
-    | "hr"
-    | "ht"
-    | "hu"
-    | "hy"
-    | "id"
-    | "is"
-    | "it"
-    | "ja"
-    | "jw"
-    | "ka"
-    | "kk"
-    | "km"
-    | "kn"
-    | "ko"
-    | "la"
-    | "lb"
-    | "ln"
-    | "lo"
-    | "lt"
-    | "lv"
-    | "mg"
-    | "mi"
-    | "mk"
-    | "ml"
-    | "mn"
-    | "mr"
-    | "ms"
-    | "mt"
-    | "my"
-    | "ne"
-    | "nl"
-    | "nn"
-    | "no"
-    | "oc"
-    | "pa"
-    | "pl"
-    | "ps"
-    | "pt"
-    | "ro"
-    | "ru"
-    | "sa"
-    | "sd"
-    | "si"
-    | "sk"
-    | "sl"
-    | "sn"
-    | "so"
-    | "sq"
-    | "sr"
-    | "su"
-    | "sv"
-    | "sw"
-    | "ta"
-    | "te"
-    | "tg"
-    | "th"
-    | "tk"
-    | "tl"
-    | "tr"
-    | "tt"
-    | "uk"
-    | "ur"
-    | "uz"
-    | "vi"
-    | "yi"
-    | "yo"
-    | "yue"
-    | "zh";
+    | 'af'
+    | 'am'
+    | 'ar'
+    | 'as'
+    | 'az'
+    | 'ba'
+    | 'be'
+    | 'bg'
+    | 'bn'
+    | 'bo'
+    | 'br'
+    | 'bs'
+    | 'ca'
+    | 'cs'
+    | 'cy'
+    | 'da'
+    | 'de'
+    | 'el'
+    | 'en'
+    | 'es'
+    | 'et'
+    | 'eu'
+    | 'fa'
+    | 'fi'
+    | 'fo'
+    | 'fr'
+    | 'gl'
+    | 'gu'
+    | 'ha'
+    | 'haw'
+    | 'he'
+    | 'hi'
+    | 'hr'
+    | 'ht'
+    | 'hu'
+    | 'hy'
+    | 'id'
+    | 'is'
+    | 'it'
+    | 'ja'
+    | 'jw'
+    | 'ka'
+    | 'kk'
+    | 'km'
+    | 'kn'
+    | 'ko'
+    | 'la'
+    | 'lb'
+    | 'ln'
+    | 'lo'
+    | 'lt'
+    | 'lv'
+    | 'mg'
+    | 'mi'
+    | 'mk'
+    | 'ml'
+    | 'mn'
+    | 'mr'
+    | 'ms'
+    | 'mt'
+    | 'my'
+    | 'ne'
+    | 'nl'
+    | 'nn'
+    | 'no'
+    | 'oc'
+    | 'pa'
+    | 'pl'
+    | 'ps'
+    | 'pt'
+    | 'ro'
+    | 'ru'
+    | 'sa'
+    | 'sd'
+    | 'si'
+    | 'sk'
+    | 'sl'
+    | 'sn'
+    | 'so'
+    | 'sq'
+    | 'sr'
+    | 'su'
+    | 'sv'
+    | 'sw'
+    | 'ta'
+    | 'te'
+    | 'tg'
+    | 'th'
+    | 'tk'
+    | 'tl'
+    | 'tr'
+    | 'tt'
+    | 'uk'
+    | 'ur'
+    | 'uz'
+    | 'vi'
+    | 'yi'
+    | 'yo'
+    | 'yue'
+    | 'zh';
   /**
    * Level of the chunks to return. Default value: `"segment"`
    */
-  chunk_level?: "segment";
+  chunk_level?: 'segment';
   /**
    * Version of the model to use. All of the models are the Whisper large variant. Default value: `"3"`
    */
-  version?: "3";
+  version?: '3';
 };
 export type WizperOutput = {
   /**
@@ -24164,1019 +24164,1019 @@ export type ZoeOutput = {
   image: Image;
 };
 export type EndpointTypeMap = {
-  "sunra/sync-lipsync": {
+  'sunra/sync-lipsync': {
     input: SyncLipsyncInput;
     output: SyncLipsyncOutput;
   };
-  "sunra/minimax-music": {
+  'sunra/minimax-music': {
     input: MinimaxMusicInput;
     output: MinimaxMusicOutput;
   };
-  "sunra/flux-pro/v1.1-ultra": {
+  'sunra/flux-pro/v1.1-ultra': {
     input: FluxProV11UltraInput;
     output: FluxProV11UltraOutput;
   };
-  "sunra/flux-pro/v1.1-ultra-finetuned": {
+  'sunra/flux-pro/v1.1-ultra-finetuned': {
     input: FluxProV11UltraFinetunedInput;
     output: FluxProV11UltraFinetunedOutput;
   };
-  "sunra/ideogram/v2": {
+  'sunra/ideogram/v2': {
     input: IdeogramV2Input;
     output: IdeogramV2Output;
   };
-  "sunra/hunyuan-video-lora-training": {
+  'sunra/hunyuan-video-lora-training': {
     input: HunyuanVideoLoraTrainingInput;
     output: HunyuanVideoLoraTrainingOutput;
   };
-  "sunra/flux-lora-fast-training": {
+  'sunra/flux-lora-fast-training': {
     input: FluxLoraFastTrainingInput;
     output: FluxLoraFastTrainingOutput;
   };
-  "sunra/flux-lora-portrait-trainer": {
+  'sunra/flux-lora-portrait-trainer': {
     input: FluxLoraPortraitTrainerInput;
     output: FluxLoraPortraitTrainerOutput;
   };
-  "sunra/flux-pro-trainer": {
+  'sunra/flux-pro-trainer': {
     input: FluxProTrainerInput;
     output: FluxProTrainerOutput;
   };
-  "sunra/recraft-v3": {
+  'sunra/recraft-v3': {
     input: RecraftV3Input;
     output: RecraftV3Output;
   };
-  "sunra/minimax/video-01-live": {
+  'sunra/minimax/video-01-live': {
     input: MinimaxVideo01LiveInput;
     output: MinimaxVideo01LiveOutput;
   };
-  "sunra/minimax/video-01-live/image-to-video": {
+  'sunra/minimax/video-01-live/image-to-video': {
     input: MinimaxVideo01LiveImageToVideoInput;
     output: MinimaxVideo01LiveImageToVideoOutput;
   };
-  "sunra/minimax/video-01-subject-reference": {
+  'sunra/minimax/video-01-subject-reference': {
     input: MinimaxVideo01SubjectReferenceInput;
     output: MinimaxVideo01SubjectReferenceOutput;
   };
-  "sunra/haiper-video/v2": {
+  'sunra/haiper-video/v2': {
     input: HaiperVideoV2Input;
     output: HaiperVideoV2Output;
   };
-  "sunra/haiper-video/v2.5/fast": {
+  'sunra/haiper-video/v2.5/fast': {
     input: HaiperVideoV25FastInput;
     output: HaiperVideoV25FastOutput;
   };
-  "sunra/hyper3d/rodin": {
+  'sunra/hyper3d/rodin': {
     input: Hyper3dRodinInput;
     output: Hyper3dRodinOutput;
   };
-  "sunra/aura-flow": {
+  'sunra/aura-flow': {
     input: AuraFlowInput;
     output: AuraFlowOutput;
   };
-  "sunra/flux/dev/image-to-image": {
+  'sunra/flux/dev/image-to-image': {
     input: FluxDevImageToImageInput;
     output: FluxDevImageToImageOutput;
   };
-  "sunra/flux/dev": {
+  'sunra/flux/dev': {
     input: FluxDevInput;
     output: FluxDevOutput;
   };
-  "sunra/flux-lora": {
+  'sunra/flux-lora': {
     input: FluxLoraInput;
     output: FluxLoraOutput;
   };
-  "sunra/flux-lora/inpainting": {
+  'sunra/flux-lora/inpainting': {
     input: FluxLoraInpaintingInput;
     output: FluxLoraInpaintingOutput;
   };
-  "sunra/flux/schnell": {
+  'sunra/flux/schnell': {
     input: FluxSchnellInput;
     output: FluxSchnellOutput;
   };
-  "sunra/flux-subject": {
+  'sunra/flux-subject': {
     input: FluxSubjectInput;
     output: FluxSubjectOutput;
   };
-  "sunra/flux/schnell/redux": {
+  'sunra/flux/schnell/redux': {
     input: FluxSchnellReduxInput;
     output: FluxSchnellReduxOutput;
   };
-  "sunra/flux/dev/redux": {
+  'sunra/flux/dev/redux': {
     input: FluxDevReduxInput;
     output: FluxDevReduxOutput;
   };
-  "sunra/flux-pro/v1/redux": {
+  'sunra/flux-pro/v1/redux': {
     input: FluxProV1ReduxInput;
     output: FluxProV1ReduxOutput;
   };
-  "sunra/flux-pro/v1.1/redux": {
+  'sunra/flux-pro/v1.1/redux': {
     input: FluxProV11ReduxInput;
     output: FluxProV11ReduxOutput;
   };
-  "sunra/flux-pro/v1.1-ultra/redux": {
+  'sunra/flux-pro/v1.1-ultra/redux': {
     input: FluxProV11UltraReduxInput;
     output: FluxProV11UltraReduxOutput;
   };
-  "sunra/flux-pro/v1/fill": {
+  'sunra/flux-pro/v1/fill': {
     input: FluxProV1FillInput;
     output: FluxProV1FillOutput;
   };
-  "sunra/flux-pro/v1/fill-finetuned": {
+  'sunra/flux-pro/v1/fill-finetuned': {
     input: FluxProV1FillFinetunedInput;
     output: FluxProV1FillFinetunedOutput;
   };
-  "sunra/flux-pro/v1/canny": {
+  'sunra/flux-pro/v1/canny': {
     input: FluxProV1CannyInput;
     output: FluxProV1CannyOutput;
   };
-  "sunra/flux-pro/v1/canny-finetuned": {
+  'sunra/flux-pro/v1/canny-finetuned': {
     input: FluxProV1CannyFinetunedInput;
     output: FluxProV1CannyFinetunedOutput;
   };
-  "sunra/flux-pro/v1/depth": {
+  'sunra/flux-pro/v1/depth': {
     input: FluxProV1DepthInput;
     output: FluxProV1DepthOutput;
   };
-  "sunra/flux-pro/v1/depth-finetuned": {
+  'sunra/flux-pro/v1/depth-finetuned': {
     input: FluxProV1DepthFinetunedInput;
     output: FluxProV1DepthFinetunedOutput;
   };
-  "sunra/flux-lora-canny": {
+  'sunra/flux-lora-canny': {
     input: FluxLoraCannyInput;
     output: FluxLoraCannyOutput;
   };
-  "sunra/flux-lora-depth": {
+  'sunra/flux-lora-depth': {
     input: FluxLoraDepthInput;
     output: FluxLoraDepthOutput;
   };
-  "sunra/flux-pro/v1.1": {
+  'sunra/flux-pro/v1.1': {
     input: FluxProV11Input;
     output: FluxProV11Output;
   };
-  "sunra/flux-pro/new": {
+  'sunra/flux-pro/new': {
     input: FluxProNewInput;
     output: FluxProNewOutput;
   };
-  "sunra/sana": {
+  'sunra/sana': {
     input: SanaInput;
     output: SanaOutput;
   };
-  "sunra/omnigen-v1": {
+  'sunra/omnigen-v1': {
     input: OmnigenV1Input;
     output: OmnigenV1Output;
   };
-  "sunra/stable-diffusion-v35-large": {
+  'sunra/stable-diffusion-v35-large': {
     input: StableDiffusionV35LargeInput;
     output: StableDiffusionV35LargeOutput;
   };
-  "sunra/stable-diffusion-v35-medium": {
+  'sunra/stable-diffusion-v35-medium': {
     input: StableDiffusionV35MediumInput;
     output: StableDiffusionV35MediumOutput;
   };
-  "sunra/switti": {
+  'sunra/switti': {
     input: SwittiInput;
     output: SwittiOutput;
   };
-  "sunra/switti/512": {
+  'sunra/switti/512': {
     input: Switti512Input;
     output: Switti512Output;
   };
-  "sunra/recraft-v3/create-style": {
+  'sunra/recraft-v3/create-style': {
     input: RecraftV3CreateStyleInput;
     output: RecraftV3CreateStyleOutput;
   };
-  "sunra/minimax/video-01/image-to-video": {
+  'sunra/minimax/video-01/image-to-video': {
     input: MinimaxVideo01ImageToVideoInput;
     output: MinimaxVideo01ImageToVideoOutput;
   };
-  "sunra/recraft-20b": {
+  'sunra/recraft-20b': {
     input: Recraft20bInput;
     output: Recraft20bOutput;
   };
-  "sunra/ideogram/v2/edit": {
+  'sunra/ideogram/v2/edit': {
     input: IdeogramV2EditInput;
     output: IdeogramV2EditOutput;
   };
-  "sunra/ideogram/v2/remix": {
+  'sunra/ideogram/v2/remix': {
     input: IdeogramV2RemixInput;
     output: IdeogramV2RemixOutput;
   };
-  "sunra/ideogram/v2/turbo": {
+  'sunra/ideogram/v2/turbo': {
     input: IdeogramV2TurboInput;
     output: IdeogramV2TurboOutput;
   };
-  "sunra/ideogram/v2/turbo/edit": {
+  'sunra/ideogram/v2/turbo/edit': {
     input: IdeogramV2TurboEditInput;
     output: IdeogramV2TurboEditOutput;
   };
-  "sunra/ideogram/v2/turbo/remix": {
+  'sunra/ideogram/v2/turbo/remix': {
     input: IdeogramV2TurboRemixInput;
     output: IdeogramV2TurboRemixOutput;
   };
-  "sunra/bria/text-to-image/base": {
+  'sunra/bria/text-to-image/base': {
     input: BriaTextToImageBaseInput;
     output: BriaTextToImageBaseOutput;
   };
-  "sunra/bria/text-to-image/fast": {
+  'sunra/bria/text-to-image/fast': {
     input: BriaTextToImageFastInput;
     output: BriaTextToImageFastOutput;
   };
-  "sunra/bria/text-to-image/hd": {
+  'sunra/bria/text-to-image/hd': {
     input: BriaTextToImageHdInput;
     output: BriaTextToImageHdOutput;
   };
-  "sunra/bria/eraser": {
+  'sunra/bria/eraser': {
     input: BriaEraserInput;
     output: BriaEraserOutput;
   };
-  "sunra/bria/product-shot": {
+  'sunra/bria/product-shot': {
     input: BriaProductShotInput;
     output: BriaProductShotOutput;
   };
-  "sunra/bria/background/replace": {
+  'sunra/bria/background/replace': {
     input: BriaBackgroundReplaceInput;
     output: BriaBackgroundReplaceOutput;
   };
-  "sunra/bria/genfill": {
+  'sunra/bria/genfill': {
     input: BriaGenfillInput;
     output: BriaGenfillOutput;
   };
-  "sunra/bria/expand": {
+  'sunra/bria/expand': {
     input: BriaExpandInput;
     output: BriaExpandOutput;
   };
-  "sunra/bria/background/remove": {
+  'sunra/bria/background/remove': {
     input: BriaBackgroundRemoveInput;
     output: BriaBackgroundRemoveOutput;
   };
-  "sunra/flux-lora-fill": {
+  'sunra/flux-lora-fill': {
     input: FluxLoraFillInput;
     output: FluxLoraFillOutput;
   };
-  "sunra/flux-lora/image-to-image": {
+  'sunra/flux-lora/image-to-image': {
     input: FluxLoraImageToImageInput;
     output: FluxLoraImageToImageOutput;
   };
-  "sunra/flux-general": {
+  'sunra/flux-general': {
     input: FluxGeneralInput;
     output: FluxGeneralOutput;
   };
-  "sunra/flux-general/inpainting": {
+  'sunra/flux-general/inpainting': {
     input: FluxGeneralInpaintingInput;
     output: FluxGeneralInpaintingOutput;
   };
-  "sunra/flux-general/image-to-image": {
+  'sunra/flux-general/image-to-image': {
     input: FluxGeneralImageToImageInput;
     output: FluxGeneralImageToImageOutput;
   };
-  "sunra/flux-general/differential-diffusion": {
+  'sunra/flux-general/differential-diffusion': {
     input: FluxGeneralDifferentialDiffusionInput;
     output: FluxGeneralDifferentialDiffusionOutput;
   };
-  "sunra/flux-general/rf-inversion": {
+  'sunra/flux-general/rf-inversion': {
     input: FluxGeneralRfInversionInput;
     output: FluxGeneralRfInversionOutput;
   };
-  "sunra/flux-pulid": {
+  'sunra/flux-pulid': {
     input: FluxPulidInput;
     output: FluxPulidOutput;
   };
-  "sunra/iclight-v2": {
+  'sunra/iclight-v2': {
     input: IclightV2Input;
     output: IclightV2Output;
   };
-  "sunra/flux-differential-diffusion": {
+  'sunra/flux-differential-diffusion': {
     input: FluxDifferentialDiffusionInput;
     output: FluxDifferentialDiffusionOutput;
   };
-  "sunra/stable-diffusion-v3-medium": {
+  'sunra/stable-diffusion-v3-medium': {
     input: StableDiffusionV3MediumInput;
     output: StableDiffusionV3MediumOutput;
   };
-  "sunra/stable-diffusion-v3-medium/image-to-image": {
+  'sunra/stable-diffusion-v3-medium/image-to-image': {
     input: StableDiffusionV3MediumImageToImageInput;
     output: StableDiffusionV3MediumImageToImageOutput;
   };
-  "sunra/fast-sdxl": {
+  'sunra/fast-sdxl': {
     input: FastSdxlInput;
     output: FastSdxlOutput;
   };
-  "sunra/lora": {
+  'sunra/lora': {
     input: LoraInput;
     output: LoraOutput;
   };
-  "sunra/aura-sr": {
+  'sunra/aura-sr': {
     input: AuraSrInput;
     output: AuraSrOutput;
   };
-  "sunra/stable-cascade": {
+  'sunra/stable-cascade': {
     input: StableCascadeInput;
     output: StableCascadeOutput;
   };
-  "sunra/minimax/video-01": {
+  'sunra/minimax/video-01': {
     input: MinimaxVideo01Input;
     output: MinimaxVideo01Output;
   };
-  "sunra/haiper-video/v2/image-to-video": {
+  'sunra/haiper-video/v2/image-to-video': {
     input: HaiperVideoV2ImageToVideoInput;
     output: HaiperVideoV2ImageToVideoOutput;
   };
-  "sunra/haiper-video/v2.5/image-to-video/fast": {
+  'sunra/haiper-video/v2.5/image-to-video/fast': {
     input: HaiperVideoV25ImageToVideoFastInput;
     output: HaiperVideoV25ImageToVideoFastOutput;
   };
-  "sunra/mochi-v1": {
+  'sunra/mochi-v1': {
     input: MochiV1Input;
     output: MochiV1Output;
   };
-  "sunra/hunyuan-video": {
+  'sunra/hunyuan-video': {
     input: HunyuanVideoInput;
     output: HunyuanVideoOutput;
   };
-  "sunra/hunyuan-video-lora": {
+  'sunra/hunyuan-video-lora': {
     input: HunyuanVideoLoraInput;
     output: HunyuanVideoLoraOutput;
   };
-  "sunra/video-upscaler": {
+  'sunra/video-upscaler': {
     input: VideoUpscalerInput;
     output: VideoUpscalerOutput;
   };
-  "sunra/auto-caption": {
+  'sunra/auto-caption': {
     input: AutoCaptionInput;
     output: AutoCaptionOutput;
   };
-  "sunra/mmaudio-v2": {
+  'sunra/mmaudio-v2': {
     input: MmaudioV2Input;
     output: MmaudioV2Output;
   };
-  "sunra/mmaudio-v2/text-to-audio": {
+  'sunra/mmaudio-v2/text-to-audio': {
     input: MmaudioV2TextToAudioInput;
     output: MmaudioV2TextToAudioOutput;
   };
-  "sunra/luma-dream-machine": {
+  'sunra/luma-dream-machine': {
     input: LumaDreamMachineInput;
     output: LumaDreamMachineOutput;
   };
-  "sunra/luma-dream-machine/image-to-video": {
+  'sunra/luma-dream-machine/image-to-video': {
     input: LumaDreamMachineImageToVideoInput;
     output: LumaDreamMachineImageToVideoOutput;
   };
-  "sunra/luma-photon": {
+  'sunra/luma-photon': {
     input: LumaPhotonInput;
     output: LumaPhotonOutput;
   };
-  "sunra/luma-photon/flash": {
+  'sunra/luma-photon/flash': {
     input: LumaPhotonFlashInput;
     output: LumaPhotonFlashOutput;
   };
-  "sunra/kling/v1-5/kolors-virtual-try-on": {
+  'sunra/kling/v1-5/kolors-virtual-try-on': {
     input: KlingV15KolorsVirtualTryOnInput;
     output: KlingV15KolorsVirtualTryOnOutput;
   };
-  "sunra/kling-video/v1/standard/text-to-video": {
+  'sunra/kling-video/v1/standard/text-to-video': {
     input: KlingVideoV1StandardTextToVideoInput;
     output: KlingVideoV1StandardTextToVideoOutput;
   };
-  "sunra/kling-video/v1/standard/image-to-video": {
+  'sunra/kling-video/v1/standard/image-to-video': {
     input: KlingVideoV1StandardImageToVideoInput;
     output: KlingVideoV1StandardImageToVideoOutput;
   };
-  "sunra/kling-video/v1/pro/text-to-video": {
+  'sunra/kling-video/v1/pro/text-to-video': {
     input: KlingVideoV1ProTextToVideoInput;
     output: KlingVideoV1ProTextToVideoOutput;
   };
-  "sunra/kling-video/v1/pro/image-to-video": {
+  'sunra/kling-video/v1/pro/image-to-video': {
     input: KlingVideoV1ProImageToVideoInput;
     output: KlingVideoV1ProImageToVideoOutput;
   };
-  "sunra/kling-video/v1.5/pro/image-to-video": {
+  'sunra/kling-video/v1.5/pro/image-to-video': {
     input: KlingVideoV15ProImageToVideoInput;
     output: KlingVideoV15ProImageToVideoOutput;
   };
-  "sunra/kling-video/v1.5/pro/text-to-video": {
+  'sunra/kling-video/v1.5/pro/text-to-video': {
     input: KlingVideoV15ProTextToVideoInput;
     output: KlingVideoV15ProTextToVideoOutput;
   };
-  "sunra/kling-video/v1.6/standard/image-to-video": {
+  'sunra/kling-video/v1.6/standard/image-to-video': {
     input: KlingVideoV16StandardImageToVideoInput;
     output: KlingVideoV16StandardImageToVideoOutput;
   };
-  "sunra/kling-video/v1.6/standard/text-to-video": {
+  'sunra/kling-video/v1.6/standard/text-to-video': {
     input: KlingVideoV16StandardTextToVideoInput;
     output: KlingVideoV16StandardTextToVideoOutput;
   };
-  "sunra/kling-video/v1.6/pro/image-to-video": {
+  'sunra/kling-video/v1.6/pro/image-to-video': {
     input: KlingVideoV16ProImageToVideoInput;
     output: KlingVideoV16ProImageToVideoOutput;
   };
-  "sunra/transpixar": {
+  'sunra/transpixar': {
     input: TranspixarInput;
     output: TranspixarOutput;
   };
-  "sunra/cogvideox-5b": {
+  'sunra/cogvideox-5b': {
     input: Cogvideox5bInput;
     output: Cogvideox5bOutput;
   };
-  "sunra/cogvideox-5b/video-to-video": {
+  'sunra/cogvideox-5b/video-to-video': {
     input: Cogvideox5bVideoToVideoInput;
     output: Cogvideox5bVideoToVideoOutput;
   };
-  "sunra/cogvideox-5b/image-to-video": {
+  'sunra/cogvideox-5b/image-to-video': {
     input: Cogvideox5bImageToVideoInput;
     output: Cogvideox5bImageToVideoOutput;
   };
-  "sunra/ltx-video": {
+  'sunra/ltx-video': {
     input: LtxVideoInput;
     output: LtxVideoOutput;
   };
-  "sunra/ltx-video/image-to-video": {
+  'sunra/ltx-video/image-to-video': {
     input: LtxVideoImageToVideoInput;
     output: LtxVideoImageToVideoOutput;
   };
-  "sunra/stable-video": {
+  'sunra/stable-video': {
     input: StableVideoInput;
     output: StableVideoOutput;
   };
-  "sunra/fast-svd/text-to-video": {
+  'sunra/fast-svd/text-to-video': {
     input: FastSvdTextToVideoInput;
     output: FastSvdTextToVideoOutput;
   };
-  "sunra/fast-svd-lcm": {
+  'sunra/fast-svd-lcm': {
     input: FastSvdLcmInput;
     output: FastSvdLcmOutput;
   };
-  "sunra/birefnet": {
+  'sunra/birefnet': {
     input: BirefnetInput;
     output: BirefnetOutput;
   };
-  "sunra/birefnet/v2": {
+  'sunra/birefnet/v2': {
     input: BirefnetV2Input;
     output: BirefnetV2Output;
   };
-  "sunra/fast-svd-lcm/text-to-video": {
+  'sunra/fast-svd-lcm/text-to-video': {
     input: FastSvdLcmTextToVideoInput;
     output: FastSvdLcmTextToVideoOutput;
   };
-  "sunra/creative-upscaler": {
+  'sunra/creative-upscaler': {
     input: CreativeUpscalerInput;
     output: CreativeUpscalerOutput;
   };
-  "sunra/ffmpeg-api/compose": {
+  'sunra/ffmpeg-api/compose': {
     input: FfmpegApiComposeInput;
     output: FfmpegApiComposeOutput;
   };
-  "sunra/ffmpeg-api/metadata": {
+  'sunra/ffmpeg-api/metadata': {
     input: FfmpegApiMetadataInput;
     output: FfmpegApiMetadataOutput;
   };
-  "sunra/ffmpeg-api/waveform": {
+  'sunra/ffmpeg-api/waveform': {
     input: FfmpegApiWaveformInput;
     output: FfmpegApiWaveformOutput;
   };
-  "sunra/clarity-upscaler": {
+  'sunra/clarity-upscaler': {
     input: ClarityUpscalerInput;
     output: ClarityUpscalerOutput;
   };
-  "sunra/ccsr": {
+  'sunra/ccsr': {
     input: CcsrInput;
     output: CcsrOutput;
   };
-  "sunra/fast-turbo-diffusion": {
+  'sunra/fast-turbo-diffusion': {
     input: FastTurboDiffusionInput;
     output: FastTurboDiffusionOutput;
   };
-  "sunra/fast-turbo-diffusion/image-to-image": {
+  'sunra/fast-turbo-diffusion/image-to-image': {
     input: FastTurboDiffusionImageToImageInput;
     output: FastTurboDiffusionImageToImageOutput;
   };
-  "sunra/fast-turbo-diffusion/inpainting": {
+  'sunra/fast-turbo-diffusion/inpainting': {
     input: FastTurboDiffusionInpaintingInput;
     output: FastTurboDiffusionInpaintingOutput;
   };
-  "sunra/fast-lcm-diffusion": {
+  'sunra/fast-lcm-diffusion': {
     input: FastLcmDiffusionInput;
     output: FastLcmDiffusionOutput;
   };
-  "sunra/fast-lcm-diffusion/image-to-image": {
+  'sunra/fast-lcm-diffusion/image-to-image': {
     input: FastLcmDiffusionImageToImageInput;
     output: FastLcmDiffusionImageToImageOutput;
   };
-  "sunra/fast-lcm-diffusion/inpainting": {
+  'sunra/fast-lcm-diffusion/inpainting': {
     input: FastLcmDiffusionInpaintingInput;
     output: FastLcmDiffusionInpaintingOutput;
   };
-  "sunra/whisper": {
+  'sunra/whisper': {
     input: WhisperInput;
     output: WhisperOutput;
   };
-  "sunra/wizper": {
+  'sunra/wizper': {
     input: WizperInput;
     output: WizperOutput;
   };
-  "sunra/fast-lightning-sdxl": {
+  'sunra/fast-lightning-sdxl': {
     input: FastLightningSdxlInput;
     output: FastLightningSdxlOutput;
   };
-  "sunra/fast-lightning-sdxl/image-to-image": {
+  'sunra/fast-lightning-sdxl/image-to-image': {
     input: FastLightningSdxlImageToImageInput;
     output: FastLightningSdxlImageToImageOutput;
   };
-  "sunra/fast-lightning-sdxl/inpainting": {
+  'sunra/fast-lightning-sdxl/inpainting': {
     input: FastLightningSdxlInpaintingInput;
     output: FastLightningSdxlInpaintingOutput;
   };
-  "sunra/hyper-sdxl": {
+  'sunra/hyper-sdxl': {
     input: HyperSdxlInput;
     output: HyperSdxlOutput;
   };
-  "sunra/hyper-sdxl/image-to-image": {
+  'sunra/hyper-sdxl/image-to-image': {
     input: HyperSdxlImageToImageInput;
     output: HyperSdxlImageToImageOutput;
   };
-  "sunra/hyper-sdxl/inpainting": {
+  'sunra/hyper-sdxl/inpainting': {
     input: HyperSdxlInpaintingInput;
     output: HyperSdxlInpaintingOutput;
   };
-  "sunra/playground-v25": {
+  'sunra/playground-v25': {
     input: PlaygroundV25Input;
     output: PlaygroundV25Output;
   };
-  "sunra/playground-v25/image-to-image": {
+  'sunra/playground-v25/image-to-image': {
     input: PlaygroundV25ImageToImageInput;
     output: PlaygroundV25ImageToImageOutput;
   };
-  "sunra/playground-v25/inpainting": {
+  'sunra/playground-v25/inpainting': {
     input: PlaygroundV25InpaintingInput;
     output: PlaygroundV25InpaintingOutput;
   };
-  "sunra/amt-interpolation": {
+  'sunra/amt-interpolation': {
     input: AmtInterpolationInput;
     output: AmtInterpolationOutput;
   };
-  "sunra/amt-interpolation/frame-interpolation": {
+  'sunra/amt-interpolation/frame-interpolation': {
     input: AmtInterpolationFrameInterpolationInput;
     output: AmtInterpolationFrameInterpolationOutput;
   };
-  "sunra/t2v-turbo": {
+  'sunra/t2v-turbo': {
     input: T2vTurboInput;
     output: T2vTurboOutput;
   };
-  "sunra/sd15-depth-controlnet": {
+  'sunra/sd15-depth-controlnet': {
     input: Sd15DepthControlnetInput;
     output: Sd15DepthControlnetOutput;
   };
-  "sunra/photomaker": {
+  'sunra/photomaker': {
     input: PhotomakerInput;
     output: PhotomakerOutput;
   };
-  "sunra/lcm": {
+  'sunra/lcm': {
     input: LcmInput;
     output: LcmOutput;
   };
-  "sunra/lcm-sd15-i2i": {
+  'sunra/lcm-sd15-i2i': {
     input: LcmSd15I2iInput;
     output: LcmSd15I2iOutput;
   };
-  "sunra/fooocus": {
+  'sunra/fooocus': {
     input: FooocusInput;
     output: FooocusOutput;
   };
-  "sunra/animatediff-v2v": {
+  'sunra/animatediff-v2v': {
     input: AnimatediffV2vInput;
     output: AnimatediffV2vOutput;
   };
-  "sunra/animatediff-v2v/turbo": {
+  'sunra/animatediff-v2v/turbo': {
     input: AnimatediffV2vTurboInput;
     output: AnimatediffV2vTurboOutput;
   };
-  "sunra/fast-animatediff/text-to-video": {
+  'sunra/fast-animatediff/text-to-video': {
     input: FastAnimatediffTextToVideoInput;
     output: FastAnimatediffTextToVideoOutput;
   };
-  "sunra/fast-animatediff/video-to-video": {
+  'sunra/fast-animatediff/video-to-video': {
     input: FastAnimatediffVideoToVideoInput;
     output: FastAnimatediffVideoToVideoOutput;
   };
-  "sunra/fast-animatediff/turbo/text-to-video": {
+  'sunra/fast-animatediff/turbo/text-to-video': {
     input: FastAnimatediffTurboTextToVideoInput;
     output: FastAnimatediffTurboTextToVideoOutput;
   };
-  "sunra/fast-animatediff/turbo/video-to-video": {
+  'sunra/fast-animatediff/turbo/video-to-video': {
     input: FastAnimatediffTurboVideoToVideoInput;
     output: FastAnimatediffTurboVideoToVideoOutput;
   };
-  "sunra/illusion-diffusion": {
+  'sunra/illusion-diffusion': {
     input: IllusionDiffusionInput;
     output: IllusionDiffusionOutput;
   };
-  "sunra/imageutils/depth": {
+  'sunra/imageutils/depth': {
     input: ImageutilsDepthInput;
     output: ImageutilsDepthOutput;
   };
-  "sunra/imageutils/rembg": {
+  'sunra/imageutils/rembg': {
     input: ImageutilsRembgInput;
     output: ImageutilsRembgOutput;
   };
-  "sunra/esrgan": {
+  'sunra/esrgan': {
     input: EsrganInput;
     output: EsrganOutput;
   };
-  "sunra/controlnetsdxl": {
+  'sunra/controlnetsdxl': {
     input: ControlnetsdxlInput;
     output: ControlnetsdxlOutput;
   };
-  "sunra/fast-sdxl-controlnet-canny": {
+  'sunra/fast-sdxl-controlnet-canny': {
     input: FastSdxlControlnetCannyInput;
     output: FastSdxlControlnetCannyOutput;
   };
-  "sunra/fast-sdxl-controlnet-canny/image-to-image": {
+  'sunra/fast-sdxl-controlnet-canny/image-to-image': {
     input: FastSdxlControlnetCannyImageToImageInput;
     output: FastSdxlControlnetCannyImageToImageOutput;
   };
-  "sunra/fast-sdxl-controlnet-canny/inpainting": {
+  'sunra/fast-sdxl-controlnet-canny/inpainting': {
     input: FastSdxlControlnetCannyInpaintingInput;
     output: FastSdxlControlnetCannyInpaintingOutput;
   };
-  "sunra/inpaint": {
+  'sunra/inpaint': {
     input: InpaintInput;
     output: InpaintOutput;
   };
-  "sunra/animatediff-sparsectrl-lcm": {
+  'sunra/animatediff-sparsectrl-lcm': {
     input: AnimatediffSparsectrlLcmInput;
     output: AnimatediffSparsectrlLcmOutput;
   };
-  "sunra/pulid": {
+  'sunra/pulid': {
     input: PulidInput;
     output: PulidOutput;
   };
-  "sunra/ip-adapter-face-id": {
+  'sunra/ip-adapter-face-id': {
     input: IpAdapterFaceIdInput;
     output: IpAdapterFaceIdOutput;
   };
-  "sunra/imageutils/marigold-depth": {
+  'sunra/imageutils/marigold-depth': {
     input: ImageutilsMarigoldDepthInput;
     output: ImageutilsMarigoldDepthOutput;
   };
-  "sunra/stable-audio": {
+  'sunra/stable-audio': {
     input: StableAudioInput;
     output: StableAudioOutput;
   };
-  "sunra/diffusion-edge": {
+  'sunra/diffusion-edge': {
     input: DiffusionEdgeInput;
     output: DiffusionEdgeOutput;
   };
-  "sunra/triposr": {
+  'sunra/triposr': {
     input: TriposrInput;
     output: TriposrOutput;
   };
-  "sunra/fooocus/upscale-or-vary": {
+  'sunra/fooocus/upscale-or-vary': {
     input: FooocusUpscaleOrVaryInput;
     output: FooocusUpscaleOrVaryOutput;
   };
-  "sunra/fooocus/image-prompt": {
+  'sunra/fooocus/image-prompt': {
     input: FooocusImagePromptInput;
     output: FooocusImagePromptOutput;
   };
-  "sunra/fooocus/inpaint": {
+  'sunra/fooocus/inpaint': {
     input: FooocusInpaintInput;
     output: FooocusInpaintOutput;
   };
-  "sunra/retoucher": {
+  'sunra/retoucher': {
     input: RetoucherInput;
     output: RetoucherOutput;
   };
-  "sunra/any-llm": {
+  'sunra/any-llm': {
     input: AnyLlmInput;
     output: AnyLlmOutput;
   };
-  "sunra/any-llm/vision": {
+  'sunra/any-llm/vision': {
     input: AnyLlmVisionInput;
     output: AnyLlmVisionOutput;
   };
-  "sunra/llavav15-13b": {
+  'sunra/llavav15-13b': {
     input: Llavav1513bInput;
     output: Llavav1513bOutput;
   };
-  "sunra/llava-next": {
+  'sunra/llava-next': {
     input: LlavaNextInput;
     output: LlavaNextOutput;
   };
-  "sunra/imageutils/nsfw": {
+  'sunra/imageutils/nsfw': {
     input: ImageutilsNsfwInput;
     output: ImageutilsNsfwOutput;
   };
-  "sunra/fast-fooocus-sdxl": {
+  'sunra/fast-fooocus-sdxl': {
     input: FastFooocusSdxlInput;
     output: FastFooocusSdxlOutput;
   };
-  "sunra/fast-fooocus-sdxl/image-to-image": {
+  'sunra/fast-fooocus-sdxl/image-to-image': {
     input: FastFooocusSdxlImageToImageInput;
     output: FastFooocusSdxlImageToImageOutput;
   };
-  "sunra/face-to-sticker": {
+  'sunra/face-to-sticker': {
     input: FaceToStickerInput;
     output: FaceToStickerOutput;
   };
-  "sunra/moondream/batched": {
+  'sunra/moondream/batched': {
     input: MoondreamBatchedInput;
     output: MoondreamBatchedOutput;
   };
-  "sunra/sadtalker": {
+  'sunra/sadtalker': {
     input: SadtalkerInput;
     output: SadtalkerOutput;
   };
-  "sunra/musetalk": {
+  'sunra/musetalk': {
     input: MusetalkInput;
     output: MusetalkOutput;
   };
-  "sunra/dubbing": {
+  'sunra/dubbing': {
     input: DubbingInput;
     output: DubbingOutput;
   };
-  "sunra/sadtalker/reference": {
+  'sunra/sadtalker/reference': {
     input: SadtalkerReferenceInput;
     output: SadtalkerReferenceOutput;
   };
-  "sunra/layer-diffusion": {
+  'sunra/layer-diffusion': {
     input: LayerDiffusionInput;
     output: LayerDiffusionOutput;
   };
-  "sunra/stable-diffusion-v15": {
+  'sunra/stable-diffusion-v15': {
     input: StableDiffusionV15Input;
     output: StableDiffusionV15Output;
   };
-  "sunra/lora/image-to-image": {
+  'sunra/lora/image-to-image': {
     input: LoraImageToImageInput;
     output: LoraImageToImageOutput;
   };
-  "sunra/fast-sdxl/image-to-image": {
+  'sunra/fast-sdxl/image-to-image': {
     input: FastSdxlImageToImageInput;
     output: FastSdxlImageToImageOutput;
   };
-  "sunra/fast-sdxl/inpainting": {
+  'sunra/fast-sdxl/inpainting': {
     input: FastSdxlInpaintingInput;
     output: FastSdxlInpaintingOutput;
   };
-  "sunra/lora/inpaint": {
+  'sunra/lora/inpaint': {
     input: LoraInpaintInput;
     output: LoraInpaintOutput;
   };
-  "sunra/pixart-sigma": {
+  'sunra/pixart-sigma': {
     input: PixartSigmaInput;
     output: PixartSigmaOutput;
   };
-  "sunra/dreamshaper": {
+  'sunra/dreamshaper': {
     input: DreamshaperInput;
     output: DreamshaperOutput;
   };
-  "sunra/realistic-vision": {
+  'sunra/realistic-vision': {
     input: RealisticVisionInput;
     output: RealisticVisionOutput;
   };
-  "sunra/lightning-models": {
+  'sunra/lightning-models': {
     input: LightningModelsInput;
     output: LightningModelsOutput;
   };
-  "sunra/omni-zero": {
+  'sunra/omni-zero': {
     input: OmniZeroInput;
     output: OmniZeroOutput;
   };
-  "sunra/leffa/virtual-tryon": {
+  'sunra/leffa/virtual-tryon': {
     input: LeffaVirtualTryonInput;
     output: LeffaVirtualTryonOutput;
   };
-  "sunra/leffa/pose-transfer": {
+  'sunra/leffa/pose-transfer': {
     input: LeffaPoseTransferInput;
     output: LeffaPoseTransferOutput;
   };
-  "sunra/cat-vton": {
+  'sunra/cat-vton': {
     input: CatVtonInput;
     output: CatVtonOutput;
   };
-  "sunra/dwpose": {
+  'sunra/dwpose': {
     input: DwposeInput;
     output: DwposeOutput;
   };
-  "sunra/stable-cascade/sote-diffusion": {
+  'sunra/stable-cascade/sote-diffusion': {
     input: StableCascadeSoteDiffusionInput;
     output: StableCascadeSoteDiffusionOutput;
   };
-  "sunra/florence-2-large/caption": {
+  'sunra/florence-2-large/caption': {
     input: Florence2LargeCaptionInput;
     output: Florence2LargeCaptionOutput;
   };
-  "sunra/florence-2-large/detailed-caption": {
+  'sunra/florence-2-large/detailed-caption': {
     input: Florence2LargeDetailedCaptionInput;
     output: Florence2LargeDetailedCaptionOutput;
   };
-  "sunra/florence-2-large/more-detailed-caption": {
+  'sunra/florence-2-large/more-detailed-caption': {
     input: Florence2LargeMoreDetailedCaptionInput;
     output: Florence2LargeMoreDetailedCaptionOutput;
   };
-  "sunra/florence-2-large/object-detection": {
+  'sunra/florence-2-large/object-detection': {
     input: Florence2LargeObjectDetectionInput;
     output: Florence2LargeObjectDetectionOutput;
   };
-  "sunra/florence-2-large/dense-region-caption": {
+  'sunra/florence-2-large/dense-region-caption': {
     input: Florence2LargeDenseRegionCaptionInput;
     output: Florence2LargeDenseRegionCaptionOutput;
   };
-  "sunra/florence-2-large/region-proposal": {
+  'sunra/florence-2-large/region-proposal': {
     input: Florence2LargeRegionProposalInput;
     output: Florence2LargeRegionProposalOutput;
   };
-  "sunra/florence-2-large/caption-to-phrase-grounding": {
+  'sunra/florence-2-large/caption-to-phrase-grounding': {
     input: Florence2LargeCaptionToPhraseGroundingInput;
     output: Florence2LargeCaptionToPhraseGroundingOutput;
   };
-  "sunra/florence-2-large/referring-expression-segmentation": {
+  'sunra/florence-2-large/referring-expression-segmentation': {
     input: Florence2LargeReferringExpressionSegmentationInput;
     output: Florence2LargeReferringExpressionSegmentationOutput;
   };
-  "sunra/florence-2-large/region-to-segmentation": {
+  'sunra/florence-2-large/region-to-segmentation': {
     input: Florence2LargeRegionToSegmentationInput;
     output: Florence2LargeRegionToSegmentationOutput;
   };
-  "sunra/florence-2-large/open-vocabulary-detection": {
+  'sunra/florence-2-large/open-vocabulary-detection': {
     input: Florence2LargeOpenVocabularyDetectionInput;
     output: Florence2LargeOpenVocabularyDetectionOutput;
   };
-  "sunra/florence-2-large/region-to-category": {
+  'sunra/florence-2-large/region-to-category': {
     input: Florence2LargeRegionToCategoryInput;
     output: Florence2LargeRegionToCategoryOutput;
   };
-  "sunra/florence-2-large/region-to-description": {
+  'sunra/florence-2-large/region-to-description': {
     input: Florence2LargeRegionToDescriptionInput;
     output: Florence2LargeRegionToDescriptionOutput;
   };
-  "sunra/florence-2-large/ocr": {
+  'sunra/florence-2-large/ocr': {
     input: Florence2LargeOcrInput;
     output: Florence2LargeOcrOutput;
   };
-  "sunra/florence-2-large/ocr-with-region": {
+  'sunra/florence-2-large/ocr-with-region': {
     input: Florence2LargeOcrWithRegionInput;
     output: Florence2LargeOcrWithRegionOutput;
   };
-  "sunra/era-3d": {
+  'sunra/era-3d': {
     input: Era3dInput;
     output: Era3dOutput;
   };
-  "sunra/live-portrait": {
+  'sunra/live-portrait': {
     input: LivePortraitInput;
     output: LivePortraitOutput;
   };
-  "sunra/live-portrait/image": {
+  'sunra/live-portrait/image': {
     input: LivePortraitImageInput;
     output: LivePortraitImageOutput;
   };
-  "sunra/muse-pose": {
+  'sunra/muse-pose': {
     input: MusePoseInput;
     output: MusePoseOutput;
   };
-  "sunra/kolors": {
+  'sunra/kolors': {
     input: KolorsInput;
     output: KolorsOutput;
   };
-  "sunra/kolors/image-to-image": {
+  'sunra/kolors/image-to-image': {
     input: KolorsImageToImageInput;
     output: KolorsImageToImageOutput;
   };
-  "sunra/sdxl-controlnet-union": {
+  'sunra/sdxl-controlnet-union': {
     input: SdxlControlnetUnionInput;
     output: SdxlControlnetUnionOutput;
   };
-  "sunra/sdxl-controlnet-union/image-to-image": {
+  'sunra/sdxl-controlnet-union/image-to-image': {
     input: SdxlControlnetUnionImageToImageInput;
     output: SdxlControlnetUnionImageToImageOutput;
   };
-  "sunra/sdxl-controlnet-union/inpainting": {
+  'sunra/sdxl-controlnet-union/inpainting': {
     input: SdxlControlnetUnionInpaintingInput;
     output: SdxlControlnetUnionInpaintingOutput;
   };
-  "sunra/sam2/image": {
+  'sunra/sam2/image': {
     input: Sam2ImageInput;
     output: Sam2ImageOutput;
   };
-  "sunra/sam2/video": {
+  'sunra/sam2/video': {
     input: Sam2VideoInput;
     output: Sam2VideoOutput;
   };
-  "sunra/imageutils/sam": {
+  'sunra/imageutils/sam': {
     input: ImageutilsSamInput;
     output: ImageutilsSamOutput;
   };
-  "sunra/sa2va/8b/image": {
+  'sunra/sa2va/8b/image': {
     input: Sa2va8bImageInput;
     output: Sa2va8bImageOutput;
   };
-  "sunra/sa2va/8b/video": {
+  'sunra/sa2va/8b/video': {
     input: Sa2va8bVideoInput;
     output: Sa2va8bVideoOutput;
   };
-  "sunra/sa2va/4b/image": {
+  'sunra/sa2va/4b/image': {
     input: Sa2va4bImageInput;
     output: Sa2va4bImageOutput;
   };
-  "sunra/sa2va/4b/video": {
+  'sunra/sa2va/4b/video': {
     input: Sa2va4bVideoInput;
     output: Sa2va4bVideoOutput;
   };
-  "sunra/mini-cpm": {
+  'sunra/mini-cpm': {
     input: MiniCpmInput;
     output: MiniCpmOutput;
   };
-  "sunra/mini-cpm/video": {
+  'sunra/mini-cpm/video': {
     input: MiniCpmVideoInput;
     output: MiniCpmVideoOutput;
   };
-  "sunra/controlnext": {
+  'sunra/controlnext': {
     input: ControlnextInput;
     output: ControlnextOutput;
   };
-  "sunra/workflowutils/canny": {
+  'sunra/workflowutils/canny': {
     input: WorkflowutilsCannyInput;
     output: WorkflowutilsCannyOutput;
   };
-  "sunra/image-preprocessors/depth-anything/v2": {
+  'sunra/image-preprocessors/depth-anything/v2': {
     input: ImagePreprocessorsDepthAnythingV2Input;
     output: ImagePreprocessorsDepthAnythingV2Output;
   };
-  "sunra/image-preprocessors/hed": {
+  'sunra/image-preprocessors/hed': {
     input: ImagePreprocessorsHedInput;
     output: ImagePreprocessorsHedOutput;
   };
-  "sunra/image-preprocessors/lineart": {
+  'sunra/image-preprocessors/lineart': {
     input: ImagePreprocessorsLineartInput;
     output: ImagePreprocessorsLineartOutput;
   };
-  "sunra/image-preprocessors/midas": {
+  'sunra/image-preprocessors/midas': {
     input: ImagePreprocessorsMidasInput;
     output: ImagePreprocessorsMidasOutput;
   };
-  "sunra/image-preprocessors/mlsd": {
+  'sunra/image-preprocessors/mlsd': {
     input: ImagePreprocessorsMlsdInput;
     output: ImagePreprocessorsMlsdOutput;
   };
-  "sunra/image-preprocessors/pidi": {
+  'sunra/image-preprocessors/pidi': {
     input: ImagePreprocessorsPidiInput;
     output: ImagePreprocessorsPidiOutput;
   };
-  "sunra/image-preprocessors/sam": {
+  'sunra/image-preprocessors/sam': {
     input: ImagePreprocessorsSamInput;
     output: ImagePreprocessorsSamOutput;
   };
-  "sunra/image-preprocessors/scribble": {
+  'sunra/image-preprocessors/scribble': {
     input: ImagePreprocessorsScribbleInput;
     output: ImagePreprocessorsScribbleOutput;
   };
-  "sunra/image-preprocessors/teed": {
+  'sunra/image-preprocessors/teed': {
     input: ImagePreprocessorsTeedInput;
     output: ImagePreprocessorsTeedOutput;
   };
-  "sunra/image-preprocessors/zoe": {
+  'sunra/image-preprocessors/zoe': {
     input: ImagePreprocessorsZoeInput;
     output: ImagePreprocessorsZoeOutput;
   };
-  "sunra/f5-tts": {
+  'sunra/f5-tts': {
     input: F5TtsInput;
     output: F5TtsOutput;
   };
-  "fashn/tryon": {
+  'fashn/tryon': {
     input: TryonInput;
     output: TryonOutput;
   };
-  "sunra/trellis": {
+  'sunra/trellis': {
     input: TrellisInput;
     output: TrellisOutput;
   };
-  "sunra/playai/tts/v3": {
+  'sunra/playai/tts/v3': {
     input: PlayaiTtsV3Input;
     output: PlayaiTtsV3Output;
   };
-  "sunra/playai/tts/dialog": {
+  'sunra/playai/tts/dialog': {
     input: PlayaiTtsDialogInput;
     output: PlayaiTtsDialogOutput;
   };
-  "sunra/latentsync": {
+  'sunra/latentsync': {
     input: LatentsyncInput;
     output: LatentsyncOutput;
   };
-  "sunra/moondream-next": {
+  'sunra/moondream-next': {
     input: MoondreamNextInput;
     output: MoondreamNextOutput;
   };
-  "sunra/moondream-next/detection": {
+  'sunra/moondream-next/detection': {
     input: MoondreamNextDetectionInput;
     output: MoondreamNextDetectionOutput;
   };
-  "sunra/moondream-next/batch": {
+  'sunra/moondream-next/batch': {
     input: MoondreamNextBatchInput;
     output: MoondreamNextBatchOutput;
   };
-  "sunra/recraft-clarity-upscale": {
+  'sunra/recraft-clarity-upscale': {
     input: RecraftClarityUpscaleInput;
     output: RecraftClarityUpscaleOutput;
   };
-  "sunra/recraft-creative-upscale": {
+  'sunra/recraft-creative-upscale': {
     input: RecraftCreativeUpscaleInput;
     output: RecraftCreativeUpscaleOutput;
   };

@@ -21,7 +21,7 @@ export type RunOptions<Input> = {
   /**
    * The HTTP method, defaults to `post`;
    */
-  readonly method?: "get" | "post" | "put" | "delete" | string;
+  readonly method?: 'get' | 'post' | 'put' | 'delete' | string;
 
   /**
    * The abort signal to cancel the request.
@@ -50,8 +50,8 @@ export type UrlOptions = {
 
 export type RequestLog = {
   message: string;
-  level: "STDERR" | "STDOUT" | "ERROR" | "INFO" | "WARN" | "DEBUG";
-  source: "USER";
+  level: 'STDERR' | 'STDOUT' | 'ERROR' | 'INFO' | 'WARN' | 'DEBUG';
+  source: 'USER';
   timestamp: string; // Using string to represent date-time format, but you could also use 'Date' type if you're going to construct Date objects.
 };
 
@@ -60,24 +60,24 @@ export type Metrics = {
 };
 
 interface BaseQueueStatus {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  status: 'IN_QUEUE' | 'IN_PROGRESS' | 'COMPLETED';
   request_id: string;
 }
 
 export interface InQueueQueueStatus extends BaseQueueStatus {
-  status: "IN_QUEUE";
+  status: 'IN_QUEUE';
   queue_position: number;
   response_url: string;
 }
 
 export interface InProgressQueueStatus extends BaseQueueStatus {
-  status: "IN_PROGRESS";
+  status: 'IN_PROGRESS';
   response_url: string;
   logs: RequestLog[];
 }
 
 export interface CompletedQueueStatus extends BaseQueueStatus {
-  status: "COMPLETED";
+  status: 'COMPLETED';
   response_url: string;
   logs: RequestLog[];
   metrics?: Metrics;
@@ -89,11 +89,11 @@ export type QueueStatus =
   | InQueueQueueStatus;
 
 export function isQueueStatus(obj: any): obj is QueueStatus {
-  return obj && obj.status && obj.response_url;
+  return obj && obj.status && obj.response_url
 }
 
 export function isCompletedQueueStatus(obj: any): obj is CompletedQueueStatus {
-  return isQueueStatus(obj) && obj.status === "COMPLETED";
+  return isQueueStatus(obj) && obj.status === 'COMPLETED'
 }
 
 export type ValidationErrorInfo = {
@@ -112,7 +112,7 @@ export type ValidationErrorInfo = {
 export type WebHookResponse<Payload = any> =
   | {
       /** Indicates a successful response. */
-      status: "OK";
+      status: 'OK';
       /** The payload of the response, structure determined by the Payload type. */
       payload: Payload;
       /** Error is never present in a successful response. */
@@ -122,7 +122,7 @@ export type WebHookResponse<Payload = any> =
     }
   | {
       /** Indicates an unsuccessful response. */
-      status: "ERROR";
+      status: 'ERROR';
       /** The payload of the response, structure determined by the Payload type. */
       payload: Payload;
       /** Description of the error that occurred. */

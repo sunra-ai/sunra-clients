@@ -83,7 +83,7 @@ export default function WhisperDemo() {
   const [error, setError] = useState<Error | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [result, setResult] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const [result, setResult] = useState<any>(null);  
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const { record, stopRecording, isRecording } = useMediaRecorder();

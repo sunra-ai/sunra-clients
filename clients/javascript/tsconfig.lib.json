@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "importHelpers": false,
     "allowJs": true,
+    "rootDir": "src",
     "checkJs": false,
     "types": ["node"]
   },

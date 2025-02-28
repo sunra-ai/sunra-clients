@@ -1,5 +1,5 @@
-import { type RequestHandler } from "@sveltejs/kit";
-import { fromHeaders, handleRequest } from "./index";
+import { type RequestHandler } from '@sveltejs/kit'
+import { fromHeaders, handleRequest } from './index'
 
 type RequestHandlerParams = {
   /**
@@ -20,12 +20,12 @@ export const createRequestHandler = ({
   credentials,
 }: RequestHandlerParams = {}) => {
   const handler: RequestHandler = async ({ request }) => {
-    const SUNRA_KEY = credentials || process.env.SUNRA_KEY || "";
+    const SUNRA_KEY = credentials || process.env.SUNRA_KEY || ''
     const responseHeaders = new Headers({
-      "Content-Type": "application/json",
-    });
+      'Content-Type': 'application/json',
+    })
     return await handleRequest({
-      id: "svelte-app-router",
+      id: 'svelte-app-router',
       method: request.method,
       getRequestBody: async () => request.text(),
       getHeaders: () => fromHeaders(request.headers),
@@ -40,14 +40,14 @@ export const createRequestHandler = ({
           headers: responseHeaders,
         }),
       sendResponse: async (res) => {
-        return new Response(res.body, res);
+        return new Response(res.body, res)
       },
-    });
-  };
+    })
+  }
   return {
     requestHandler: handler,
     GET: handler,
     POST: handler,
     PUT: handler,
-  };
-};
+  }
+}

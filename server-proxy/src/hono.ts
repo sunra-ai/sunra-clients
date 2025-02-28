@@ -1,11 +1,11 @@
-import { Context } from "hono";
-import { type StatusCode } from "hono/utils/http-status";
+import { Context } from 'hono'
+// import { type StatusCode } from 'hono/utils/http-status'
 import {
   handleRequest,
   HeaderValue,
   resolveApiKeyFromEnv,
   responsePassthrough,
-} from "./index";
+} from './index'
 
 export type SunraHonoProxyOptions = {
   /**
@@ -30,13 +30,13 @@ export function createRouteHandler({
   resolveApiKey = resolveApiKeyFromEnv,
 }: SunraHonoProxyOptions): RouteHandler {
   const routeHandler: RouteHandler = async (context) => {
-    const responseHeaders: Record<string, HeaderValue> = {};
+    const responseHeaders: Record<string, HeaderValue> = {}
     const response = await handleRequest({
-      id: "hono",
+      id: 'hono',
       method: context.req.method,
       respondWith: (status, data) => {
         // return context.json(data, status as StatusCode, responseHeaders);
-        return context.json(data, status as any, responseHeaders as any);
+        return context.json(data, status as any, responseHeaders as any)
       },
       getHeaders: () => responseHeaders,
       getHeader: (name) => context.req.header(name),
@@ -44,9 +44,9 @@ export function createRouteHandler({
       getRequestBody: async () => JSON.stringify(await context.req.json()),
       sendResponse: responsePassthrough,
       resolveApiKey,
-    });
-    return response;
-  };
+    })
+    return response
+  }
 
-  return routeHandler;
+  return routeHandler
 }

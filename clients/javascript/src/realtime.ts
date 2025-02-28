@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { decode, encode } from "@msgpack/msgpack";
+
+import { decode, encode } from '@msgpack/msgpack'
 import {
   ContextFunction,
   InterpretOnChangeFunction,
@@ -11,12 +11,12 @@ import {
   reduce,
   state,
   transition,
-} from "robot3";
-import { TOKEN_EXPIRATION_SECONDS, getTemporaryAuthToken } from "./auth";
-import { RequiredConfig } from "./config";
-import { ApiError } from "./response";
-import { isBrowser } from "./runtime";
-import { ensureEndpointIdFormat, isReact, throttle } from "./utils";
+} from 'robot3'
+import { TOKEN_EXPIRATION_SECONDS, getTemporaryAuthToken } from './auth'
+import { RequiredConfig } from './config'
+import { ApiError } from './response'
+import { isBrowser } from './runtime'
+import { ensureEndpointIdFormat, isReact, throttle } from './utils'
 
 // Define the context
 interface Context {
@@ -28,15 +28,15 @@ interface Context {
 
 const initialState: ContextFunction<Context> = () => ({
   enqueuedMessage: undefined,
-});
+})
 
-type SendEvent = { type: "send"; message: any };
-type AuthenticatedEvent = { type: "authenticated"; token: string };
-type InitiateAuthEvent = { type: "initiateAuth" };
-type UnauthorizedEvent = { type: "unauthorized"; error: Error };
-type ConnectedEvent = { type: "connected"; websocket: WebSocket };
+type SendEvent = { type: 'send'; message: any };
+type AuthenticatedEvent = { type: 'authenticated'; token: string };
+type InitiateAuthEvent = { type: 'initiateAuth' };
+type UnauthorizedEvent = { type: 'unauthorized'; error: Error };
+type ConnectedEvent = { type: 'connected'; websocket: WebSocket };
 type ConnectionClosedEvent = {
-  type: "connectionClosed";
+  type: 'connectionClosed';
   code: number;
   reason: string;
 };
@@ -50,61 +50,61 @@ type Event =
   | ConnectionClosedEvent;
 
 function hasToken(context: Context): boolean {
-  return context.token !== undefined;
+  return context.token !== undefined
 }
 
 function noToken(context: Context): boolean {
-  return !hasToken(context);
+  return !hasToken(context)
 }
 
 function enqueueMessage(context: Context, event: SendEvent): Context {
   return {
     ...context,
     enqueuedMessage: event.message,
-  };
+  }
 }
 
 function closeConnection(context: Context): Context {
   if (context.websocket && context.websocket.readyState === WebSocket.OPEN) {
-    context.websocket.close();
+    context.websocket.close()
   }
   return {
     ...context,
     websocket: undefined,
-  };
+  }
 }
 
 function sendMessage(context: Context, event: SendEvent): Context {
   if (context.websocket && context.websocket.readyState === WebSocket.OPEN) {
     if (event.message instanceof Uint8Array) {
-      context.websocket.send(event.message);
+      context.websocket.send(event.message)
     } else {
-      context.websocket.send(encode(event.message));
+      context.websocket.send(encode(event.message))
     }
 
     return {
       ...context,
       enqueuedMessage: undefined,
-    };
+    }
   }
   return {
     ...context,
     enqueuedMessage: event.message,
-  };
+  }
 }
 
 function expireToken(context: Context): Context {
   return {
     ...context,
     token: undefined,
-  };
+  }
 }
 
 function setToken(context: Context, event: AuthenticatedEvent): Context {
   return {
     ...context,
     token: event.token,
-  };
+  }
 }
 
 function connectionEstablished(
@@ -114,55 +114,55 @@ function connectionEstablished(
   return {
     ...context,
     websocket: event.websocket,
-  };
+  }
 }
 
 // State machine
 const connectionStateMachine = createMachine(
-  "idle",
+  'idle',
   {
     idle: state(
-      transition("send", "connecting", reduce(enqueueMessage)),
-      transition("expireToken", "idle", reduce(expireToken)),
-      transition("close", "idle", reduce(closeConnection)),
+      transition('send', 'connecting', reduce(enqueueMessage)),
+      transition('expireToken', 'idle', reduce(expireToken)),
+      transition('close', 'idle', reduce(closeConnection)),
     ),
     connecting: state(
-      transition("connecting", "connecting"),
-      transition("connected", "active", reduce(connectionEstablished)),
-      transition("connectionClosed", "idle", reduce(closeConnection)),
-      transition("send", "connecting", reduce(enqueueMessage)),
-      transition("close", "idle", reduce(closeConnection)),
-      immediate("authRequired", guard(noToken)),
+      transition('connecting', 'connecting'),
+      transition('connected', 'active', reduce(connectionEstablished)),
+      transition('connectionClosed', 'idle', reduce(closeConnection)),
+      transition('send', 'connecting', reduce(enqueueMessage)),
+      transition('close', 'idle', reduce(closeConnection)),
+      immediate('authRequired', guard(noToken)),
     ),
     authRequired: state(
-      transition("initiateAuth", "authInProgress"),
-      transition("send", "authRequired", reduce(enqueueMessage)),
-      transition("close", "idle", reduce(closeConnection)),
+      transition('initiateAuth', 'authInProgress'),
+      transition('send', 'authRequired', reduce(enqueueMessage)),
+      transition('close', 'idle', reduce(closeConnection)),
     ),
     authInProgress: state(
-      transition("authenticated", "connecting", reduce(setToken)),
+      transition('authenticated', 'connecting', reduce(setToken)),
       transition(
-        "unauthorized",
-        "idle",
+        'unauthorized',
+        'idle',
         reduce(expireToken),
         reduce(closeConnection),
       ),
-      transition("send", "authInProgress", reduce(enqueueMessage)),
-      transition("close", "idle", reduce(closeConnection)),
+      transition('send', 'authInProgress', reduce(enqueueMessage)),
+      transition('close', 'idle', reduce(closeConnection)),
     ),
     active: state(
-      transition("send", "active", reduce(sendMessage)),
-      transition("unauthorized", "idle", reduce(expireToken)),
-      transition("connectionClosed", "idle", reduce(closeConnection)),
-      transition("close", "idle", reduce(closeConnection)),
+      transition('send', 'active', reduce(sendMessage)),
+      transition('unauthorized', 'idle', reduce(expireToken)),
+      transition('connectionClosed', 'idle', reduce(closeConnection)),
+      transition('close', 'idle', reduce(closeConnection)),
     ),
     failed: state(
-      transition("send", "failed"),
-      transition("close", "idle", reduce(closeConnection)),
+      transition('send', 'failed'),
+      transition('close', 'idle', reduce(closeConnection)),
     ),
   },
   initialState,
-);
+)
 
 type WithRequestId = {
   request_id: string;
@@ -258,23 +258,23 @@ function buildRealtimeUrl(
   { token, maxBuffering }: RealtimeUrlParams,
 ): string {
   if (maxBuffering !== undefined && (maxBuffering < 1 || maxBuffering > 60)) {
-    throw new Error("The `maxBuffering` must be between 1 and 60 (inclusive)");
+    throw new Error('The `maxBuffering` must be between 1 and 60 (inclusive)')
   }
   const queryParams = new URLSearchParams({
     sunra_jwt_token: token,
-  });
+  })
   if (maxBuffering !== undefined) {
-    queryParams.set("max_buffering", maxBuffering.toFixed(0));
+    queryParams.set('max_buffering', maxBuffering.toFixed(0))
   }
-  const appId = ensureEndpointIdFormat(app);
-  return `wss://sunra.run/${appId}/realtime?${queryParams.toString()}`;
+  const appId = ensureEndpointIdFormat(app)
+  return `wss://sunra.run/${appId}/realtime?${queryParams.toString()}`
 }
 
-const DEFAULT_THROTTLE_INTERVAL = 128;
+const DEFAULT_THROTTLE_INTERVAL = 128
 
 function isUnauthorizedError(message: any): boolean {
   // TODO we need better protocol definition with error codes
-  return message["status"] === "error" && message["error"] === "Unauthorized";
+  return message['status'] === 'error' && message['error'] === 'Unauthorized'
 }
 
 /**
@@ -283,7 +283,7 @@ function isUnauthorizedError(message: any): boolean {
 const WebSocketErrorCodes = {
   NORMAL_CLOSURE: 1000,
   GOING_AWAY: 1001,
-};
+}
 
 type ConnectionStateMachine = Service<typeof connectionStateMachine> & {
   throttledSend: (
@@ -298,60 +298,60 @@ type ConnectionOnChange = InterpretOnChangeFunction<
 
 type RealtimeConnectionCallback = Pick<
   RealtimeConnectionHandler<any>,
-  "onResult" | "onError"
+  'onResult' | 'onError'
 >;
 
-const connectionCache = new Map<string, ConnectionStateMachine>();
-const connectionCallbacks = new Map<string, RealtimeConnectionCallback>();
+const connectionCache = new Map<string, ConnectionStateMachine>()
+const connectionCallbacks = new Map<string, RealtimeConnectionCallback>()
 function reuseInterpreter(
   key: string,
   throttleInterval: number,
   onChange: ConnectionOnChange,
 ) {
   if (!connectionCache.has(key)) {
-    const machine = interpret(connectionStateMachine, onChange);
+    const machine = interpret(connectionStateMachine, onChange)
     connectionCache.set(key, {
       ...machine,
       throttledSend:
         throttleInterval > 0
           ? throttle(machine.send, throttleInterval, true)
           : machine.send,
-    });
+    })
   }
-  return connectionCache.get(key) as ConnectionStateMachine;
+  return connectionCache.get(key) as ConnectionStateMachine
 }
 
 const noop = () => {
   /* No-op */
-};
+}
 
 /**
  * A no-op connection that does not send any message.
  * Useful on the frameworks that reuse code for both ssr and csr (e.g. Next)
  * so the call when doing ssr has no side-effects.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const NoOpConnection: RealtimeConnection<any> = {
   send: noop,
   close: noop,
-};
+}
 
 function isSuccessfulResult(data: any): boolean {
   return (
-    data.status !== "error" &&
-    data.type !== "x-sunra-message" &&
+    data.status !== 'error' &&
+    data.type !== 'x-sunra-message' &&
     !isSunraErrorResult(data)
-  );
+  )
 }
 
 type SunraErrorResult = {
-  type: "x-sunra-error";
+  type: 'x-sunra-error';
   error: string;
   reason: string;
 };
 
 function isSunraErrorResult(data: any): data is SunraErrorResult {
-  return data.type === "x-sunra-error";
+  return data.type === 'x-sunra-error'
 }
 
 type RealtimeClientDependencies = {
@@ -372,12 +372,12 @@ export function createRealtimeClient({
         connectionKey = crypto.randomUUID(),
         maxBuffering,
         throttleInterval = DEFAULT_THROTTLE_INTERVAL,
-      } = handler;
+      } = handler
       if (clientOnly && !isBrowser()) {
-        return NoOpConnection;
+        return NoOpConnection
       }
 
-      let previousState: string | undefined;
+      let previousState: string | undefined
 
       // Although the state machine is cached so we don't open multiple connections,
       // we still need to update the callbacks so we can call the correct references
@@ -387,112 +387,112 @@ export function createRealtimeClient({
       connectionCallbacks.set(connectionKey, {
         onError: handler.onError,
         onResult: handler.onResult,
-      });
+      })
       const getCallbacks = () =>
-        connectionCallbacks.get(connectionKey) as RealtimeConnectionCallback;
+        connectionCallbacks.get(connectionKey) as RealtimeConnectionCallback
       const stateMachine = reuseInterpreter(
         connectionKey,
         throttleInterval,
         ({ context, machine, send }) => {
-          const { enqueuedMessage, token } = context;
-          if (machine.current === "active" && enqueuedMessage) {
-            send({ type: "send", message: enqueuedMessage });
+          const { enqueuedMessage, token } = context
+          if (machine.current === 'active' && enqueuedMessage) {
+            send({ type: 'send', message: enqueuedMessage })
           }
           if (
-            machine.current === "authRequired" &&
+            machine.current === 'authRequired' &&
             token === undefined &&
             previousState !== machine.current
           ) {
-            send({ type: "initiateAuth" });
+            send({ type: 'initiateAuth' })
             getTemporaryAuthToken(app, config)
               .then((token) => {
-                send({ type: "authenticated", token });
+                send({ type: 'authenticated', token })
                 const tokenExpirationTimeout = Math.round(
                   TOKEN_EXPIRATION_SECONDS * 0.9 * 1000,
-                );
+                )
                 setTimeout(() => {
-                  send({ type: "expireToken" });
-                }, tokenExpirationTimeout);
+                  send({ type: 'expireToken' })
+                }, tokenExpirationTimeout)
               })
               .catch((error) => {
-                send({ type: "unauthorized", error });
-              });
+                send({ type: 'unauthorized', error })
+              })
           }
           if (
-            machine.current === "connecting" &&
+            machine.current === 'connecting' &&
             previousState !== machine.current &&
             token !== undefined
           ) {
             const ws = new WebSocket(
               buildRealtimeUrl(app, { token, maxBuffering }),
-            );
+            )
             ws.onopen = () => {
-              send({ type: "connected", websocket: ws });
-            };
+              send({ type: 'connected', websocket: ws })
+            }
             ws.onclose = (event) => {
               if (event.code !== WebSocketErrorCodes.NORMAL_CLOSURE) {
-                const { onError = noop } = getCallbacks();
+                const { onError = noop } = getCallbacks()
                 onError(
                   new ApiError({
                     message: `Error closing the connection: ${event.reason}`,
                     status: event.code,
                   }),
-                );
+                )
               }
-              send({ type: "connectionClosed", code: event.code });
-            };
-            ws.onerror = (event) => {
+              send({ type: 'connectionClosed', code: event.code })
+            }
+            ws.onerror = () => {
               // TODO specify error protocol for identified errors
-              const { onError = noop } = getCallbacks();
-              onError(new ApiError({ message: "Unknown error", status: 500 }));
-            };
+              const { onError = noop } = getCallbacks()
+              onError(new ApiError({ message: 'Unknown error', status: 500 }))
+            }
             ws.onmessage = (event) => {
-              const { onResult } = getCallbacks();
+              const { onResult } = getCallbacks()
 
               // Handle binary messages as msgpack messages
               if (event.data instanceof ArrayBuffer) {
-                const result = decode(new Uint8Array(event.data));
-                onResult(result);
-                return;
+                const result = decode(new Uint8Array(event.data))
+                onResult(result)
+                return
               }
               if (event.data instanceof Uint8Array) {
-                const result = decode(event.data);
-                onResult(result);
-                return;
+                const result = decode(event.data)
+                onResult(result)
+                return
               }
               if (event.data instanceof Blob) {
                 event.data.arrayBuffer().then((buffer) => {
-                  const result = decode(new Uint8Array(buffer));
-                  onResult(result);
-                });
-                return;
+                  const result = decode(new Uint8Array(buffer))
+                  onResult(result)
+                })
+                return
               }
 
               // Otherwise handle strings as plain JSON messages
-              const data = JSON.parse(event.data);
+              const data = JSON.parse(event.data)
 
               // Drop messages that are not related to the actual result.
               // In the future, we might want to handle other types of messages.
               // TODO: specify the sunra ws protocol format
               if (isUnauthorizedError(data)) {
                 send({
-                  type: "unauthorized",
-                  error: new Error("Unauthorized"),
-                });
-                return;
+                  type: 'unauthorized',
+                  error: new Error('Unauthorized'),
+                })
+                return
               }
               if (isSuccessfulResult(data)) {
-                onResult(data);
-                return;
+                onResult(data)
+                return
               }
               if (isSunraErrorResult(data)) {
-                if (data.error === "TIMEOUT") {
+                if (data.error === 'TIMEOUT') {
                   // Timeout error messages just indicate that the connection hasn't
                   // received an incoming message for a while. We don't need to
                   // handle them as errors.
-                  return;
+                  return
                 }
-                const { onError = noop } = getCallbacks();
+                const { onError = noop } = getCallbacks()
                 onError(
                   new ApiError({
                     message: `${data.error}: ${data.reason}`,
@@ -500,31 +500,31 @@ export function createRealtimeClient({
                     status: 400,
                     body: data,
                   }),
-                );
-                return;
+                )
+                return
               }
-            };
+            }
           }
-          previousState = machine.current;
+          previousState = machine.current
         },
-      );
+      )
 
       const send = (input: Input & Partial<WithRequestId>) => {
         // Use throttled send to avoid sending too many messages
         stateMachine.throttledSend({
-          type: "send",
+          type: 'send',
           message: input,
-        });
-      };
+        })
+      }
 
       const close = () => {
-        stateMachine.send({ type: "close" });
-      };
+        stateMachine.send({ type: 'close' })
+      }
 
       return {
         send,
         close,
-      };
+      }
     },
-  };
+  }
 }
