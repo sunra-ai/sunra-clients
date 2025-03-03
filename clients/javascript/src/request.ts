@@ -43,8 +43,8 @@ export async function dispatchRequest<Input, Output>(
     url: targetUrl,
     headers: params.headers,
   })
-  // const authHeader = credentials ? { Authorization: `Key ${credentials}` } : {}
-  const authHeader = credentials ? { 'x-sunra-key': credentials } : {}
+  const authHeader = credentials ? { Authorization: `Bearer ${credentials}` } : {}
+  // const authHeader = credentials ? { 'x-sunra-key': credentials } : {}
   const requestHeaders = {
     ...authHeader,
     Accept: 'application/json',
