@@ -267,7 +267,7 @@ function buildRealtimeUrl(
     queryParams.set('max_buffering', maxBuffering.toFixed(0))
   }
   const appId = ensureEndpointIdFormat(app)
-  return `wss://sunra.run/${appId}/realtime?${queryParams.toString()}`
+  return `wss://sunra.ai/${appId}/realtime?${queryParams.toString()}`
 }
 
 const DEFAULT_THROTTLE_INTERVAL = 128
