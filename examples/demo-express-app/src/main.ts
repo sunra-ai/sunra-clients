@@ -33,7 +33,7 @@ app.get('/api', (req, res) => {
 
 app.get('/sunra-on-server', async (req, res) => {
   // TODO: change the default model id
-  const result = await sunra.run('110602490-lcm', {
+  const result = await sunra.run('fal-ai/any-llm', {
     input: {
       prompt:
         'a black cat with glowing eyes, cute, adorable, disney, pixar, highly detailed, 8k',
@@ -50,7 +50,7 @@ app.post('/sunra-upload-demo', upload.single('file'), async (req, res) => {
   const blob = new Blob([buffer], { type: file.mimetype })
 
   // TODO: change the default model id
-  const result = await sunra.run('110602490-lcm', {
+  const result = await sunra.run('flux/dev/image-to-image', {
     input: {
       prompt:
         'a black cat with glowing eyes, cute, adorable, disney, pixar, highly detailed, 8k',
