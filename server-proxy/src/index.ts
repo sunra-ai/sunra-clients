@@ -4,6 +4,7 @@ import { HttpsProxyAgent } from 'https-proxy-agent'
 
 export const TARGET_URL_HEADER = 'x-sunra-target-url'
 export const DEFAULT_PROXY_ROUTE = '/api/sunra/proxy'
+const SUNRA_TOKEN_HEADER_KEY = 'x-sunra-token'
 
 const SUNRA_KEY = process.env.SUNRA_KEY
 const SUNRA_KEY_ID = process.env.SUNRA_KEY_ID
@@ -103,16 +104,16 @@ export async function handleRequest<ResponseType>(
 
   const proxyUserAgent = `@sunra/server-proxy/${behavior.id}`
   const userAgent = singleHeaderValue(behavior.getHeader('user-agent'))
+  const token = singleHeaderValue(behavior.getHeader(SUNRA_TOKEN_HEADER_KEY)) ?? sunraKey
 
   const realHeaders = {
     ...headers,
-    authorization:
-      singleHeaderValue(behavior.getHeader('authorization')) ??
-      `Key ${sunraKey}`,
+    // authorization: singleHeaderValue(behavior.getHeader('authorization')) ??  `Key ${sunraKey}`,
     accept: 'application/json',
     'content-type': 'application/json',
     'user-agent': userAgent,
     'x-sunra-client-proxy': proxyUserAgent,
+    'x-sunra-token': token,
   } as HeadersInit
 
   const body = behavior.method?.toUpperCase() === 'GET'
