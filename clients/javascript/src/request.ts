@@ -109,11 +109,7 @@ export function buildUrl<Input>(
   }
 
   const appId = ensureEndpointIdFormat(id)
-  const subdomain = options.subdomain ? `${options.subdomain}.` : ''
-  let domain = `${subdomain}sunra.ai`
-  if (subdomain === 'queue.') {
-    domain = process.env.SUNRA_QUEUE_DOMAIN ?? domain
-  }
+  const domain = ['api.sunra.ai/v1', options.subdomain].filter(Boolean).join('/')
   const url = `https://${domain}/${appId}/${path}`
   return `${url.replace(/\/$/, '')}${queryParams}`
 }
