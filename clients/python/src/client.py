@@ -110,6 +110,10 @@ APP_NAMESPACES = ["workflows", "comfy"]
 def _ensure_app_id_format(id: str) -> str:
     import re
 
+    # if id is empty, return it
+    if not id:
+        return id
+
     parts = id.split("/")
     if len(parts) > 1:
         return id
@@ -219,7 +223,7 @@ class SyncRequestHandle(_BaseRequestHandle):
     ) -> SyncRequestHandle:
         app_id = AppId.from_endpoint_id(application)
         prefix = f"{app_id.namespace}/" if app_id.namespace else ""
-        base_url = f"{QUEUE_URL_FORMAT}{prefix}{app_id.owner}/{app_id.alias}/requests/{request_id}"
+        base_url = f"{QUEUE_URL_FORMAT}{prefix}/requests/{request_id}"
         return cls(
             request_id=request_id,
             response_url=base_url,
@@ -285,7 +289,7 @@ class AsyncRequestHandle(_BaseRequestHandle):
     ) -> AsyncRequestHandle:
         app_id = AppId.from_endpoint_id(application)
         prefix = f"{app_id.namespace}/" if app_id.namespace else ""
-        base_url = f"{QUEUE_URL_FORMAT}{prefix}{app_id.owner}/{app_id.alias}/requests/{request_id}"
+        base_url = f"{QUEUE_URL_FORMAT}{prefix}/requests/{request_id}"
         return cls(
             request_id=request_id,
             response_url=base_url,
@@ -522,7 +526,7 @@ class AsyncClient:
     ) -> str:
         if isinstance(data, str):
             data = data.encode("utf-8")
-            
+
         if file_name is None:
             file_name = "upload.bin"
 

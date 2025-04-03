@@ -1,7 +1,7 @@
 "use client";
 
 import { createSunraClient } from "@sunra/client";
-import { IllusionDiffusionOutput } from "@sunra/client/endpoints";
+import { AnimateDiffT2VOutput } from "@sunra/client/endpoints";
 import { useMemo, useState } from "react";
 
 const sunra = createSunraClient({
@@ -35,20 +35,19 @@ export default function Home() {
   // @snippet:start("client.ui.state")
   // Input state
   const [prompt, setPrompt] = useState<string>(DEFAULT_PROMPT);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   // Result state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [result, setResult] = useState<IllusionDiffusionOutput | null>(null);
+  const [result, setResult] = useState<AnimateDiffT2VOutput | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   // @snippet:end
-  const image = useMemo(() => {
+  const video = useMemo(() => {
     if (!result) {
       return null;
     }
-    if (result.image) {
-      return result.image;
+    if (result.video) {
+      return result.video;
     }
     return null;
   }, [result]);
@@ -61,18 +60,15 @@ export default function Home() {
     setElapsedTime(0);
   };
 
-  const generateImage = async () => {
-    if (!imageFile) return;
+  const generateVideo = async () => {
     reset();
     // @snippet:start("client.queue.subscribe")
     setLoading(true);
     const start = Date.now();
     try {
-      const result = await sunra.subscribe("sunra/illusion-diffusion", {
+      const result = await sunra.subscribe("sunra/fast-animatediff/text-to-video", {
         input: {
           prompt,
-          image_url: imageFile,
-          image_size: "square_hd",
         },
         logs: true,
         onQueueUpdate(update) {
@@ -102,20 +98,6 @@ export default function Home() {
         </h1>
         <div className="w-full text-lg">
           <label htmlFor="prompt" className="mb-2 block text-current">
-            Image
-          </label>
-          <input
-            className="w-full rounded border border-black/20 bg-black/10 p-2 text-lg dark:border-white/10 dark:bg-white/5"
-            id="image_url"
-            name="image_url"
-            type="file"
-            placeholder="Choose a file"
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
-          />
-        </div>
-        <div className="w-full text-lg">
-          <label htmlFor="prompt" className="mb-2 block text-current">
             Prompt
           </label>
           <input
@@ -133,21 +115,20 @@ export default function Home() {
         <button
           onClick={(e) => {
             e.preventDefault();
-            generateImage();
+            generateVideo();
           }}
           className="focus:shadow-outline mx-auto rounded bg-indigo-600 py-3 px-6 text-lg font-bold text-white hover:bg-indigo-700 focus:outline-none"
           disabled={loading}
         >
-          {loading ? "Generating..." : "Generate Image"}
+          {loading ? "Generating..." : "Generate Video"}
         </button>
 
         <Error error={error} />
 
         <div className="flex w-full flex-col space-y-4">
           <div className="mx-auto">
-            {image && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={image.url} alt="" />
+            {video && (
+              <video controls autoPlay loop playsInline src={video.url} />
             )}
           </div>
           <div className="space-y-2">
