@@ -43,7 +43,8 @@ export async function dispatchRequest<Input, Output>(
     url: targetUrl,
     headers: params.headers,
   })
-  const authHeader = credentials ? { Authorization: `Key ${credentials}` } : {}
+  const authHeader = credentials ? { Authorization: `Bearer ${credentials}` } : {}
+  // const authHeader = credentials ? { 'x-sunra-key': credentials } : {}
   const requestHeaders = {
     ...authHeader,
     Accept: 'application/json',
@@ -108,11 +109,7 @@ export function buildUrl<Input>(
   }
 
   const appId = ensureEndpointIdFormat(id)
-  const subdomain = options.subdomain ? `${options.subdomain}.` : ''
-  let domain = `${subdomain}sunra.ai`
-  if (subdomain === 'queue.') {
-    domain = process.env.SUNRA_QUEUE_DOMAIN ?? domain
-  }
+  const domain = ['api.sunra.ai/v1', options.subdomain].filter(Boolean).join('/')
   const url = `https://${domain}/${appId}/${path}`
   return `${url.replace(/\/$/, '')}${queryParams}`
 }

@@ -1,23 +1,9 @@
 import { createSunraClient } from "@sunra/client";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-// @snippet:start(client.config)
 const sunra = createSunraClient({
   proxyUrl: "/api/sunra/proxy", // the built-int nextjs proxy
-  // proxyUrl: 'http://localhost:3333/api/sunra/proxy', // or your own external proxy
 });
-// @snippet:end
-
-// @snippet:start(client.result.type)
-type Image = {
-  url: string;
-  file_name: string;
-  file_size: number;
-};
-type Output = {
-  images: Image[];
-};
-// @snippet:end
 
 type ErrorProps = {
   error: any;
@@ -41,22 +27,16 @@ const DEFAULT_PROMPT =
   "a city landscape of a cyberpunk metropolis, raining, purple, pink and teal neon lights, highly detailed, uhd";
 
 export function Index() {
-  // @snippet:start("client.ui.state")
   // Input state
   const [prompt, setPrompt] = useState<string>(DEFAULT_PROMPT);
   // Result state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [result, setResult] = useState<Output | null>(null);
+  const [result, setResult] = useState<any>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
-  // @snippet:end
-  const image = useMemo(() => {
-    if (!result) {
-      return null;
-    }
-    return result.images[0];
-  }, [result]);
+
+  const video = result?.video ?? null
 
   const reset = () => {
     setLoading(false);
@@ -66,17 +46,14 @@ export function Index() {
     setElapsedTime(0);
   };
 
-  const generateImage = async () => {
+  const generateVideo = async () => {
     reset();
-    // @snippet:start("client.queue.subscribe")
     setLoading(true);
     const start = Date.now();
     try {
-      const result = await sunra.subscribe("sunra/lora", {
+      const result = await sunra.subscribe("sunra/fast-animatediff/text-to-video", {
         input: {
           prompt,
-          model_name: "stabilityai/stable-diffusion-xl-base-1.0",
-          image_size: "square_hd",
         },
         logs: true,
         onQueueUpdate(update) {
@@ -96,7 +73,6 @@ export function Index() {
       setLoading(false);
       setElapsedTime(Date.now() - start);
     }
-    // @snippet:end
   };
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -123,21 +99,20 @@ export function Index() {
         <button
           onClick={(e) => {
             e.preventDefault();
-            generateImage();
+            generateVideo();
           }}
           className="focus:shadow-outline mx-auto rounded bg-indigo-600 py-3 px-6 text-lg font-bold text-white hover:bg-indigo-700 focus:outline-none"
           disabled={loading}
         >
-          {loading ? "Generating..." : "Generate Image"}
+          {loading ? "Generating..." : "Generate Video"}
         </button>
 
         <Error error={error} />
 
         <div className="flex w-full flex-col space-y-4">
           <div className="mx-auto">
-            {image && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={image.url} alt="" />
+            {video && (
+              <video controls autoPlay loop playsInline src={video.url} />
             )}
           </div>
           <div className="space-y-2">

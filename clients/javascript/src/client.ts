@@ -100,7 +100,10 @@ export function createSunraClient(userConfig: Config = {}): SunraClient {
         : undefined
       return dispatchRequest<InputType<Id>, Result<OutputType<Id>>>({
         method: options.method,
-        targetUrl: buildUrl(endpointId, options),
+        targetUrl: buildUrl(endpointId, {
+          subdomain: 'queue',
+          ...options
+        }),
         input: input as InputType<Id>,
         config: {
           ...config,
