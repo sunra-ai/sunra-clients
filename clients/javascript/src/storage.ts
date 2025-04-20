@@ -216,6 +216,9 @@ export function createStorageClient({
         return Promise.all(input.map((item) => ref.transformInput(item)))
       } else if (input instanceof Blob) {
         return await ref.upload(input)
+      } else if (typeof input === 'string' && input.startsWith('blob:')) {
+        const blob = await fetch(input).then(r => r.blob())
+        return await ref.upload(blob)
       } else if (isPlainObject(input)) {
         const inputObject = input as Record<string, any>
         const promises = Object.entries(inputObject).map(
