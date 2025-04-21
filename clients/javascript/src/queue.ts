@@ -244,7 +244,7 @@ export const createQueueClient = ({
         targetUrl: buildUrl(endpointId, {
           ...runOptions,
           subdomain: 'queue',
-          query: webhookUrl ? { sunra_webhook: webhookUrl } : undefined,
+          query: webhookUrl ? { webhook: webhookUrl } : undefined,
         }),
         headers: {
           'x-sunra-queue-priority': priority ?? 'normal',
