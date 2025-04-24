@@ -26,6 +26,7 @@
     "build": "tsc -p ./tsconfig.lib.json",
     "dev": "tsc -p ./tsconfig.lib.json --watch",
     "lint": "eslint --ext .ts src",
+    "check-types": "tsc --noEmit",
     "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {

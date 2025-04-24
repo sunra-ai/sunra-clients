@@ -1,0 +1,5 @@
+# !/usr/bin/env sh
+# . "$(dirname -- "$0")/_/husky.sh"
+
+# turbo check-types && turbo lint && turbo test && sleep .2 && reset
+pnpm run -r check-types && pnpm run -r lint && pnpm run -r test

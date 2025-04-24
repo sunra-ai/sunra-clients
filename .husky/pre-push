@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# . "$(dirname -- "$0")/_/husky.sh"
+
+# cross-env NEXT_DIST_DIR=.next_pre_push turbo build && reset
+cross-env NEXT_DIST_DIR=.next_pre_push pnpm run -r build
