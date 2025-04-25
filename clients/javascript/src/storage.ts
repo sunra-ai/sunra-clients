@@ -63,7 +63,6 @@ async function initiateUpload(
 
   return await dispatchRequest<InitiateUploadData, InitiateUploadResult>({
     method: 'POST',
-    // NOTE: We want to test V3 without making it the default at the API level
     targetUrl: `${getRestApiUrl()}/storage/upload/initiate?storage_type=sunra-cdn-v3`,
     input: {
       content_type: contentType,
