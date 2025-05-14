@@ -63,7 +63,6 @@ async function initiateUpload(
 
   return await dispatchRequest<InitiateUploadData, InitiateUploadResult>({
     method: 'POST',
-    // NOTE: We want to test V3 without making it the default at the API level
     targetUrl: `${getRestApiUrl()}/storage/upload/initiate?storage_type=sunra-cdn-v3`,
     input: {
       content_type: contentType,
@@ -216,6 +215,9 @@ export function createStorageClient({
         return Promise.all(input.map((item) => ref.transformInput(item)))
       } else if (input instanceof Blob) {
         return await ref.upload(input)
+      } else if (typeof input === 'string' && input.startsWith('blob:')) {
+        const blob = await fetch(input).then(r => r.blob())
+        return await ref.upload(blob)
       } else if (isPlainObject(input)) {
         const inputObject = input as Record<string, any>
         const promises = Object.entries(inputObject).map(

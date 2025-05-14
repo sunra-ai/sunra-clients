@@ -1,0 +1,8 @@
+# !/usr/bin/env bash
+
+shopt -s expand_aliases
+# . "$(dirname -- "$0")/_/husky.sh"
+
+# turbo check-types && turbo lint && turbo test && sleep .2 && reset
+alias run='pnpm run --filter "...[HEAD]" -r'
+run check-types && run lint && run test && sleep .2 && reset

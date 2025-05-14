@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# set -x
+
+shopt -s expand_aliases
+
+# . "$(dirname -- "$0")/_/husky.sh"
+
+branch=$(git branch --show-current)
+
+# check if the corresponding remote branch exists in the origin remote
+# remotes/origin/<branch>
+
+filter=''
+
+remoteBranchExists=$(git show-ref --verify --quiet refs/remotes/origin/$branch)
+
+if [ -z "$remoteBranchExists" ]; then
+  filter="...[origin/$branch]"
+fi
+
+# cross-env NEXT_DIST_DIR=.next_pre_push turbo build && reset
+cross-env NEXT_DIST_DIR=.next_pre_push pnpm run --filter "$filter" -r build

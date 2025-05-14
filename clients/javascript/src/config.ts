@@ -129,7 +129,7 @@ export function createConfig(config: Config): RequiredConfig {
   if (isBrowser() && credentials && !suppressLocalCredentialsWarning) {
     console.warn(
       'The sunra credentials are exposed in the browser\'s environment. ' +
-        'That\'s not recommended for production use cases.',
+      'That\'s not recommended for production use cases.',
     )
   }
   return configuration
@@ -139,5 +139,5 @@ export function createConfig(config: Config): RequiredConfig {
  * @returns the URL of the sunra REST api endpoint.
  */
 export function getRestApiUrl(): string {
-  return process.env.SUNRA_API_ENDPOINT ?? 'https://apiv1.sunra.ai'
+  return process.env.SUNRA_API_ENDPOINT ?? 'https://api.sunra.ai/v1'
 }

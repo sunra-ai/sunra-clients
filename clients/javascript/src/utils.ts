@@ -118,3 +118,7 @@ export function isReact() {
 export function isPlainObject(value: any): boolean {
   return !!value && Object.getPrototypeOf(value) === Object.prototype
 }
+
+export const whisper = (formatStr: string, ...args: any[]) => {
+  debug(formatStr, ...args)
+}

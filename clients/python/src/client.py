@@ -532,7 +532,7 @@ class AsyncClient:
 
         # Get upload URLs
         init_response = await self._client.post(
-            "https://apiv1.sunra.ai/storage/upload/initiate",
+            "https://api.sunra.ai/v1/storage/upload/initiate",
             json={
                 "content_type": content_type,
                 "file_name": file_name
@@ -757,7 +757,7 @@ class SyncClient:
 
         # Get upload URLs
         init_response = self._client.post(
-            "https://apiv1.sunra.ai/storage/upload/initiate",
+            "https://api.sunra.ai/v1/storage/upload/initiate",
             json={
                 "content_type": content_type,
                 "file_name": file_name

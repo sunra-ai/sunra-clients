@@ -6,12 +6,17 @@
     "dev": "turbo dev --filter='!demo-*'",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
+    "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "publish-packages": "turbo run build lint test && changeset version && changeset publish",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
     "@changesets/cli": "^2.28.1",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "cross-env": "^7.0.3",
+    "husky": "^9.1.7",
     "prettier": "^3.5.0",
     "turbo": "^2.4.2",
     "typescript": "5.7.3"

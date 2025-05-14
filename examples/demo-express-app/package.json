@@ -8,6 +8,7 @@
     "start": "tsx src/main.ts",
     "dev": "tsx --watch src/main.ts",
     "lint": "eslint --ext .ts src",
+    "check-types": "tsc --noEmit",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
