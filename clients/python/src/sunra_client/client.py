@@ -17,8 +17,10 @@ from typing import Any, AsyncIterator, Dict, Iterator, TYPE_CHECKING, Optional, 
 from urllib.parse import urlencode
 
 import httpx
+import requests
 from httpx_sse import aconnect_sse, connect_sse
 from sunra_client.auth import SUNRA_HOST, fetch_credentials
+import anyio
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +30,7 @@ if TYPE_CHECKING:
 AnyJSON = Dict[str, Any]
 Priority = Literal["normal", "low"]
 
-RUN_URL_FORMAT = f"https://apiv1.{SUNRA_HOST}/"
-QUEUE_URL_FORMAT = f"https://queue.{SUNRA_HOST}/"
-REALTIME_URL_FORMAT = f"wss://{SUNRA_HOST}/"
-CDN_URL = "https://v3.sunra.media"
+QUEUE_URL_FORMAT = f"https://api.{SUNRA_HOST}/v1/queue/"
 USER_AGENT = "sunra-client/0.2.2 (python)"
 
 
@@ -66,22 +65,19 @@ class Queued(Status):
 @dataclass
 class InProgress(Status):
     """Indicates the request is currently being processed. If the status operation called
-    with the `with_logs` parameter set to True, the logs field will be a list of
     log objects."""
 
-    # TODO: Type the log object structure so we can offer editor completion
-    logs: list[dict[str, Any]] | None = field()
+    logs: str | None = field(default=None)
 
 
 @dataclass
 class Completed(Status):
-    """Indicates the request has been completed and the result can be gathered. The logs field will
-    contain the logs if the status operation was called with the `with_logs` parameter set to True. Metrics
+    """Indicates the request has been completed and the result can be gathered. Metrics
     might contain the inference time, and other internal metadata (number of tokens
     processed, etc.)."""
 
-    logs: list[dict[str, Any]] | None = field()
-    metrics: dict[str, Any] = field()
+    logs: str | None = field(default=None)
+    metrics: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -95,11 +91,10 @@ class _BaseRequestHandle:
         if data["status"] == "IN_QUEUE":
             return Queued(position=data["queue_position"])
         elif data["status"] == "IN_PROGRESS":
-            return InProgress(logs=data["logs"])
+            return InProgress(logs=data.get("logs"))
         elif data["status"] == "COMPLETED":
-            # NOTE: legacy apps might not return metrics
             metrics = data.get("metrics", {})
-            return Completed(logs=data["logs"], metrics=metrics)
+            return Completed(logs=data.get("logs"), metrics=metrics)
         else:
             raise ValueError(f"Unknown status: {data['status']}")
 
@@ -124,34 +119,6 @@ def _ensure_app_id_format(id: str) -> str:
         return f"{app_owner}/{app_id}"
 
     raise ValueError(f"Invalid app id: {id}. Must be in the format <appOwner>/<appId>")
-
-
-@dataclass(frozen=True)
-class AppId:
-    owner: str
-    alias: str
-    path: Optional[str]
-    namespace: Optional[str]
-
-    @classmethod
-    def from_endpoint_id(cls, endpoint_id: str) -> AppId:
-        normalized_id = _ensure_app_id_format(endpoint_id)
-        parts = normalized_id.split("/")
-
-        if parts[0] in APP_NAMESPACES:
-            return cls(
-                owner=parts[1],
-                alias=parts[2],
-                path="/".join(parts[3:]) or None,
-                namespace=parts[0],
-            )
-
-        return cls(
-            owner=parts[0],
-            alias=parts[1],
-            path="/".join(parts[2:]) or None,
-            namespace=None,
-        )
 
 
 def _request(
@@ -219,11 +186,9 @@ class SyncRequestHandle(_BaseRequestHandle):
 
     @classmethod
     def from_request_id(
-        cls, client: httpx.Client, application: str, request_id: str
+        cls, client: httpx.Client, request_id: str
     ) -> SyncRequestHandle:
-        app_id = AppId.from_endpoint_id(application)
-        prefix = f"{app_id.namespace}/" if app_id.namespace else ""
-        base_url = f"{QUEUE_URL_FORMAT}{prefix}/requests/{request_id}"
+        base_url = f"{QUEUE_URL_FORMAT}/requests/{request_id}"
         return cls(
             request_id=request_id,
             response_url=base_url,
@@ -232,42 +197,37 @@ class SyncRequestHandle(_BaseRequestHandle):
             client=client,
         )
 
-    def status(self, *, with_logs: bool = False) -> Status:
+    def status(self) -> Status:
         """Returns the status of the request (which can be one of the following:
-        Queued, InProgress, Completed). If `with_logs` is True, logs will be included
-        for InProgress and Completed statuses."""
+        Queued, InProgress, Completed)."""
 
         response = _maybe_retry_request(
             self.client,
             "GET",
             self.status_url,
-            params={
-                "logs": with_logs,
-            },
         )
         _raise_for_status(response)
 
         return self._parse_status(response.json())
 
     def iter_events(
-        self, *, with_logs: bool = False, interval: float = 0.1
+        self, *, interval: float = 0.1
     ) -> Iterator[Status]:
         """Continuously poll for the status of the request and yield it at each interval till
-        the request is completed. If `with_logs` is True, logs will be included in the response.
-        """
+        the request is completed."""
 
         while True:
-            status = self.status(with_logs=with_logs)
+            status = self.status()
             yield status
             if isinstance(status, Completed):
                 break
-
             time.sleep(interval)
 
     def get(self) -> AnyJSON:
         """Wait till the request is completed and return the result of the inference call."""
-        for _ in self.iter_events(with_logs=False):
-            continue
+        for status in self.iter_events():
+            if isinstance(status, Completed):
+                break
 
         response = _maybe_retry_request(self.client, "GET", self.response_url)
         _raise_for_status(response)
@@ -285,11 +245,9 @@ class AsyncRequestHandle(_BaseRequestHandle):
 
     @classmethod
     def from_request_id(
-        cls, client: httpx.AsyncClient, application: str, request_id: str
+        cls, client: httpx.AsyncClient, request_id: str
     ) -> AsyncRequestHandle:
-        app_id = AppId.from_endpoint_id(application)
-        prefix = f"{app_id.namespace}/" if app_id.namespace else ""
-        base_url = f"{QUEUE_URL_FORMAT}{prefix}/requests/{request_id}"
+        base_url = f"{QUEUE_URL_FORMAT}/requests/{request_id}"
         return cls(
             request_id=request_id,
             response_url=base_url,
@@ -298,42 +256,37 @@ class AsyncRequestHandle(_BaseRequestHandle):
             client=client,
         )
 
-    async def status(self, *, with_logs: bool = False) -> Status:
+    async def status(self) -> Status:
         """Returns the status of the request (which can be one of the following:
-        Queued, InProgress, Completed). If `with_logs` is True, logs will be included
-        for InProgress and Completed statuses."""
+        Queued, InProgress, Completed)."""
 
         response = await _async_maybe_retry_request(
             self.client,
             "GET",
             self.status_url,
-            params={
-                "logs": with_logs,
-            },
         )
         _raise_for_status(response)
 
         return self._parse_status(response.json())
 
     async def iter_events(
-        self, *, with_logs: bool = False, interval: float = 0.1
+        self, *, interval: float = 0.1
     ) -> AsyncIterator[Status]:
         """Continuously poll for the status of the request and yield it at each interval till
-        the request is completed. If `with_logs` is True, logs will be included in the response.
-        """
+        the request is completed."""
 
         while True:
-            status = await self.status(with_logs=with_logs)
+            status = await self.status()
             yield status
             if isinstance(status, Completed):
                 break
-
             await asyncio.sleep(interval)
 
     async def get(self) -> AnyJSON:
         """Wait till the request is completed and return the result."""
-        async for _ in self.iter_events(with_logs=False):
-            continue
+        async for status in self.iter_events():
+            if isinstance(status, Completed):
+                break
 
         response = await _async_maybe_retry_request(
             self.client, "GET", self.response_url
@@ -362,43 +315,11 @@ class AsyncClient:
         key = self._get_key()
         return httpx.AsyncClient(
             headers={
-                "Authorization": f"Key {key}",
+                "Authorization": f"Bearer {key}",
                 "User-Agent": USER_AGENT,
             },
             timeout=self.default_timeout,
         )
-
-    async def run(
-        self,
-        application: str,
-        arguments: AnyJSON,
-        *,
-        path: str = "",
-        timeout: float | None = None,
-        hint: str | None = None,
-    ) -> AnyJSON:
-        """Run an application with the given arguments (which will be JSON serialized). The path parameter can be used to
-        specify a subpath when applicable. This method will return the result of the inference call directly.
-        """
-
-        url = RUN_URL_FORMAT + application
-        if path:
-            url += "/" + path.lstrip("/")
-
-        headers = {}
-        if hint is not None:
-            headers["X-sunra-Runner-Hint"] = hint
-
-        response = await _async_maybe_retry_request(
-            self._client,
-            "POST",
-            url,
-            json=arguments,
-            timeout=timeout,
-            headers=headers,
-        )
-        _raise_for_status(response)
-        return response.json()
 
     async def submit(
         self,
@@ -453,7 +374,6 @@ class AsyncClient:
         *,
         path: str = "",
         hint: str | None = None,
-        with_logs: bool = False,
         on_enqueue: Optional[callable[[Queued], None]] = None,
         on_queue_update: Optional[callable[[Status], None]] = None,
         priority: Optional[Priority] = None,
@@ -470,56 +390,46 @@ class AsyncClient:
             on_enqueue(handle.request_id)
 
         if on_queue_update is not None:
-            async for event in handle.iter_events(with_logs=with_logs):
+            async for event in handle.iter_events():
                 on_queue_update(event)
 
         return await handle.get()
 
-    def get_handle(self, application: str, request_id: str) -> AsyncRequestHandle:
-        return AsyncRequestHandle.from_request_id(self._client, application, request_id)
+    def get_handle(self, request_id: str) -> AsyncRequestHandle:
+        return AsyncRequestHandle.from_request_id(self._client, request_id)
 
     async def status(
-        self, application: str, request_id: str, *, with_logs: bool = False
+        self, request_id: str, 
     ) -> Status:
-        handle = self.get_handle(application, request_id)
-        return await handle.status(with_logs=with_logs)
+        handle = self.get_handle(request_id)
+        return await handle.status()
 
-    async def result(self, application: str, request_id: str) -> AnyJSON:
-        handle = self.get_handle(application, request_id)
+    async def result(self, request_id: str) -> AnyJSON:
+        handle = self.get_handle(request_id)
         return await handle.get()
 
-    async def cancel(self, application: str, request_id: str) -> None:
-        handle = self.get_handle(application, request_id)
+    async def cancel(self, request_id: str) -> None:
+        handle = self.get_handle(request_id)
         await handle.cancel()
 
     async def stream(
         self,
-        application: str,
-        arguments: AnyJSON,
+        request_id: str,
         *,
-        path: str = "/stream",
         timeout: float | None = None,
     ) -> AsyncIterator[dict[str, Any]]:
-        """Stream the output of an application with the given arguments (which will be JSON serialized). This is only supported
-        at a few select applications at the moment, so be sure to first consult with the documentation of individual applications
-        to see if this is supported.
-
-        The function will iterate over each event that is streamed from the server.
-        """
-
-        url = RUN_URL_FORMAT + application
-        if path:
-            url += "/" + path.lstrip("/")
-
+        url = f"https://api.{SUNRA_HOST}/v1/queue/requests/{request_id}/status/stream"
         async with aconnect_sse(
             self._client,
-            "POST",
+            "GET",
             url,
-            json=arguments,
             timeout=timeout,
         ) as events:
             async for event in events.aiter_sse():
-                yield event.json()
+                data = event.json()
+                yield data
+                if data.get("status") in ("COMPLETED", "FAILED", "CANCELLED"):
+                    break
 
     async def upload(
         self, data: str | bytes, content_type: str, file_name: str | None = None
@@ -532,7 +442,7 @@ class AsyncClient:
 
         # Get upload URLs
         init_response = await self._client.post(
-            "https://api.sunra.ai/v1/storage/upload/initiate",
+            f"https://api.{SUNRA_HOST}/v1/storage/upload/initiate",
             json={
                 "content_type": content_type,
                 "file_name": file_name
@@ -544,26 +454,20 @@ class AsyncClient:
         file_url = upload_data["file_url"]
 
         # Upload data using signed URL
-        response = await self._client.put(
-            upload_url,
-            content=data,
-            headers={"Content-Type": content_type}
-        )
-        _raise_for_status(response)
+        def do_upload():
+            response = requests.put(
+                upload_url,
+                data=data,
+                headers={
+                    "Content-Type": content_type,
+                }
+            )
+            response.raise_for_status()
+            return response
+
+        await anyio.to_thread.run_sync(do_upload)
 
         return file_url
-
-    async def upload_file(self, path: os.PathLike) -> str:
-        """Upload a file from the local filesystem."""
-
-        mime_type, _ = mimetypes.guess_type(path)
-        if mime_type is None:
-            mime_type = "application/octet-stream"
-
-        with open(path, "rb") as file:
-            return await self.upload(
-                file.read(), mime_type, file_name=os.path.basename(path)
-            )
 
     async def upload_image(self, image: Image.Image, format: str = "jpeg") -> str:
         """Upload a pillow image object"""
@@ -571,6 +475,8 @@ class AsyncClient:
         with io.BytesIO() as buffer:
             image.save(buffer, format=format)
             return await self.upload(buffer.getvalue(), f"image/{format}")
+
+
 
 
 @dataclass(frozen=True)
@@ -594,39 +500,6 @@ class SyncClient:
             timeout=self.default_timeout,
             follow_redirects=True,
         )
-
-
-    def run(
-        self,
-        application: str,
-        arguments: AnyJSON,
-        *,
-        path: str = "",
-        timeout: float | None = None,
-        hint: str | None = None,
-    ) -> AnyJSON:
-        """Run an application with the given arguments (which will be JSON serialized). The path parameter can be used to
-        specify a subpath when applicable. This method will return the result of the inference call directly.
-        """
-
-        url = RUN_URL_FORMAT + application
-        if path:
-            url += "/" + path.lstrip("/")
-
-        headers = {}
-        if hint is not None:
-            headers["X-sunra-Runner-Hint"] = hint
-
-        response = _maybe_retry_request(
-            self._client,
-            "POST",
-            url,
-            json=arguments,
-            timeout=timeout,
-            headers=headers,
-        )
-        _raise_for_status(response)
-        return response.json()
 
     def submit(
         self,
@@ -682,7 +555,6 @@ class SyncClient:
         *,
         path: str = "",
         hint: str | None = None,
-        with_logs: bool = False,
         on_enqueue: Optional[callable[[Queued], None]] = None,
         on_queue_update: Optional[callable[[Status], None]] = None,
         priority: Optional[Priority] = None,
@@ -699,52 +571,47 @@ class SyncClient:
             on_enqueue(handle.request_id)
 
         if on_queue_update is not None:
-            for event in handle.iter_events(with_logs=with_logs):
+            for event in handle.iter_events():
                 on_queue_update(event)
 
         return handle.get()
 
-    def get_handle(self, application: str, request_id: str) -> SyncRequestHandle:
-        return SyncRequestHandle.from_request_id(self._client, application, request_id)
+    def get_handle(self, request_id: str) -> SyncRequestHandle:
+        return SyncRequestHandle.from_request_id(self._client, request_id)
 
     def status(
-        self, application: str, request_id: str, *, with_logs: bool = False
+        self, request_id: str, 
     ) -> Status:
-        handle = self.get_handle(application, request_id)
-        return handle.status(with_logs=with_logs)
+        handle = self.get_handle(request_id)
+        return handle.status()
 
-    def result(self, application: str, request_id: str) -> AnyJSON:
-        handle = self.get_handle(application, request_id)
+    def result(self, request_id: str) -> AnyJSON:
+        handle = self.get_handle(request_id)
         return handle.get()
 
-    def cancel(self, application: str, request_id: str) -> None:
-        handle = self.get_handle(application, request_id)
+    def cancel(self, request_id: str) -> None:
+        handle = self.get_handle(request_id)
         handle.cancel()
 
     def stream(
         self,
-        application: str,
-        arguments: AnyJSON,
+        request_id: str,
         *,
-        path: str = "/stream",
         timeout: float | None = None,
     ) -> Iterator[dict[str, Any]]:
-        """Stream the output of an application with the given arguments (which will be JSON serialized). This is only supported
-        at a few select applications at the moment, so be sure to first consult with the documentation of individual applications
-        to see if this is supported.
-
-        The function will iterate over each event that is streamed from the server.
-        """
-
-        url = RUN_URL_FORMAT + application
-        if path:
-            url += "/" + path.lstrip("/")
-
+        """Stream the status updates of a request by request_id. Each yielded item is a status event from the server."""
+        url = f"https://api.{SUNRA_HOST}/v1/queue/requests/{request_id}/status/stream"
         with connect_sse(
-            self._client, "POST", url, json=arguments, timeout=timeout
+            self._client,
+            "GET",
+            url,
+            timeout=timeout,
         ) as events:
             for event in events.iter_sse():
-                yield event.json()
+                data = event.json()
+                yield data
+                if data.get("status") in ("COMPLETED", "FAILED", "CANCELLED"):
+                    break
 
     def upload(
         self, data: str | bytes, content_type: str, file_name: str | None = None
@@ -757,7 +624,7 @@ class SyncClient:
 
         # Get upload URLs
         init_response = self._client.post(
-            "https://api.sunra.ai/v1/storage/upload/initiate",
+            f"https://api.{SUNRA_HOST}/v1/storage/upload/initiate",
             json={
                 "content_type": content_type,
                 "file_name": file_name
@@ -767,35 +634,24 @@ class SyncClient:
         upload_data = init_response.json()
         upload_url = upload_data["upload_url"]
         file_url = upload_data["file_url"]
+        print(f"[upload] upload_url: {upload_url}, file_url: {file_url}")
 
         # Upload data using signed URL
-        response = self._client.put(
+        print(f"[upload] Request URL: {upload_url}")
+        print(f"[upload] Request content length: {len(data)}")
+        print(f"[upload] Request content type: {content_type}")
+        
+        response = requests.put(
             upload_url,
-            content=data,
-            headers={"Content-Type": content_type}
+            data=data,
+            headers={
+                "Content-Type": content_type,
+            }
         )
-        _raise_for_status(response)
+        response.raise_for_status()
 
         return file_url
 
-    def upload_file(self, path: os.PathLike) -> str:
-        """Upload a file from the local filesystem to the CDN and return the access URL."""
-
-        mime_type, _ = mimetypes.guess_type(path)
-        if mime_type is None:
-            mime_type = "application/octet-stream"
-
-        if os.path.getsize(path) > MULTIPART_THRESHOLD:
-            client = self._get_cdn_client()
-            return MultipartUpload.save_file(
-                file_path=path,
-                client=client,
-                token_manager=self._token_manager,
-                content_type=mime_type,
-            )
-
-        with open(path, "rb") as file:
-            return self.upload(file.read(), mime_type, file_name=os.path.basename(path))
 
     def upload_image(self, image: Image.Image, format: str = "jpeg") -> str:
         """Upload a pillow image object to the CDN and return the access URL."""
