@@ -42,5 +42,6 @@ yarn-error.log*
 **/*.tgz
 .idea/
 .venv/
+venv/
 .idea/
 __pycache__/
