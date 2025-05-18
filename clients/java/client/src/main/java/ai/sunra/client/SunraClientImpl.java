@@ -24,7 +24,7 @@ public class SunraClientImpl implements SunraClient {
     @Override
     @Nonnull
     public <O> Output<O> run(String endpointId, RunOptions<O> options) {
-        final var url = "https://api.sunra.ai/v1/queue/" + endpointId + "/text-to-video";
+        final var url = "https://api.sunra.ai/v1/queue/" + endpointId;
         final var request = httpClient.prepareRequest(url, options);
         final var response = httpClient.executeRequest(request);
         return httpClient.wrapInResult(response, options.getResultType());

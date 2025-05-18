@@ -25,7 +25,7 @@ public class AsyncSunraClientImpl implements AsyncSunraClient {
 
     @Override
     public <O> CompletableFuture<Output<O>> run(String endpointId, RunOptions<O> options) {
-        final var url = "https://api.sunra.ai/v1/queue/" + endpointId + "/text-to-video";
+        final var url = "https://api.sunra.ai/v1/queue/" + endpointId;
         final var request = httpClient.prepareRequest(url, options);
         return httpClient
                 .executeRequestAsync(request)

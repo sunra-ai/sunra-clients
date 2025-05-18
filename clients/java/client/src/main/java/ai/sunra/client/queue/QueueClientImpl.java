@@ -26,7 +26,7 @@ public class QueueClientImpl implements QueueClient {
     @Nonnull
     @Override
     public QueueStatus.InQueue submit(@Nonnull String endpointId, @Nonnull QueueSubmitOptions options) {
-        final var url = "https://api.sunra.ai/v1/queue/" + endpointId + "/text-to-video";
+        final var url = "https://api.sunra.ai/v1/queue/" + endpointId;
         final var queryParams = new HashMap<String, Object>();
         if (options.getWebhookUrl() != null) {
             queryParams.put("sunra_webhook", options.getWebhookUrl());

@@ -25,7 +25,7 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
     @Nonnull
     @Override
     public CompletableFuture<QueueStatus.InQueue> submit(String endpointId, QueueSubmitOptions options) {
-        final var url = "https://api.sunra.ai/v1/queue/" + endpointId + "/text-to-video";
+        final var url = "https://api.sunra.ai/v1/queue/" + endpointId;
         final var queryParams = new HashMap<String, Object>();
         if (options.getWebhookUrl() != null) {
             queryParams.put("sunra_webhook", options.getWebhookUrl());
