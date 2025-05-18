@@ -33,12 +33,12 @@ implementation "ai.sunra.client:sunra-client:0.7.1"
 ```java
 import ai.sunra.client.*;
 
-var sunra = sunraClient.withEnvCredentials();
+var sunra = SunraClient.withEnvCredentials();
 
 var input = Map.of(
     "prompt", "A cute shih-tzu puppy"
 );
-var result = sunra.subscribe("sunra-ai/fast-sdxl",
+var result = sunra.subscribe("sunra/fast-animatediff/text-to-video",
     SubscribeOptions.<JsonObject>builder()
         .input(input)
         .resultType(JsonObject.class)
@@ -64,12 +64,12 @@ implementation "ai.sunra.client:sunra-client-async:0.7.1"
 ```java
 import ai.sunra.client.*;
 
-var sunra = AsyncsunraClient.withEnvCredentials();
+var sunra = AsyncSunraClient.withEnvCredentials();
 
 var input = Map.of(
     "prompt", "A cute shih-tzu puppy"
 );
-var future = sunra.subscribe("sunra-ai/fast-sdxl",
+var future = sunra.subscribe("sunra/fast-animatediff/text-to-video",
     SubscribeOptions.<JsonObject>builder()
         .input(input)
         .resultType(JsonObject.class)
@@ -99,7 +99,7 @@ import ai.sunra.client.kt.*
 
 val sunra = createsunraClient()
 
-val result = sunra.subscribe("sunra-ai/fast-sdxl", input = mapOf(
+val result = sunra.subscribe("sunra/fast-animatediff/text-to-video", input = mapOf(
     "prompt" to "A cute shih-tzu puppy"
 )) { update ->
     print(update.status)

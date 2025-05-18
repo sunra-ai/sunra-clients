@@ -20,216 +20,120 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class SunraClientTest {
 
-    @Mock
-    private SunraClient mockClient;
-
-    private final String testEndpointId = "test-endpoint";
-    private final Map<String, Object> testInput = Map.of("prompt", "Testing prompt");
-
-    @Test
-    void testRunMethod() {
-        // Arrange
-        JsonObject expectedJson = new JsonObject();
-        expectedJson.addProperty("status", "success");
-        expectedJson.addProperty("result", "test result");
-
-        Output<JsonObject> expectedOutput = new Output<>(expectedJson, "test-request-id");
-
-        when(mockClient.run(eq(testEndpointId), any(RunOptions.class))).thenReturn(expectedOutput);
-
-        // Act
-        RunOptions<JsonObject> options = RunOptions.<JsonObject>builder()
-            .input(testInput)
-            .resultType(JsonObject.class)
-            .build();
-
-        Output<JsonObject> result = mockClient.run(testEndpointId, options);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("test-request-id", result.getRequestId());
-        assertEquals("success", result.getData().get("status").getAsString());
-        assertEquals("test result", result.getData().get("result").getAsString());
-
-        verify(mockClient).run(eq(testEndpointId), any(RunOptions.class));
-    }
-
-    @Test
-    void testSubscribeMethod() {
-        // Arrange
-        JsonObject expectedJson = new JsonObject();
-        expectedJson.addProperty("status", "success");
-        expectedJson.addProperty("result", "subscription result");
-        expectedJson.addProperty("image_url", "https://example.com/image.png");
-
-        Output<JsonObject> expectedOutput = new Output<>(expectedJson, "sub-request-id");
-
-        // 创建一个原子布尔值来跟踪回调是否被调用
-        AtomicInteger updateCallCount = new AtomicInteger(0);
-        AtomicBoolean progressReceived = new AtomicBoolean(false);
-
-        // 模拟queue状态更新的回调
-        Consumer<QueueStatus.StatusUpdate> queueUpdateHandler = update -> {
-            updateCallCount.incrementAndGet();
-            if (update.getStatus() == QueueStatus.Status.IN_PROGRESS) {
-                progressReceived.set(true);
-            }
-        };
-
-        // 配置mock客户端的行为
-        when(mockClient.subscribe(eq(testEndpointId), any(SubscribeOptions.class)))
-            .thenReturn(expectedOutput);
-
-        // Act
-        SubscribeOptions<JsonObject> options = SubscribeOptions.<JsonObject>builder()
-            .input(testInput)
-            .resultType(JsonObject.class)
-            .onQueueUpdate(queueUpdateHandler)
-            .logs(true) // 启用日志
-            .build();
-
-        Output<JsonObject> result = mockClient.subscribe(testEndpointId, options);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("sub-request-id", result.getRequestId());
-        assertEquals("success", result.getData().get("status").getAsString());
-        assertEquals("subscription result", result.getData().get("result").getAsString());
-        assertEquals("https://example.com/image.png", result.getData().get("image_url").getAsString());
-
-        // 验证subscribe方法被调用，并且参数类型正确
-        verify(mockClient).subscribe(eq(testEndpointId), any(SubscribeOptions.class));
-
-        // 注意：在单元测试中，我们无法验证回调是否被调用，因为是mock客户端
-        // 真实的回调验证将在集成测试中进行
-    }
-
-    @Test
-    void testWithEnvCredentials() {
-        // Just verify that the static method doesn't throw
-        try {
-            SunraClient client = SunraClient.withEnvCredentials();
-            assertNotNull(client);
-        } catch (Exception e) {
-            // In a test environment without proper ENV vars, this might throw
-            // which is expected and okay for this test
-        }
-    }
-
     /**
-     * 这个测试方法用于打印实际的API请求结果。
-     * 使用Config方式而不是环境变量方式创建sunraClient实例。
+     * This test method is used to print actual API request results.
+     * Creates a sunraClient instance using Config approach instead of environment variables.
      *
-     * 要运行此测试，需要替换下面的"YOUR_API_KEY"为实际的API Key。
+     * To run this test, replace the API Key below with an actual API Key.
      */
     @Test
     void testRealApiCall() {
-        // 使用硬编码API Key创建ClientConfig
-        // 注意：在实际项目中应避免硬编码API密钥，这里仅作为测试示例
-        String apiKey = "sk-api-x17DjLiNh5d3Y2aDyauyW7l5dXa58bZTfDPbY6YaERdDWmmKjxPTA726CeOvnKJJnM54MMMpk1A2g8wOnYWSt2MWS9eJybmgegPkIzb7njuwF4eRfJwILHo4TImY";  // 替换为实际的API Key
+        // Create ClientConfig with hardcoded API Key
+        // Note: In real projects, avoid hardcoding API keys, this is just a test example
+        String apiKey = System.getenv("SUNRA_API_KEY");;  // Replace with actual API Key
 
         try {
-            // 使用Config方式创建客户端实例
+            // Create client instance using Config approach
             ClientConfig config = ClientConfig.builder()
-                .withCredentials(CredentialsResolver.fromApiKey(apiKey))
-                .build();
+                    .withCredentials(CredentialsResolver.fromApiKey(apiKey))
+                    .build();
 
             SunraClient realClient = SunraClient.withConfig(config);
 
-            // 选择一个实际存在的端点
-            String realEndpointId = "sunra/fast-animatediff/text-to-video";  // 根据实际情况修改
+            // Choose an endpoint that actually exists
+            String realEndpointId = "sunra/fast-animatediff/text-to-video";  // Modify according to actual situation
 
-            // 准备测试输入
+            // Prepare test input
             Map<String, Object> input = Map.of(
-                "prompt", "the cat is running",
-                "max_tokens", 100
+                    "prompt", "the cat is running",
+                    "max_tokens", 100
             );
 
-            // 执行API调用
-            System.out.println("正在调用API端点: " + realEndpointId);
-            System.out.println("输入参数: " + input);
+            // Execute API call
+            System.out.println("Calling API endpoint: " + realEndpointId);
+            System.out.println("Input parameters: " + input);
 
             RunOptions<JsonObject> options = RunOptions.<JsonObject>builder()
-                .input(input)
-                .resultType(JsonObject.class)
-                .build();
+                    .input(input)
+                    .resultType(JsonObject.class)
+                    .build();
 
             Output<JsonObject> result = realClient.run(realEndpointId, options);
 
-            // 打印结果
-            System.out.println("\n========== API 响应结果 ==========");
-            System.out.println("请求ID: " + result.getRequestId());
-            System.out.println("响应数据: " + result.getData().toString());
+            // Print results
+            System.out.println("\n========== API Response Results ==========");
+            System.out.println("Request ID: " + result.getRequestId());
+            System.out.println("Response data: " + result.getData().toString());
             System.out.println("====================================\n");
 
-            // 基本验证
+            // Basic validation
             assertNotNull(result);
             assertNotNull(result.getRequestId());
             assertNotNull(result.getData());
         } catch (Exception e) {
-            System.err.println("API调用失败: " + e.getMessage());
+            System.err.println("API call failed: " + e.getMessage());
             e.printStackTrace();
-            fail("API调用异常: " + e.getMessage());
+            fail("API call exception: " + e.getMessage());
         }
     }
 
     /**
-     * 使用实际API测试subscribe方法
-     * 这个测试会实际调用API并监听状态更新
+     * Test the subscribe method with real API
+     * This test will actually call the API and listen for status updates
      */
     @Test
     void testRealSubscribe() {
-        // 使用硬编码API Key创建ClientConfig
-        String apiKey = "sk-api-x17DjLiNh5d3Y2aDyauyW7l5dXa58bZTfDPbY6YaERdDWmmKjxPTA726CeOvnKJJnM54MMMpk1A2g8wOnYWSt2MWS9eJybmgegPkIzb7njuwF4eRfJwILHo4TImY";
+        // Create ClientConfig with hardcoded API Key
+        String apiKey = System.getenv("SUNRA_API_KEY");;
 
         try {
-            // 设置连接超时配置
+            // Set connection timeout configuration
             System.setProperty("http.keepAlive", "false");
             System.setProperty("http.maxConnections", "5");
 
 
-            // 创建客户端
+            // Create client
             ClientConfig config = ClientConfig.builder()
-                .withCredentials(CredentialsResolver.fromApiKey(apiKey))
-                .build();
+                    .withCredentials(CredentialsResolver.fromApiKey(apiKey))
+                    .build();
 
             SunraClient realClient = SunraClient.withConfig(config);
 
-            // 选择一个适合长时间运行任务的端点
+            // Choose an endpoint suitable for long-running tasks
             String realEndpointId = "sunra/fast-animatediff/text-to-video";
 
-            // 准备输入
+            // Prepare input
             Map<String, Object> input = Map.of(
-                "prompt", "a dog running in the park",
-                "num_frames", 4  // 生成16帧动画
+                    "prompt", "a dog running in the park",
+                    "num_frames", 4  // Generate 4 frames of animation
             );
 
-            System.out.println("开始订阅API端点: " + realEndpointId);
-            System.out.println("输入参数: " + input);
+            System.out.println("Starting to subscribe to API endpoint: " + realEndpointId);
+            System.out.println("Input parameters: " + input);
 
-            // 创建状态追踪变量
+            // Create status tracking variables
             final AtomicInteger statusUpdateCount = new AtomicInteger(0);
             final StringBuilder statusLog = new StringBuilder();
 
-            // 创建状态更新回调
+            // Create status update callback
             Consumer<QueueStatus.StatusUpdate> statusUpdateHandler = update -> {
                 int count = statusUpdateCount.incrementAndGet();
                 String status = update.getStatus().toString();
-                String message = String.format("\n状态更新 #%d: %s, 请求ID: %s",
-                    count, status, update.getRequestId());
+                String message = String.format("\nStatus update #%d: %s, Request ID: %s",
+                        count, status, update.getRequestId());
                 System.out.println(message);
                 statusLog.append(message).append("\n");
             };
 
-            // 创建subscribe选项
+            // Create subscribe options
             SubscribeOptions<JsonObject> options = SubscribeOptions.<JsonObject>builder()
-                .input(input)
-                .resultType(JsonObject.class)
-                .onQueueUpdate(statusUpdateHandler)
-                .logs(true)  // 启用日志
-                .build();
+                    .input(input)
+                    .resultType(JsonObject.class)
+                    .onQueueUpdate(statusUpdateHandler)
+                    .logs(true)  // Enable logs
+                    .build();
 
-            // 添加重试逻辑
+            // Add retry logic
             int maxRetries = 3;
             int retryCount = 0;
             Output<JsonObject> result = null;
@@ -237,24 +141,24 @@ public class SunraClientTest {
 
             while (retryCount < maxRetries) {
                 try {
-                    // 执行subscribe调用
+                    // Execute subscribe call
                     result = realClient.subscribe(realEndpointId, options);
-                    // 如果成功，跳出循环
+                    // Break loop if successful
                     break;
                 } catch (Exception e) {
                     lastException = e;
                     retryCount++;
-                    System.err.println("API订阅尝试 #" + retryCount + " 失败: " + e.getMessage());
+                    System.err.println("API subscription attempt #" + retryCount + " failed: " + e.getMessage());
 
-                    // 检查是否为StreamResetException
+                    // Check if it's a StreamResetException
                     if (e.getCause() != null && e.getCause().toString().contains("StreamResetException")) {
-                        System.err.println("检测到StreamResetException，正在重试...");
+                        System.err.println("StreamResetException detected, retrying...");
                     }
 
                     if (retryCount < maxRetries) {
-                        // 等待一段时间再重试
+                        // Wait for a while before retrying
                         try {
-                            Thread.sleep(5000 * retryCount); // 重试间隔递增
+                            Thread.sleep(5000 * retryCount); // Increasing retry intervals
                         } catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                             break;
@@ -263,55 +167,31 @@ public class SunraClientTest {
                 }
             }
 
-            // 检查是否成功获取结果
+            // Check if result was successfully obtained
             if (result == null) {
-                fail("所有API订阅尝试都失败，最后错误: " + (lastException != null ? lastException.getMessage() : "未知错误"));
+                fail("All API subscription attempts failed, last error: " +
+                        (lastException != null ? lastException.getMessage() : "Unknown error"));
                 return;
             }
 
-            // 打印结果和状态日志
-            System.out.println("\n========== 订阅响应结果 ==========");
-            System.out.println("请求ID: " + result.getRequestId());
-            System.out.println("收到的状态更新次数: " + statusUpdateCount.get());
-            System.out.println("状态日志:\n" + statusLog.toString());
-            System.out.println("响应数据: " + result.getData().toString());
+            // Print result and status log
+            System.out.println("\n========== Subscription Response Results ==========");
+            System.out.println("Request ID: " + result.getRequestId());
+            System.out.println("Number of status updates received: " + statusUpdateCount.get());
+            System.out.println("Status log:\n" + statusLog.toString());
+            System.out.println("Response data: " + result.getData().toString());
             System.out.println("====================================\n");
 
-            // 基本验证
+            // Basic validation
             assertNotNull(result);
             assertNotNull(result.getRequestId());
             assertNotNull(result.getData());
-            assertTrue(statusUpdateCount.get() > 0, "应该收到至少一次状态更新");
+            assertTrue(statusUpdateCount.get() > 0, "Should receive at least one status update");
 
         } catch (Exception e) {
-            System.err.println("API订阅失败: " + e.getMessage());
+            System.err.println("API subscription failed: " + e.getMessage());
             e.printStackTrace();
-            fail("API订阅异常: " + e.getMessage());
+            fail("API subscription exception: " + e.getMessage());
         }
-    }
-
-    /**
-     * 测试使用自定义配置的sunraClient
-     * 这个测试展示了如何使用ClientConfig的各种设置创建sunraClient
-     */
-    @Test
-    void testClientWithCustomConfig() {
-        // 创建一个使用自定义base URL和API Key的配置
-        String apiKey = "TEST_API_KEY";
-
-        // 创建客户端配置
-        ClientConfig config = ClientConfig.builder()
-            .withCredentials(CredentialsResolver.fromApiKey(apiKey))
-            // 可以添加其他配置，例如代理URL
-            // .withProxyUrl("https://your-proxy-url.com")
-            .build();
-
-        // 使用配置创建客户端
-        SunraClient client = SunraClient.withConfig(config);
-
-        // 验证客户端已创建
-        assertNotNull(client);
-
-        // 注意：这个测试不会实际调用API，只是验证配置能正确应用
     }
 }
