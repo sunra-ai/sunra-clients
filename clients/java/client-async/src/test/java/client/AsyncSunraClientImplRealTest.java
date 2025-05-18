@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AsyncSunraClientImplRealTest {
 
     private AsyncSunraClientImpl asyncClient;
-    private String testEndpointId = "sunra/fast-animatediff";
+    private String testEndpointId = "sunra/fast-animatediff/text-to-video";
     // 建议用环境变量或配置文件存储API Key
     private String apiKey = "sk-api-x17DjLiNh5d3Y2aDyauyW7l5dXa58bZTfDPbY6YaERdDWmmKjxPTA726CeOvnKJJnM54MMMpk1A2g8wOnYWSt2MWS9eJybmgegPkIzb7njuwF4eRfJwILHo4TImY";
 

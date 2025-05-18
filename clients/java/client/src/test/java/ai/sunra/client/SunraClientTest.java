@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class SunraClientTest {
 
     @Mock
-    private SunraClient mockClient;  // 使用接口而不是实现类
+    private SunraClient mockClient;
 
     private final String testEndpointId = "test-endpoint";
     private final Map<String, Object> testInput = Map.of("prompt", "Testing prompt");
@@ -137,7 +137,7 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // 选择一个实际存在的端点
-            String realEndpointId = "sunra/fast-animatediff";  // 根据实际情况修改
+            String realEndpointId = "sunra/fast-animatediff/text-to-video";  // 根据实际情况修改
 
             // 准备测试输入
             Map<String, Object> input = Map.of(
@@ -196,7 +196,7 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // 选择一个适合长时间运行任务的端点
-            String realEndpointId = "sunra/fast-animatediff";
+            String realEndpointId = "sunra/fast-animatediff/text-to-video";
 
             // 准备输入
             Map<String, Object> input = Map.of(
