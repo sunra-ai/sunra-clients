@@ -63,7 +63,7 @@ async function initiateUpload(
 
   return await dispatchRequest<InitiateUploadData, InitiateUploadResult>({
     method: 'POST',
-    targetUrl: `${getRestApiUrl()}/storage/upload/initiate?storage_type=sunra-cdn-v3`,
+    targetUrl: `${getRestApiUrl()}/storage/upload/initiate`,
     input: {
       content_type: contentType,
       file_name: filename,
@@ -86,7 +86,7 @@ async function initiateMultipartUpload(
 
   return await dispatchRequest<InitiateUploadData, InitiateUploadResult>({
     method: 'POST',
-    targetUrl: `${getRestApiUrl()}/storage/upload/initiate-multipart?storage_type=sunra-cdn-v3`,
+    targetUrl: `${getRestApiUrl()}/storage/upload/initiate-multipart`,
     input: {
       content_type: contentType,
       file_name: filename,
