@@ -103,4 +103,10 @@ Distributed under the MIT License. See [LICENSE](https://github.com/sunra-ai/sun
 
 ## Credits
 
-This project is derived from [fal-ai/fal-js](https://github.com/fal-ai/fal-js) and adapted to work with sunra.ai. The original project is licensed under the MIT License. We extend our gratitude to the original authors for their contributions.
+This project is derived from
+
+- [fal-ai/fal-js](https://github.com/fal-ai/fal-js)
+- [fal-ai/fal-java](https://github.com/fal-ai/fal-java)
+- [fal-ai/fal](https://github.com/fal-ai/fal/tree/main/projects/fal_client)
+
+and adapted to work with sunra.ai. The original project is licensed under the MIT License. We extend our gratitude to the original authors for their contributions.
