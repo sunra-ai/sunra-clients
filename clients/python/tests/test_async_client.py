@@ -22,7 +22,7 @@ async def client() -> sunra_client.AsyncClient:
 async def test_sunra_client(client: sunra_client.AsyncClient):
 
     handle = await client.submit(
-        "sunra/fast-animatediff/text-to-video",
+        "sunra/lcm/text-to-image",
         arguments={
             "prompt": "an orange cat",
         },
@@ -39,7 +39,7 @@ async def test_sunra_client(client: sunra_client.AsyncClient):
     assert isinstance(status, sunra_client.Completed)
 
     output = await client.subscribe(
-        "sunra/fast-animatediff/text-to-video",
+        "sunra/lcm/text-to-image",
         arguments={
             "prompt": "a cat",
         },
@@ -50,18 +50,15 @@ async def test_sunra_client(client: sunra_client.AsyncClient):
 
 
 async def test_sunra_client_streaming(client: sunra_client.AsyncClient):
-    handle = await client.submit(
-        "sunra/fast-animatediff/text-to-video",
+    events = []
+    async for event in client.stream(
+        "sunra/lcm/text-to-image",
         arguments={
             "prompt": "an orange cat",
         },
-    )
-    events = []
-    async for event in client.stream(
-        handle.request_id,
     ):
-        events.append(event)
-        print(event)
+      events.append(event)
+      print(event)
 
     assert len(events) >= 2
     assert events[-1].get("status") == "COMPLETED"
