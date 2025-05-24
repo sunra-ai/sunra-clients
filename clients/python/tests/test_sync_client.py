@@ -20,7 +20,7 @@ def client() -> sunra_client.SyncClient:
 
 def test_sunra_client(client: sunra_client.SyncClient):
     handle = client.submit(
-        "sunra/fast-animatediff/text-to-video",
+        "sunra/lcm/text-to-image",
         arguments={
             "prompt": "an orange cat",
         },
@@ -38,7 +38,7 @@ def test_sunra_client(client: sunra_client.SyncClient):
 
 
     output = client.subscribe(
-        "sunra/fast-animatediff/text-to-video",
+        "sunra/lcm/text-to-image",
         arguments={
             "prompt": "a cat",
         },
@@ -50,21 +50,19 @@ def test_sunra_client(client: sunra_client.SyncClient):
 
 
 def test_sunra_client_streaming(client: sunra_client.SyncClient):
-    handle = client.submit(
-        "sunra/fast-animatediff/text-to-video",
+    events = []
+    for event in client.stream(
+        "sunra/lcm/text-to-image",
         arguments={
             "prompt": "an orange cat",
         },
-    )
-    events = []
-    for event in client.stream(
-        handle.request_id,
     ):
-        events.append(event)
-        print(event)
+      events.append(event)
+      print(event)
 
     assert len(events) >= 2
     assert events[-1].get("status") == "COMPLETED"
+
 
 
 def test_sunra_client_upload(

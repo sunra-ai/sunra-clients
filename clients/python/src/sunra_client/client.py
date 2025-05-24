@@ -399,7 +399,7 @@ class AsyncClient:
         return AsyncRequestHandle.from_request_id(self._client, request_id)
 
     async def status(
-        self, request_id: str, 
+        self, request_id: str,
     ) -> Status:
         handle = self.get_handle(request_id)
         return await handle.status()
@@ -414,11 +414,18 @@ class AsyncClient:
 
     async def stream(
         self,
-        request_id: str,
+        application: str,
+        arguments: AnyJSON,
         *,
+        path: str = "",
         timeout: float | None = None,
     ) -> AsyncIterator[dict[str, Any]]:
-        url = f"https://api.{SUNRA_HOST}/v1/queue/requests/{request_id}/status/stream"
+        handle = await self.submit(
+          application,
+          arguments,
+          path=path,
+        )
+        url = f"https://api.{SUNRA_HOST}/v1/queue/requests/{handle.request_id}/status/stream"
         async with aconnect_sse(
             self._client,
             "GET",
@@ -580,7 +587,7 @@ class SyncClient:
         return SyncRequestHandle.from_request_id(self._client, request_id)
 
     def status(
-        self, request_id: str, 
+        self, request_id: str,
     ) -> Status:
         handle = self.get_handle(request_id)
         return handle.status()
@@ -595,12 +602,19 @@ class SyncClient:
 
     def stream(
         self,
-        request_id: str,
+        application: str,
+        arguments: AnyJSON,
         *,
+        path: str = "",
         timeout: float | None = None,
     ) -> Iterator[dict[str, Any]]:
         """Stream the status updates of a request by request_id. Each yielded item is a status event from the server."""
-        url = f"https://api.{SUNRA_HOST}/v1/queue/requests/{request_id}/status/stream"
+        handle = self.submit(
+          application,
+          arguments,
+          path=path,
+        )
+        url = f"https://api.{SUNRA_HOST}/v1/queue/requests/{handle.request_id}/status/stream"
         with connect_sse(
             self._client,
             "GET",
@@ -640,7 +654,7 @@ class SyncClient:
         print(f"[upload] Request URL: {upload_url}")
         print(f"[upload] Request content length: {len(data)}")
         print(f"[upload] Request content type: {content_type}")
-        
+
         response = requests.put(
             upload_url,
             data=data,
