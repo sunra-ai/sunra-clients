@@ -44,9 +44,9 @@ async def test_sunra_client(client: sunra_client.AsyncClient):
             "prompt": "a cat",
         },
     )
-    assert "video" in output
-    assert isinstance(output["video"], dict)
-    assert "url" in output["video"]
+    assert "images" in output
+    assert isinstance(output["images"], dict)
+    assert "url" in output["images"]
 
 
 async def test_sunra_client_streaming(client: sunra_client.AsyncClient):
