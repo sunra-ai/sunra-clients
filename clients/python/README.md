@@ -23,7 +23,7 @@ Now you can use the client to interact with your models. Here's an example of ho
 import sunra_client
 
 response = sunra_client.subscribe("sunra/lcm/text-to-image", arguments={"prompt": "a cute cat, realistic, orange"})
-print(response["images"]["url"])
+print(response["images"][0]["url"])
 ```
 
 ## streaming responses
@@ -47,7 +47,7 @@ import sunra_client
 
 async def main():
     response = await sunra_client.subscribe_async("sunra/lcm/text-to-image", arguments={"prompt": "a cute cat, realistic, orange"})
-    print(response["images"]["url"])
+    print(response["images"][0]["url"])
 
 
 asyncio.run(main())
@@ -73,7 +73,7 @@ async def main():
             print(event)
 
     result = await response.get()
-    print(result["images"]["url"])
+    print(result["images"][0]["url"])
 
 
 asyncio.run(main())

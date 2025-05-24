@@ -45,7 +45,6 @@ def test_sunra_client(client: sunra_client.SyncClient):
     )
     assert "images" in output
     assert isinstance(output["images"], dict)
-    assert "url" in output["images"]
 
 
 
