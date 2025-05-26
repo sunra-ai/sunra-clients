@@ -92,6 +92,10 @@ public class QueueClientImpl implements QueueClient {
                     onUpdate.accept(status);
                 }
                 this.currentStatus = status;
+                if (currentStatus != null && currentStatus instanceof Completed) {
+                    future.complete((Completed) currentStatus);
+                    eventSource.cancel();
+                }
             }
 
             @Override

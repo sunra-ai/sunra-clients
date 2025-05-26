@@ -95,6 +95,10 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                     onUpdate.accept(status);
                 }
                 this.currentStatus = status;
+                if (currentStatus != null && currentStatus instanceof QueueStatus.Completed) {
+                    future.complete((QueueStatus.Completed) currentStatus);
+                    eventSource.cancel();
+                }
             }
 
             @Override
