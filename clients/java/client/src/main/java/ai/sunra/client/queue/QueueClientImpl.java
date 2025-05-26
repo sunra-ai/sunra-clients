@@ -134,4 +134,18 @@ public class QueueClientImpl implements QueueClient {
         final var response = httpClient.executeRequest(request);
         return httpClient.wrapInResult(response, options.getResultType());
     }
+
+    @Override
+    @Nonnull
+    public Object cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options) {
+        final var endpoint = EndpointId.fromString(endpointId);
+        final var url = String.format(
+                "https://api.sunra.ai/v1/queue/requests/%s/cancel",
+                options.getRequestId());
+        final var request = httpClient.prepareRequest(url, options);
+
+        final var response = httpClient.executeRequest(request);
+        final var result = httpClient.handleResponse(response, JsonObject.class);
+        return result;
+    }
 }
