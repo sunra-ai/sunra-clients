@@ -12,7 +12,7 @@ export default function Index() {
           <code className="font-light text-pink-600">sunra</code>
         </h1>
         <p className="mt-2 max-w-2xl text-lg text-gray-400">
-          Learn how to use our sunra-js to execute Comfy workflows.
+          Learn how to use our sunra-clients to execute Comfy workflows.
         </p>
         <div className="mt-12 grid grid-cols-1 gap-3 md:grid-cols-3 lg:grid-cols-3">
           <button
