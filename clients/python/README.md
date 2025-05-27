@@ -22,8 +22,19 @@ Now you can use the client to interact with your models. Here's an example of ho
 ```python
 import sunra_client
 
-response = sunra_client.run("sunra-ai/fast-sdxl", arguments={"prompt": "a cute cat, realistic, orange"})
+response = sunra_client.subscribe("sunra/lcm/text-to-image", arguments={"prompt": "a cute cat, realistic, orange"})
 print(response["images"][0]["url"])
+```
+
+## streaming responses
+```python
+import sunra_client
+
+application = "sunra/lcm/text-to-image"
+arguments={"prompt": "a cute cat, realistic, orange"}
+
+for event in sunra_client.stream(application, arguments):
+    print(f"Received event: {event}")
 ```
 
 ## Asynchronous requests
@@ -35,36 +46,13 @@ import asyncio
 import sunra_client
 
 async def main():
-    response = await sunra_client.run_async("sunra-ai/fast-sdxl", arguments={"prompt": "a cute cat, realistic, orange"})
+    response = await sunra_client.subscribe_async("sunra/lcm/text-to-image", arguments={"prompt": "a cute cat, realistic, orange"})
     print(response["images"][0]["url"])
 
 
 asyncio.run(main())
 ```
 
-## Uploading files
-
-If the model requires files as input, you can upload them directly to sunra.media (our CDN) and pass the URLs to the client. Here's an example:
-
-```python
-import sunra_client
-
-audio_url = sunra_client.upload_file("path/to/audio.wav")
-response = sunra_client.run("sunra-ai/whisper", arguments={"audio_url": audio_url})
-print(response["text"])
-```
-
-## Encoding files as in-memory data URLs
-
-If you don't want to upload your file to our CDN service (for latency reasons, for example), you can encode it as a data URL and pass it directly to the client. Here's an example:
-
-```python
-import sunra_client
-
-audio_data_url = sunra_client.encode_file("path/to/audio.wav")
-response = sunra_client.run("sunra-ai/whisper", arguments={"audio_url": audio_data_url})
-print(response["text"])
-```
 
 ## Queuing requests
 
@@ -75,17 +63,14 @@ import asyncio
 import sunra_client
 
 async def main():
-    response = await sunra_client.submit_async("sunra-ai/fast-sdxl", arguments={"prompt": "a cute cat, realistic, orange"})
+    response = await sunra_client.submit_async("sunra/lcm/text-to-image", arguments={"prompt": "a cute cat, realistic, orange"})
 
     logs_index = 0
-    async for event in response.iter_events(with_logs=True):
+    async for event in response.iter_events():
         if isinstance(event, sunra_client.Queued):
             print("Queued. Position:", event.position)
         elif isinstance(event, (sunra_client.InProgress, sunra_client.Completed)):
-            new_logs = event.logs[logs_index:]
-            for log in new_logs:
-                print(log["message"])
-            logs_index = len(event.logs)
+            print(event)
 
     result = await response.get()
     print(result["images"][0]["url"])
@@ -93,3 +78,13 @@ async def main():
 
 asyncio.run(main())
 ```
+
+## Credits
+
+This project is derived from
+
+- [fal-ai/fal-js](https://github.com/fal-ai/fal-js)
+- [fal-ai/fal-java](https://github.com/fal-ai/fal-java)
+- [fal-ai/fal](https://github.com/fal-ai/fal/tree/main/projects/fal_client)
+
+and adapted to work with sunra.ai. The original project is licensed under the MIT/Apache2.0 License. We extend our gratitude to the original authors for their contributions.

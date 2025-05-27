@@ -43,3 +43,9 @@ yarn-error.log*
 
 # Java docs
 docs
+
+.idea/
+.venv/
+venv/
+.idea/
+__pycache__/

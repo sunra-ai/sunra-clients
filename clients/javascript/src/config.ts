@@ -29,7 +29,7 @@ export type Config = {
    * By default it tries to use the `SUNRA_KEY` environment variable, when
    * `process.env` is defined.
    *
-   * @see https://sunra.ai/docs/model-endpoints/server-side
+   * @see https://docs.sunra.ai/model-endpoints/server-side
    * @see #suppressLocalCredentialsWarning
    */
   credentials?: undefined | string | CredentialsResolver;
