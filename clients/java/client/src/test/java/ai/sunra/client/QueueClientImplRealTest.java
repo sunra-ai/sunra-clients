@@ -205,19 +205,18 @@ public class QueueClientImplRealTest {
     @Test
     void testCancel() {
         try {
-//            // 1. 先提交一个任务
-//            Map<String, Object> input = Map.of(
-//                "prompt", "a test for cancel",
-//                "num_frames", 4
-//            );
-//
-//            QueueSubmitOptions submitOptions = QueueSubmitOptions.builder()
-//                .input(input)
-//                .build();
-//
-//            QueueStatus.InQueue submitResult = queueClient.submit(testEndpointId, submitOptions);
-//            String requestId = submitResult.getRequestId();
-            String requestId = "pd_WjGYaMZhxfSp7Dd32PQG6T4Z";
+            // 1. 先提交一个任务
+            Map<String, Object> input = Map.of(
+                "prompt", "a test for cancel",
+                "num_frames", 4
+            );
+
+            QueueSubmitOptions submitOptions = QueueSubmitOptions.builder()
+                .input(input)
+                .build();
+
+            QueueStatus.InQueue submitResult = queueClient.submit(testEndpointId, submitOptions);
+            String requestId = submitResult.getRequestId();
 
             System.out.println("Task submitted, requestId: " + requestId);
 
@@ -232,8 +231,6 @@ public class QueueClientImplRealTest {
 
             // 3. 校验返回
             assertNotNull(cancelResult);
-//            assertNotNull(cancelResult.getRequestId());
-//            assertNotNull(cancelResult.getData());
 
             // 4. 可选：再查一次状态，确认已取消
             QueueStatusOptions statusOptions = QueueStatusOptions.builder()
@@ -241,8 +238,6 @@ public class QueueClientImplRealTest {
                 .build();
             QueueStatus.StatusUpdate status = queueClient.status(testEndpointId, statusOptions);
             System.out.println("Status after cancel: " + status.getStatus());
-            // 你可以根据实际API返回的状态码判断是否为已取消
-            // assertEquals(QueueStatus.Status.CANCELLED, status.getStatus());
 
         } catch (Exception e) {
             System.err.println("Cancel test failed: " + e.getMessage());

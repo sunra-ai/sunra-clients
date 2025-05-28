@@ -134,4 +134,20 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                 .executeRequestAsync(request)
                 .thenApply((response) -> httpClient.wrapInResult(response, options.getResultType()));
     }
+
+    @Nonnull
+    @Override
+    public CompletableFuture<Object> cancel(
+            @Nonnull String endpointId, @Nonnull QueueCancelOptions options) {
+        final var endpoint = EndpointId.fromString(endpointId);
+        final var url = String.format(
+                "https://api.sunra.ai/v1/queue/requests/%s/cancel",
+                options.getRequestId());
+
+        final var request = httpClient.prepareRequest(url, options);
+        return httpClient.executeRequestAsync(request).thenApply((response) -> {
+            final var result = httpClient.handleResponse(response, JsonObject.class);
+            return httpClient.fromJson(result, QueueStatus.resolveType(result));
+        });
+    }
 }

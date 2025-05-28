@@ -18,4 +18,7 @@ public interface AsyncQueueClient {
 
     @Nonnull
     <O> CompletableFuture<Output<O>> result(@Nonnull String endpointId, @Nonnull QueueResultOptions<O> options);
+
+    @Nonnull
+    CompletableFuture<Object> cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options);
 }

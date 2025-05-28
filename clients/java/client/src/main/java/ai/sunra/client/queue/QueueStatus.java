@@ -17,6 +17,7 @@ public interface QueueStatus {
         IN_QUEUE,
         IN_PROGRESS,
         COMPLETED,
+        CANCELED,
     }
 
     interface StatusUpdate {
@@ -90,6 +91,16 @@ public interface QueueStatus {
         private String logs;
     }
 
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    class CANCELED extends BaseStatusUpdate {
+
+        @Nullable
+        @SerializedName("logs")
+        private String logs;
+    }
+
     static Class<? extends StatusUpdate> resolveType(JsonObject payload) {
         final var status = payload.get("status").getAsString();
         if (status.equals(QueueStatus.Status.IN_QUEUE.name())) {
@@ -100,6 +111,9 @@ public interface QueueStatus {
         }
         if (status.equals(QueueStatus.Status.COMPLETED.name())) {
             return QueueStatus.Completed.class;
+        }
+        if (status.equals(QueueStatus.Status.CANCELED.name())) {
+            return QueueStatus.CANCELED.class;
         }
         throw new IllegalArgumentException("Unknown status: " + status);
     }
