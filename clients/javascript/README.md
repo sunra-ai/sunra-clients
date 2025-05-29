@@ -20,7 +20,7 @@ sunra.config({
 });
 ```
 
-**Note:** Ensure you've reviewed the [sunra getting started guide](https://sunra.ai/docs) to acquire your credentials and register your functions. Also, make sure your credentials are always protected. See the [../proxy](../proxy) package for a secure way to use the client in client-side applications.
+**Note:** Ensure you've reviewed the [sunra getting started guide](https://docs.sunra.ai) to acquire your credentials and register your functions. Also, make sure your credentials are always protected. See the [../proxy](../proxy) package for a secure way to use the client in client-side applications.
 
 ## Running functions with `sunra.run`
 
@@ -34,7 +34,7 @@ const result = await sunra.run("my-function-id", {
 
 ## Long-running functions with `sunra.subscribe`
 
-The `sunra.subscribe` method offers a powerful way to rely on the [queue system](https://www.sunra.ai/docs/function-endpoints/queue) to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
+The `sunra.subscribe` method offers a powerful way to rely on the [queue system](https://docs.sunra.ai/function-endpoints/queue) to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
 
 ```ts
 const result = await sunra.subscribe("my-function-id", {
@@ -49,4 +49,14 @@ const result = await sunra.subscribe("my-function-id", {
 
 ## More features
 
-The client library offers a plethora of features designed to simplify your journey with `sunra`. Dive into the [official documentation](https://sunra.ai/docs) for a comprehensive guide.
+The client library offers a plethora of features designed to simplify your journey with `sunra`. Dive into the [official documentation](https://docs.sunra.ai) for a comprehensive guide.
+
+## Credits
+
+This project is derived from
+
+- [fal-ai/fal-js](https://github.com/fal-ai/fal-js)
+- [fal-ai/fal-java](https://github.com/fal-ai/fal-java)
+- [fal-ai/fal](https://github.com/fal-ai/fal/tree/main/projects/fal_client)
+
+and adapted to work with sunra.ai. The original project is licensed under the MIT/Apache2.0 License. We extend our gratitude to the original authors for their contributions.

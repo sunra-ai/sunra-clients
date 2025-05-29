@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "wheel", "setuptools_scm[toml]>=7"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
@@ -9,7 +9,7 @@ tag_regex = "^sunra_client_v(?P<version>.*)$"
 
 [project]
 name = "sunra_client"
-dynamic = ["version"]
+version = "0.1.0"
 description = "Python client for sunra.ai"
 readme = "README.md"
 authors = [{ name = "Features & Labels <support@sunra.ai>" }]
@@ -17,6 +17,7 @@ requires-python = ">=3.8"
 dependencies = [
     "httpx>=0.21.0,<1",
     "httpx-sse>=0.4.0,<0.5",
+    "requests",
 ]
 
 [project.optional-dependencies]
@@ -36,7 +37,7 @@ dev = [
 
 [project.urls]
 homepage = "https://sunra.ai"
-repository = "https://github.com/sunra-ai/sunra-python"
+repository = "https://github.com/sunra-ai/sunra-clients"
 
 [tool.pytest.ini_options]
 testpaths = "tests/"

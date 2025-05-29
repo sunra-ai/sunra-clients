@@ -10,7 +10,7 @@ branch=$(git branch --show-current)
 # check if the corresponding remote branch exists in the origin remote
 # remotes/origin/<branch>
 
-filter=''
+filter='*'
 
 remoteBranchExists=$(git show-ref --verify --quiet refs/remotes/origin/$branch)
 

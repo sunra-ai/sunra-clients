@@ -76,4 +76,4 @@ Now all your client calls will route through your server proxy, so your credenti
 
 ## More information
 
-For a deeper dive into the proxy library and its capabilities, explore the [official documentation](https://sunra.ai/docs).
+For a deeper dive into the proxy library and its capabilities, explore the [official documentation](https://docs.sunra.ai).
