@@ -46,4 +46,14 @@ public interface QueueClient {
      */
     @Nonnull
     <O> Output<O> result(@Nonnull String endpointId, @Nonnull QueueResultOptions<O> options);
+
+    /**
+     * Cancel a submission.
+     *
+     * @param endpointId the endpoint to cancel the submission for
+     * @param options the cancel options
+     * @return the cancel of the submission
+     */
+    @Nonnull
+    Object  cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options);
 }

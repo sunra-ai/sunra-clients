@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QueueClientImplRealTest {
 
     private QueueClientImpl queueClient;
-    private String testEndpointId = "sunra/fast-animatediff";
+    private String testEndpointId = "sunra/fast-animatediff/text-to-video";
     // For security, it's recommended to store the API Key in environment variables or config files
     private String apiKey = System.getenv("SUNRA_API_KEY");
 
@@ -199,6 +199,50 @@ public class QueueClientImplRealTest {
             System.err.println("Subscription test failed: " + e.getMessage());
             e.printStackTrace();
             fail("Subscription test exception: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testCancel() {
+        try {
+            // 1. 先提交一个任务
+            Map<String, Object> input = Map.of(
+                "prompt", "a test for cancel",
+                "num_frames", 4
+            );
+
+            QueueSubmitOptions submitOptions = QueueSubmitOptions.builder()
+                .input(input)
+                .build();
+
+            QueueStatus.InQueue submitResult = queueClient.submit(testEndpointId, submitOptions);
+            String requestId = submitResult.getRequestId();
+
+            System.out.println("Task submitted, requestId: " + requestId);
+
+            // 2. 立即调用 cancel
+            QueueCancelOptions cancelOptions = QueueCancelOptions.builder()
+                .requestId(requestId)
+                .build();
+
+            Object cancelResult = queueClient.cancel(testEndpointId, cancelOptions);
+
+            System.out.println("Cancel result: " + cancelResult);
+
+            // 3. 校验返回
+            assertNotNull(cancelResult);
+
+            // 4. 可选：再查一次状态，确认已取消
+            QueueStatusOptions statusOptions = QueueStatusOptions.builder()
+                .requestId(requestId)
+                .build();
+            QueueStatus.StatusUpdate status = queueClient.status(testEndpointId, statusOptions);
+            System.out.println("Status after cancel: " + status.getStatus());
+
+        } catch (Exception e) {
+            System.err.println("Cancel test failed: " + e.getMessage());
+            e.printStackTrace();
+            fail("Cancel test exception: " + e.getMessage());
         }
     }
 
