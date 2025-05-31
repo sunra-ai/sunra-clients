@@ -1,21 +1,16 @@
 package ai.sunra.client;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import ai.sunra.client.queue.QueueStatus;
 import com.google.gson.JsonObject;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class SunraClientTest {
@@ -30,7 +25,8 @@ public class SunraClientTest {
     void testRealApiCall() {
         // Create ClientConfig with hardcoded API Key
         // Note: In real projects, avoid hardcoding API keys, this is just a test example
-        String apiKey = System.getenv("SUNRA_API_KEY");;  // Replace with actual API Key
+        String apiKey = System.getenv("SUNRA_API_KEY");
+        ; // Replace with actual API Key
 
         try {
             // Create client instance using Config approach
@@ -41,13 +37,10 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // Choose an endpoint that actually exists
-            String realEndpointId = "sunra/fast-animatediff/text-to-video";  // Modify according to actual situation
+            String realEndpointId = "sunra/fast-animatediff/text-to-video"; // Modify according to actual situation
 
             // Prepare test input
-            Map<String, Object> input = Map.of(
-                    "prompt", "the cat is running",
-                    "max_tokens", 100
-            );
+            Map<String, Object> input = Map.of("prompt", "the cat is running", "max_tokens", 100);
 
             // Execute API call
             System.out.println("Calling API endpoint: " + realEndpointId);
@@ -84,13 +77,13 @@ public class SunraClientTest {
     @Test
     void testRealSubscribe() {
         // Create ClientConfig with hardcoded API Key
-        String apiKey = System.getenv("SUNRA_API_KEY");;
+        String apiKey = System.getenv("SUNRA_API_KEY");
+        ;
 
         try {
             // Set connection timeout configuration
             System.setProperty("http.keepAlive", "false");
             System.setProperty("http.maxConnections", "5");
-
 
             // Create client
             ClientConfig config = ClientConfig.builder()
@@ -104,9 +97,8 @@ public class SunraClientTest {
 
             // Prepare input
             Map<String, Object> input = Map.of(
-                    "prompt", "a dog running in the park",
-                    "num_frames", 4  // Generate 4 frames of animation
-            );
+                    "prompt", "a dog running in the park", "num_frames", 4 // Generate 4 frames of animation
+                    );
 
             System.out.println("Starting to subscribe to API endpoint: " + realEndpointId);
             System.out.println("Input parameters: " + input);
@@ -119,8 +111,8 @@ public class SunraClientTest {
             Consumer<QueueStatus.StatusUpdate> statusUpdateHandler = update -> {
                 int count = statusUpdateCount.incrementAndGet();
                 String status = update.getStatus().toString();
-                String message = String.format("\nStatus update #%d: %s, Request ID: %s",
-                        count, status, update.getRequestId());
+                String message =
+                        String.format("\nStatus update #%d: %s, Request ID: %s", count, status, update.getRequestId());
                 System.out.println(message);
                 statusLog.append(message).append("\n");
             };
@@ -130,7 +122,7 @@ public class SunraClientTest {
                     .input(input)
                     .resultType(JsonObject.class)
                     .onQueueUpdate(statusUpdateHandler)
-                    .logs(true)  // Enable logs
+                    .logs(true) // Enable logs
                     .build();
 
             // Add retry logic
@@ -169,8 +161,8 @@ public class SunraClientTest {
 
             // Check if result was successfully obtained
             if (result == null) {
-                fail("All API subscription attempts failed, last error: " +
-                        (lastException != null ? lastException.getMessage() : "Unknown error"));
+                fail("All API subscription attempts failed, last error: "
+                        + (lastException != null ? lastException.getMessage() : "Unknown error"));
                 return;
             }
 

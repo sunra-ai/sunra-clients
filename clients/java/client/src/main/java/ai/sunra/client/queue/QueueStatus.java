@@ -1,11 +1,9 @@
 package ai.sunra.client.queue;
 
-import ai.sunra.client.type.RequestLog;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

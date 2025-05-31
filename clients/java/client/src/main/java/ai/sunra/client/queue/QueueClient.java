@@ -55,5 +55,5 @@ public interface QueueClient {
      * @return the cancel of the submission
      */
     @Nonnull
-    Object  cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options);
+    Object cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options);
 }

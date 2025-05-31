@@ -46,7 +46,7 @@ public class HttpClient {
     public Request prepareRequest(
             @Nonnull String url, @Nonnull ApiOptions options, @Nonnull Map<String, Object> queryParams) {
         var body = options.getInput() != null ? gson.toJson(options.getInput()) : null;
-        if("null".equals(body)){
+        if ("null".equals(body)) {
             body = "{}";
         }
         var urlBuilder = HttpUrl.parse(url).newBuilder();

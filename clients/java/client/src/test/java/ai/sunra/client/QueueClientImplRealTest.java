@@ -1,23 +1,17 @@
 package ai.sunra.client;
 
-import ai.sunra.client.ClientConfig;
-import ai.sunra.client.CredentialsResolver;
-import ai.sunra.client.Output;
-import ai.sunra.client.http.HttpClient;
+import static org.junit.jupiter.api.Assertions.*;
+
 import ai.sunra.client.http.ClientProxyInterceptor;
 import ai.sunra.client.http.CredentialsInterceptor;
+import ai.sunra.client.http.HttpClient;
 import ai.sunra.client.queue.*;
-import com.google.gson.JsonObject;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Real API call test for QueueClientImpl
@@ -38,11 +32,10 @@ public class QueueClientImplRealTest {
 
         // Create HttpClient, similar to the approach in sunraClientImpl
         ClientConfig config = ClientConfig.builder()
-            .withCredentials(CredentialsResolver.fromApiKey(apiKey))
-            .build();
+                .withCredentials(CredentialsResolver.fromApiKey(apiKey))
+                .build();
 
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-            .addInterceptor(new CredentialsInterceptor(config));
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().addInterceptor(new CredentialsInterceptor(config));
 
         // Add proxy interceptor if necessary
         if (config.getProxyUrl() != null) {
@@ -63,34 +56,30 @@ public class QueueClientImplRealTest {
         try {
             // Prepare input
             Map<String, Object> input = Map.of(
-                "prompt", "a cat playing with yarn",
-                "num_frames", 4 // Reduced frames to speed up testing
-            );
+                    "prompt", "a cat playing with yarn", "num_frames", 4 // Reduced frames to speed up testing
+                    );
 
             System.out.println("Starting to test submit method...");
 
             // Execute submit call
-            QueueSubmitOptions submitOptions = QueueSubmitOptions.builder()
-                .input(input)
-                .build();
+            QueueSubmitOptions submitOptions =
+                    QueueSubmitOptions.builder().input(input).build();
 
             QueueStatus.InQueue submitResult = queueClient.submit(testEndpointId, submitOptions);
 
             // Validate submission result
             assertNotNull(submitResult);
             assertNotNull(submitResult.getRequestId());
-//            assertEquals(QueueStatus.Status.IN_QUEUE, submitResult.getStatus());
-//            assertNotNull(submitResult.getQueuePosition());
+            //            assertEquals(QueueStatus.Status.IN_QUEUE, submitResult.getStatus());
+            //            assertNotNull(submitResult.getQueuePosition());
 
             System.out.println("Submission successful, Request ID: " + submitResult.getRequestId());
             System.out.println("Queue position: " + submitResult.getQueuePosition());
 
             // Test status query - may need multiple polling to see status changes
             String requestId = submitResult.getRequestId();
-            QueueStatusOptions statusOptions = QueueStatusOptions.builder()
-                .requestId(requestId)
-                .logs(true)
-                .build();
+            QueueStatusOptions statusOptions =
+                    QueueStatusOptions.builder().requestId(requestId).logs(true).build();
 
             System.out.println("Starting to test status method...");
 
@@ -99,7 +88,7 @@ public class QueueClientImplRealTest {
 
             // Validate status result
             assertNotNull(statusResult);
-//            assertEquals(requestId, statusResult.getRequestId());
+            //            assertEquals(requestId, statusResult.getRequestId());
             assertNotNull(statusResult.getStatus());
 
             System.out.println("Status query successful, current status: " + statusResult.getStatus());
@@ -126,18 +115,18 @@ public class QueueClientImplRealTest {
             Consumer<QueueStatus.StatusUpdate> statusUpdateHandler = update -> {
                 int count = updateCount.incrementAndGet();
                 String status = update.getStatus().toString();
-                String message = String.format("\nStatus update #%d: %s, Request ID: %s",
-                    count, status, update.getRequestId());
+                String message =
+                        String.format("\nStatus update #%d: %s, Request ID: %s", count, status, update.getRequestId());
                 System.out.println(message);
                 statusLog.append(message).append("\n");
             };
 
             // Create subscription options
             QueueSubscribeOptions subscribeOptions = QueueSubscribeOptions.builder()
-                .requestId(requestId)
-                .logs(true)
-                .onQueueUpdate(statusUpdateHandler)
-                .build();
+                    .requestId(requestId)
+                    .logs(true)
+                    .onQueueUpdate(statusUpdateHandler)
+                    .build();
 
             System.out.println("Starting to subscribe to status updates...");
 
@@ -177,8 +166,8 @@ public class QueueClientImplRealTest {
 
             // Check if result was successfully obtained
             if (result == null) {
-                fail("All subscription attempts failed, last error: " +
-                    (lastException != null ? lastException.getMessage() : "Unknown error"));
+                fail("All subscription attempts failed, last error: "
+                        + (lastException != null ? lastException.getMessage() : "Unknown error"));
                 return;
             }
 
@@ -206,14 +195,10 @@ public class QueueClientImplRealTest {
     void testCancel() {
         try {
             // 1. 先提交一个任务
-            Map<String, Object> input = Map.of(
-                "prompt", "a test for cancel",
-                "num_frames", 4
-            );
+            Map<String, Object> input = Map.of("prompt", "a test for cancel", "num_frames", 4);
 
-            QueueSubmitOptions submitOptions = QueueSubmitOptions.builder()
-                .input(input)
-                .build();
+            QueueSubmitOptions submitOptions =
+                    QueueSubmitOptions.builder().input(input).build();
 
             QueueStatus.InQueue submitResult = queueClient.submit(testEndpointId, submitOptions);
             String requestId = submitResult.getRequestId();
@@ -221,9 +206,8 @@ public class QueueClientImplRealTest {
             System.out.println("Task submitted, requestId: " + requestId);
 
             // 2. 立即调用 cancel
-            QueueCancelOptions cancelOptions = QueueCancelOptions.builder()
-                .requestId(requestId)
-                .build();
+            QueueCancelOptions cancelOptions =
+                    QueueCancelOptions.builder().requestId(requestId).build();
 
             Object cancelResult = queueClient.cancel(testEndpointId, cancelOptions);
 
@@ -233,9 +217,8 @@ public class QueueClientImplRealTest {
             assertNotNull(cancelResult);
 
             // 4. 可选：再查一次状态，确认已取消
-            QueueStatusOptions statusOptions = QueueStatusOptions.builder()
-                .requestId(requestId)
-                .build();
+            QueueStatusOptions statusOptions =
+                    QueueStatusOptions.builder().requestId(requestId).build();
             QueueStatus.StatusUpdate status = queueClient.status(testEndpointId, statusOptions);
             System.out.println("Status after cancel: " + status.getStatus());
 
@@ -245,5 +228,4 @@ public class QueueClientImplRealTest {
             fail("Cancel test exception: " + e.getMessage());
         }
     }
-
 }

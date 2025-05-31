@@ -1,5 +1,7 @@
 package client;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import ai.sunra.client.AsyncSunraClientImpl;
 import ai.sunra.client.ClientConfig;
 import ai.sunra.client.CredentialsResolver;
@@ -8,17 +10,14 @@ import ai.sunra.client.RunOptions;
 import ai.sunra.client.SubscribeOptions;
 import ai.sunra.client.queue.QueueStatus;
 import com.google.gson.JsonObject;
-import okhttp3.OkHttpClient;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-
-import static org.junit.jupiter.api.Assertions.*;
+import okhttp3.OkHttpClient;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AsyncSunraClientImplRealTest {
 
@@ -47,10 +46,7 @@ public class AsyncSunraClientImplRealTest {
     @Test
     void testRun() throws Exception {
         // Prepare test input
-        Map<String, Object> input = Map.of(
-                "prompt", "the cat is running",
-                "max_tokens", 100
-        );
+        Map<String, Object> input = Map.of("prompt", "the cat is running", "max_tokens", 100);
 
         RunOptions<JsonObject> options = RunOptions.<JsonObject>builder()
                 .input(input)
@@ -70,15 +66,13 @@ public class AsyncSunraClientImplRealTest {
 
     @Test
     void testSubscribe() throws Exception {
-        Map<String, Object> input = Map.of(
-                "prompt", "a dog playing with a ball",
-                "num_frames", 2
-        );
+        Map<String, Object> input = Map.of("prompt", "a dog playing with a ball", "num_frames", 2);
 
         AtomicInteger updateCount = new AtomicInteger(0);
         Consumer<QueueStatus.StatusUpdate> onUpdate = update -> {
             int count = updateCount.incrementAndGet();
-            System.out.println("Status update #" + count + ": " + update.getStatus() + ", Request ID: " + update.getRequestId());
+            System.out.println(
+                    "Status update #" + count + ": " + update.getStatus() + ", Request ID: " + update.getRequestId());
         };
 
         SubscribeOptions<JsonObject> options = SubscribeOptions.<JsonObject>builder()

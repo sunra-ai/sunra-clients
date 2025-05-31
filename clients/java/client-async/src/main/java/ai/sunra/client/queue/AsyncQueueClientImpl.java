@@ -41,9 +41,7 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
     public CompletableFuture<QueueStatus.StatusUpdate> status(
             @Nonnull String endpointId, @Nonnull QueueStatusOptions options) {
         final var endpoint = EndpointId.fromString(endpointId);
-        final var url = String.format(
-            "https://api.sunra.ai/v1/queue/requests/%s/status",
-            options.getRequestId());
+        final var url = String.format("https://api.sunra.ai/v1/queue/requests/%s/status", options.getRequestId());
 
         final var queryParams = new HashMap<String, Object>();
         if (options.getLogs() != null && options.getLogs()) {
@@ -62,9 +60,8 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
     public CompletableFuture<QueueStatus.Completed> subscribeToStatus(
             @Nonnull String endpointId, @Nonnull QueueSubscribeOptions options) {
         final var endpoint = EndpointId.fromString(endpointId);
-        final var url = String.format(
-            "https://api.sunra.ai/v1/queue/requests/%s/status/stream",
-            options.getRequestId());
+        final var url =
+                String.format("https://api.sunra.ai/v1/queue/requests/%s/status/stream", options.getRequestId());
 
         final var queryParams = new HashMap<String, Object>();
         if (options.getLogs() != null && options.getLogs()) {
@@ -125,9 +122,7 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
     @Override
     public <O> CompletableFuture<Output<O>> result(@Nonnull String endpointId, @Nonnull QueueResultOptions<O> options) {
         final var endpoint = EndpointId.fromString(endpointId);
-        final var url = String.format(
-            "https://api.sunra.ai/v1/queue/requests/%s",
-            options.getRequestId());
+        final var url = String.format("https://api.sunra.ai/v1/queue/requests/%s", options.getRequestId());
         final var request = httpClient.prepareRequest(url, options);
 
         return httpClient
@@ -137,12 +132,9 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
 
     @Nonnull
     @Override
-    public CompletableFuture<Object> cancel(
-            @Nonnull String endpointId, @Nonnull QueueCancelOptions options) {
+    public CompletableFuture<Object> cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options) {
         final var endpoint = EndpointId.fromString(endpointId);
-        final var url = String.format(
-                "https://api.sunra.ai/v1/queue/requests/%s/cancel",
-                options.getRequestId());
+        final var url = String.format("https://api.sunra.ai/v1/queue/requests/%s/cancel", options.getRequestId());
 
         final var request = httpClient.prepareRequest(url, options);
         return httpClient.executeRequestAsync(request).thenApply((response) -> {
