@@ -4,11 +4,11 @@
 
 ## About the Project
 
-The `sunraClient` is a robust and user-friendly Java implementation of the [sunra.ai](https://sunra.ai) client.
+The `SunraClient` is a robust and user-friendly Java implementation of the [sunra.ai](https://sunra.ai) client.
 
 ## Getting Started
 
-The `sunraClient` library serves as a client for sunra serverless Python functions. Before using this library, ensure you've got your sunra key from [our dashboard](https://sunra.ai/dashboard/keys).
+The `SunraClient` library serves as a client for sunra serverless Python functions. Before using this library, ensure you've got your sunra key from [our dashboard](https://sunra.ai/dashboard/keys).
 
 The client is available on Maven Central. There are three different modules:
 
@@ -25,7 +25,7 @@ The
 ##### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client:0.7.1"
+implementation "ai.sunra.client:sunra-client:0.1.0"
 ```
 
 ##### Call the API
@@ -38,7 +38,7 @@ var sunra = SunraClient.withEnvCredentials();
 var input = Map.of(
     "prompt", "A cute shih-tzu puppy"
 );
-var result = sunra.subscribe("sunra/fast-animatediff/text-to-video",
+var result = sunra.subscribe("sunra/lcm/text-to-image",
     SubscribeOptions.<JsonObject>builder()
         .input(input)
         .resultType(JsonObject.class)
@@ -56,7 +56,7 @@ System.out.println(result.getData());
 ##### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client-async:0.7.1"
+implementation "ai.sunra.client:sunra-client-async:0.1.0"
 ```
 
 ##### Call the API
@@ -69,7 +69,7 @@ var sunra = AsyncSunraClient.withEnvCredentials();
 var input = Map.of(
     "prompt", "A cute shih-tzu puppy"
 );
-var future = sunra.subscribe("sunra/fast-animatediff/text-to-video",
+var future = sunra.subscribe("sunra/lcm/text-to-image",
     SubscribeOptions.<JsonObject>builder()
         .input(input)
         .resultType(JsonObject.class)
@@ -89,7 +89,7 @@ future.thenAccept(result -> {
 ##### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client-kotlin:0.7.1"
+implementation "ai.sunra.client:sunra-client-kotlin:0.1.0"
 ```
 
 ##### Call the API
@@ -97,9 +97,9 @@ implementation "ai.sunra.client:sunra-client-kotlin:0.7.1"
 ```kotlin
 import ai.sunra.client.kt.*
 
-val sunra = createsunraClient()
+val sunra = createSunraClient()
 
-val result = sunra.subscribe("sunra/fast-animatediff/text-to-video", input = mapOf(
+val result = sunra.subscribe("sunra/lcm/text-to-image", input = mapOf(
     "prompt" to "A cute shih-tzu puppy"
 )) { update ->
     print(update.status)

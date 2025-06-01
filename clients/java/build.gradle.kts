@@ -8,7 +8,7 @@ plugins {
 
 subprojects {
     group = "ai.sunra.client"
-    version = "0.7.1"
+    version = "0.1.0"
 
     apply(plugin = "com.diffplug.spotless")
     apply(plugin = "com.vanniktech.maven.publish")
@@ -33,7 +33,7 @@ subprojects {
             name.set("sunra Client Library")
             description.set("A Client library for sunra.ai APIs")
             inceptionYear.set("2024")
-            url.set("https://github.com/sunra-ai/sunra-java")
+            url.set("https://github.com/sunra-ai/sunra-clients/tree/main/clients/java")
             licenses {
                 license {
                     name.set("MIT")
@@ -49,8 +49,8 @@ subprojects {
                 }
             }
             scm {
-                url.set("https://github.com/sunra-ai/sunra-java")
-                connection.set("scm:git:git://github.com/sunra-ai/sunra-java.git")
+                url.set("https://github.com/sunra-ai/sunra-clients/tree/main/clients/java")
+                connection.set("scm:git:git://github.com/sunra-ai/sunra-clients.git")
             }
         }
     }
