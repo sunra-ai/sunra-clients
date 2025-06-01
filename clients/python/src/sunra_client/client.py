@@ -344,10 +344,10 @@ class AsyncClient:
 
         headers = {}
         if hint is not None:
-            headers["X-sunra-Runner-Hint"] = hint
+            headers["X-Sunra-Runner-Hint"] = hint
 
         if priority is not None:
-            headers["X-sunra-Queue-Priority"] = priority
+            headers["X-Sunra-Queue-Priority"] = priority
 
         response = await _async_maybe_retry_request(
             self._client,
@@ -531,10 +531,10 @@ class SyncClient:
 
         headers = {}
         if hint is not None:
-            headers["X-sunra-Runner-Hint"] = hint
+            headers["X-Sunra-Runner-Hint"] = hint
 
         if priority is not None:
-            headers["X-sunra-Queue-Priority"] = priority
+            headers["X-Sunra-Queue-Priority"] = priority
 
         response = _maybe_retry_request(
             self._client,
