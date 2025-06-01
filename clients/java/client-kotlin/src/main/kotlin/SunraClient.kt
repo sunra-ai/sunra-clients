@@ -22,9 +22,9 @@ data class SubscribeOptions(
 /**
  * The main client class that provides access to simple API model usage,
  * as well as access to the [queue] APIs.
- * @see AsyncsunraClient
+ * @see AsyncSunraClient
  */
-interface sunraClient {
+interface SunraClient {
     /** The queue client with specific methods to interact with the queue API.
      *
      * **Note:** that the [subscribe] method is a convenience method that uses the
@@ -79,11 +79,11 @@ interface sunraClient {
 typealias OnStatusUpdate = (update: QueueStatus.StatusUpdate) -> Unit
 
 /**
- * A Kotlin implementation of [sunraClient] that wraps the Java [AsyncsunraClient].
+ * A Kotlin implementation of [SunraClient] that wraps the Java [AsyncSunraClient].
  */
-internal class sunraClientKotlinImpl(
+internal class SunraClientKotlinImpl(
     config: ClientConfig,
-) : sunraClient {
+) : SunraClient {
     private val client = AsyncSunraClient.withConfig(config)
 
     override val queue: QueueClient = QueueClientImpl(client.queue())
@@ -123,20 +123,20 @@ internal class sunraClientKotlinImpl(
     }
 }
 
-suspend inline fun <reified Output : Any> sunraClient.run(
+suspend inline fun <reified Output : Any> SunraClient.run(
     endpointId: String,
     input: Any,
     options: RunOptions = RunOptions(),
 ) = this.run(endpointId, input, Output::class, options)
 
 @JvmName("run_")
-suspend fun sunraClient.run(
+suspend fun SunraClient.run(
     endpointId: String,
     input: Any,
     options: RunOptions = RunOptions(),
 ) = this.run(endpointId, input, JsonObject::class, options)
 
-suspend inline fun <reified Output : Any> sunraClient.subscribe(
+suspend inline fun <reified Output : Any> SunraClient.subscribe(
     endpointId: String,
     input: Any,
     options: SubscribeOptions = SubscribeOptions(),
@@ -144,15 +144,15 @@ suspend inline fun <reified Output : Any> sunraClient.subscribe(
 ) = this.subscribe(endpointId, input, Output::class, options, onUpdate)
 
 @JvmName("subscribe_")
-suspend inline fun sunraClient.subscribe(
+suspend inline fun SunraClient.subscribe(
     endpointId: String,
     input: Any,
     options: SubscribeOptions = SubscribeOptions(),
     noinline onUpdate: OnStatusUpdate? = null,
 ) = this.subscribe(endpointId, input, JsonObject::class, options, onUpdate)
 
-fun createsunraClient(config: ClientConfig? = null): sunraClient =
-    sunraClientKotlinImpl(config ?: ClientConfig.withCredentials(CredentialsResolver.fromEnv()))
+fun createSunraClient(config: ClientConfig? = null): SunraClient =
+    SunraClientKotlinImpl(config ?: ClientConfig.withCredentials(CredentialsResolver.fromEnv()))
 
-fun createsunraClient(credentialsResolver: CredentialsResolver): sunraClient =
-    sunraClientKotlinImpl(ClientConfig.withCredentials(credentialsResolver))
+fun createSunraClient(credentialsResolver: CredentialsResolver): SunraClient =
+    SunraClientKotlinImpl(ClientConfig.withCredentials(credentialsResolver))

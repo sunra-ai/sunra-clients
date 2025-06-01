@@ -39,7 +39,7 @@ public class AsyncSunraClientImplRealTest {
                 .withCredentials(CredentialsResolver.fromApiKey(apiKey))
                 .build();
 
-        // Direct instantiation, not using sunraClient factory
+        // Direct instantiation, not using SunraClient factory
         asyncClient = new AsyncSunraClientImpl(config);
     }
 

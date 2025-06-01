@@ -17,7 +17,7 @@ public class SunraClientTest {
 
     /**
      * This test method is used to print actual API request results.
-     * Creates a sunraClient instance using Config approach instead of environment variables.
+     * Creates a SunraClient instance using Config approach instead of environment variables.
      *
      * To run this test, replace the API Key below with an actual API Key.
      */

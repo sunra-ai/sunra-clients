@@ -30,7 +30,7 @@ public class QueueClientImplRealTest {
         System.setProperty("http.keepAlive", "false");
         System.setProperty("http.maxConnections", "5");
 
-        // Create HttpClient, similar to the approach in sunraClientImpl
+        // Create HttpClient, similar to the approach in SunraClientImpl
         ClientConfig config = ClientConfig.builder()
                 .withCredentials(CredentialsResolver.fromApiKey(apiKey))
                 .build();

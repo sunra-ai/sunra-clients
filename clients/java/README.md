@@ -4,11 +4,11 @@
 
 ## About the Project
 
-The `sunraClient` is a robust and user-friendly Java implementation of the [sunra.ai](https://sunra.ai) client.
+The `SunraClient` is a robust and user-friendly Java implementation of the [sunra.ai](https://sunra.ai) client.
 
 ## Getting Started
 
-The `sunraClient` library serves as a client for sunra serverless Python functions. Before using this library, ensure you've got your sunra key from [our dashboard](https://sunra.ai/dashboard/keys).
+The `SunraClient` library serves as a client for sunra serverless Python functions. Before using this library, ensure you've got your sunra key from [our dashboard](https://sunra.ai/dashboard/keys).
 
 The client is available on Maven Central. There are three different modules:
 
@@ -97,7 +97,7 @@ implementation "ai.sunra.client:sunra-client-kotlin:0.1.0"
 ```kotlin
 import ai.sunra.client.kt.*
 
-val sunra = createsunraClient()
+val sunra = createSunraClient()
 
 val result = sunra.subscribe("sunra/lcm/text-to-image", input = mapOf(
     "prompt" to "A cute shih-tzu puppy"
