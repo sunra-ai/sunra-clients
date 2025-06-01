@@ -37,7 +37,7 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // Choose an endpoint that actually exists
-            String realEndpointId = "sunra/fast-animatediff/text-to-video"; // Modify according to actual situation
+            String realEndpointId = "sunra/lcm/text-to-image"; // Modify according to actual situation
 
             // Prepare test input
             Map<String, Object> input = Map.of("prompt", "the cat is running", "max_tokens", 100);
@@ -93,7 +93,7 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // Choose an endpoint suitable for long-running tasks
-            String realEndpointId = "sunra/fast-animatediff/text-to-video";
+            String realEndpointId = "sunra/lcm/text-to-image";
 
             // Prepare input
             Map<String, Object> input = Map.of(

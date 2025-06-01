@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 public class QueueClientImplRealTest {
 
     private QueueClientImpl queueClient;
-    private String testEndpointId = "sunra/fast-animatediff/text-to-video";
+    private String testEndpointId = "sunra/lcm/text-to-image";
     // For security, it's recommended to store the API Key in environment variables or config files
     private String apiKey = System.getenv("SUNRA_API_KEY");
 

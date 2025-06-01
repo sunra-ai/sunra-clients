@@ -38,7 +38,7 @@ var sunra = SunraClient.withEnvCredentials();
 var input = Map.of(
     "prompt", "A cute shih-tzu puppy"
 );
-var result = sunra.subscribe("sunra/fast-animatediff/text-to-video",
+var result = sunra.subscribe("sunra/lcm/text-to-image",
     SubscribeOptions.<JsonObject>builder()
         .input(input)
         .resultType(JsonObject.class)
@@ -69,7 +69,7 @@ var sunra = AsyncSunraClient.withEnvCredentials();
 var input = Map.of(
     "prompt", "A cute shih-tzu puppy"
 );
-var future = sunra.subscribe("sunra/fast-animatediff/text-to-video",
+var future = sunra.subscribe("sunra/lcm/text-to-image",
     SubscribeOptions.<JsonObject>builder()
         .input(input)
         .resultType(JsonObject.class)
@@ -99,7 +99,7 @@ import ai.sunra.client.kt.*
 
 val sunra = createsunraClient()
 
-val result = sunra.subscribe("sunra/fast-animatediff/text-to-video", input = mapOf(
+val result = sunra.subscribe("sunra/lcm/text-to-image", input = mapOf(
     "prompt" to "A cute shih-tzu puppy"
 )) { update ->
     print(update.status)
