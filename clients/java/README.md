@@ -25,7 +25,7 @@ The
 ##### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client:0.7.1"
+implementation "ai.sunra.client:sunra-client:0.1.0"
 ```
 
 ##### Call the API
@@ -56,7 +56,7 @@ System.out.println(result.getData());
 ##### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client-async:0.7.1"
+implementation "ai.sunra.client:sunra-client-async:0.1.0"
 ```
 
 ##### Call the API
@@ -89,7 +89,7 @@ future.thenAccept(result -> {
 ##### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client-kotlin:0.7.1"
+implementation "ai.sunra.client:sunra-client-kotlin:0.1.0"
 ```
 
 ##### Call the API

@@ -8,7 +8,7 @@ plugins {
 
 subprojects {
     group = "ai.sunra.client"
-    version = "0.7.1"
+    version = "0.1.0"
 
     apply(plugin = "com.diffplug.spotless")
     apply(plugin = "com.vanniktech.maven.publish")

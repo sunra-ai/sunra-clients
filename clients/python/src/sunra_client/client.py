@@ -31,7 +31,7 @@ AnyJSON = Dict[str, Any]
 Priority = Literal["normal", "low"]
 
 QUEUE_URL_FORMAT = f"https://api.{SUNRA_HOST}/v1/queue/"
-USER_AGENT = "sunra-client/0.2.2 (python)"
+USER_AGENT = "sunra-client/0.1.0 (python)"
 
 
 class SunraClientError(Exception):
