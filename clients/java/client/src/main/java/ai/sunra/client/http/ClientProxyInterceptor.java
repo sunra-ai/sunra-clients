@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientProxyInterceptor implements Interceptor {
 
-    public static final String HEADER_TARGET_URL = "X-sunra-Target-Url";
+    public static final String HEADER_TARGET_URL = "X-Sunra-Target-Url";
 
     private final ClientConfig config;
 

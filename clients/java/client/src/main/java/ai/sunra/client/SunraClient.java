@@ -69,7 +69,7 @@ public interface SunraClient {
     /**
      * Create a new client instance with the provided proxy URL. With this configuration all
      * requests will be proxied through the provided URL and the sunra target url will be in a request
-     * header called `X-sunra-Target-Url`.
+     * header called `X-Sunra-Target-Url`.
      *
      * @param proxyUrl The proxy URL.
      * @return The new client instance.

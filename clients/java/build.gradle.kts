@@ -1,80 +1,82 @@
-import com.vanniktech.maven.publish.SonatypeHost
-
 plugins {
-    id("com.diffplug.spotless") version "6.25.0"
-    id("com.vanniktech.maven.publish") version "0.29.0"
     kotlin("jvm") version "1.9.25" apply false
+    id("eu.kakde.gradle.sonatype-maven-central-publisher") version "1.0.6"
 }
 
-subprojects {
+catalog {
+    versionCatalog {
+        from(files("./libs.versions.toml"))
+    }
+}
+
+// ------------------------------------
+// PUBLISHING TO SONATYPE CONFIGURATION
+// ------------------------------------
+object Meta {
+    val COMPONENT_TYPE = "java" // "java" or "versionCatalog"
+    val GROUP = "ai.sunra.client"
+    val ARTIFACT_ID = "sunra-client"
+    val VERSION = "0.1.0" // VERSION OF THE LIBRARY THAT WILL BE PUBLISHED TO REPO.
+    val PUBLISHING_TYPE = "AUTOMATIC" // USER_MANAGED or AUTOMATIC
+    val DESC = "Sunra Client Library"
+    val LICENSE = "Apache-2.0"
+    val LICENSE_URL = "https://opensource.org/licenses/Apache-2.0"
+    val GITHUB_REPO = "sunra-ai/sunra-clients.git"
+    val DEVELOPER_ID = "sunra"
+    val DEVELOPER_NAME = "Sunra AI"
+    val DEVELOPER_ORGANIZATION = "sunra.ai"
+    val DEVELOPER_ORGANIZATION_URL = "https://sunra.ai"
+}
+
+val sonatypeUsername: String? by project // this is defined in ~/.gradle/gradle.properties
+val sonatypePassword: String? by project // this is defined in ~/.gradle/gradle.properties
+
+allprojects {
     group = "ai.sunra.client"
     version = "0.1.0"
+    apply(plugin = "eu.kakde.gradle.sonatype-maven-central-publisher")
 
-    apply(plugin = "com.diffplug.spotless")
-    apply(plugin = "com.vanniktech.maven.publish")
-
-    spotless {
-        java {
-            palantirJavaFormat()
-        }
-        kotlin {
-            ktlint()
-        }
-        kotlinGradle {
-            target("*.gradle.kts")
-            ktlint()
-        }
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
     }
 
-    mavenPublishing {
-        publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
-        signAllPublications()
+    sonatypeCentralPublishExtension {
+        groupId.set(Meta.GROUP)
+        artifactId.set(Meta.ARTIFACT_ID)
+        version.set(Meta.VERSION)
+        componentType.set(Meta.COMPONENT_TYPE)
+        publishingType.set(Meta.PUBLISHING_TYPE)
+        username.set(System.getenv("SONATYPE_USERNAME") ?: sonatypeUsername)
+        password.set(System.getenv("SONATYPE_PASSWORD") ?: sonatypePassword)
+
         pom {
-            name.set("sunra Client Library")
-            description.set("A Client library for sunra.ai APIs")
-            inceptionYear.set("2024")
-            url.set("https://github.com/sunra-ai/sunra-clients/tree/main/clients/java")
+            name.set(Meta.ARTIFACT_ID)
+            description.set(Meta.DESC)
+            url.set("https://github.com/${Meta.GITHUB_REPO}")
             licenses {
                 license {
-                    name.set("MIT")
-                    url.set("https://opensource.org/license/mit")
+                    name.set(Meta.LICENSE)
+                    url.set(Meta.LICENSE_URL)
                 }
             }
             developers {
                 developer {
-                    id.set("sunra")
-                    name.set("sunra AI")
-                    email.set("developers@sunra.ai")
-                    url.set("https://github.com/sunra-ai")
+                    id.set(Meta.DEVELOPER_ID)
+                    name.set(Meta.DEVELOPER_NAME)
+                    organization.set(Meta.DEVELOPER_ORGANIZATION)
+                    organizationUrl.set(Meta.DEVELOPER_ORGANIZATION_URL)
                 }
             }
             scm {
-                url.set("https://github.com/sunra-ai/sunra-clients/tree/main/clients/java")
-                connection.set("scm:git:git://github.com/sunra-ai/sunra-clients.git")
+                url.set("https://github.com/${Meta.GITHUB_REPO}")
+                connection.set("scm:git:https://github.com/${Meta.GITHUB_REPO}")
+                developerConnection.set("scm:git:https://github.com/${Meta.GITHUB_REPO}")
+            }
+            issueManagement {
+                system.set("GitHub")
+                url.set("https://github.com/${Meta.GITHUB_REPO}/issues")
             }
         }
     }
-
-    tasks.withType<Javadoc> {
-        // Disable empty javadoc warnings
-        (options as CoreJavadocOptions).addBooleanOption("Xdoclint:none", true)
-    }
-
-    afterEvaluate {
-        when {
-            plugins.hasPlugin("java") && !plugins.hasPlugin("org.jetbrains.kotlin.jvm") -> {
-                tasks.named<Javadoc>("javadoc") {
-                    options.encoding = "UTF-8"
-
-                    doLast {
-                        copy {
-                            from(destinationDir)
-                            into(rootProject.projectDir.resolve("docs/${project.name}"))
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 }

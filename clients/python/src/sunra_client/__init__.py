@@ -25,7 +25,6 @@ __all__ = [
     "subscribe",
     "submit",
     "stream",
-    "run_async",
     "submit_async",
     "stream_async",
     "cancel",

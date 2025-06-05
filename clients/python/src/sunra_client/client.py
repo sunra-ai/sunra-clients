@@ -1,26 +1,22 @@
 from __future__ import annotations
 
 import io
-import math
 import os
 import mimetypes
 import asyncio
-from pathlib import Path
 import time
 import base64
-import threading
 import logging
-from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Any, AsyncIterator, Dict, Iterator, TYPE_CHECKING, Optional, Literal
+from typing import Any, AsyncIterator, Dict, Iterator, TYPE_CHECKING, Optional, Literal, Callable
 from urllib.parse import urlencode
 
 import httpx
 import requests
 from httpx_sse import aconnect_sse, connect_sse
-from sunra_client.auth import SUNRA_HOST, fetch_credentials
 import anyio
+from sunra_client.auth import SUNRA_HOST, fetch_credentials
 
 logger = logging.getLogger(__name__)
 
@@ -88,15 +84,15 @@ class _BaseRequestHandle:
     cancel_url: str = field(repr=False)
 
     def _parse_status(self, data: AnyJSON) -> Status:
-        if data["status"] == "IN_QUEUE":
-            return Queued(position=data["queue_position"])
-        elif data["status"] == "IN_PROGRESS":
-            return InProgress(logs=data.get("logs"))
-        elif data["status"] == "COMPLETED":
+        if data.get("status") == "IN_QUEUE":
+            return Queued(position=data.get("queue_position", 0))
+        elif data.get("status") == "IN_PROGRESS":
+            return InProgress(logs=data.get("logs", ""))
+        elif data.get("status") == "COMPLETED":
             metrics = data.get("metrics", {})
-            return Completed(logs=data.get("logs"), metrics=metrics)
+            return Completed(logs=data.get("logs", ""), metrics=metrics)
         else:
-            raise ValueError(f"Unknown status: {data['status']}")
+            raise ValueError(f"Unknown status: {data.get('status')}")
 
 
 APP_NAMESPACES = ["workflows", "comfy"]
@@ -344,10 +340,10 @@ class AsyncClient:
 
         headers = {}
         if hint is not None:
-            headers["X-sunra-Runner-Hint"] = hint
+            headers["X-Sunra-Runner-Hint"] = hint
 
         if priority is not None:
-            headers["X-sunra-Queue-Priority"] = priority
+            headers["X-Sunra-Queue-Priority"] = priority
 
         response = await _async_maybe_retry_request(
             self._client,
@@ -360,10 +356,10 @@ class AsyncClient:
 
         data = response.json()
         return AsyncRequestHandle(
-            request_id=data["request_id"],
-            response_url=data["response_url"],
-            status_url=data["status_url"],
-            cancel_url=data["cancel_url"],
+            request_id=data.get("request_id", ""),
+            response_url=data.get("response_url", ""),
+            status_url=data.get("status_url", ""),
+            cancel_url=data.get("cancel_url", ""),
             client=self._client,
         )
 
@@ -374,8 +370,8 @@ class AsyncClient:
         *,
         path: str = "",
         hint: str | None = None,
-        on_enqueue: Optional[callable[[Queued], None]] = None,
-        on_queue_update: Optional[callable[[Status], None]] = None,
+        on_enqueue: Optional[Callable[[Queued], None]] = None,
+        on_queue_update: Optional[Callable[[Status], None]] = None,
         priority: Optional[Priority] = None,
     ) -> AnyJSON:
         handle = await self.submit(
@@ -457,8 +453,8 @@ class AsyncClient:
         )
         _raise_for_status(init_response)
         upload_data = init_response.json()
-        upload_url = upload_data["upload_url"]
-        file_url = upload_data["file_url"]
+        upload_url = upload_data.get("upload_url", "")
+        file_url = upload_data.get("file_url", "")
 
         # Upload data using signed URL
         def do_upload():
@@ -531,10 +527,10 @@ class SyncClient:
 
         headers = {}
         if hint is not None:
-            headers["X-sunra-Runner-Hint"] = hint
+            headers["X-Sunra-Runner-Hint"] = hint
 
         if priority is not None:
-            headers["X-sunra-Queue-Priority"] = priority
+            headers["X-Sunra-Queue-Priority"] = priority
 
         response = _maybe_retry_request(
             self._client,
@@ -548,10 +544,10 @@ class SyncClient:
 
         data = response.json()
         return SyncRequestHandle(
-            request_id=data["request_id"],
-            response_url=data["response_url"],
-            status_url=data["status_url"],
-            cancel_url=data["cancel_url"],
+            request_id=data.get("request_id", ""),
+            response_url=data.get("response_url", ""),
+            status_url=data.get("status_url", ""),
+            cancel_url=data.get("cancel_url", ""),
             client=self._client,
         )
 
@@ -562,8 +558,8 @@ class SyncClient:
         *,
         path: str = "",
         hint: str | None = None,
-        on_enqueue: Optional[callable[[Queued], None]] = None,
-        on_queue_update: Optional[callable[[Status], None]] = None,
+        on_enqueue: Optional[Callable[[Queued], None]] = None,
+        on_queue_update: Optional[Callable[[Status], None]] = None,
         priority: Optional[Priority] = None,
     ) -> AnyJSON:
         handle = self.submit(
@@ -646,8 +642,8 @@ class SyncClient:
         )
         _raise_for_status(init_response)
         upload_data = init_response.json()
-        upload_url = upload_data["upload_url"]
-        file_url = upload_data["file_url"]
+        upload_url = upload_data.get("upload_url", "")
+        file_url = upload_data.get("file_url", "")
         print(f"[upload] upload_url: {upload_url}, file_url: {file_url}")
 
         # Upload data using signed URL
