@@ -23,7 +23,7 @@ public interface AsyncSunraClient {
     }
 
     /**
-     * Create a new client instance with the credentials resolved from the `sunra_KEY` environment
+     * Create a new client instance with the credentials resolved from the `SUNRA_KEY` environment
      * variable.
      *
      * @return The new client instance.

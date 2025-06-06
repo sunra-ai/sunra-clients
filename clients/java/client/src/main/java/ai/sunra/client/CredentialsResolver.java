@@ -8,6 +8,6 @@ public interface CredentialsResolver extends Supplier<String> {
     }
 
     static CredentialsResolver fromEnv() {
-        return () -> System.getenv("sunra_KEY");
+        return () -> System.getenv("SUNRA_KEY");
     }
 }

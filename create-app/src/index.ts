@@ -36,7 +36,7 @@ async function main() {
     if (!appName || !kebabRegez.test(args[0] as string)) {
       appName = await input({
         message: 'Enter your app name',
-        default: 'model-playground',
+        default: 'my-app',
         validate: (d) => {
           if (!kebabRegez.test(d)) {
             return 'please enter your app name in the format of my-app-name'
@@ -61,17 +61,14 @@ async function main() {
     })
 
     if (!hasSunraEnv) {
-      await open('https://www.sunra.ai/dashboard')
+      await open('https://app.sunra.ai/dashboard')
     }
 
-    const sunra_api_key = await input({ message: 'Sunra AI API Key' })
+    const apiKey = await input({ message: 'Sunra AI API Key' })
 
     const envs = `
-    # environment, either PRODUCTION or DEVELOPMENT
-    ENVIRONMENT="PRODUCTION"
-
     # SUNRA AI API Key
-    SUNRA_KEY="${sunra_api_key}"
+    SUNRA_KEY="${apiKey}"
     `
 
     log('\nInitializing project. \n')

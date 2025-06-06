@@ -24,7 +24,7 @@ public class AsyncSunraClientImplRealTest {
     private AsyncSunraClientImpl asyncClient;
     private String testEndpointId = "sunra/lcm/text-to-image";
     // Recommended to store API Key in environment variables or config files
-    private String apiKey = System.getenv("SUNRA_API_KEY");
+    private String apiKey = System.getenv("SUNRA_KEY");
 
     @BeforeEach
     void setUp() {
