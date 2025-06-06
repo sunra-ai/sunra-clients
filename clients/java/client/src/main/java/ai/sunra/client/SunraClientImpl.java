@@ -7,11 +7,26 @@ import ai.sunra.client.queue.*;
 import jakarta.annotation.Nonnull;
 import okhttp3.OkHttpClient;
 
+/**
+ * The Sunra client implementation.
+ */
 public class SunraClientImpl implements SunraClient {
 
+    /**
+     * The HTTP client.
+     */
     private final HttpClient httpClient;
+
+    /**
+     * The Queue client.
+     */
     private final QueueClient queueClient;
 
+    /**
+     * Create a new Sunra client implementation.
+     *
+     * @param config The client configuration.
+     */
     SunraClientImpl(@Nonnull ClientConfig config) {
         final var builder = new OkHttpClient.Builder().addInterceptor(new CredentialsInterceptor(config));
         if (config.getProxyUrl() != null) {
@@ -21,6 +36,13 @@ public class SunraClientImpl implements SunraClient {
         this.queueClient = new QueueClientImpl(this.httpClient);
     }
 
+    /**
+     * Run the specified endpoint with the provided options.
+     *
+     * @param endpointId The endpoint ID to run.
+     * @param options The run options.
+     * @return The output.
+     */
     @Override
     @Nonnull
     public <O> Output<O> run(String endpointId, RunOptions<O> options) {
@@ -30,6 +52,13 @@ public class SunraClientImpl implements SunraClient {
         return httpClient.wrapInResult(response, options.getResultType());
     }
 
+    /**
+     * Subscribe to the specified endpoint with the provided options.
+     *
+     * @param endpointId The endpoint ID to subscribe to.
+     * @param options The subscribe options.
+     * @return The output.
+     */
     @Override
     @Nonnull
     public <O> Output<O> subscribe(String endpointId, SubscribeOptions<O> options) {
@@ -56,6 +85,11 @@ public class SunraClientImpl implements SunraClient {
                         .build());
     }
 
+    /**
+     * Get the queue client.
+     *
+     * @return The queue client.
+     */
     @Override
     public QueueClient queue() {
         return this.queueClient;
