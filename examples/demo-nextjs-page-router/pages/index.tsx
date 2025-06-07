@@ -27,16 +27,14 @@ const DEFAULT_PROMPT =
   "a city landscape of a cyberpunk metropolis, raining, purple, pink and teal neon lights, highly detailed, uhd";
 
 export function Index() {
-  // Input state
   const [prompt, setPrompt] = useState<string>(DEFAULT_PROMPT);
-  // Result state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [result, setResult] = useState<any>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
-  const video = result?.video ?? null
+  const image = result?.image ?? result?.images?.[0] ?? null
 
   const reset = () => {
     setLoading(false);
@@ -46,12 +44,12 @@ export function Index() {
     setElapsedTime(0);
   };
 
-  const generateVideo = async () => {
+  const generateImage = async () => {
     reset();
     setLoading(true);
     const start = Date.now();
     try {
-      const result = await sunra.subscribe("sunra/fast-animatediff/text-to-video", {
+      const result = await sunra.subscribe("sunra/lcm/text-to-image", {
         input: {
           prompt,
         },
@@ -66,7 +64,7 @@ export function Index() {
           }
         },
       });
-      setResult(result.data as any);
+      setResult(result);
     } catch (error: any) {
       setError(error);
     } finally {
@@ -99,20 +97,20 @@ export function Index() {
         <button
           onClick={(e) => {
             e.preventDefault();
-            generateVideo();
+            generateImage();
           }}
           className="focus:shadow-outline mx-auto rounded bg-indigo-600 py-3 px-6 text-lg font-bold text-white hover:bg-indigo-700 focus:outline-none"
           disabled={loading}
         >
-          {loading ? "Generating..." : "Generate Video"}
+          {loading ? "Generating..." : "Generate Image"}
         </button>
 
         <Error error={error} />
 
         <div className="flex w-full flex-col space-y-4">
           <div className="mx-auto">
-            {video && (
-              <video controls autoPlay loop playsInline src={video.url} />
+            {image && (
+              <img src={image.url} alt="Generated Image" />
             )}
           </div>
           <div className="space-y-2">

@@ -1,12 +1,8 @@
-import { Config, createConfig } from './config'
+import { SunraClientConfig, createConfig } from './config'
 import { createQueueClient, QueueClient, QueueSubscribeOptions } from './queue'
-import { createRealtimeClient, RealtimeClient } from './realtime'
 import { buildUrl, dispatchRequest } from './request'
-import { resultResponseHandler } from './response'
 import { createStorageClient, StorageClient } from './storage'
-import { createStreamingClient, StreamingClient } from './streaming'
-import { EndpointType, InputType, OutputType } from './types/client'
-import { Result, RunOptions } from './types/common'
+import { SunraResult, SunraRunOptions } from './types/common'
 
 /**
  * The main client type, it provides access to simple API model usage,
@@ -21,23 +17,9 @@ export interface SunraClient {
   readonly queue: QueueClient;
 
   /**
-   * The realtime client to interact with the realtime API
-   * and receive updates in real-time.
-   * @see #RealtimeClient
-   * @see #RealtimeClient.connect
-   */
-  readonly realtime: RealtimeClient;
-
-  /**
    * The storage client to interact with the storage API.
    */
   readonly storage: StorageClient;
-
-  /**
-   * The streaming client to interact with the streaming API.
-   * @see #stream
-   */
-  readonly streaming: StreamingClient;
 
   /**
    * Runs a sunra endpoints identified by its `endpointId`.
@@ -45,10 +27,7 @@ export interface SunraClient {
    * @param endpointId the registered function revision id or alias.
    * @returns the remote function output
    */
-  run<Id extends EndpointType>(
-    endpointId: Id,
-    options: RunOptions<InputType<Id>>,
-  ): Promise<Result<OutputType<Id>>>;
+  run(endpointId: string, options: SunraRunOptions<any>): Promise<SunraResult<any>>;
 
   /**
    * Subscribes to updates for a specific request in the queue.
@@ -57,21 +36,7 @@ export interface SunraClient {
    * @param options - Options to configure how the request is run and how updates are received.
    * @returns A promise that resolves to the result of the request once it's completed.
    */
-  subscribe<Id extends EndpointType>(
-    endpointId: Id,
-    options: RunOptions<InputType<Id>> & QueueSubscribeOptions,
-  ): Promise<Result<OutputType<Id>>>;
-
-  /**
-   * Calls a sunra app that supports streaming and provides a streaming-capable
-   * object as a result, that can be used to get partial results through either
-   * `AsyncIterator` or through an event listener.
-   *
-   * @param endpointId the endpoint id, e.g. `sunra/llavav15-13b`.
-   * @param options the request options, including the input payload.
-   * @returns the `SunraStream` instance.
-   */
-  stream: StreamingClient['stream'];
+  subscribe(endpointId: string, options: SunraRunOptions<any> & QueueSubscribeOptions): Promise<SunraResult<any>>;
 }
 
 /**
@@ -79,39 +44,24 @@ export interface SunraClient {
  * @param userConfig Optional configuration to override the default settings.
  * @returns a new instance of the `SunraClient`.
  */
-export function createSunraClient(userConfig: Config = {}): SunraClient {
+export function createSunraClient(userConfig: SunraClientConfig = {}): SunraClient {
   const config = createConfig(userConfig)
   const storage = createStorageClient({ config })
   const queue = createQueueClient({ config, storage })
-  const streaming = createStreamingClient({ config, storage })
-  const realtime = createRealtimeClient({ config })
   return {
     queue,
-    realtime,
     storage,
-    streaming,
-    stream: streaming.stream,
-    async run<Id extends EndpointType>(
-      endpointId: Id,
-      options: RunOptions<InputType<Id>> = {},
-    ): Promise<Result<OutputType<Id>>> {
+    async run(endpointId: string, options: SunraRunOptions<any> = {}): Promise<SunraResult<any>> {
       const input = options.input
         ? await storage.transformInput(options.input)
         : undefined
-      return dispatchRequest<InputType<Id>, Result<OutputType<Id>>>({
-        method: options.method,
+      return dispatchRequest<any, SunraResult<any>>({
         targetUrl: buildUrl(endpointId, {
           subdomain: 'queue',
           ...options
         }),
-        input: input as InputType<Id>,
-        config: {
-          ...config,
-          responseHandler: resultResponseHandler,
-        },
-        options: {
-          signal: options.abortSignal,
-        },
+        input: input as any,
+        config,
       })
     },
     subscribe: async (endpointId, options) => {

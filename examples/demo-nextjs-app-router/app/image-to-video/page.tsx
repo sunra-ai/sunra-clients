@@ -1,25 +1,11 @@
 "use client";
 
-import { createSunraClient, Result } from "@sunra/client";
+import { createSunraClient } from "@sunra/client";
 import { useMemo, useState } from "react";
 
 const sunra = createSunraClient({
   proxyUrl: "/api/sunra/proxy", // the built-int nextjs proxy
-  // proxyUrl: 'http://localhost:3333/api/sunra/proxy', // or your own external proxy
 });
-
-type Image = {
-  filename: string;
-  subfolder: string;
-  type: string;
-  url: string;
-};
-
-type ComfyOutput = {
-  url: string;
-  outputs: Record<string, any>[];
-  images: Image[];
-};
 
 type ErrorProps = {
   error: any;
@@ -40,25 +26,19 @@ function Error(props: ErrorProps) {
 }
 
 const DEFAULT_PROMPT =
-  "a city landscape of a cyberpunk metropolis, raining, purple, pink and teal neon lights, highly detailed, uhd";
+  "(masterpiece:1.4), (best quality), (detailed), Medieval village scene with busy streets and castle in the distance";
 
-export default function ComfyTextToImagePage() {
-  // @snippet:start("client.ui.state")
-  // Input state
+export default function Home() {
   const [prompt, setPrompt] = useState<string>(DEFAULT_PROMPT);
-  // Result state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [result, setResult] = useState<ComfyOutput | null>(null);
+  const [result, setResult] = useState<any>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
-  // @snippet:end
   const image = useMemo(() => {
-    if (!result) {
-      return null;
-    }
-    return result;
+    return result?.image ?? result?.images?.[0] ?? null
   }, [result]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const reset = () => {
     setLoading(false);
@@ -68,35 +48,29 @@ export default function ComfyTextToImagePage() {
     setElapsedTime(0);
   };
 
-  const getImageURL = (result: ComfyOutput) => {
-    return result.outputs[9].images[0];
-  };
-
-  const generateImage = async () => {
+  const generateVideo = async () => {
     reset();
     // @snippet:start("client.queue.subscribe")
     setLoading(true);
     const start = Date.now();
     try {
-      const { data }: Result<ComfyOutput> = await sunra.subscribe(
-        "comfy/sunra/text-to-image",
-        {
-          input: {
-            prompt: prompt,
-          },
-          logs: true,
-          onQueueUpdate(update) {
-            setElapsedTime(Date.now() - start);
-            if (
-              update.status === "IN_PROGRESS" ||
-              update.status === "COMPLETED"
-            ) {
-              setLogs((update.logs || []).map((log) => log.message));
-            }
-          },
+      const result = await sunra.subscribe("sunra/lcm/text-to-image", {
+        input: {
+          prompt,
+          image: imageFile,
         },
-      );
-      setResult(getImageURL(data));
+        logs: true,
+        onQueueUpdate(update) {
+          setElapsedTime(Date.now() - start);
+          if (
+            update.status === "IN_PROGRESS" ||
+            update.status === "COMPLETED"
+          ) {
+            setLogs((update.logs || []).map((log) => log.message));
+          }
+        },
+      });
+      setResult(result);
     } catch (error: any) {
       setError(error);
     } finally {
@@ -108,7 +82,9 @@ export default function ComfyTextToImagePage() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <main className="container flex w-full flex-1 flex-col items-center justify-center space-y-8 py-10 text-gray-900 dark:text-gray-50">
-        <h1 className="mb-8 text-4xl font-bold">Comfy SDXL - Text to Image</h1>
+        <h1 className="mb-8 text-4xl font-bold">
+          Hello <code className="font-light text-pink-600">sunra</code>
+        </h1>
         <div className="w-full text-lg">
           <label htmlFor="prompt" className="mb-2 block text-current">
             Prompt
@@ -124,11 +100,29 @@ export default function ComfyTextToImagePage() {
             onBlur={(e) => setPrompt(e.target.value.trim())}
           />
         </div>
+        <div className="w-full text-lg">
+          <label htmlFor="image" className="mb-2 block text-current">
+            Image
+          </label>
+          <input
+            className="w-full rounded border border-black/20 bg-black/10 p-2 text-lg dark:border-white/10 dark:bg-white/5"
+            id="image"
+            name="image"
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (file) {
+                setImageFile(file)
+              }
+            }}
+          />
+        </div>
 
         <button
           onClick={(e) => {
             e.preventDefault();
-            generateImage();
+            generateVideo();
           }}
           className="focus:shadow-outline mx-auto rounded bg-indigo-600 py-3 px-6 text-lg font-bold text-white hover:bg-indigo-700 focus:outline-none"
           disabled={loading}
@@ -141,8 +135,7 @@ export default function ComfyTextToImagePage() {
         <div className="flex w-full flex-col space-y-4">
           <div className="mx-auto">
             {image && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={image.url} alt="" />
+              <img src={image.url} alt="Generated Image" />
             )}
           </div>
           <div className="space-y-2">

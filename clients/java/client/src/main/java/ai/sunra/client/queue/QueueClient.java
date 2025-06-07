@@ -9,7 +9,7 @@ public interface QueueClient {
     /**
      * Submit a payload to an endpoint's queue.
      *
-     * @param endpointId the endpoint to submit to (e.g. `sunra-ai/fast-sdxl`)
+     * @param endpointId the endpoint to submit to (e.g. `sunra/lcm`)
      * @param options the submit options
      * @return the status of the submission with the `requestId` for tracking the submission.
      */

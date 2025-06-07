@@ -20,7 +20,7 @@ public interface SunraClient {
      * the queue or {@link #queue()} client for specific queue operations. .
      *
      * @param <O> Output type.
-     * @param endpointId The endpoint ID to run, e.g. `sunra-ai/fast-sdxl`.
+     * @param endpointId The endpoint ID to run, e.g. `sunra/lcm`.
      * @param options The run options.
      * @return The result of the operation.
      */
@@ -32,7 +32,7 @@ public interface SunraClient {
      * completed.
      *
      * @param <O> Output type.
-     * @param endpointId The endpoint ID to subscribe to, e.g. `sunra-ai/fast-sdxl`.
+     * @param endpointId The endpoint ID to subscribe to, e.g. `sunra/lcm`.
      * @param options The subscribe options.
      * @return The result of the operation.
      * @see #queue()
