@@ -16,7 +16,7 @@ object Meta {
     val COMPONENT_TYPE = "java" // "java" or "versionCatalog"
     val GROUP = "ai.sunra.client"
     val ARTIFACT_ID = "sunra-client"
-    val VERSION = "0.1.0" // VERSION OF THE LIBRARY THAT WILL BE PUBLISHED TO REPO.
+    val VERSION = "0.1.1" // VERSION OF THE LIBRARY THAT WILL BE PUBLISHED TO REPO.
     val PUBLISHING_TYPE = "AUTOMATIC" // USER_MANAGED or AUTOMATIC
     val DESC = "Sunra Client Library"
     val LICENSE = "Apache-2.0"
@@ -32,8 +32,8 @@ val sonatypeUsername: String? by project // this is defined in ~/.gradle/gradle.
 val sonatypePassword: String? by project // this is defined in ~/.gradle/gradle.properties
 
 allprojects {
-    group = "ai.sunra.client"
-    version = "0.1.0"
+    group = Meta.GROUP
+    version = Meta.VERSION
     apply(plugin = "eu.kakde.gradle.sonatype-maven-central-publisher")
 
     repositories {

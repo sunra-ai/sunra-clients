@@ -25,7 +25,7 @@ public class SunraClientTest {
     void testRealApiCall() {
         // Create ClientConfig with hardcoded API Key
         // Note: In real projects, avoid hardcoding API keys, this is just a test example
-        String apiKey = System.getenv("SUNRA_API_KEY");
+        String apiKey = System.getenv("SUNRA_KEY");
         ; // Replace with actual API Key
 
         try {
@@ -77,7 +77,7 @@ public class SunraClientTest {
     @Test
     void testRealSubscribe() {
         // Create ClientConfig with hardcoded API Key
-        String apiKey = System.getenv("SUNRA_API_KEY");
+        String apiKey = System.getenv("SUNRA_KEY");
         ;
 
         try {
