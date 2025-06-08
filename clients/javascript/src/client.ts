@@ -1,6 +1,5 @@
 import { SunraClientConfig, createConfig } from './config'
 import { createQueueClient, QueueClient, QueueSubscribeOptions } from './queue'
-import { buildUrl, dispatchRequest } from './request'
 import { createStorageClient, StorageClient } from './storage'
 import { SunraResult, SunraRunOptions } from './types/common'
 
@@ -20,14 +19,6 @@ export interface SunraClient {
    * The storage client to interact with the storage API.
    */
   readonly storage: StorageClient;
-
-  /**
-   * Runs a sunra endpoints identified by its `endpointId`.
-   *
-   * @param endpointId the registered function revision id or alias.
-   * @returns the remote function output
-   */
-  run(endpointId: string, options: SunraRunOptions<any>): Promise<SunraResult<any>>;
 
   /**
    * Subscribes to updates for a specific request in the queue.
@@ -51,19 +42,6 @@ export function createSunraClient(userConfig: SunraClientConfig = {}): SunraClie
   return {
     queue,
     storage,
-    async run(endpointId: string, options: SunraRunOptions<any> = {}): Promise<SunraResult<any>> {
-      const input = options.input
-        ? await storage.transformInput(options.input)
-        : undefined
-      return dispatchRequest<any, SunraResult<any>>({
-        targetUrl: buildUrl(endpointId, {
-          subdomain: 'queue',
-          ...options
-        }),
-        input: input as any,
-        config,
-      })
-    },
     subscribe: async (endpointId, options) => {
       const { request_id: requestId } = await queue.submit(endpointId, options)
       if (options.onEnqueue) {

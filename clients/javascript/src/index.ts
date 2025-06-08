@@ -38,9 +38,6 @@ export const sunra: SingletonSunraClient =
       get storage() {
         return currentInstance.storage
       },
-      run(id: string, options: SunraRunOptions<any>) {
-        return currentInstance.run(id, options)
-      },
       subscribe(
         endpointId: string,
         options: SunraRunOptions<any>,

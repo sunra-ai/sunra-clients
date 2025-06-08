@@ -288,7 +288,7 @@ export const createQueueClient = ({
       endpointId: string,
       { requestId }: BaseQueueOptions,
     ): Promise<SunraResult<Output>> {
-      return dispatchRequest<unknown, SunraResult<Output>>({
+      const data = await dispatchRequest<unknown, Output>({
         method: 'get',
         targetUrl: buildUrl('', {
           subdomain: 'queue',
@@ -296,6 +296,11 @@ export const createQueueClient = ({
         }),
         config,
       })
+
+      return {
+        data,
+        requestId,
+      }
     },
 
     async cancel(
