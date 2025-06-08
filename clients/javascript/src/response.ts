@@ -1,18 +1,9 @@
-import { RequiredConfig } from './config'
-import { Result, ValidationErrorInfo } from './types/common'
-
-export type ResponseHandler<Output> = (response: Response) => Promise<Output>;
-
-const REQUEST_ID_HEADER = 'x-sunra-request-id'
-
-export type ResponseHandlerCreator<Output> = (
-  config: RequiredConfig,
-) => ResponseHandler<Output>;
+import { ValidationErrorInfo } from './types/common'
 
 type ApiErrorArgs = {
   message: string;
   status: number;
-   
+
   body?: any;
 };
 
@@ -57,44 +48,4 @@ export class ValidationError extends ApiError<ValidationErrorBody> {
       (error) => error.loc[error.loc.length - 1] === field,
     )
   }
-}
-
-export async function defaultResponseHandler<Output>(
-  response: Response,
-): Promise<Output> {
-  const { status, statusText } = response
-  const contentType = response.headers.get('Content-Type') ?? ''
-  if (!response.ok) {
-    if (contentType.includes('application/json')) {
-      const body = await response.json()
-      const ErrorType = status === 422 ? ValidationError : ApiError
-      throw new ErrorType({
-        message: body.message || statusText,
-        status,
-        body,
-      })
-    }
-    throw new ApiError({ message: `HTTP ${status}: ${statusText}`, status })
-  }
-  if (contentType.includes('application/json')) {
-    return response.json() as Promise<Output>
-  }
-  if (contentType.includes('text/html')) {
-    return response.text() as Promise<Output>
-  }
-  if (contentType.includes('application/octet-stream')) {
-    return response.arrayBuffer() as Promise<Output>
-  }
-  // TODO convert to either number or bool automatically
-  return response.text() as Promise<Output>
-}
-
-export async function resultResponseHandler<Output>(
-  response: Response,
-): Promise<Result<Output>> {
-  const data = await defaultResponseHandler<Output>(response)
-  return {
-    data,
-    requestId: response.headers.get(REQUEST_ID_HEADER) || '',
-  } satisfies Result<Output>
 }

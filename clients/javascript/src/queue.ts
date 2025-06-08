@@ -1,26 +1,21 @@
 import { RequiredConfig } from './config'
 import { buildUrl, dispatchRequest } from './request'
-import { resultResponseHandler } from './response'
 import { StorageClient } from './storage'
-import { SunraStream, StreamingConnectionMode } from './streaming'
-import { EndpointType, InputType, OutputType } from './types/client'
 import {
-  CompletedQueueStatus,
-  InQueueQueueStatus,
-  QueueStatus,
-  RequestLog,
-  Result,
-  RunOptions,
+  SunraCompletedQueueStatus,
+  SunraInQueueQueueStatus,
+  SunraQueueStatus,
+  SunraResult,
+  SunraRunOptions,
 } from './types/common'
-import { parseEndpointId } from './utils'
 
-export type QueuePriority = 'low' | 'normal';
-export type QueueStatusSubscriptionOptions = QueueStatusOptions &
+type QueuePriority = 'low' | 'normal';
+type QueueStatusSubscriptionOptions = QueueStatusOptions &
   Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'>;
 
 type TimeoutId = ReturnType<typeof setTimeout> | undefined;
 
-const DEFAULT_POLL_INTERVAL = 500
+const DEFAULT_POLL_INTERVAL = 1000
 
 /**
  * Options for subscribing to the request queue.
@@ -28,14 +23,10 @@ const DEFAULT_POLL_INTERVAL = 500
 export type QueueSubscribeOptions = {
   /**
    * The mode to use for subscribing to updates. It defaults to `polling`.
-   * You can also use client-side streaming by setting it to `streaming`.
-   *
-   * **Note:** Streaming is currently experimental and once stable, it will
-   * be the default mode.
    *
    * @see pollInterval
    */
-  mode?: 'polling' | 'streaming';
+  mode?: 'polling'
 
   /**
    * Callback function that is called when a request is enqueued.
@@ -47,7 +38,7 @@ export type QueueSubscribeOptions = {
    * Callback function that is called when the status of the queue changes.
    * @param status - The current status of the queue.
    */
-  onQueueUpdate?: (status: QueueStatus) => void;
+  onQueueUpdate?: (status: SunraQueueStatus) => void;
 
   /**
    * If `true`, the response will include the logs for the request.
@@ -90,21 +81,12 @@ export type QueueSubscribeOptions = {
        */
       pollInterval?: number;
     }
-    | {
-      mode: 'streaming';
-
-      /**
-       * The connection mode to use for streaming updates. It defaults to `server`.
-       * Set to `client` if your server proxy doesn't support streaming.
-       */
-      connectionMode?: StreamingConnectionMode;
-    }
   );
 
 /**
  * Options for submitting a request to the queue.
  */
-export type SubmitOptions<Input> = RunOptions<Input> & {
+type SubmitOptions<Input> = SunraRunOptions<Input> & {
   /**
    * The URL to send a webhook notification to when the request is completed.
    * @see WebHookResponse
@@ -123,27 +105,14 @@ type BaseQueueOptions = {
    * The unique identifier for the enqueued request.
    */
   requestId: string;
-
-  /**
-   * The signal to abort the request.
-   */
-  abortSignal?: AbortSignal;
 };
 
-export type QueueStatusOptions = BaseQueueOptions & {
+type QueueStatusOptions = BaseQueueOptions & {
   /**
    * If `true`, the response will include the logs for the request.
    * Defaults to `false`.
    */
   logs?: boolean;
-};
-
-export type QueueStatusStreamOptions = QueueStatusOptions & {
-  /**
-   * The connection mode to use for streaming updates. It defaults to `server`.
-   * Set to `client` if your server proxy doesn't support streaming.
-   */
-  connectionMode?: StreamingConnectionMode;
 };
 
 /**
@@ -158,10 +127,7 @@ export interface QueueClient {
    * @param options - Options to configure how the request is run.
    * @returns A promise that resolves to the result of enqueuing the request.
    */
-  submit<Id extends EndpointType>(
-    endpointId: Id,
-    options: SubmitOptions<InputType<Id>>,
-  ): Promise<InQueueQueueStatus>;
+  submit(endpointId: string, options: SubmitOptions<any>): Promise<SunraInQueueQueueStatus>;
 
   /**
    * Retrieves the status of a specific request in the queue.
@@ -170,19 +136,7 @@ export interface QueueClient {
    * @param options - Options to configure how the request is run.
    * @returns A promise that resolves to the status of the request.
    */
-  status(endpointId: string, options: QueueStatusOptions): Promise<QueueStatus>;
-
-  /**
-   * Subscribes to updates for a specific request in the queue using HTTP streaming events.
-   *
-   * @param endpointId - The ID of the function web endpoint.
-   * @param options - Options to configure how the request is run and how updates are received.
-   * @returns The streaming object that can be used to listen for updates.
-   */
-  streamStatus(
-    endpointId: string,
-    options: QueueStatusStreamOptions,
-  ): Promise<SunraStream<unknown, QueueStatus>>;
+  status(endpointId: string, options: QueueStatusOptions): Promise<SunraQueueStatus>;
 
   /**
    * Subscribes to updates for a specific request in the queue using polling or streaming.
@@ -195,7 +149,7 @@ export interface QueueClient {
   subscribeToStatus(
     endpointId: string,
     options: QueueStatusSubscriptionOptions,
-  ): Promise<CompletedQueueStatus>;
+  ): Promise<SunraCompletedQueueStatus>;
 
   /**
    * Retrieves the result of a specific request from the queue.
@@ -204,10 +158,7 @@ export interface QueueClient {
    * @param options - Options to configure how the request is run.
    * @returns A promise that resolves to the result of the request.
    */
-  result<Id extends EndpointType>(
-    endpointId: Id,
-    options: BaseQueueOptions,
-  ): Promise<Result<OutputType<Id>>>;
+  result(endpointId: string, options: BaseQueueOptions): Promise<SunraResult<any>>;
 
   /**
    * Cancels a request in the queue.
@@ -234,13 +185,12 @@ export const createQueueClient = ({
     async submit<Input>(
       endpointId: string,
       options: SubmitOptions<Input>,
-    ): Promise<InQueueQueueStatus> {
+    ): Promise<SunraInQueueQueueStatus> {
       const { webhookUrl, priority, ...runOptions } = options
       const input = options.input
         ? await storage.transformInput(options.input)
         : undefined
-      return dispatchRequest<Input, InQueueQueueStatus>({
-        method: options.method,
+      return dispatchRequest<Input, SunraInQueueQueueStatus>({
         targetUrl: buildUrl(endpointId, {
           ...runOptions,
           subdomain: 'queue',
@@ -251,60 +201,27 @@ export const createQueueClient = ({
         },
         input: input as Input,
         config,
-        options: {
-          signal: options.abortSignal,
-        },
       })
     },
     async status(
       endpointId: string,
-      { requestId, logs = false, abortSignal }: QueueStatusOptions,
-    ): Promise<QueueStatus> {
-      const appId = parseEndpointId(endpointId)
-      const prefix = appId.namespace ? `${appId.namespace}/` : ''
-      return dispatchRequest<unknown, QueueStatus>({
+      { requestId, logs = false }: QueueStatusOptions,
+    ): Promise<SunraQueueStatus> {
+      return dispatchRequest<unknown, SunraQueueStatus>({
         method: 'get',
-        targetUrl: buildUrl(prefix, {
+        targetUrl: buildUrl('', {
           subdomain: 'queue',
           query: { logs: logs ? '1' : '0' },
           path: `/requests/${requestId}/status`,
         }),
         config,
-        options: {
-          signal: abortSignal,
-        },
-      })
-    },
-
-    async streamStatus(
-      endpointId: string,
-      { requestId, logs = false, connectionMode }: QueueStatusStreamOptions,
-    ): Promise<SunraStream<unknown, QueueStatus>> {
-      const appId = parseEndpointId(endpointId)
-      const prefix = appId.namespace ? `${appId.namespace}/` : ''
-
-      const queryParams = {
-        logs: logs ? '1' : '0',
-      }
-
-      const url = buildUrl(prefix, {
-        subdomain: 'queue',
-        path: `/requests/${requestId}/status/stream`,
-        query: queryParams,
-      })
-
-      return new SunraStream<unknown, QueueStatus>(endpointId, config, {
-        url,
-        method: 'get',
-        connectionMode,
-        queryParams,
       })
     },
 
     async subscribeToStatus(
       endpointId,
       options,
-    ): Promise<CompletedQueueStatus> {
+    ): Promise<SunraCompletedQueueStatus> {
       const requestId = options.requestId
       const timeout = options.timeout
       let timeoutId: TimeoutId = undefined
@@ -314,50 +231,8 @@ export const createQueueClient = ({
         // regardless of the server response. In case cancelation fails, we
         // still want to reject the promise and consider the client call canceled.
       }
-      if (options.mode === 'streaming') {
-        const status = await ref.streamStatus(endpointId, {
-          requestId,
-          logs: options.logs,
-          connectionMode:
-            'connectionMode' in options
-              ? (options.connectionMode as StreamingConnectionMode)
-              : undefined,
-        })
-        const logs: RequestLog[] = []
-        if (timeout) {
-          timeoutId = setTimeout(() => {
-            status.abort()
-            ref.cancel(endpointId, { requestId }).catch(handleCancelError)
-            // TODO this error cannot bubble up to the user since it's thrown in
-            // a closure in the global scope due to setTimeout behavior.
-            // User will get a platform error instead. We should find a way to
-            // make this behavior aligned with polling.
-            throw new Error(
-              `Client timed out waiting for the request to complete after ${timeout}ms`,
-            )
-          }, timeout)
-        }
-        status.on('data', (data: QueueStatus) => {
-          if (options.onQueueUpdate) {
-            // accumulate logs to match previous polling behavior
-            if (
-              'logs' in data &&
-              Array.isArray(data.logs) &&
-              data.logs.length > 0
-            ) {
-              logs.push(...data.logs)
-            }
-            options.onQueueUpdate('logs' in data ? { ...data, logs } : data)
-          }
-        })
-        const doneStatus = await status.done()
-        if (timeoutId) {
-          clearTimeout(timeoutId)
-        }
-        return doneStatus as CompletedQueueStatus
-      }
-      // default to polling until status streaming is stable and faster
-      return new Promise<CompletedQueueStatus>((resolve, reject) => {
+
+      return new Promise<SunraCompletedQueueStatus>((resolve, reject) => {
         let pollingTimeoutId: TimeoutId
         // type resolution isn't great in this case, so check for its presence
         // and and type so the typechecker behaves as expected
@@ -390,7 +265,6 @@ export const createQueueClient = ({
             const requestStatus = await ref.status(endpointId, {
               requestId,
               logs: options.logs ?? false,
-              abortSignal: options.abortSignal,
             })
             if (options.onQueueUpdate) {
               options.onQueueUpdate(requestStatus)
@@ -412,42 +286,29 @@ export const createQueueClient = ({
 
     async result<Output>(
       endpointId: string,
-      { requestId, abortSignal }: BaseQueueOptions,
-    ): Promise<Result<Output>> {
-      const appId = parseEndpointId(endpointId)
-      const prefix = appId.namespace ? `${appId.namespace}/` : ''
-      return dispatchRequest<unknown, Result<Output>>({
+      { requestId }: BaseQueueOptions,
+    ): Promise<SunraResult<Output>> {
+      return dispatchRequest<unknown, SunraResult<Output>>({
         method: 'get',
-        targetUrl: buildUrl(prefix, {
+        targetUrl: buildUrl('', {
           subdomain: 'queue',
           path: `/requests/${requestId}`,
         }),
-        config: {
-          ...config,
-          responseHandler: resultResponseHandler,
-        },
-        options: {
-          signal: abortSignal,
-        },
+        config,
       })
     },
 
     async cancel(
       endpointId: string,
-      { requestId, abortSignal }: BaseQueueOptions,
+      { requestId }: BaseQueueOptions,
     ): Promise<void> {
-      const appId = parseEndpointId(endpointId)
-      const prefix = appId.namespace ? `${appId.namespace}/` : ''
       await dispatchRequest<unknown, void>({
         method: 'put',
-        targetUrl: buildUrl(prefix, {
+        targetUrl: buildUrl('', {
           subdomain: 'queue',
           path: `/requests/${requestId}/cancel`,
         }),
         config,
-        options: {
-          signal: abortSignal,
-        },
       })
     },
   }

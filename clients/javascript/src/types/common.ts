@@ -2,7 +2,7 @@
  * Represents an API result, containing the data,
  *  the request ID and any other relevant information.
  */
-export type Result<T> = {
+export type SunraResult<T> = {
   data: T;
   requestId: string;
 };
@@ -11,22 +11,12 @@ export type Result<T> = {
  * The function input and other configuration when running
  * the function, such as the HTTP method to use.
  */
-export type RunOptions<Input> = {
+export type SunraRunOptions<Input> = {
   /**
    * The function input. It will be submitted either as query params
    * or the body payload, depending on the `method`.
    */
   readonly input?: Input;
-
-  /**
-   * The HTTP method, defaults to `post`;
-   */
-  readonly method?: 'get' | 'post' | 'put' | 'delete' | string;
-
-  /**
-   * The abort signal to cancel the request.
-   */
-  readonly abortSignal?: AbortSignal;
 };
 
 export type UrlOptions = {
@@ -59,40 +49,40 @@ export type Metrics = {
   inference_time: number | null;
 };
 
-interface BaseQueueStatus {
+interface SunraBaseQueueStatus {
   status: 'IN_QUEUE' | 'IN_PROGRESS' | 'COMPLETED';
   request_id: string;
 }
 
-export interface InQueueQueueStatus extends BaseQueueStatus {
+export interface SunraInQueueQueueStatus extends SunraBaseQueueStatus {
   status: 'IN_QUEUE';
   queue_position: number;
   response_url: string;
 }
 
-export interface InProgressQueueStatus extends BaseQueueStatus {
+export interface SunraInProgressQueueStatus extends SunraBaseQueueStatus {
   status: 'IN_PROGRESS';
   response_url: string;
   logs: RequestLog[];
 }
 
-export interface CompletedQueueStatus extends BaseQueueStatus {
+export interface SunraCompletedQueueStatus extends SunraBaseQueueStatus {
   status: 'COMPLETED';
   response_url: string;
   logs: RequestLog[];
   metrics?: Metrics;
 }
 
-export type QueueStatus =
-  | InProgressQueueStatus
-  | CompletedQueueStatus
-  | InQueueQueueStatus;
+export type SunraQueueStatus =
+  | SunraInProgressQueueStatus
+  | SunraCompletedQueueStatus
+  | SunraInQueueQueueStatus;
 
-export function isQueueStatus(obj: any): obj is QueueStatus {
+export function isQueueStatus(obj: any): obj is SunraQueueStatus {
   return obj && obj.status && obj.response_url
 }
 
-export function isCompletedQueueStatus(obj: any): obj is CompletedQueueStatus {
+export function isCompletedQueueStatus(obj: any): obj is SunraCompletedQueueStatus {
   return isQueueStatus(obj) && obj.status === 'COMPLETED'
 }
 
@@ -109,24 +99,24 @@ export type ValidationErrorInfo = {
  * @template Payload - The type of the payload in the response. It defaults to `any`,
  * allowing for flexibility in specifying the structure of the payload.
  */
-export type WebHookResponse<Payload = any> =
+export type SunraWebHookResponse<Payload = any> =
   | {
-      /** Indicates a successful response. */
-      status: 'OK';
-      /** The payload of the response, structure determined by the Payload type. */
-      payload: Payload;
-      /** Error is never present in a successful response. */
-      error: never;
-      /** The unique identifier for the request. */
-      request_id: string;
-    }
+    /** Indicates a successful response. */
+    status: 'OK';
+    /** The payload of the response, structure determined by the Payload type. */
+    payload: Payload;
+    /** Error is never present in a successful response. */
+    error: never;
+    /** The unique identifier for the request. */
+    request_id: string;
+  }
   | {
-      /** Indicates an unsuccessful response. */
-      status: 'ERROR';
-      /** The payload of the response, structure determined by the Payload type. */
-      payload: Payload;
-      /** Description of the error that occurred. */
-      error: string;
-      /** The unique identifier for the request. */
-      request_id: string;
-    };
+    /** Indicates an unsuccessful response. */
+    status: 'ERROR';
+    /** The payload of the response, structure determined by the Payload type. */
+    payload: Payload;
+    /** Description of the error that occurred. */
+    error: string;
+    /** The unique identifier for the request. */
+    request_id: string;
+  };

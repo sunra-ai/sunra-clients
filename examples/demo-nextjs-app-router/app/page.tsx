@@ -1,13 +1,10 @@
 "use client";
 
 import { createSunraClient } from "@sunra/client";
-import { AnimateDiffT2VOutput } from "@sunra/client/endpoints";
 import { useMemo, useState } from "react";
 
 const sunra = createSunraClient({
-  // credentials: 'SUNRA_KEY_ID:SUNRA_KEY_SECRET',
   proxyUrl: "/api/sunra/proxy", // the built-int nextjs proxy
-  // proxyUrl: 'http://localhost:3333/api/sunra/proxy', // or your own external proxy
 });
 
 type ErrorProps = {
@@ -32,24 +29,14 @@ const DEFAULT_PROMPT =
   "(masterpiece:1.4), (best quality), (detailed), Medieval village scene with busy streets and castle in the distance";
 
 export default function Home() {
-  // @snippet:start("client.ui.state")
-  // Input state
   const [prompt, setPrompt] = useState<string>(DEFAULT_PROMPT);
-  // Result state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [result, setResult] = useState<AnimateDiffT2VOutput | null>(null);
+  const [result, setResult] = useState<any>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
-  // @snippet:end
-  const video = useMemo(() => {
-    if (!result) {
-      return null;
-    }
-    if (result.video) {
-      return result.video;
-    }
-    return null;
+  const image = useMemo(() => {
+    return result?.image ?? result?.images?.[0] ?? null
   }, [result]);
 
   const reset = () => {
@@ -60,13 +47,13 @@ export default function Home() {
     setElapsedTime(0);
   };
 
-  const generateVideo = async () => {
+  const generateImage = async () => {
     reset();
     // @snippet:start("client.queue.subscribe")
     setLoading(true);
     const start = Date.now();
     try {
-      const result = await sunra.subscribe("sunra/fast-animatediff/text-to-video", {
+      const result = await sunra.subscribe("sunra/lcm/text-to-image", {
         input: {
           prompt,
         },
@@ -81,7 +68,7 @@ export default function Home() {
           }
         },
       });
-      setResult(result.data);
+      setResult(result);
     } catch (error: any) {
       setError(error);
     } finally {
@@ -115,20 +102,20 @@ export default function Home() {
         <button
           onClick={(e) => {
             e.preventDefault();
-            generateVideo();
+            generateImage();
           }}
           className="focus:shadow-outline mx-auto rounded bg-indigo-600 py-3 px-6 text-lg font-bold text-white hover:bg-indigo-700 focus:outline-none"
           disabled={loading}
         >
-          {loading ? "Generating..." : "Generate Video"}
+          {loading ? "Generating..." : "Generate Image"}
         </button>
 
         <Error error={error} />
 
         <div className="flex w-full flex-col space-y-4">
           <div className="mx-auto">
-            {video && (
-              <video controls autoPlay loop playsInline src={video.url} />
+            {image && (
+              <img src={image.url} alt="Generated Image" />
             )}
           </div>
           <div className="space-y-2">

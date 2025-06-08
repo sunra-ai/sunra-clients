@@ -7,25 +7,7 @@ sunra.config({
   proxyUrl: "/api/sunra/proxy",
 });
 
-type ErrorProps = {
-  error: any;
-};
-
-function Error(props: ErrorProps) {
-  if (!props.error) {
-    return null;
-  }
-  return (
-    <div
-      className="mb-4 rounded bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
-      role="alert"
-    >
-      <span className="font-medium">Error</span> {props.error.message}
-    </div>
-  );
-}
-
-const DEFAULT_ENDPOINT_ID = "sunra/fast-sdxl";
+const DEFAULT_ENDPOINT_ID = "sunra/lcm/text-to-image";
 const DEFAULT_INPUT = `{
   "prompt": "A beautiful sunset over the ocean"
 }`;
@@ -36,14 +18,12 @@ export default function Home() {
   const [input, setInput] = useState<string>(DEFAULT_INPUT);
   // Result state
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
   const [result, setResult] = useState<any | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const reset = () => {
     setLoading(false);
-    setError(null);
     setResult(null);
     setLogs([]);
     setElapsedTime(0);
@@ -76,7 +56,7 @@ export default function Home() {
       });
       setResult(result);
     } catch (error: any) {
-      setError(error);
+      console.error(error);
     } finally {
       setLoading(false);
       setElapsedTime(Date.now() - start);
@@ -131,8 +111,6 @@ export default function Home() {
         >
           {loading ? "Running..." : "Run"}
         </button>
-
-        <Error error={error} />
 
         <div className="flex w-full flex-col space-y-4">
           <div className="space-y-2">
