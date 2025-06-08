@@ -22,19 +22,17 @@ sunra.config({
 
 **Note:** Ensure you've reviewed the [sunra getting started guide](https://docs.sunra.ai) to acquire your credentials and register your functions. Also, make sure your credentials are always protected. See the [../proxy](../proxy) package for a secure way to use the client in client-side applications.
 
-## Running functions with `sunra.run`
-
-The `sunra.run` method is the simplest way to execute a function. It returns a promise that resolves to the function's result:
+## Running functions without waiting for the result
 
 ```ts
-const result = await sunra.run("my-function-id", {
+const { request_id } = await sunra.queue.submit("my-function-id", {
   input: { foo: "bar" },
 });
 ```
 
 ## Long-running functions with `sunra.subscribe`
 
-The `sunra.subscribe` method offers a powerful way to rely on the [queue system](https://docs.sunra.ai/function-endpoints/queue) to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
+The `sunra.subscribe` method offers a powerful way to rely on the queue system to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
 
 ```ts
 const result = await sunra.subscribe("my-function-id", {
