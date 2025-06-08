@@ -1,4 +1,4 @@
-import { isBrowser } from './runtime'
+import { isBrowser } from './utils'
 import axios, { AxiosInstance } from 'axios'
 
 type CredentialsResolver = () => string | undefined;

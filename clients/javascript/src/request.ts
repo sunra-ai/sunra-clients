@@ -1,8 +1,13 @@
 import { AxiosRequestConfig } from 'axios'
 import { RequiredConfig } from './config'
-import { getUserAgent, isBrowser } from './runtime'
 import { SunraRunOptions, UrlOptions } from './types/common'
-import { ensureEndpointIdFormat, isValidUrl, whisper } from './utils'
+import { ensureEndpointIdFormat, isBrowser, isValidUrl, whisper } from './utils'
+import packageInfo from '../package.json'
+
+function getUserAgent(): string {
+  return `${packageInfo.name}/${packageInfo.version}`
+}
+
 
 const isCloudflareWorkers =
   typeof navigator !== 'undefined' &&

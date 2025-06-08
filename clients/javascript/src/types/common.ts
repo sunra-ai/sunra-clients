@@ -86,12 +86,6 @@ export function isCompletedQueueStatus(obj: any): obj is SunraCompletedQueueStat
   return isQueueStatus(obj) && obj.status === 'COMPLETED'
 }
 
-export type ValidationErrorInfo = {
-  msg: string;
-  loc: Array<string | number>;
-  type: string;
-};
-
 /**
  * Represents the response from a WebHook request.
  * This is a union type that varies based on the `status` property.

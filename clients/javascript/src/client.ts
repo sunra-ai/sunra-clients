@@ -1,5 +1,5 @@
 import { SunraClientConfig, createConfig } from './config'
-import { createQueueClient, QueueClient, QueueSubscribeOptions } from './queue'
+import { createQueueClient, SunraQueueClient, QueueSubscribeOptions } from './queue'
 import { createStorageClient, StorageClient } from './storage'
 import { SunraResult, SunraRunOptions } from './types/common'
 
@@ -13,7 +13,7 @@ export interface SunraClient {
   /**
    * The queue client to interact with the queue API.
    */
-  readonly queue: QueueClient;
+  readonly queue: SunraQueueClient;
 
   /**
    * The storage client to interact with the storage API.

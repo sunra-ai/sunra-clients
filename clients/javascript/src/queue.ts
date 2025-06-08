@@ -119,7 +119,7 @@ type QueueStatusOptions = BaseQueueOptions & {
  * Represents a request queue with methods for submitting requests,
  * checking their status, retrieving results, and subscribing to updates.
  */
-export interface QueueClient {
+export interface SunraQueueClient {
   /**
    * Submits a request to the queue.
    *
@@ -180,8 +180,8 @@ type QueueClientDependencies = {
 export const createQueueClient = ({
   config,
   storage,
-}: QueueClientDependencies): QueueClient => {
-  const ref: QueueClient = {
+}: QueueClientDependencies): SunraQueueClient => {
+  const ref: SunraQueueClient = {
     async submit<Input>(
       endpointId: string,
       options: SubmitOptions<Input>,

@@ -53,6 +53,12 @@ export function isPlainObject(value: any): boolean {
   return !!value && Object.getPrototypeOf(value) === Object.prototype
 }
 
+export function isBrowser(): boolean {
+  return (
+    typeof window !== 'undefined' && typeof window.document !== 'undefined'
+  )
+}
+
 export const whisper = (formatStr: string, ...args: any[]) => {
   debug(formatStr, ...args)
 }

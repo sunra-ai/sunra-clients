@@ -3,16 +3,14 @@ import { SunraClientConfig } from './config'
 import { SunraRunOptions } from './types/common'
 
 export {
-  createSunraClient as createSunraClient,
+  createSunraClient,
   type SunraClient,
 } from './client'
-export type { QueueClient } from './queue'
-export { ApiError, ValidationError } from './response'
+export type { SunraQueueClient } from './queue'
 export type { StorageClient } from './storage'
 export * from './types/common'
 export type {
   SunraQueueStatus as QueueStatus,
-  ValidationErrorInfo,
   SunraWebHookResponse as WebHookResponse,
 } from './types/common'
 export { parseEndpointId } from './utils'
