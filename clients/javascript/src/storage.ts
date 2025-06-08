@@ -45,8 +45,12 @@ type InitiateUploadData = {
  * @returns the file extension or `bin` if the content type is not recognized.
  */
 function getExtensionFromContentType(contentType: string): string {
+  const extMap: Record<string, string> = {
+    mpeg: 'mp3'
+  }
   const [, fileType] = contentType.split('/')
-  return fileType?.split(/[-;]/)[0] ?? 'bin'
+  const ext = fileType?.split(/[-;]/)[0] ?? 'bin'
+  return extMap[ext] ?? ext
 }
 
 /**
