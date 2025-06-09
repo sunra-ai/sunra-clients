@@ -65,11 +65,11 @@ For Express applications:
 Once you've set up the proxy, you can configure the client to use it:
 
 ```ts
-import { sunra } from "@sunra/client";
+import { createSunraClient } from "@sunra/client";
 
-sunra.config({
+const sunra = createSunraClient({
   proxyUrl: "/api/sunra/proxy", // or https://my.app.com/api/sunra/proxy
-});
+})
 ```
 
 Now all your client calls will route through your server proxy, so your credentials are protected.

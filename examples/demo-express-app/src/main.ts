@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { sunra } from '@sunra/client'
+import { createSunraClient } from '@sunra/client'
 import * as sunraProxy from '@sunra/server-proxy/express'
 import cors from 'cors'
 import { configDotenv } from 'dotenv'
@@ -12,6 +12,10 @@ import * as path from 'path'
 import multer from 'multer'
 import fs from 'fs/promises'
 import { Blob } from 'buffer'
+
+const sunra = createSunraClient({
+  credentials: process.env.SUNRA_KEY,
+})
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -33,7 +37,7 @@ app.get('/api', (req, res) => {
 
 app.get('/sunra-on-server', async (req, res) => {
   // TODO: change the default model id
-  const result = await sunra.run('fal-ai/any-llm', {
+  const result = await sunra.subscribe('sunra/lcm/text-to-image', {
     input: {
       prompt:
         'a black cat with glowing eyes, cute, adorable, disney, pixar, highly detailed, 8k',
@@ -50,11 +54,11 @@ app.post('/sunra-upload-demo', upload.single('file'), async (req, res) => {
   const blob = new Blob([buffer], { type: file.mimetype })
 
   // TODO: change the default model id
-  const result = await sunra.run('flux/dev/image-to-image', {
+  const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/image-to-image', {
     input: {
       prompt:
         'a black cat with glowing eyes, cute, adorable, disney, pixar, highly detailed, 8k',
-      file: blob
+      image: blob
     },
   })
   res.send(result)

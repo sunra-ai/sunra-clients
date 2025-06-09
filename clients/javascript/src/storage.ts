@@ -1,6 +1,8 @@
-import { getRestApiUrl, RequiredConfig } from './config'
+import { RequiredConfig } from './config'
 import { dispatchRequest } from './request'
-import { isPlainObject } from './utils'
+import { getRestApiUrl } from './utils'
+import isPlainObject from 'lodash.isplainobject'
+
 /**
  * File support for the client. This interface establishes the contract for
  * uploading files to the server and transforming the input to replace file
@@ -45,8 +47,12 @@ type InitiateUploadData = {
  * @returns the file extension or `bin` if the content type is not recognized.
  */
 function getExtensionFromContentType(contentType: string): string {
+  const extMap: Record<string, string> = {
+    mpeg: 'mp3'
+  }
   const [, fileType] = contentType.split('/')
-  return fileType?.split(/[-;]/)[0] ?? 'bin'
+  const ext = fileType?.split(/[-;]/)[0] ?? 'bin'
+  return extMap[ext] ?? ext
 }
 
 /**
@@ -72,108 +78,6 @@ async function initiateUpload(
   })
 }
 
-/**
- * Initiate the multipart upload of a file to the server. This returns the URL to upload
- * the file to and the URL of the file once it is uploaded.
- */
-async function initiateMultipartUpload(
-  file: Blob,
-  config: RequiredConfig,
-  contentType: string,
-): Promise<InitiateUploadResult> {
-  const filename =
-    (file as File).name || `${Date.now()}.${getExtensionFromContentType(contentType)}`
-
-  return await dispatchRequest<InitiateUploadData, InitiateUploadResult>({
-    method: 'POST',
-    targetUrl: `${getRestApiUrl()}/storage/upload/initiate-multipart`,
-    input: {
-      content_type: contentType,
-      file_name: filename,
-    },
-    config,
-  })
-}
-
-type MultipartObject = {
-  partNumber: number;
-  etag: string;
-};
-
-async function partUploadRetries(
-  uploadUrl: string,
-  chunk: Blob,
-  config: RequiredConfig,
-  tries = 3,
-): Promise<MultipartObject> {
-  if (tries === 0) {
-    throw new Error('Part upload failed, retries exhausted')
-  }
-
-  const { fetch, responseHandler } = config
-
-  try {
-    const response = await fetch(uploadUrl, {
-      method: 'PUT',
-      body: chunk,
-    })
-
-    return (await responseHandler(response)) as MultipartObject
-  } catch {
-    return await partUploadRetries(uploadUrl, chunk, config, tries - 1)
-  }
-}
-
-async function multipartUpload(
-  file: Blob,
-  config: RequiredConfig,
-): Promise<string> {
-  const { fetch, responseHandler } = config
-  const contentType = file.type || 'application/octet-stream'
-  const { upload_url: uploadUrl, file_url: url } =
-    await initiateMultipartUpload(file, config, contentType)
-
-  // Break the file into 10MB chunks
-  const chunkSize = 10 * 1024 * 1024
-  const chunks = Math.ceil(file.size / chunkSize)
-
-  const parsedUrl = new URL(uploadUrl)
-
-  const responses: MultipartObject[] = []
-
-  for (let i = 0; i < chunks; i++) {
-    const start = i * chunkSize
-    const end = Math.min(start + chunkSize, file.size)
-
-    const chunk = file.slice(start, end)
-
-    const partNumber = i + 1
-    // {uploadUrl}/{part_number}?uploadUrlParams=...
-    const partUploadUrl = `${parsedUrl.origin}${parsedUrl.pathname}/${partNumber}${parsedUrl.search}`
-
-    responses.push(await partUploadRetries(partUploadUrl, chunk, config))
-  }
-
-  // Complete the upload
-  const completeUrl = `${parsedUrl.origin}${parsedUrl.pathname}/complete${parsedUrl.search}`
-  const response = await fetch(completeUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      parts: responses.map((mpart) => ({
-        partNumber: mpart.partNumber,
-        etag: mpart.etag,
-      })),
-    }),
-  })
-  await responseHandler(response)
-
-  return url
-}
-
-
 type KeyValuePair = [string, any];
 
 type StorageClientDependencies = {
@@ -185,27 +89,15 @@ export function createStorageClient({
 }: StorageClientDependencies): StorageClient {
   const ref: StorageClient = {
     upload: async (file: Blob) => {
-      // Check for 90+ MB file size to do multipart upload
-      if (file.size > 90 * 1024 * 1024) {
-        return await multipartUpload(file, config)
-      }
-
       const contentType = file.type || 'application/octet-stream'
 
-      const { fetch, responseHandler } = config
+      const { axios } = config
       const { upload_url: uploadUrl, file_url: url } = await initiateUpload(
         file,
         config,
         contentType,
       )
-      const response = await fetch(uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': file.type || 'application/octet-stream',
-        },
-      })
-      await responseHandler(response)
+      await axios.put(uploadUrl, file)
       return url
     },
 
