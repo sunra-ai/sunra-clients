@@ -19,22 +19,6 @@ export function ensureEndpointIdFormat(id: string): string {
   )
 }
 
-type EndpointId = {
-  readonly owner: string;
-  readonly alias: string;
-  readonly path?: string;
-};
-
-export function parseEndpointId(id: string): EndpointId {
-  const normalizedId = ensureEndpointIdFormat(id)
-  const parts = normalizedId.split('/')
-  return {
-    owner: parts[0] as string,
-    alias: parts[1] as string,
-    path: parts.slice(2).join('/') || undefined,
-  }
-}
-
 export function isValidUrl(url: string) {
   try {
     const { host } = new URL(url)

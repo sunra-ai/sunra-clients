@@ -1,17 +1,12 @@
 import { AxiosRequestConfig } from 'axios'
 import { RequiredConfig } from './config'
-import { SunraRunOptions, UrlOptions } from './types/common'
-import { ensureEndpointIdFormat, isBrowser, isValidUrl, whisper } from './utils'
+import { isBrowser, whisper } from './utils'
 import packageInfo from '../package.json'
 
 function getUserAgent(): string {
   return `${packageInfo.name}/${packageInfo.version}`
 }
 
-
-const isCloudflareWorkers =
-  typeof navigator !== 'undefined' &&
-  navigator?.userAgent === 'Cloudflare-Workers'
 
 type RequestParams<Input = any> = {
   method?: string;
@@ -55,46 +50,10 @@ export async function dispatchRequest<Input, Output>(
     url,
     method,
     headers: requestHeaders,
-    ...(!isCloudflareWorkers && { mode: 'cors' }),
     data: input
   }
 
   whisper('axiosConfig is: ', axiosConfig)
   const response = await axios.request(axiosConfig)
   return response.data
-}
-
-/**
- * Builds the final url to run the function based on its `id` or alias and
- * a the options from `RunOptions<Input>`.
- *
- * @private
- * @param id the function id or alias
- * @param options the run options
- * @returns the final url to run the function
- */
-export function buildUrl<Input>(
-  id: string,
-  options: SunraRunOptions<Input> & UrlOptions = {},
-): string {
-  const path = (options.path ?? '').replace(/^\//, '').replace(/\/{2,}/, '/')
-  const params = {
-    ...(options.query || {}),
-  }
-
-  const queryParams =
-    Object.keys(params).length > 0
-      ? `?${new URLSearchParams(params).toString()}`
-      : ''
-
-  // if a sunra url is passed, just use it
-  if (isValidUrl(id)) {
-    const url = id.endsWith('/') ? id : `${id}/`
-    return `${url}${path}${queryParams}`
-  }
-
-  const appId = ensureEndpointIdFormat(id)
-  const domain = ['api.sunra.ai/v1', options.subdomain].filter(Boolean).join('/')
-  const url = `https://${domain}/${appId}/${path}`
-  return `${url.replace(/\/$/, '')}${queryParams}`
 }

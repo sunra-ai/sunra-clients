@@ -1,5 +1,5 @@
-import { RequiredConfig } from './config'
-import { buildUrl, dispatchRequest } from './request'
+import { getRestApiUrl, RequiredConfig } from './config'
+import { dispatchRequest } from './request'
 import { StorageClient } from './storage'
 import {
   SunraCompletedQueueStatus,
@@ -9,7 +9,6 @@ import {
   SunraRunOptions,
 } from './types/common'
 
-type QueuePriority = 'low' | 'normal';
 type QueueStatusSubscriptionOptions = QueueStatusOptions &
   Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'>;
 
@@ -64,12 +63,6 @@ export type QueueSubscribeOptions = {
    * @see WebHookResponse
    */
   webhookUrl?: string;
-
-  /**
-   * The priority of the request. It defaults to `normal`.
-   * @see QueuePriority
-   */
-  priority?: QueuePriority;
 } & (
     | {
       mode?: 'polling';
@@ -92,12 +85,6 @@ type SubmitOptions<Input> = SunraRunOptions<Input> & {
    * @see WebHookResponse
    */
   webhookUrl?: string;
-
-  /**
-   * The priority of the request. It defaults to `normal`.
-   * @see QueuePriority
-   */
-  priority?: QueuePriority;
 };
 
 type BaseQueueOptions = {
@@ -186,19 +173,16 @@ export const createQueueClient = ({
       endpointId: string,
       options: SubmitOptions<Input>,
     ): Promise<SunraInQueueQueueStatus> {
-      const { webhookUrl, priority, ...runOptions } = options
-      const input = options.input
+      const webhookUrl = options?.webhookUrl
+      const input = options?.input
         ? await storage.transformInput(options.input)
         : undefined
+
+      const baseUrl = `${getRestApiUrl()}/queue/${endpointId}`
+      const search = webhookUrl ? `?webhook=${webhookUrl}` : ''
+      const url = `${baseUrl}${search}`
       return dispatchRequest<Input, SunraInQueueQueueStatus>({
-        targetUrl: buildUrl(endpointId, {
-          ...runOptions,
-          subdomain: 'queue',
-          query: webhookUrl ? { webhook: webhookUrl } : undefined,
-        }),
-        headers: {
-          'x-sunra-queue-priority': priority ?? 'normal',
-        },
+        targetUrl: url,
         input: input as Input,
         config,
       })
@@ -207,13 +191,12 @@ export const createQueueClient = ({
       endpointId: string,
       { requestId, logs = false }: QueueStatusOptions,
     ): Promise<SunraQueueStatus> {
+      const baseUrl = `${getRestApiUrl()}/queue/requests/${requestId}/status`
+      const search = logs ? '?logs=1' : '?logs=0'
+      const url = `${baseUrl}${search}`
       return dispatchRequest<unknown, SunraQueueStatus>({
         method: 'get',
-        targetUrl: buildUrl('', {
-          subdomain: 'queue',
-          query: { logs: logs ? '1' : '0' },
-          path: `/requests/${requestId}/status`,
-        }),
+        targetUrl: url,
         config,
       })
     },
@@ -225,12 +208,6 @@ export const createQueueClient = ({
       const requestId = options.requestId
       const timeout = options.timeout
       let timeoutId: TimeoutId = undefined
-
-      const handleCancelError = () => {
-        // Ignore errors as the client will follow through with the timeout
-        // regardless of the server response. In case cancelation fails, we
-        // still want to reject the promise and consider the client call canceled.
-      }
 
       return new Promise<SunraCompletedQueueStatus>((resolve, reject) => {
         let pollingTimeoutId: TimeoutId
@@ -252,7 +229,7 @@ export const createQueueClient = ({
         if (timeout) {
           timeoutId = setTimeout(() => {
             clearScheduledTasks()
-            ref.cancel(endpointId, { requestId }).catch(handleCancelError)
+            ref.cancel(endpointId, { requestId }).catch(console.error)
             reject(
               new Error(
                 `Client timed out waiting for the request to complete after ${timeout}ms`,
@@ -290,10 +267,7 @@ export const createQueueClient = ({
     ): Promise<SunraResult<Output>> {
       const data = await dispatchRequest<unknown, Output>({
         method: 'get',
-        targetUrl: buildUrl('', {
-          subdomain: 'queue',
-          path: `/requests/${requestId}`,
-        }),
+        targetUrl: `${getRestApiUrl()}/queue/requests/${requestId}`,
         config,
       })
 
@@ -309,10 +283,7 @@ export const createQueueClient = ({
     ): Promise<void> {
       await dispatchRequest<unknown, void>({
         method: 'put',
-        targetUrl: buildUrl('', {
-          subdomain: 'queue',
-          path: `/requests/${requestId}/cancel`,
-        }),
+        targetUrl: `${getRestApiUrl()}/queue/requests/${requestId}/cancel`,
         config,
       })
     },

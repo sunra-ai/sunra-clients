@@ -19,25 +19,6 @@ export type SunraRunOptions<Input> = {
   readonly input?: Input;
 };
 
-export type UrlOptions = {
-  /**
-   * If `true`, the function will use the queue to run the function
-   * asynchronously and return the result in a separate call. This
-   * influences how the URL is built.
-   */
-  readonly subdomain?: string;
-
-  /**
-   * The query parameters to include in the URL.
-   */
-  readonly query?: Record<string, string>;
-
-  /**
-   * The path to append to the function URL.
-   */
-  path?: string;
-};
-
 export type RequestLog = {
   message: string;
   level: 'STDERR' | 'STDOUT' | 'ERROR' | 'INFO' | 'WARN' | 'DEBUG';
