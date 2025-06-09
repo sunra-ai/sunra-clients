@@ -29,6 +29,12 @@ export type QueueSubscribeOptions = {
   mode?: 'polling'
 
   /**
+   * The interval (in milliseconds) at which to poll for updates.
+   * If not provided, a default value of `1000` will be used.
+   */
+  pollInterval?: number;
+
+  /**
    * Callback function that is called when a request is enqueued.
    * @param requestId - The unique identifier for the enqueued request.
    */
@@ -64,18 +70,7 @@ export type QueueSubscribeOptions = {
    * @see WebHookResponse
    */
   webhookUrl?: string;
-} & (
-    | {
-      mode?: 'polling';
-      /**
-       * The interval (in milliseconds) at which to poll for updates.
-       * If not provided, a default value of `500` will be used.
-       *
-       * This value is ignored if `mode` is set to `streaming`.
-       */
-      pollInterval?: number;
-    }
-  );
+}
 
 /**
  * Options for submitting a request to the queue.

@@ -11,21 +11,19 @@ The `sunra` JavaScript Client Library provides a seamless way to interact with `
 Before diving into the client-specific features, ensure you've set up your credentials:
 
 ```ts
-import { sunra } from "@sunra/client";
+import { createSunraClient } from "@sunra/client";
 
-sunra.config({
-  // Can also be auto-configured using environment variables:
-  // Either a single SUNRA_KEY or a combination of SUNRA_KEY_ID and SUNRA_KEY_SECRET
-  credentials: "SUNRA_KEY_ID:SUNRA_KEY_SECRET",
+const sunra = createSunraClient({
+  credentials: "SUNRA_KEY",
 });
 ```
 
-**Note:** Ensure you've reviewed the [sunra getting started guide](https://docs.sunra.ai) to acquire your credentials and register your functions. Also, make sure your credentials are always protected. See the [../proxy](../proxy) package for a secure way to use the client in client-side applications.
+**Note:** Ensure you've reviewed the [sunra getting started guide](https://docs.sunra.ai) to acquire your credentials and register your functions. Also, make sure your credentials are always protected. See the [../../server-proxy](../../server-proxy) package for a secure way to use the client in client-side applications.
 
 ## Running functions without waiting for the result
 
 ```ts
-const { request_id } = await sunra.queue.submit("my-function-id", {
+const { request_id } = await sunra.queue.submit("sunra/lcm/text-to-image", {
   input: { foo: "bar" },
 });
 ```
@@ -35,7 +33,7 @@ const { request_id } = await sunra.queue.submit("my-function-id", {
 The `sunra.subscribe` method offers a powerful way to rely on the queue system to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
 
 ```ts
-const result = await sunra.subscribe("my-function-id", {
+const result = await sunra.subscribe("sunra/lcm/text-to-image", {
   input: { foo: "bar" },
   onQueueUpdate(update) {
     if (update.status === "IN_QUEUE") {

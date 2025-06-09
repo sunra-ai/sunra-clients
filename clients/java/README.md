@@ -1,6 +1,6 @@
 ## The sunra.ai JVM Client for Java and Kotlin
 
-![License](https://img.shields.io/badge/license-MIT-blue)
+![License](https://img.shields.io/badge/license-Apache%20License%202.0-blue)
 
 ## About the Project
 
