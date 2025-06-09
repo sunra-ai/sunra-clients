@@ -46,12 +46,12 @@ public class SunraClientTest {
             System.out.println("Calling API endpoint: " + realEndpointId);
             System.out.println("Input parameters: " + input);
 
-            RunOptions<JsonObject> options = RunOptions.<JsonObject>builder()
+            SubscribeOptions<JsonObject> options = SubscribeOptions.<JsonObject>builder()
                     .input(input)
                     .resultType(JsonObject.class)
                     .build();
 
-            Output<JsonObject> result = realClient.run(realEndpointId, options);
+            Output<JsonObject> result = realClient.subscribe(realEndpointId, options);
 
             // Print results
             System.out.println("\n========== API Response Results ==========");

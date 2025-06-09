@@ -12,20 +12,6 @@ import jakarta.annotation.Nonnull;
  * with the credentials resolved from the environment.
  */
 public interface SunraClient {
-
-    /**
-     * Run the specified endpoint with the provided options. This method is only recommended for
-     * short-running operations. For long-running operations, consider using the {@link
-     * #subscribe(String, SubscribeOptions)} method to subscribe to the endpoint's results via
-     * the queue or {@link #queue()} client for specific queue operations. .
-     *
-     * @param <O> Output type.
-     * @param endpointId The endpoint ID to run, e.g. `sunra/lcm`.
-     * @param options The run options.
-     * @return The result of the operation.
-     */
-    <O> Output<O> run(String endpointId, RunOptions<O> options);
-
     /**
      * Subscribe to the specified endpoint with the provided options. This method is recommended for
      * long-running operations. The subscription will return the result once the operation is
