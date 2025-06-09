@@ -1,42 +1,6 @@
 import { debug as createDebug } from 'debug'
 export const debug = createDebug('sunra')
 
-export function ensureEndpointIdFormat(id: string): string {
-  if (!id) {
-    return ''
-  }
-
-  const parts = id.split('/')
-  if (parts.length > 1) {
-    return id
-  }
-  const [, appOwner, appId] = /^([0-9]+)-([a-zA-Z0-9-]+)$/.exec(id) || []
-  if (appOwner && appId) {
-    return `${appOwner}/${appId}`
-  }
-  throw new Error(
-    `Invalid app id: ${id}. Must be in the format <appOwner>/<appId>`,
-  )
-}
-
-export function isValidUrl(url: string) {
-  try {
-    const { host } = new URL(url)
-    return /(sunra\.(ai|run))$/.test(host)
-  } catch {
-    return false
-  }
-}
-
-/**
- * Check if a value is a plain object.
- * @param value - The value to check.
- * @returns `true` if the value is a plain object, `false` otherwise.
- */
-export function isPlainObject(value: any): boolean {
-  return !!value && Object.getPrototypeOf(value) === Object.prototype
-}
-
 export function isBrowser(): boolean {
   return (
     typeof window !== 'undefined' && typeof window.document !== 'undefined'
@@ -45,4 +9,11 @@ export function isBrowser(): boolean {
 
 export const whisper = (formatStr: string, ...args: any[]) => {
   debug(formatStr, ...args)
+}
+
+/**
+ * @returns the URL of the sunra REST api endpoint.
+ */
+export function getRestApiUrl(): string {
+  return process.env.SUNRA_API_ENDPOINT ?? 'https://api.sunra.ai/v1'
 }

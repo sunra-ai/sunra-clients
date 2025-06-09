@@ -19,14 +19,14 @@ export type SunraRunOptions<Input> = {
   readonly input?: Input;
 };
 
-export type RequestLog = {
+export type SunraRequestLog = {
   message: string;
   level: 'STDERR' | 'STDOUT' | 'ERROR' | 'INFO' | 'WARN' | 'DEBUG';
   source: 'USER';
   timestamp: string; // Using string to represent date-time format, but you could also use 'Date' type if you're going to construct Date objects.
 };
 
-export type Metrics = {
+export type SunraMetrics = {
   inference_time: number | null;
 };
 
@@ -44,28 +44,20 @@ export interface SunraInQueueQueueStatus extends SunraBaseQueueStatus {
 export interface SunraInProgressQueueStatus extends SunraBaseQueueStatus {
   status: 'IN_PROGRESS';
   response_url: string;
-  logs: RequestLog[];
+  logs: SunraRequestLog[];
 }
 
 export interface SunraCompletedQueueStatus extends SunraBaseQueueStatus {
   status: 'COMPLETED';
   response_url: string;
-  logs: RequestLog[];
-  metrics?: Metrics;
+  logs: SunraRequestLog[];
+  metrics?: SunraMetrics;
 }
 
 export type SunraQueueStatus =
   | SunraInProgressQueueStatus
   | SunraCompletedQueueStatus
   | SunraInQueueQueueStatus;
-
-export function isQueueStatus(obj: any): obj is SunraQueueStatus {
-  return obj && obj.status && obj.response_url
-}
-
-export function isCompletedQueueStatus(obj: any): obj is SunraCompletedQueueStatus {
-  return isQueueStatus(obj) && obj.status === 'COMPLETED'
-}
 
 /**
  * Represents the response from a WebHook request.

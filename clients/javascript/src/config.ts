@@ -67,10 +67,3 @@ export function createConfig(config: SunraClientConfig): RequiredConfig {
   }
   return configuration
 }
-
-/**
- * @returns the URL of the sunra REST api endpoint.
- */
-export function getRestApiUrl(): string {
-  return process.env.SUNRA_API_ENDPOINT ?? 'https://api.sunra.ai/v1'
-}

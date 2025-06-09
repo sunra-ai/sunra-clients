@@ -1,9 +1,9 @@
 "use client";
 
-import { sunra } from "@sunra/client";
+import { createSunraClient } from "@sunra/client";
 import { useState } from "react";
 
-sunra.config({
+const sunra = createSunraClient({
   proxyUrl: "/api/sunra/proxy",
 });
 

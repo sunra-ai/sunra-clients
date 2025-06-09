@@ -1,5 +1,6 @@
-import { getRestApiUrl, RequiredConfig } from './config'
+import { RequiredConfig } from './config'
 import { dispatchRequest } from './request'
+import { getRestApiUrl } from './utils'
 import { StorageClient } from './storage'
 import {
   SunraCompletedQueueStatus,
@@ -7,7 +8,7 @@ import {
   SunraQueueStatus,
   SunraResult,
   SunraRunOptions,
-} from './types/common'
+} from './types'
 
 type QueueStatusSubscriptionOptions = QueueStatusOptions &
   Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'>;

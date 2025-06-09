@@ -1,7 +1,7 @@
 import { SunraClientConfig, createConfig } from './config'
 import { createQueueClient, SunraQueueClient, QueueSubscribeOptions } from './queue'
 import { createStorageClient, StorageClient } from './storage'
-import { SunraResult, SunraRunOptions } from './types/common'
+import { SunraResult, SunraRunOptions } from './types'
 
 /**
  * The main client type, it provides access to simple API model usage,

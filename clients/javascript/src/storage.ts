@@ -1,6 +1,8 @@
-import { getRestApiUrl, RequiredConfig } from './config'
+import { RequiredConfig } from './config'
 import { dispatchRequest } from './request'
-import { isPlainObject } from './utils'
+import { getRestApiUrl } from './utils'
+import isPlainObject from 'lodash.isplainobject'
+
 /**
  * File support for the client. This interface establishes the contract for
  * uploading files to the server and transforming the input to replace file
