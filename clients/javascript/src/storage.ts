@@ -8,7 +8,7 @@ import isPlainObject from 'lodash.isplainobject'
  * uploading files to the server and transforming the input to replace file
  * objects with URLs.
  */
-export interface StorageClient {
+export interface SunraStorageClient {
   /**
    * Upload a file to the server. Returns the URL of the uploaded file.
    * @param file the file to upload
@@ -25,7 +25,6 @@ export interface StorageClient {
    * @param input the input to transform.
    * @returns the transformed input.
    */
-
   transformInput: (input: Record<string, any>) => Promise<Record<string, any>>;
 }
 
@@ -81,48 +80,54 @@ async function initiateUpload(
 type KeyValuePair = [string, any];
 
 type StorageClientDependencies = {
-  config: RequiredConfig;
+  getConfig: () => RequiredConfig;
 };
 
-export function createStorageClient({
-  config,
-}: StorageClientDependencies): StorageClient {
-  const ref: StorageClient = {
-    upload: async (file: Blob) => {
-      const contentType = file.type || 'application/octet-stream'
+/**
+ * Implementation of the StorageClient interface
+ */
+export class SunraStorageClientImpl implements SunraStorageClient {
+  constructor(private readonly getConfig: () => RequiredConfig) { }
 
-      const { axios } = config
-      const { upload_url: uploadUrl, file_url: url } = await initiateUpload(
-        file,
-        config,
-        contentType,
-      )
-      await axios.put(uploadUrl, file)
-      return url
-    },
+  async upload(file: Blob): Promise<string> {
+    const contentType = file.type || 'application/octet-stream'
 
-
-    transformInput: async (input: any): Promise<any> => {
-      if (Array.isArray(input)) {
-        return Promise.all(input.map((item) => ref.transformInput(item)))
-      } else if (input instanceof Blob) {
-        return await ref.upload(input)
-      } else if (typeof input === 'string' && input.startsWith('blob:')) {
-        const blob = await fetch(input).then(r => r.blob())
-        return await ref.upload(blob)
-      } else if (isPlainObject(input)) {
-        const inputObject = input as Record<string, any>
-        const promises = Object.entries(inputObject).map(
-          async ([key, value]): Promise<KeyValuePair> => {
-            return [key, await ref.transformInput(value)]
-          },
-        )
-        const results = await Promise.all(promises)
-        return Object.fromEntries(results)
-      }
-      // Return the input as is if it's neither an object nor a file/blob/data URI
-      return input
-    },
+    const config = this.getConfig()
+    const { axios } = config
+    const { upload_url: uploadUrl, file_url: url } = await initiateUpload(
+      file,
+      config,
+      contentType,
+    )
+    await axios.put(uploadUrl, file)
+    return url
   }
-  return ref
+
+  async transformInput(input: any): Promise<any> {
+    if (Array.isArray(input)) {
+      return Promise.all(input.map((item) => this.transformInput(item)))
+    } else if (input instanceof Blob) {
+      return await this.upload(input)
+    } else if (typeof input === 'string' && input.startsWith('blob:')) {
+      const blob = await fetch(input).then(r => r.blob())
+      return await this.upload(blob)
+    } else if (isPlainObject(input)) {
+      const inputObject = input as Record<string, any>
+      const promises = Object.entries(inputObject).map(
+        async ([key, value]): Promise<KeyValuePair> => {
+          return [key, await this.transformInput(value)]
+        },
+      )
+      const results = await Promise.all(promises)
+      return Object.fromEntries(results)
+    }
+    // Return the input as is if it's neither an object nor a file/blob/data URI
+    return input
+  }
+}
+
+export function createStorageClient({
+  getConfig,
+}: StorageClientDependencies): SunraStorageClient {
+  return new SunraStorageClientImpl(getConfig)
 }
