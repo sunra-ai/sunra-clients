@@ -11,7 +11,9 @@ import {
 } from './types'
 
 type QueueStatusSubscriptionOptions = QueueStatusOptions &
-  Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'>;
+  Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'> & {
+    maxRetries?: number;
+  }
 
 type TimeoutId = ReturnType<typeof setTimeout> | undefined;
 
@@ -205,6 +207,9 @@ export const createQueueClient = ({
       const timeout = options.timeout
       let timeoutId: TimeoutId = undefined
 
+      const maxRetries = options.maxRetries ?? 3
+      let retries = 0
+
       return new Promise<SunraCompletedQueueStatus>((resolve, reject) => {
         let pollingTimeoutId: TimeoutId
         // type resolution isn't great in this case, so check for its presence
@@ -248,7 +253,13 @@ export const createQueueClient = ({
               return
             }
             pollingTimeoutId = setTimeout(poll, pollInterval)
+            retries = 0
           } catch (error) {
+            if (retries < maxRetries) {
+              retries++
+              pollingTimeoutId = setTimeout(poll, pollInterval)
+              return
+            }
             clearScheduledTasks()
             reject(error)
           }

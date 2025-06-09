@@ -52,3 +52,12 @@ export function createSunraClient(userConfig: SunraClientConfig = {}): SunraClie
     },
   }
 }
+
+export const sunra = createSunraClient({
+  credentials: () => {
+    if (typeof process !== 'undefined' && typeof process.env !== 'undefined' && process.env.SUNRA_KEY) {
+      return process.env.SUNRA_KEY
+    }
+    return undefined
+  }
+})
