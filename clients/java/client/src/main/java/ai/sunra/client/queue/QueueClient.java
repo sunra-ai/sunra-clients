@@ -19,41 +19,37 @@ public interface QueueClient {
     /**
      * Check the status of a submission.
      *
-     * @param endpointId the endpoint to cancel the submission for
      * @param options the status check options
      * @return the status of the submission
      */
     @Nonnull
-    QueueStatus.StatusUpdate status(@Nonnull String endpointId, @Nonnull QueueStatusOptions options);
+    QueueStatus.StatusUpdate status(@Nonnull QueueStatusOptions options);
 
     /**
      * Subscribe to the status of a submission.
      *
-     * @param endpointId the endpoint to subscribe to the status for
      * @param options the subscribe options
      * @return the status of the submission
      */
     @Nonnull
-    QueueStatus.Completed subscribeToStatus(@Nonnull String endpointId, @Nonnull QueueSubscribeOptions options);
+    QueueStatus.Completed subscribeToStatus(@Nonnull QueueSubscribeOptions options);
 
     /**
      * Get the result of a submission.
      *
      * @param <O> the type of the output payload
-     * @param endpointId the endpoint to get the result for
      * @param options the response options
      * @return the result of the submission
      */
     @Nonnull
-    <O> Output<O> result(@Nonnull String endpointId, @Nonnull QueueResultOptions<O> options);
+    <O> Output<O> result(@Nonnull QueueResultOptions<O> options);
 
     /**
      * Cancel a submission.
      *
-     * @param endpointId the endpoint to cancel the submission for
      * @param options the cancel options
      * @return the cancel of the submission
      */
     @Nonnull
-    Object cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options);
+    Object cancel(@Nonnull QueueCancelOptions options);
 }

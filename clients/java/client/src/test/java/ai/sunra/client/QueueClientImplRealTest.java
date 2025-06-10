@@ -84,7 +84,7 @@ public class QueueClientImplRealTest {
             System.out.println("Starting to test status method...");
 
             // Get status
-            QueueStatus.StatusUpdate statusResult = queueClient.status(testEndpointId, statusOptions);
+            QueueStatus.StatusUpdate statusResult = queueClient.status(statusOptions);
 
             // Validate status result
             assertNotNull(statusResult);
@@ -139,7 +139,7 @@ public class QueueClientImplRealTest {
             while (retryCount < maxRetries) {
                 try {
                     // Execute subscription call
-                    result = queueClient.subscribeToStatus(testEndpointId, subscribeOptions);
+                    result = queueClient.subscribeToStatus(subscribeOptions);
                     // Break out of loop if successful
                     break;
                 } catch (Exception e) {
@@ -209,7 +209,7 @@ public class QueueClientImplRealTest {
             QueueCancelOptions cancelOptions =
                     QueueCancelOptions.builder().requestId(requestId).build();
 
-            Object cancelResult = queueClient.cancel(testEndpointId, cancelOptions);
+            Object cancelResult = queueClient.cancel(cancelOptions);
 
             System.out.println("Cancel result: " + cancelResult);
 
@@ -219,7 +219,7 @@ public class QueueClientImplRealTest {
             // 4. 可选：再查一次状态，确认已取消
             QueueStatusOptions statusOptions =
                     QueueStatusOptions.builder().requestId(requestId).build();
-            QueueStatus.StatusUpdate status = queueClient.status(testEndpointId, statusOptions);
+            QueueStatus.StatusUpdate status = queueClient.status(statusOptions);
             System.out.println("Status after cancel: " + status.getStatus());
 
         } catch (Exception e) {

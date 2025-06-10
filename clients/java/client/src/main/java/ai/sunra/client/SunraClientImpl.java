@@ -54,7 +54,6 @@ public class SunraClientImpl implements SunraClient {
                         .build());
 
         final var completed = queueClient.subscribeToStatus(
-                endpointId,
                 QueueSubscribeOptions.builder()
                         .requestId(enqueued.getRequestId())
                         .logs(options.getLogs())
@@ -62,7 +61,6 @@ public class SunraClientImpl implements SunraClient {
                         .build());
 
         return queueClient.result(
-                endpointId,
                 QueueResultOptions.<O>builder()
                         .requestId(completed.getRequestId())
                         .resultType(options.getResultType())
