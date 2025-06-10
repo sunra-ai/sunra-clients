@@ -53,8 +53,8 @@ export class SunraClientImpl implements SunraClient {
     if (options.onEnqueue) {
       options.onEnqueue(requestId)
     }
-    await this.queue.subscribeToStatus(endpointId, { requestId, ...options })
-    return this.queue.result(endpointId, { requestId })
+    await this.queue.subscribeToStatus({ requestId, ...options })
+    return this.queue.result({ requestId })
   }
 }
 

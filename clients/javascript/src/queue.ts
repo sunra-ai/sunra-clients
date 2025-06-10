@@ -117,44 +117,37 @@ export interface SunraQueueClient {
   /**
    * Retrieves the status of a specific request in the queue.
    *
-   * @param endpointId - The ID of the function web endpoint.
    * @param options - Options to configure how the request is run.
    * @returns A promise that resolves to the status of the request.
    */
-  status(endpointId: string, options: QueueStatusOptions): Promise<SunraQueueStatus>;
+  status(options: QueueStatusOptions): Promise<SunraQueueStatus>;
 
   /**
    * Subscribes to updates for a specific request in the queue using polling or streaming.
    * See `options.mode` for more details.
    *
-   * @param endpointId - The ID of the function web endpoint.
    * @param options - Options to configure how the request is run and how updates are received.
    * @returns A promise that resolves to the final status of the request.
    */
-  subscribeToStatus(
-    endpointId: string,
-    options: QueueStatusSubscriptionOptions,
-  ): Promise<SunraCompletedQueueStatus>;
+  subscribeToStatus(options: QueueStatusSubscriptionOptions): Promise<SunraCompletedQueueStatus>;
 
   /**
    * Retrieves the result of a specific request from the queue.
    *
-   * @param endpointId - The ID of the function web endpoint.
    * @param options - Options to configure how the request is run.
    * @returns A promise that resolves to the result of the request.
    */
-  result(endpointId: string, options: BaseQueueOptions): Promise<SunraResult<any>>;
+  result(options: BaseQueueOptions): Promise<SunraResult<any>>;
 
   /**
    * Cancels a request in the queue.
    *
-   * @param endpointId - The ID of the function web endpoint.
    * @param options - Options to configure how the request
    * is run and how updates are received.
    * @returns A promise that resolves once the request is cancelled.
    * @throws {Error} If the request cannot be cancelled.
    */
-  cancel(endpointId: string, options: BaseQueueOptions): Promise<void>;
+  cancel(options: BaseQueueOptions): Promise<void>;
 }
 
 type QueueClientDependencies = {
@@ -194,10 +187,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
     })
   }
 
-  async status(
-    endpointId: string,
-    { requestId, logs = false }: QueueStatusOptions,
-  ): Promise<SunraQueueStatus> {
+  async status({ requestId, logs = false }: QueueStatusOptions): Promise<SunraQueueStatus> {
     const baseUrl = `${getRestApiUrl()}/queue/requests/${requestId}/status`
     const search = logs ? '?logs=1' : '?logs=0'
     const url = `${baseUrl}${search}`
@@ -208,10 +198,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
     })
   }
 
-  async subscribeToStatus(
-    endpointId: string,
-    options: QueueStatusSubscriptionOptions,
-  ): Promise<SunraCompletedQueueStatus> {
+  async subscribeToStatus(options: QueueStatusSubscriptionOptions): Promise<SunraCompletedQueueStatus> {
     const requestId = options.requestId
     const timeout = options.timeout
     let timeoutId: TimeoutId = undefined
@@ -237,7 +224,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
       if (timeout) {
         timeoutId = setTimeout(() => {
           clearScheduledTasks()
-          this.cancel(endpointId, { requestId }).catch(console.error)
+          this.cancel({ requestId }).catch(console.error)
           reject(
             new Error(
               `Client timed out waiting for the request to complete after ${timeout}ms`,
@@ -247,7 +234,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
       }
       const poll = async () => {
         try {
-          const requestStatus = await this.status(endpointId, {
+          const requestStatus = await this.status({
             requestId,
             logs: options.logs ?? false,
           })
@@ -275,10 +262,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
     })
   }
 
-  async result<Output>(
-    endpointId: string,
-    { requestId }: BaseQueueOptions,
-  ): Promise<SunraResult<Output>> {
+  async result<Output>({ requestId }: BaseQueueOptions): Promise<SunraResult<Output>> {
     const data = await dispatchRequest<unknown, Output>({
       method: 'get',
       targetUrl: `${getRestApiUrl()}/queue/requests/${requestId}`,
@@ -291,10 +275,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
     }
   }
 
-  async cancel(
-    endpointId: string,
-    { requestId }: BaseQueueOptions,
-  ): Promise<void> {
+  async cancel({ requestId }: BaseQueueOptions): Promise<void> {
     await dispatchRequest<unknown, void>({
       method: 'put',
       targetUrl: `${getRestApiUrl()}/queue/requests/${requestId}/cancel`,
