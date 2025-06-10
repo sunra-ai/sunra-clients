@@ -99,7 +99,11 @@ export class SunraStorageClientImpl implements SunraStorageClient {
       config,
       contentType,
     )
-    await axios.put(uploadUrl, file)
+    await axios.put(uploadUrl, file, {
+      headers: {
+        'Content-Type': contentType,
+      },
+    })
     return url
   }
 
