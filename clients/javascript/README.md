@@ -23,8 +23,11 @@ const sunra = createSunraClient({
 ## Running functions without waiting for the result
 
 ```ts
-const { request_id } = await sunra.queue.submit("sunra/lcm/text-to-image", {
-  input: { foo: "bar" },
+const { request_id } = await sunra.queue.submit(
+  "sunra/lcm/text-to-image", {
+  input: {
+    prompt: "A glass teapot with blooming flower tea inside, placed on a wooden table by a sunlit window with gentle morning light."
+  },
 });
 ```
 
@@ -33,14 +36,19 @@ const { request_id } = await sunra.queue.submit("sunra/lcm/text-to-image", {
 The `sunra.subscribe` method offers a powerful way to rely on the queue system to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
 
 ```ts
-const result = await sunra.subscribe("sunra/lcm/text-to-image", {
-  input: { foo: "bar" },
-  onQueueUpdate(update) {
-    if (update.status === "IN_QUEUE") {
-      console.log(`Your position in the queue is ${update.position}`);
-    }
-  },
-});
+const result = await sunra.subscribe(
+  "sunra/lcm/text-to-image",
+  {
+    input: {
+      prompt: "A glass teapot with blooming flower tea inside, placed on a wooden table by a sunlit window with gentle morning light."
+    },
+    onQueueUpdate(update) {
+      if (update.status === "IN_QUEUE") {
+        console.log(`Your position in the queue is ${update.position}`);
+      }
+    },
+  }
+);
 ```
 
 ## More features
