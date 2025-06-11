@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The `sunra` JavaScript Client Library provides a seamless way to interact with `sunra` endpoints from your JavaScript or TypeScript applications. With built-in support for various platforms, it ensures consistent behavior across web, Node.js, and React Native environments.
+The [Sunra](https://sunra.ai) JavaScript Client Library provides a seamless way to interact with [Sunra](https://sunra.ai) endpoints from your JavaScript or TypeScript applications. With built-in support for various platforms, it ensures consistent behavior across web, Node.js, and React Native environments.
 
 ## Getting started
 
