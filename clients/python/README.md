@@ -22,7 +22,12 @@ Now you can use the client to interact with your models. Here's an example of ho
 ```python
 import sunra_client
 
-response = sunra_client.subscribe("sunra/lcm/text-to-image", arguments={"prompt": "a cute cat, realistic, orange"})
+response = sunra_client.subscribe(
+  "sunra/lcm/text-to-image",
+  arguments={
+    "prompt": "a cute cat, realistic, orange"
+  }
+)
 print(response["images"][0]["url"])
 ```
 
