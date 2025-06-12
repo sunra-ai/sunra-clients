@@ -6,22 +6,22 @@ import java.util.function.Consumer;
 
 public class SunraDemo {
   public static void main(String[] args) {
-    ClientConfig config = ClientConfig.builder()
+    var config = ClientConfig.builder()
         .withCredentials(CredentialsResolver.fromEnv())
         .build();
 
-    SunraClient client = SunraClient.withConfig(config);
-    Map<String, Object> input = Map.of(
+    var client = SunraClient.withConfig(config);
+    var input = Map.of(
         "prompt", "a dog running in the park");
 
-    Consumer<QueueStatus.StatusUpdate> statusUpdateHandler = update -> {
+    var statusUpdateHandler = (Consumer<QueueStatus.StatusUpdate>) update -> {
       String status = update.getStatus().toString();
       String message = String.format("\nStatus Update: %s, Request ID: %s",
           status, update.getRequestId());
       System.out.println(message);
     };
 
-    SubscribeOptions<JsonObject> options = SubscribeOptions.<JsonObject>builder()
+    var options = SubscribeOptions.<JsonObject>builder()
         .input(input)
         .resultType(JsonObject.class)
         .onQueueUpdate(statusUpdateHandler)
@@ -29,7 +29,7 @@ public class SunraDemo {
         .build();
 
     // save the subscribe request to a variable and print it
-    Output<JsonObject> response = client.subscribe("sunra/lcm/text-to-image", options);
+    var response = client.subscribe("sunra/lcm/text-to-image", options);
     System.out.println("Completed!");
     System.out.println(response.getData());
     System.exit(0);
