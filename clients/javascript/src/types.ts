@@ -19,13 +19,6 @@ export type SunraRunOptions<Input> = {
   readonly input?: Input;
 };
 
-export type SunraRequestLog = {
-  message: string;
-  level: 'STDERR' | 'STDOUT' | 'ERROR' | 'INFO' | 'WARN' | 'DEBUG';
-  source: 'USER';
-  timestamp: string; // Using string to represent date-time format, but you could also use 'Date' type if you're going to construct Date objects.
-};
-
 export type SunraMetrics = {
   inference_time: number | null;
 };
@@ -44,13 +37,13 @@ export interface SunraInQueueQueueStatus extends SunraBaseQueueStatus {
 export interface SunraInProgressQueueStatus extends SunraBaseQueueStatus {
   status: 'IN_PROGRESS';
   response_url: string;
-  logs: SunraRequestLog[];
+  logs?: string
 }
 
 export interface SunraCompletedQueueStatus extends SunraBaseQueueStatus {
   status: 'COMPLETED';
   response_url: string;
-  logs: SunraRequestLog[];
+  logs?: string;
   metrics?: SunraMetrics;
 }
 

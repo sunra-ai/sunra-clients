@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "speech-to-text": "tsx src/speech-to-text.ts"
+    "speech-to-text": "tsx src/speech-to-text.ts",
+    "text-to-video": "tsx src/text-to-video.ts"
   },
   "keywords": [],
   "author": "",
