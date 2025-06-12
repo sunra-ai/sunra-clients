@@ -9,6 +9,7 @@ result = sunra_client.subscribe(
         "speaker_diarization": False
     },
     with_logs=True,
+    on_enqueue=print,
     on_queue_update=print
 )
 print(result)
