@@ -194,7 +194,6 @@ public class QueueClientImplRealTest {
     @Test
     void testCancel() {
         try {
-            // 1. 先提交一个任务
             Map<String, Object> input = Map.of("prompt", "a test for cancel", "num_frames", 4);
 
             QueueSubmitOptions submitOptions =
@@ -205,7 +204,6 @@ public class QueueClientImplRealTest {
 
             System.out.println("Task submitted, requestId: " + requestId);
 
-            // 2. 立即调用 cancel
             QueueCancelOptions cancelOptions =
                     QueueCancelOptions.builder().requestId(requestId).build();
 
@@ -213,10 +211,8 @@ public class QueueClientImplRealTest {
 
             System.out.println("Cancel result: " + cancelResult);
 
-            // 3. 校验返回
             assertNotNull(cancelResult);
 
-            // 4. 可选：再查一次状态，确认已取消
             QueueStatusOptions statusOptions =
                     QueueStatusOptions.builder().requestId(requestId).build();
             QueueStatus.StatusUpdate status = queueClient.status(statusOptions);

@@ -4,7 +4,6 @@ import ai.sunra.client.Output;
 import ai.sunra.client.exception.SunraException;
 import ai.sunra.client.http.HttpClient;
 import ai.sunra.client.queue.QueueStatus.Completed;
-import ai.sunra.client.util.EndpointId;
 import com.google.gson.JsonObject;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

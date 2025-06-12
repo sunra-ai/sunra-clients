@@ -29,7 +29,7 @@ const main = async () => {
       },
       onQueueUpdate: (update) => {
         if (update.status === 'IN_PROGRESS') {
-          update.logs?.map((log) => log.message).forEach(console.log)
+          console.log(update.logs)
         }
       },
     })
