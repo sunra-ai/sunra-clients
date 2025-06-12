@@ -9,7 +9,7 @@ import base64
 import logging
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Any, AsyncIterator, Dict, Iterator, TYPE_CHECKING, Optional, Literal, Callable
+from typing import Any, AsyncIterator, Dict, Iterator, TYPE_CHECKING, Optional, Callable
 from urllib.parse import urlencode
 
 import httpx
@@ -24,7 +24,6 @@ if TYPE_CHECKING:
     from PIL import Image
 
 AnyJSON = Dict[str, Any]
-Priority = Literal["normal", "low"]
 
 QUEUE_URL_FORMAT = f"https://api.{SUNRA_HOST}/v1/queue/"
 USER_AGENT = "sunra-client/0.1.0 (python)"
@@ -323,9 +322,8 @@ class AsyncClient:
         arguments: AnyJSON,
         *,
         path: str = "",
-        hint: str | None = None,
         webhook_url: str | None = None,
-        priority: Optional[Priority] = None,
+        with_logs: bool = True,
     ) -> AsyncRequestHandle:
         """Submit an application with the given arguments (which will be JSON serialized). The path parameter can be used to
         specify a subpath when applicable. This method will return a handle to the request that can be used to check the status
@@ -335,15 +333,13 @@ class AsyncClient:
         if path:
             url += "/" + path.lstrip("/")
 
+        if with_logs:
+            url += "?logs=1"
+        else:
+            url += "?logs=0"
+
         if webhook_url is not None:
-            url += "?" + urlencode({"webhook": webhook_url})
-
-        headers = {}
-        if hint is not None:
-            headers["X-Sunra-Runner-Hint"] = hint
-
-        if priority is not None:
-            headers["X-Sunra-Queue-Priority"] = priority
+            url += "&" + urlencode({"webhook": webhook_url})
 
         response = await _async_maybe_retry_request(
             self._client,
@@ -369,17 +365,15 @@ class AsyncClient:
         arguments: AnyJSON,
         *,
         path: str = "",
-        hint: str | None = None,
         on_enqueue: Optional[Callable[[Queued], None]] = None,
+        with_logs: bool = True,
         on_queue_update: Optional[Callable[[Status], None]] = None,
-        priority: Optional[Priority] = None,
     ) -> AnyJSON:
         handle = await self.submit(
             application,
             arguments,
             path=path,
-            hint=hint,
-            priority=priority,
+            with_logs=with_logs,
         )
 
         if on_enqueue is not None:
@@ -510,9 +504,8 @@ class SyncClient:
         arguments: AnyJSON,
         *,
         path: str = "",
-        hint: str | None = None,
         webhook_url: str | None = None,
-        priority: Optional[Priority] = None,
+        with_logs: bool = True,
     ) -> SyncRequestHandle:
         """Submit an application with the given arguments (which will be JSON serialized). The path parameter can be used to
         specify a subpath when applicable. This method will return a handle to the request that can be used to check the status
@@ -522,15 +515,13 @@ class SyncClient:
         if path:
             url += "/" + path.lstrip("/")
 
+        if with_logs:
+            url += "?logs=1"
+        else:
+            url += "?logs=0"
+
         if webhook_url is not None:
-            url += "?" + urlencode({"webhook": webhook_url})
-
-        headers = {}
-        if hint is not None:
-            headers["X-Sunra-Runner-Hint"] = hint
-
-        if priority is not None:
-            headers["X-Sunra-Queue-Priority"] = priority
+            url += "&" + urlencode({"webhook": webhook_url})
 
         response = _maybe_retry_request(
             self._client,
@@ -538,7 +529,6 @@ class SyncClient:
             url,
             json=arguments,
             timeout=self.default_timeout,
-            headers=headers,
         )
         _raise_for_status(response)
 
@@ -557,17 +547,15 @@ class SyncClient:
         arguments: AnyJSON,
         *,
         path: str = "",
-        hint: str | None = None,
         on_enqueue: Optional[Callable[[Queued], None]] = None,
+        with_logs: bool = True,
         on_queue_update: Optional[Callable[[Status], None]] = None,
-        priority: Optional[Priority] = None,
     ) -> AnyJSON:
         handle = self.submit(
             application,
             arguments,
             path=path,
-            hint=hint,
-            priority=priority,
+            with_logs=with_logs,
         )
 
         if on_enqueue is not None:
