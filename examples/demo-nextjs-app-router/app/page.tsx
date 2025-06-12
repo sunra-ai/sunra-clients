@@ -33,7 +33,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [result, setResult] = useState<any>(null);
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<string>("");
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const image = useMemo(() => {
     return result?.image ?? result?.images?.[0] ?? null
@@ -43,7 +43,7 @@ export default function Home() {
     setLoading(false);
     setError(null);
     setResult(null);
-    setLogs([]);
+    setLogs("");
     setElapsedTime(0);
   };
 
@@ -64,7 +64,7 @@ export default function Home() {
             update.status === "IN_PROGRESS" ||
             update.status === "COMPLETED"
           ) {
-            setLogs((update.logs || []).map((log) => log.message));
+            setLogs(update.logs || "");
           }
         },
       });
@@ -133,7 +133,7 @@ export default function Home() {
           <div className="space-y-2">
             <h3 className="text-xl font-light">Logs</h3>
             <pre className="h-60 w-full overflow-auto whitespace-pre rounded bg-black/70 font-mono text-sm text-white/80">
-              {logs.filter(Boolean).join("\n")}
+              {logs}
             </pre>
           </div>
         </div>
