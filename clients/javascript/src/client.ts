@@ -21,6 +21,12 @@ export interface SunraClient {
   readonly storage: SunraStorageClient;
 
   /**
+   * Configures the client with a new configuration.
+   * @param config - The new configuration to use.
+   */
+  config(config: SunraClientConfig): void;
+
+  /**
    * Subscribes to updates for a specific request in the queue.
    *
    * @param endpointId - The ID of the API endpoint.
