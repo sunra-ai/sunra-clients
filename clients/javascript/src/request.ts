@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import { RequiredConfig } from './config'
-import { isBrowser, whisper } from './utils'
+import { isBrowser } from './utils'
 import packageInfo from '../package.json'
 
 function getUserAgent(): string {
@@ -53,7 +53,6 @@ export async function dispatchRequest<Input, Output>(
     data: input
   }
 
-  whisper('axiosConfig is: ', axiosConfig)
   const response = await axios.request(axiosConfig)
   return response.data
 }
