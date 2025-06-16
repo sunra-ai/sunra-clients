@@ -1,5 +1,4 @@
 package ai.sunra.client;
-
 import ai.sunra.client.http.ClientProxyInterceptor;
 import ai.sunra.client.http.CredentialsInterceptor;
 import ai.sunra.client.http.HttpClient;
