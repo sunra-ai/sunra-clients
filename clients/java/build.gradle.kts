@@ -15,7 +15,6 @@ catalog {
 object Meta {
     val COMPONENT_TYPE = "java" // "java" or "versionCatalog"
     val GROUP = "ai.sunra.client"
-    val ARTIFACT_ID = "sunra-client"
     val VERSION = "0.1.4" // VERSION OF THE LIBRARY THAT WILL BE PUBLISHED TO REPO.
     val PUBLISHING_TYPE = "AUTOMATIC" // USER_MANAGED or AUTOMATIC
     val DESC = "Sunra Client Library"
@@ -43,7 +42,8 @@ allprojects {
 
     sonatypeCentralPublishExtension {
         groupId.set(Meta.GROUP)
-        artifactId.set(Meta.ARTIFACT_ID)
+        artifactId.set(project.name)
+        // Each subproject will set its own artifactId
         version.set(Meta.VERSION)
         componentType.set(Meta.COMPONENT_TYPE)
         publishingType.set(Meta.PUBLISHING_TYPE)
@@ -51,7 +51,7 @@ allprojects {
         password.set(System.getenv("SONATYPE_PASSWORD") ?: sonatypePassword)
 
         pom {
-            name.set(Meta.ARTIFACT_ID)
+            name.set(project.name)
             description.set(Meta.DESC)
             url.set("https://github.com/${Meta.GITHUB_REPO}")
             licenses {
