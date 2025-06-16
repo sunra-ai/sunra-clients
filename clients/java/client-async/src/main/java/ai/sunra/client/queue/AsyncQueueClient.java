@@ -10,15 +10,14 @@ public interface AsyncQueueClient {
     CompletableFuture<QueueStatus.InQueue> submit(String endpointId, QueueSubmitOptions options);
 
     @Nonnull
-    CompletableFuture<QueueStatus.StatusUpdate> status(@Nonnull String endpointId, @Nonnull QueueStatusOptions options);
+    CompletableFuture<QueueStatus.StatusUpdate> status(@Nonnull QueueStatusOptions options);
 
     @Nonnull
-    CompletableFuture<QueueStatus.Completed> subscribeToStatus(
-            @Nonnull String endpointId, @Nonnull QueueSubscribeOptions options);
+    CompletableFuture<QueueStatus.Completed> subscribeToStatus(@Nonnull QueueSubscribeOptions options);
 
     @Nonnull
-    <O> CompletableFuture<Output<O>> result(@Nonnull String endpointId, @Nonnull QueueResultOptions<O> options);
+    <O> CompletableFuture<Output<O>> result(@Nonnull QueueResultOptions<O> options);
 
     @Nonnull
-    CompletableFuture<Object> cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options);
+    CompletableFuture<Object> cancel(@Nonnull QueueCancelOptions options);
 }

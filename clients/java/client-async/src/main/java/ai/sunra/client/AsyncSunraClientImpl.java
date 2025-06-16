@@ -8,12 +8,10 @@ import java.util.concurrent.CompletableFuture;
 import okhttp3.OkHttpClient;
 
 public class AsyncSunraClientImpl implements AsyncSunraClient {
-
     private final HttpClient httpClient;
 
     private final AsyncQueueClient queueClient;
 
-    // todo 删掉public
     public AsyncSunraClientImpl(ClientConfig config) {
         final var builder = new OkHttpClient.Builder().addInterceptor(new CredentialsInterceptor(config));
         if (config.getProxyUrl() != null) {
@@ -21,15 +19,6 @@ public class AsyncSunraClientImpl implements AsyncSunraClient {
         }
         this.httpClient = new HttpClient(config, builder.build());
         this.queueClient = new AsyncQueueClientImpl(this.httpClient);
-    }
-
-    @Override
-    public <O> CompletableFuture<Output<O>> run(String endpointId, RunOptions<O> options) {
-        final var url = "https://api.sunra.ai/v1/queue/" + endpointId;
-        final var request = httpClient.prepareRequest(url, options);
-        return httpClient
-                .executeRequestAsync(request)
-                .thenApply(response -> httpClient.wrapInResult(response, options.getResultType()));
     }
 
     @Override
@@ -42,14 +31,12 @@ public class AsyncSunraClientImpl implements AsyncSunraClient {
                                 .webhookUrl(options.getWebhookUrl())
                                 .build())
                 .thenCompose((submitted) -> queueClient.subscribeToStatus(
-                        endpointId,
                         QueueSubscribeOptions.builder()
                                 .requestId(submitted.getRequestId())
                                 .logs(options.getLogs())
                                 .onQueueUpdate(options.getOnQueueUpdate())
                                 .build()))
                 .thenCompose((completed) -> queueClient.result(
-                        endpointId,
                         QueueResultOptions.<O>builder()
                                 .requestId(completed.getRequestId())
                                 .resultType(options.getResultType())
