@@ -4,9 +4,9 @@ import com.google.gson.JsonObject;
 
 public class SunraDemo {
   public static void main(String[] args) {
-    var client = SunraClient.withEnvCredentials();
+    var client = AsyncSunraClient.withEnvCredentials();
 
-    var response = client.subscribe(
+    var future = client.subscribe(
       "sunra/lcm/text-to-image",
       SubscribeOptions.<JsonObject>builder()
         .input(Map.of("prompt", "a dog running in the park"))
@@ -20,7 +20,14 @@ public class SunraDemo {
         .build()
     );
 
-    System.out.println("Completed!");
-    System.out.println(response.getData());
+    try {
+      var data = future.get().getData();
+
+      System.out.println("Completed!");
+      System.out.println(data);
+    } catch (Exception e) {
+      System.out.println("Error!");
+      System.out.println(e);
+    }
   }
 }
