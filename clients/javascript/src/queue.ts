@@ -9,6 +9,7 @@ import {
   SunraResult,
   SunraRunOptions,
 } from './types'
+import { SunraStream } from './streaming'
 
 type QueueStatusSubscriptionOptions = QueueStatusOptions &
   Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'> & {
@@ -100,6 +101,9 @@ type QueueStatusOptions = BaseQueueOptions & {
   logs?: boolean;
 };
 
+export type QueueStatusStreamOptions = QueueStatusOptions
+
+
 /**
  * Represents a request queue with methods for submitting requests,
  * checking their status, retrieving results, and subscribing to updates.
@@ -121,6 +125,17 @@ export interface SunraQueueClient {
    * @returns A promise that resolves to the status of the request.
    */
   status(options: QueueStatusOptions): Promise<SunraQueueStatus>;
+
+  /**
+   * Subscribes to updates for a specific request in the queue using HTTP streaming events.
+   *
+   * @param options - Options to configure how the request is run and how updates are received.
+   * @returns The streaming object that can be used to listen for updates.
+   */
+  streamStatus(
+    options: QueueStatusStreamOptions,
+  ): Promise<SunraStream<unknown, SunraQueueStatus>>;
+
 
   /**
    * Subscribes to updates for a specific request in the queue using polling or streaming.
@@ -195,6 +210,17 @@ export class SunraQueueClientImpl implements SunraQueueClient {
       method: 'get',
       targetUrl: url,
       config: this.config,
+    })
+  }
+
+  async streamStatus(
+    { requestId, logs = false }: QueueStatusStreamOptions,
+  ): Promise<SunraStream<unknown, SunraQueueStatus>> {
+    const url = `${getRestApiUrl()}/queue/requests/${requestId}/status/stream?logs=${logs ? '1' : '0'}`
+
+    return new SunraStream<unknown, SunraQueueStatus>(this.config, {
+      url,
+      method: 'get',
     })
   }
 
