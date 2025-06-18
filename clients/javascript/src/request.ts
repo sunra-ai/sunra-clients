@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from 'axios'
 import { RequiredConfig } from './config'
 import { isBrowser } from './utils'
 import packageInfo from '../package.json'
+import axios from 'axios'
 
 function getUserAgent(): string {
   return `${packageInfo.name}/${packageInfo.version}`
@@ -16,11 +17,15 @@ type RequestParams<Input = any> = {
   headers?: Record<string, string>;
 };
 
-export async function dispatchRequest<Input, Output>(
-  params: RequestParams<Input>,
-): Promise<Output> {
+type RequestParamsWithStream<Input = any> = RequestParams<Input> & {
+  onData?: (data: any) => void;
+  onError?: (error: any) => void;
+  onEnd?: () => void;
+};
+
+const getAxiosConfig = (params: RequestParams<any>) => {
   const { targetUrl, input, config } = params
-  const { credentials: credentialsValue, proxyUrl, axios } = config
+  const { credentials: credentialsValue, proxyUrl } = config
   const userAgent = isBrowser() ? {} : { 'User-Agent': getUserAgent() }
   const credentials =
     typeof credentialsValue === 'function'
@@ -52,7 +57,71 @@ export async function dispatchRequest<Input, Output>(
     headers: requestHeaders,
     data: input
   }
+  return axiosConfig
+}
 
-  const response = await axios.request(axiosConfig)
+export async function dispatchRequest<Input, Output>(
+  params: RequestParams<Input>,
+): Promise<Output> {
+  const axiosInstance = params?.config?.axios ?? axios
+  const axiosConfig = getAxiosConfig(params)
+
+  const response = await axiosInstance.request(axiosConfig)
+  return response.data
+}
+
+export async function dispatchRequestWithStream<Input, Output>(
+  params: RequestParamsWithStream<Input>,
+): Promise<Output> {
+  const axiosInstance = params?.config?.axios ?? axios
+  const { onData, onError, onEnd } = params
+  const axiosConfig = getAxiosConfig(params)
+  const headers: AxiosRequestConfig['headers'] = {
+    ...axiosConfig.headers,
+    Accept: 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+  }
+  axiosConfig.headers = headers
+  // axiosConfig.adapter = 'fetch'
+  axiosConfig.responseType = 'stream'
+
+  console.log('axiosConfig is: ', axiosConfig)
+  const response = await axiosInstance.request(axiosConfig)
+  console.log('response is: ', response)
+
+  // Set up a reader for the response
+  const reader = response.data.getReader()
+  const decoder = new TextDecoder('utf-8')
+
+  // Process the SSE stream
+  while (true) {
+    const { done, value } = await reader.read()
+    console.log('Read chunk:', { done, value })
+
+    if (done) {
+      onEnd?.()
+      break
+    }
+
+    const chunk = decoder.decode(value)
+    const messages = chunk.split('\n\n').filter(Boolean)
+
+    for (const message of messages) {
+      try {
+        const eventData = JSON.parse(message)
+        onData?.(eventData)
+
+        if (eventData.status === 'COMPLETED' || eventData.status === 'FAILED' || eventData.status === 'CANCELLED') {
+          onEnd?.()
+          break
+        }
+      } catch (e) {
+        onError?.(e)
+      }
+    }
+  }
+
+
   return response.data
 }

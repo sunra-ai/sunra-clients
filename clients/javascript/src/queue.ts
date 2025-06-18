@@ -1,5 +1,5 @@
 import { RequiredConfig } from './config'
-import { dispatchRequest } from './request'
+import { dispatchRequest, dispatchRequestWithStream } from './request'
 import { getRestApiUrl } from './utils'
 import { SunraStorageClient } from './storage'
 import {
@@ -9,11 +9,11 @@ import {
   SunraResult,
   SunraRunOptions,
 } from './types'
-import { SunraStream } from './streaming'
 
 type QueueStatusSubscriptionOptions = QueueStatusOptions &
   Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'> & {
     maxRetries?: number;
+    mode?: 'polling' | 'streaming'; // defaults to polling
   }
 
 type TimeoutId = ReturnType<typeof setTimeout> | undefined;
@@ -29,7 +29,7 @@ export type QueueSubscribeOptions = {
    *
    * @see pollInterval
    */
-  mode?: 'polling'
+  mode?: 'polling' | 'streaming';
 
   /**
    * The interval (in milliseconds) at which to poll for updates.
@@ -101,8 +101,22 @@ type QueueStatusOptions = BaseQueueOptions & {
   logs?: boolean;
 };
 
-export type QueueStatusStreamOptions = QueueStatusOptions
+type QueueStatusStreamOptions = QueueStatusOptions & {
+  /**
+   * The callback function that will be called with the status of the request.
+   */
+  onData?: (status: SunraQueueStatus) => void;
 
+  /**
+   * The callback function that will be called when the stream ends.
+   */
+  onEnd?: () => void;
+
+  /**
+   * The callback function that will be called when an error occurs.
+   */
+  onError?: (error: any) => void;
+};
 
 /**
  * Represents a request queue with methods for submitting requests,
@@ -125,17 +139,6 @@ export interface SunraQueueClient {
    * @returns A promise that resolves to the status of the request.
    */
   status(options: QueueStatusOptions): Promise<SunraQueueStatus>;
-
-  /**
-   * Subscribes to updates for a specific request in the queue using HTTP streaming events.
-   *
-   * @param options - Options to configure how the request is run and how updates are received.
-   * @returns The streaming object that can be used to listen for updates.
-   */
-  streamStatus(
-    options: QueueStatusStreamOptions,
-  ): Promise<SunraStream<unknown, SunraQueueStatus>>;
-
 
   /**
    * Subscribes to updates for a specific request in the queue using polling or streaming.
@@ -213,14 +216,14 @@ export class SunraQueueClientImpl implements SunraQueueClient {
     })
   }
 
-  async streamStatus(
-    { requestId, logs = false }: QueueStatusStreamOptions,
-  ): Promise<SunraStream<unknown, SunraQueueStatus>> {
-    const url = `${getRestApiUrl()}/queue/requests/${requestId}/status/stream?logs=${logs ? '1' : '0'}`
-
-    return new SunraStream<unknown, SunraQueueStatus>(this.config, {
-      url,
+  async streamStatus({ requestId, logs = false }: QueueStatusStreamOptions): Promise<SunraQueueStatus> {
+    const baseUrl = `${getRestApiUrl()}/queue/requests/${requestId}/status/stream`
+    const search = logs ? '?logs=1' : '?logs=0'
+    const url = `${baseUrl}${search}`
+    return dispatchRequestWithStream<unknown, SunraQueueStatus>({
       method: 'get',
+      targetUrl: url,
+      config: this.config,
     })
   }
 
@@ -287,7 +290,23 @@ export class SunraQueueClientImpl implements SunraQueueClient {
           reject(error)
         }
       }
-      poll().catch(reject)
+
+      if (options.mode === 'streaming') {
+        console.log('Streaming status...')
+        this.streamStatus({
+          requestId,
+          logs: options.logs ?? false,
+          onData: options.onQueueUpdate,
+          onEnd: async () => {
+            console.log('Stream ended, getting final status...')
+            const status = await this.status({ requestId })
+            resolve(status as SunraCompletedQueueStatus)
+          },
+          onError: reject,
+        }).catch(reject)
+      } else {
+        poll().catch(reject)
+      }
     })
   }
 
