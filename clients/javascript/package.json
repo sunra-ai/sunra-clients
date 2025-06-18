@@ -2,7 +2,7 @@
   "name": "@sunra/client",
   "description": "The sunra client for JavaScript and TypeScript",
   "homepage": "https://sunra.ai",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -265,7 +265,10 @@ export class SunraQueueClientImpl implements SunraQueueClient {
             logs: options.logs ?? false,
           })
           if (options.onQueueUpdate) {
-            options.onQueueUpdate(requestStatus)
+            options.onQueueUpdate({
+              ...requestStatus,
+              request_id: requestId
+            })
           }
           if (requestStatus.status === 'COMPLETED') {
             clearScheduledTasks()

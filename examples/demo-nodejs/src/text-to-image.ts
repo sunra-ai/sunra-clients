@@ -15,13 +15,14 @@ if (!apiKey) {
 const main = async () => {
   try {
     console.log(chalk.green('Subscribing to the queue...'))
-    const result = await sunra.subscribe('kling/kling-v2-master/text-to-video', {
+    const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/text-to-image', {
       input: {
-        prompt: 'A pole bear playing violin in the snow.',
-        negative_prompt: '',
-        guidance_scale: 0.5,
+        prompt: 'a bedroom with messy goods on the bed and floor',
+        prompt_enhancer: false,
+        seed: 0,
         aspect_ratio: '16:9',
-        duration: 5
+        output_format: 'jpeg',
+        safety_tolerance: 6
       },
       logs: true,
       onEnqueue: (requestId) => {
