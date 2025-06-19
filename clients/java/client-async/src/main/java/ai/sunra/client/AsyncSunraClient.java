@@ -5,9 +5,6 @@ import jakarta.annotation.Nonnull;
 import java.util.concurrent.CompletableFuture;
 
 public interface AsyncSunraClient {
-
-    <O> CompletableFuture<Output<O>> run(String endpointId, RunOptions<O> options);
-
     <O> CompletableFuture<Output<O>> subscribe(String endpointId, SubscribeOptions<O> options);
 
     AsyncQueueClient queue();

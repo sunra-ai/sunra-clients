@@ -1,7 +1,6 @@
 package ai.sunra.client;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import ai.sunra.client.queue.QueueStatus;
 import com.google.gson.JsonObject;

@@ -1,6 +1,6 @@
-import { SunraClientConfig, createConfig } from './config'
+import { SunraClientConfig, createConfig, credentialsFromEnv, RequiredConfig } from './config'
 import { createQueueClient, SunraQueueClient, QueueSubscribeOptions } from './queue'
-import { createStorageClient, StorageClient } from './storage'
+import { createStorageClient, SunraStorageClient } from './storage'
 import { SunraResult, SunraRunOptions } from './types'
 
 /**
@@ -18,7 +18,13 @@ export interface SunraClient {
   /**
    * The storage client to interact with the storage API.
    */
-  readonly storage: StorageClient;
+  readonly storage: SunraStorageClient;
+
+  /**
+   * Configures the client with a new configuration.
+   * @param config - The new configuration to use.
+   */
+  config(config: SunraClientConfig): void;
 
   /**
    * Subscribes to updates for a specific request in the queue.
@@ -31,24 +37,42 @@ export interface SunraClient {
 }
 
 /**
+ * Implementation of the SunraClient interface
+ */
+export class SunraClientImpl implements SunraClient {
+  private _config: RequiredConfig
+  readonly queue: SunraQueueClient
+  readonly storage: SunraStorageClient
+
+  constructor(userConfig: SunraClientConfig = {}) {
+    this._config = createConfig(userConfig)
+    this.storage = createStorageClient({ getConfig: () => this._config })
+    this.queue = createQueueClient({ getConfig: () => this._config, storage: this.storage })
+  }
+
+  config(config: SunraClientConfig) {
+    this._config = createConfig(config)
+  }
+
+  async subscribe(endpointId: string, options: SunraRunOptions<any> & QueueSubscribeOptions): Promise<SunraResult<any>> {
+    const { request_id: requestId } = await this.queue.submit(endpointId, options)
+    if (options.onEnqueue) {
+      options.onEnqueue(requestId)
+    }
+    await this.queue.subscribeToStatus({ requestId, ...options })
+    return this.queue.result({ requestId })
+  }
+}
+
+/**
  * Creates a new reference of the `SunraClient`.
  * @param userConfig Optional configuration to override the default settings.
  * @returns a new instance of the `SunraClient`.
  */
 export function createSunraClient(userConfig: SunraClientConfig = {}): SunraClient {
-  const config = createConfig(userConfig)
-  const storage = createStorageClient({ config })
-  const queue = createQueueClient({ config, storage })
-  return {
-    queue,
-    storage,
-    subscribe: async (endpointId, options) => {
-      const { request_id: requestId } = await queue.submit(endpointId, options)
-      if (options.onEnqueue) {
-        options.onEnqueue(requestId)
-      }
-      await queue.subscribeToStatus(endpointId, { requestId, ...options })
-      return queue.result(endpointId, { requestId })
-    },
-  }
+  return new SunraClientImpl(userConfig)
 }
+
+export const sunra = createSunraClient({
+  credentials: credentialsFromEnv
+})

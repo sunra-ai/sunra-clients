@@ -84,7 +84,7 @@ public class QueueClientImplRealTest {
             System.out.println("Starting to test status method...");
 
             // Get status
-            QueueStatus.StatusUpdate statusResult = queueClient.status(testEndpointId, statusOptions);
+            QueueStatus.StatusUpdate statusResult = queueClient.status(statusOptions);
 
             // Validate status result
             assertNotNull(statusResult);
@@ -103,7 +103,7 @@ public class QueueClientImplRealTest {
     @Test
     void testSubscribeToStatus() {
         try {
-            String requestId = "pd_mFufCrWZQngDGUzNvNA8xqrr";
+            String requestId = "pd_657Ugnj92U2BcMFSfUQmU8GY";
 
             System.out.println("Submission successful, Request ID: " + requestId);
 
@@ -139,7 +139,7 @@ public class QueueClientImplRealTest {
             while (retryCount < maxRetries) {
                 try {
                     // Execute subscription call
-                    result = queueClient.subscribeToStatus(testEndpointId, subscribeOptions);
+                    result = queueClient.subscribeToStatus(subscribeOptions);
                     // Break out of loop if successful
                     break;
                 } catch (Exception e) {
@@ -194,7 +194,6 @@ public class QueueClientImplRealTest {
     @Test
     void testCancel() {
         try {
-            // 1. 先提交一个任务
             Map<String, Object> input = Map.of("prompt", "a test for cancel", "num_frames", 4);
 
             QueueSubmitOptions submitOptions =
@@ -205,21 +204,18 @@ public class QueueClientImplRealTest {
 
             System.out.println("Task submitted, requestId: " + requestId);
 
-            // 2. 立即调用 cancel
             QueueCancelOptions cancelOptions =
                     QueueCancelOptions.builder().requestId(requestId).build();
 
-            Object cancelResult = queueClient.cancel(testEndpointId, cancelOptions);
+            Object cancelResult = queueClient.cancel(cancelOptions);
 
             System.out.println("Cancel result: " + cancelResult);
 
-            // 3. 校验返回
             assertNotNull(cancelResult);
 
-            // 4. 可选：再查一次状态，确认已取消
             QueueStatusOptions statusOptions =
                     QueueStatusOptions.builder().requestId(requestId).build();
-            QueueStatus.StatusUpdate status = queueClient.status(testEndpointId, statusOptions);
+            QueueStatus.StatusUpdate status = queueClient.status(statusOptions);
             System.out.println("Status after cancel: " + status.getStatus());
 
         } catch (Exception e) {

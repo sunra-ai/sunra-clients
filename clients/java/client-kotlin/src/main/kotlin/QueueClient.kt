@@ -48,14 +48,12 @@ interface QueueClient {
     /**
      * Gets the current status of the request with the given [requestId].
      *
-     * @param endpointId The ID of the endpoint to send the request to.
      * @param requestId The ID of the request to get the status for.
      * @param options The options to use for the request.
      *
      * @see #submit
      */
     suspend fun status(
-        endpointId: String,
         requestId: String,
         options: StatusOptions = StatusOptions(),
     ): QueueStatus.StatusUpdate
@@ -64,7 +62,6 @@ interface QueueClient {
      * Subscribes to the status updates of the request with the given [requestId].
      * This method uses the Queue API to subscribe to the status updates of the request.
      *
-     * @param endpointId The ID of the endpoint to send the request to.
      * @param requestId The ID of the request to subscribe to.
      * @param options The options to use for the request.
      * @param onQueueUpdate The status update callback.
@@ -73,7 +70,6 @@ interface QueueClient {
      * @see #status
      */
     suspend fun subscribeToStatus(
-        endpointId: String,
         requestId: String,
         options: StatusSubscribeOptions = StatusSubscribeOptions(),
         onQueueUpdate: OnStatusUpdate? = null,
@@ -82,14 +78,12 @@ interface QueueClient {
     /**
      * Gets the result of the request with the given `requestId`.
      *
-     * @param endpointId The ID of the endpoint to send the request to.
      * @param requestId The ID of the request to get the result for.
      * @param resultType The expected result type of the request.
      *
      * @see #submit
      */
     suspend fun <Output : Any> result(
-        endpointId: String,
         requestId: String,
         resultType: KClass<Output>,
     ): RequestOutput<Output>
@@ -117,12 +111,10 @@ internal class QueueClientImpl(
     }
 
     override suspend fun status(
-        endpointId: String,
         requestId: String,
         options: StatusOptions,
     ): QueueStatus.StatusUpdate {
         return queueClient.status(
-            endpointId,
             InternalStatusOptions.builder()
                 .requestId(requestId)
                 .logs(options.logs)
@@ -131,13 +123,11 @@ internal class QueueClientImpl(
     }
 
     override suspend fun subscribeToStatus(
-        endpointId: String,
         requestId: String,
         options: StatusSubscribeOptions,
         onQueueUpdate: OnStatusUpdate?,
     ): QueueStatus.Completed {
         return queueClient.subscribeToStatus(
-            endpointId,
             InternalSubscribeOptions.builder()
                 .requestId(requestId)
                 .logs(options.logs)
@@ -147,12 +137,10 @@ internal class QueueClientImpl(
     }
 
     override suspend fun <Output : Any> result(
-        endpointId: String,
         requestId: String,
         resultType: KClass<Output>,
     ): RequestOutput<Output> {
         return queueClient.result(
-            endpointId,
             InternalResultOptions.builder<Output>()
                 .requestId(requestId)
                 .resultType(resultType.java)
@@ -162,16 +150,14 @@ internal class QueueClientImpl(
 }
 
 suspend inline fun <reified Output : Any> QueueClient.result(
-    endpointId: String,
     requestId: String,
 ): RequestOutput<Output> {
-    return result(endpointId, requestId, Output::class)
+    return result(requestId, Output::class)
 }
 
 @JvmName("result_")
 suspend inline fun QueueClient.result(
-    endpointId: String,
     requestId: String,
 ): RequestOutput<JsonObject> {
-    return result(endpointId, requestId, JsonObject::class)
+    return result(requestId, JsonObject::class)
 }

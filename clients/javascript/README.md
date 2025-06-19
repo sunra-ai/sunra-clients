@@ -4,13 +4,13 @@
 
 ## Introduction
 
-The `sunra` JavaScript Client Library provides a seamless way to interact with `sunra` endpoints from your JavaScript or TypeScript applications. With built-in support for various platforms, it ensures consistent behavior across web, Node.js, and React Native environments.
+The [Sunra](https://sunra.ai) JavaScript Client Library provides a seamless way to interact with [Sunra](https://sunra.ai) endpoints from your JavaScript or TypeScript applications. With built-in support for various platforms, it ensures consistent behavior across web, Node.js, and React Native environments.
 
 ## Getting started
 
 Before diving into the client-specific features, ensure you've set up your credentials:
 
-```ts
+```typescript
 import { createSunraClient } from "@sunra/client";
 
 const sunra = createSunraClient({
@@ -22,9 +22,12 @@ const sunra = createSunraClient({
 
 ## Running functions without waiting for the result
 
-```ts
-const { request_id } = await sunra.queue.submit("sunra/lcm/text-to-image", {
-  input: { foo: "bar" },
+```typescript
+const { request_id } = await sunra.queue.submit(
+  "sunra/lcm/text-to-image", {
+  input: {
+    prompt: "A glass teapot with blooming flower tea inside, placed on a wooden table by a sunlit window with gentle morning light."
+  },
 });
 ```
 
@@ -32,15 +35,20 @@ const { request_id } = await sunra.queue.submit("sunra/lcm/text-to-image", {
 
 The `sunra.subscribe` method offers a powerful way to rely on the queue system to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
 
-```ts
-const result = await sunra.subscribe("sunra/lcm/text-to-image", {
-  input: { foo: "bar" },
-  onQueueUpdate(update) {
-    if (update.status === "IN_QUEUE") {
-      console.log(`Your position in the queue is ${update.position}`);
-    }
-  },
-});
+```typescript
+const result = await sunra.subscribe(
+  "sunra/lcm/text-to-image",
+  {
+    input: {
+      prompt: "A glass teapot with blooming flower tea inside, placed on a wooden table by a sunlit window with gentle morning light."
+    },
+    onQueueUpdate(update) {
+      if (update.status === "IN_QUEUE") {
+        console.log(`Your position in the queue is ${update.position}`);
+      }
+    },
+  }
+);
 ```
 
 ## More features

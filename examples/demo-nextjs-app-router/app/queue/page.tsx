@@ -19,13 +19,13 @@ export default function Home() {
   // Result state
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any | null>(null);
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<string>("");
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const reset = () => {
     setLoading(false);
     setResult(null);
-    setLogs([]);
+    setLogs("");
     setElapsedTime(0);
   };
 
@@ -48,9 +48,7 @@ export default function Home() {
             update.status === "IN_PROGRESS" ||
             update.status === "COMPLETED"
           ) {
-            if (update.logs && update.logs.length > logs.length) {
-              setLogs((update.logs || []).map((log) => log.message));
-            }
+            setLogs(update.logs || '')
           }
         },
       });
@@ -128,7 +126,7 @@ export default function Home() {
           <div className="space-y-2">
             <h3 className="text-xl font-light">Logs</h3>
             <pre className="h-60 w-full overflow-auto whitespace-pre rounded bg-black/70 font-mono text-sm text-white/80">
-              {logs.join("\n")}
+              {logs}
             </pre>
           </div>
         </div>

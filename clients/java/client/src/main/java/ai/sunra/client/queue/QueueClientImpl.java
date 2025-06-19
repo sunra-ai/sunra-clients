@@ -4,7 +4,6 @@ import ai.sunra.client.Output;
 import ai.sunra.client.exception.SunraException;
 import ai.sunra.client.http.HttpClient;
 import ai.sunra.client.queue.QueueStatus.Completed;
-import ai.sunra.client.util.EndpointId;
 import com.google.gson.JsonObject;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -38,8 +37,7 @@ public class QueueClientImpl implements QueueClient {
 
     @Nonnull
     @Override
-    public QueueStatus.StatusUpdate status(@Nonnull String endpointId, @Nonnull QueueStatusOptions options) {
-        final var endpoint = EndpointId.fromString(endpointId);
+    public QueueStatus.StatusUpdate status(@Nonnull QueueStatusOptions options) {
         final var url = String.format("https://api.sunra.ai/v1/queue/requests/%s/status", options.getRequestId());
 
         final var queryParams = new HashMap<String, Object>();
@@ -55,8 +53,7 @@ public class QueueClientImpl implements QueueClient {
 
     @Override
     @Nonnull
-    public Completed subscribeToStatus(@Nonnull String endpointId, @Nonnull QueueSubscribeOptions options) {
-        final var endpoint = EndpointId.fromString(endpointId);
+    public Completed subscribeToStatus(@Nonnull QueueSubscribeOptions options) {
         final var url =
                 String.format("https://api.sunra.ai/v1/queue/requests/%s/status/stream", options.getRequestId());
 
@@ -121,8 +118,7 @@ public class QueueClientImpl implements QueueClient {
 
     @Nonnull
     @Override
-    public <O> Output<O> result(@Nonnull String endpointId, @Nonnull QueueResultOptions<O> options) {
-        final var endpoint = EndpointId.fromString(endpointId);
+    public <O> Output<O> result(@Nonnull QueueResultOptions<O> options) {
         final var url = String.format("https://api.sunra.ai/v1/queue/requests/%s", options.getRequestId());
         final var request = httpClient.prepareRequest(url, options);
 
@@ -132,8 +128,7 @@ public class QueueClientImpl implements QueueClient {
 
     @Override
     @Nonnull
-    public Object cancel(@Nonnull String endpointId, @Nonnull QueueCancelOptions options) {
-        final var endpoint = EndpointId.fromString(endpointId);
+    public Object cancel(@Nonnull QueueCancelOptions options) {
         final var url = String.format("https://api.sunra.ai/v1/queue/requests/%s/cancel", options.getRequestId());
         final var request = httpClient.prepareRequest(url, options);
 

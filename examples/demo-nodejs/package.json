@@ -1,0 +1,26 @@
+{
+  "name": "demo-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "speech-to-text": "tsx src/speech-to-text.ts",
+    "text-to-video": "tsx src/text-to-video.ts",
+    "text-to-image": "tsx src/text-to-image.ts",
+    "image-to-video": "tsx src/image-to-video.ts",
+    "stream-status": "tsx src/stream-status.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sunra/client": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@types/node": "^24.0.1",
+    "chalk": "^5.3.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  }
+}

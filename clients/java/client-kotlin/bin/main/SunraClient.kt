@@ -33,25 +33,6 @@ interface SunraClient {
     val queue: QueueClient
 
     /**
-     * Sends a request to the given [endpointId]. This method is a direct request
-     * to the model API and it waits for the processing to complete before returning the result.
-     *
-     * This is useful for short running requests, but it's not recommended for
-     * long running requests, for those see [subscribe].
-     *
-     * @param endpointId The ID of the endpoint to send the request to.
-     * @param input The input data to send to the endpoint.
-     * @param resultType The expected result type of the request.
-     * @param options The options to use for the request.
-     */
-    suspend fun <Output : Any> run(
-        endpointId: String,
-        input: Any,
-        resultType: KClass<Output>,
-        options: RunOptions = RunOptions(),
-    ): RequestOutput<Output>
-
-    /**
      * Submits a request to the given [endpointId]. This method
      * uses the [queue] API to submit the request and poll for the result.
      *
@@ -88,21 +69,6 @@ internal class SunraClientKotlinImpl(
 
     override val queue: QueueClient = QueueClientImpl(client.queue())
 
-    override suspend fun <Output : Any> run(
-        endpointId: String,
-        input: Any,
-        resultType: KClass<Output>,
-        options: RunOptions,
-    ): RequestOutput<Output> {
-        val internalOptions =
-            InternalRunOptions.builder<Output>()
-                .httpMethod(options.httpMethod)
-                .input(input)
-                .resultType(resultType.java)
-                .build()
-        return client.run(endpointId, internalOptions).thenConvertOutput().await()
-    }
-
     override suspend fun <Output : Any> subscribe(
         endpointId: String,
         input: Any,
@@ -122,19 +88,6 @@ internal class SunraClientKotlinImpl(
         return client.subscribe(endpointId, internalOptions).thenConvertOutput().await()
     }
 }
-
-suspend inline fun <reified Output : Any> SunraClient.run(
-    endpointId: String,
-    input: Any,
-    options: RunOptions = RunOptions(),
-) = this.run(endpointId, input, Output::class, options)
-
-@JvmName("run_")
-suspend fun SunraClient.run(
-    endpointId: String,
-    input: Any,
-    options: RunOptions = RunOptions(),
-) = this.run(endpointId, input, JsonObject::class, options)
 
 suspend inline fun <reified Output : Any> SunraClient.subscribe(
     endpointId: String,

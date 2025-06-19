@@ -35,3 +35,7 @@ tasks.withType<JavaCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+sonatypeCentralPublishExtension {
+    artifactId.set("sunra-client-async")
+}
