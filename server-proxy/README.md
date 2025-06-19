@@ -18,9 +18,11 @@ For Next.js applications using the page router:
 
 1. Create an API route in your Next.js app, as a convention we suggest using `pages/api/sunra/proxy.js` (or `.ts` if you're using TypeScript):
 2. Re-export the proxy handler from the library as the default export:
-   ```ts
-   export { handler as default } from "@sunra/server-proxy/nextjs";
-   ```
+
+  ```typescript
+  export { handler as default } from "@sunra/server-proxy/nextjs";
+  ```
+
 3. Ensure you've set the `SUNRA_KEY` as an environment variable in your server, containing a valid API Key.
 
 ## Next.js app router integration
@@ -30,11 +32,11 @@ For Next.js applications using the app router:
 1. Create an API route in your Next.js app, as a convention we suggest using `app/api/sunra/proxy/route.js` (or `.ts` if you're using TypeScript):
 2. Re-export the proxy handler from the library as the default export:
 
-   ```ts
-   import { route } from "@sunra/server-proxy/nextjs";
+  ```typescript
+  import { route } from "@sunra/server-proxy/nextjs";
 
-   export const { GET, POST, PUT } = route;
-   ```
+  export const { GET, POST, PUT } = route;
+  ```
 
 3. Ensure you've set the `SUNRA_KEY` as an environment variable in your server, containing a valid API Key.
 
@@ -43,20 +45,22 @@ For Next.js applications using the app router:
 For Express applications:
 
 1. Make sure your app supports JSON payloads, either by using `express.json()` (recommended) or `body-parser`:
-   ```ts
-   app.use(express.json());
-   ```
+
+  ```typescript
+  app.use(express.json());
+  ```
+
 2. Add the proxy route and its handler. Note that if your client lives outside of the express app (i.e. the express app is solely used as an external API for other clients), you will need to allow CORS on the proxy route:
 
-   ```ts
-   import * as sunraProxy from "@sunra/server-proxy/express";
+  ```typescript
+  import * as sunraProxy from "@sunra/server-proxy/express";
 
-   app.all(
-     sunraProxy.route, // '/api/sunra/proxy' or you can use your own
-     cors(), // if external clients will use the proxy
-     sunraProxy.handler,
-   );
-   ```
+  app.all(
+    sunraProxy.route, // '/api/sunra/proxy' or you can use your own
+    cors(), // if external clients will use the proxy
+    sunraProxy.handler,
+  );
+  ```
 
 3. Ensure you've set the `SUNRA_KEY` as an environment variable in your server, containing a valid API Key.
 
@@ -64,13 +68,13 @@ For Express applications:
 
 Once you've set up the proxy, you can configure the client to use it:
 
-```ts
-import { createSunraClient } from "@sunra/client";
+  ```typescript
+  import { createSunraClient } from "@sunra/client";
 
-const sunra = createSunraClient({
-  proxyUrl: "/api/sunra/proxy", // or https://my.app.com/api/sunra/proxy
-})
-```
+  const sunra = createSunraClient({
+    proxyUrl: "/api/sunra/proxy", // or https://my.app.com/api/sunra/proxy
+  })
+  ```
 
 Now all your client calls will route through your server proxy, so your credentials are protected.
 

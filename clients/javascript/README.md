@@ -10,7 +10,7 @@ The [Sunra](https://sunra.ai) JavaScript Client Library provides a seamless way 
 
 Before diving into the client-specific features, ensure you've set up your credentials:
 
-```ts
+```typescript
 import { createSunraClient } from "@sunra/client";
 
 const sunra = createSunraClient({
@@ -22,7 +22,7 @@ const sunra = createSunraClient({
 
 ## Running functions without waiting for the result
 
-```ts
+```typescript
 const { request_id } = await sunra.queue.submit(
   "sunra/lcm/text-to-image", {
   input: {
@@ -35,7 +35,7 @@ const { request_id } = await sunra.queue.submit(
 
 The `sunra.subscribe` method offers a powerful way to rely on the queue system to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
 
-```ts
+```typescript
 const result = await sunra.subscribe(
   "sunra/lcm/text-to-image",
   {

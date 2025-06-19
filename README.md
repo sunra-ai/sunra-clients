@@ -21,23 +21,26 @@ This client library is crafted as a lightweight layer atop platform standards li
 > Ensure you've reviewed the [getting started guide](https://docs.sunra.ai) to acquire your credentials, browser existing APIs, or create your custom functions.
 
 1. Install the client library
-   ```sh
-   npm install --save @sunra/client
-   ```
+
+  ```sh
+  npm install --save @sunra/client
+  ```
+
 2. Start by configuring your credentials:
 
-   ```ts
+  ```typescript
   import { createSunraClient } from "@sunra/client";
 
   const sunra = createSunraClient({
     credentials: "SUNRA_KEY",
   });
-   ```
+  ```
 
 3. Retrieve your function id and execute it:
-   ```ts
-   const result = await sunra.run("user/app-alias");
-   ```
+
+  ```typescript
+  const result = await sunra.run("user/app-alias");
+  ```
 
 See the available [models](https://sunra.ai/models) for more details.
 
@@ -52,17 +55,21 @@ For example, if you are using Next.js, you can:
    npm install --save @sunra/server-proxy
    ```
 2. Add the proxy as an API endpoint of your app, see an example here in [pages/api/sunra/proxy.ts](https://github.com/sunra-ai/sunra-clients/blob/main/apps/demo-nextjs-page-router/pages/api/sunra/proxy.ts)
-   ```ts
-   export { handler as default } from "@sunra/server-proxy/nextjs";
-   ```
+
+  ```typescript
+  export { handler as default } from "@sunra/server-proxy/nextjs";
+  ```
+
 3. Configure the client to use the proxy:
-  ```ts
+
+  ```typescript
   import { createSunraClient } from "@sunra/client";
 
   const sunra = createSunraClient({
     proxyUrl: "/api/sunra/proxy",
   });
   ```
+
 4. Make sure your server has `SUNRA_KEY` as environment variable with a valid API Key. That's it! Now your client calls will route through your server proxy, so your credentials are protected.
 
 See [server-proxy](./server-proxy/) for more details.
