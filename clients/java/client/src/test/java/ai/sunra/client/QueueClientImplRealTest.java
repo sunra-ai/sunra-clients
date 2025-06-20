@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 public class QueueClientImplRealTest {
 
     private QueueClientImpl queueClient;
-    private String testEndpointId = "sunra/lcm/text-to-image";
+    private String testEndpointId = "black-forest-labs/flux-kontext-pro/text-to-image";
     // For security, it's recommended to store the API Key in environment variables or config files
     private String apiKey = System.getenv("SUNRA_KEY");
 
@@ -56,7 +56,7 @@ public class QueueClientImplRealTest {
         try {
             // Prepare input
             Map<String, Object> input = Map.of(
-                    "prompt", "a cat playing with yarn", "num_frames", 4 // Reduced frames to speed up testing
+                    "prompt", "a cat playing with yarn"
                     );
 
             System.out.println("Starting to test submit method...");
@@ -70,8 +70,6 @@ public class QueueClientImplRealTest {
             // Validate submission result
             assertNotNull(submitResult);
             assertNotNull(submitResult.getRequestId());
-            //            assertEquals(QueueStatus.Status.IN_QUEUE, submitResult.getStatus());
-            //            assertNotNull(submitResult.getQueuePosition());
 
             System.out.println("Submission successful, Request ID: " + submitResult.getRequestId());
             System.out.println("Queue position: " + submitResult.getQueuePosition());
@@ -88,7 +86,6 @@ public class QueueClientImplRealTest {
 
             // Validate status result
             assertNotNull(statusResult);
-            //            assertEquals(requestId, statusResult.getRequestId());
             assertNotNull(statusResult.getStatus());
 
             System.out.println("Status query successful, current status: " + statusResult.getStatus());
@@ -194,7 +191,7 @@ public class QueueClientImplRealTest {
     @Test
     void testCancel() {
         try {
-            Map<String, Object> input = Map.of("prompt", "a test for cancel", "num_frames", 4);
+            Map<String, Object> input = Map.of("prompt", "a test for cancel");
 
             QueueSubmitOptions submitOptions =
                     QueueSubmitOptions.builder().input(input).build();

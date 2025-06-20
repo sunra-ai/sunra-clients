@@ -50,14 +50,13 @@ export default function Home() {
 
   const generateVideo = async () => {
     reset();
-    // @snippet:start("client.queue.subscribe")
     setLoading(true);
     const start = Date.now();
     try {
-      const result = await sunra.subscribe("sunra/lcm/text-to-image", {
+      const result = await sunra.subscribe("vidu/viduq1/image-to-video", {
         input: {
           prompt,
-          image: imageFile,
+          start_image: imageFile,
         },
         logs: true,
         onQueueUpdate(update) {
@@ -77,7 +76,6 @@ export default function Home() {
       setLoading(false);
       setElapsedTime(Date.now() - start);
     }
-    // @snippet:end
   };
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">

@@ -22,7 +22,7 @@ async def client() -> sunra_client.AsyncClient:
 async def test_sunra_client(client: sunra_client.AsyncClient):
 
     handle = await client.submit(
-        "sunra/lcm/text-to-image",
+        "black-forest-labs/flux-kontext-pro/text-to-image",
         arguments={
             "prompt": "an orange cat",
         },
@@ -39,7 +39,7 @@ async def test_sunra_client(client: sunra_client.AsyncClient):
     assert isinstance(status, sunra_client.Completed)
 
     output = await client.subscribe(
-        "sunra/lcm/text-to-image",
+        "black-forest-labs/flux-kontext-pro/text-to-image",
         arguments={
             "prompt": "a cat",
         },
@@ -51,7 +51,7 @@ async def test_sunra_client(client: sunra_client.AsyncClient):
 async def test_sunra_client_streaming(client: sunra_client.AsyncClient):
     events = []
     async for event in client.stream(
-        "sunra/lcm/text-to-image",
+        "black-forest-labs/flux-kontext-pro/text-to-image",
         arguments={
             "prompt": "an orange cat",
         },

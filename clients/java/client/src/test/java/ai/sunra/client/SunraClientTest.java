@@ -36,10 +36,10 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // Choose an endpoint that actually exists
-            String realEndpointId = "sunra/lcm/text-to-image"; // Modify according to actual situation
+            String realEndpointId = "black-forest-labs/flux-kontext-pro/text-to-image"; // Modify according to actual situation
 
             // Prepare test input
-            Map<String, Object> input = Map.of("prompt", "the cat is running", "max_tokens", 100);
+            Map<String, Object> input = Map.of("prompt", "the cat is running");
 
             // Execute API call
             System.out.println("Calling API endpoint: " + realEndpointId);
@@ -92,12 +92,10 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // Choose an endpoint suitable for long-running tasks
-            String realEndpointId = "sunra/lcm/text-to-image";
+            String realEndpointId = "black-forest-labs/flux-kontext-pro/text-to-image";
 
             // Prepare input
-            Map<String, Object> input = Map.of(
-                    "prompt", "a dog running in the park", "num_frames", 4 // Generate 4 frames of animation
-                    );
+            Map<String, Object> input = Map.of("prompt", "a dog running in the park");
 
             System.out.println("Starting to subscribe to API endpoint: " + realEndpointId);
             System.out.println("Input parameters: " + input);

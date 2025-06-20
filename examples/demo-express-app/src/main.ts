@@ -36,8 +36,7 @@ app.get('/api', (req, res) => {
 })
 
 app.get('/sunra-on-server', async (req, res) => {
-  // TODO: change the default model id
-  const result = await sunra.subscribe('sunra/lcm/text-to-image', {
+  const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/text-to-image', {
     input: {
       prompt:
         'a black cat with glowing eyes, cute, adorable, disney, pixar, highly detailed, 8k',

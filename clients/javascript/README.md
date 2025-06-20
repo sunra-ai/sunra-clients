@@ -24,7 +24,7 @@ const sunra = createSunraClient({
 
 ```typescript
 const { request_id } = await sunra.queue.submit(
-  "sunra/lcm/text-to-image", {
+  "black-forest-labs/flux-kontext-pro/text-to-image", {
   input: {
     prompt: "A glass teapot with blooming flower tea inside, placed on a wooden table by a sunlit window with gentle morning light."
   },
@@ -37,7 +37,7 @@ The `sunra.subscribe` method offers a powerful way to rely on the queue system t
 
 ```typescript
 const result = await sunra.subscribe(
-  "sunra/lcm/text-to-image",
+  "black-forest-labs/flux-kontext-pro/text-to-image",
   {
     input: {
       prompt: "A glass teapot with blooming flower tea inside, placed on a wooden table by a sunlit window with gentle morning light."

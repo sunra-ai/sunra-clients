@@ -7,7 +7,7 @@ public class SunraDemo {
     var client = AsyncSunraClient.withEnvCredentials();
 
     var future = client.subscribe(
-      "sunra/lcm/text-to-image",
+      "black-forest-labs/flux-kontext-pro/text-to-image",
       SubscribeOptions.<JsonObject>builder()
         .input(Map.of("prompt", "a dog running in the park"))
         .resultType(JsonObject.class)
