@@ -42,9 +42,8 @@
     "@msgpack/msgpack": "^3.1.2",
     "axios": "^1.9.0",
     "debug": "^4.4.0",
-    "eventsource-parser": "^1.1.2",
-    "lodash.isplainobject": "^4.0.6",
-    "robot3": "^0.4.1"
+    "eventsource-parser": "^3.0.3",
+    "lodash.isplainobject": "^4.0.6"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

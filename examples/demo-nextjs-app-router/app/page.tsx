@@ -67,6 +67,7 @@ export default function Home() {
             setLogs(update.logs || "");
           }
         },
+        mode: "streaming",
       });
       setResult(result);
     } catch (error: any) {

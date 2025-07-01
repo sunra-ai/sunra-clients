@@ -1,6 +1,6 @@
 import { RequiredConfig } from './config'
 import { dispatchRequest, dispatchRequestWithStream } from './request'
-import { getRestApiUrl } from './utils'
+import { getRestApiUrl, whisper } from './utils'
 import { SunraStorageClient } from './storage'
 import {
   SunraCompletedQueueStatus,
@@ -216,7 +216,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
     })
   }
 
-  async streamStatus({ requestId, logs = false }: QueueStatusStreamOptions): Promise<SunraQueueStatus> {
+  async streamStatus({ requestId, logs = false, ...rest }: QueueStatusStreamOptions): Promise<SunraQueueStatus> {
     const baseUrl = `${getRestApiUrl()}/queue/requests/${requestId}/status/stream`
     const search = logs ? '?logs=1' : '?logs=0'
     const url = `${baseUrl}${search}`
@@ -224,6 +224,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
       method: 'get',
       targetUrl: url,
       config: this.config,
+      ...rest,
     })
   }
 
@@ -292,13 +293,13 @@ export class SunraQueueClientImpl implements SunraQueueClient {
       }
 
       if (options.mode === 'streaming') {
-        console.log('Streaming status...')
+        whisper('Streaming status...')
         this.streamStatus({
           requestId,
           logs: options.logs ?? false,
           onData: options.onQueueUpdate,
           onEnd: async () => {
-            console.log('Stream ended, getting final status...')
+            whisper('Stream ended, getting final status...')
             const status = await this.status({ requestId })
             resolve(status as SunraCompletedQueueStatus)
           },
