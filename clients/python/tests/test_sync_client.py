@@ -20,7 +20,7 @@ def client() -> sunra_client.SyncClient:
 
 def test_sunra_client(client: sunra_client.SyncClient):
     handle = client.submit(
-        "sunra/lcm/text-to-image",
+        "black-forest-labs/flux-kontext-pro/text-to-image",
         arguments={
             "prompt": "an orange cat",
         },
@@ -38,7 +38,7 @@ def test_sunra_client(client: sunra_client.SyncClient):
 
 
     output = client.subscribe(
-        "sunra/lcm/text-to-image",
+        "black-forest-labs/flux-kontext-pro/text-to-image",
         arguments={
             "prompt": "a cat",
         },
@@ -51,7 +51,7 @@ def test_sunra_client(client: sunra_client.SyncClient):
 def test_sunra_client_streaming(client: sunra_client.SyncClient):
     events = []
     for event in client.stream(
-        "sunra/lcm/text-to-image",
+        "black-forest-labs/flux-kontext-pro/text-to-image",
         arguments={
             "prompt": "an orange cat",
         },

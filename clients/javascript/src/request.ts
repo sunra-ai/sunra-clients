@@ -1,8 +1,9 @@
 import { AxiosRequestConfig } from 'axios'
 import { RequiredConfig } from './config'
-import { isBrowser } from './utils'
+import { isBrowser, whisper } from './utils'
 import packageInfo from '../package.json'
 import axios from 'axios'
+import { createParser, EventSourceMessage } from 'eventsource-parser'
 
 function getUserAgent(): string {
   return `${packageInfo.name}/${packageInfo.version}`
@@ -83,42 +84,61 @@ export async function dispatchRequestWithStream<Input, Output>(
     'Connection': 'keep-alive',
   }
   axiosConfig.headers = headers
-  // axiosConfig.adapter = 'fetch'
+  axiosConfig.adapter = 'fetch'
   axiosConfig.responseType = 'stream'
 
-  console.log('axiosConfig is: ', axiosConfig)
+  const controller = new AbortController()
+  axiosConfig.signal = controller.signal
+
   const response = await axiosInstance.request(axiosConfig)
-  console.log('response is: ', response)
 
   // Set up a reader for the response
   const reader = response.data.getReader()
   const decoder = new TextDecoder('utf-8')
 
+  let isDone = false
+
+  const onEvent = (event: EventSourceMessage) => {
+    try {
+      const eventData = JSON.parse(event.data)
+      whisper('event data is: ', eventData)
+
+      onData?.(eventData)
+
+      if (eventData.status === 'COMPLETED' || eventData.status === 'FAILED' || eventData.status === 'CANCELLED') {
+        isDone = true
+        controller.abort()
+      }
+    } catch (e) {
+      onError?.(e)
+    }
+  }
+
+  const parser = createParser({
+    onEvent
+  })
+
+
   // Process the SSE stream
   while (true) {
-    const { done, value } = await reader.read()
-    console.log('Read chunk:', { done, value })
+    try {
+      const { done, value } = await reader.read()
 
-    if (done) {
-      onEnd?.()
-      break
-    }
-
-    const chunk = decoder.decode(value)
-    const messages = chunk.split('\n\n').filter(Boolean)
-
-    for (const message of messages) {
-      try {
-        const eventData = JSON.parse(message)
-        onData?.(eventData)
-
-        if (eventData.status === 'COMPLETED' || eventData.status === 'FAILED' || eventData.status === 'CANCELLED') {
-          onEnd?.()
-          break
-        }
-      } catch (e) {
-        onError?.(e)
+      if (done || isDone) {
+        onEnd?.()
+        break
       }
+
+      const chunk = decoder.decode(value)
+      parser.feed(chunk)
+    } catch (error) {
+      if ((error instanceof Error && error.name === 'CanceledError') || isDone || axios.isCancel(error)) {
+        onEnd?.()
+      } else {
+        whisper('error is: ', error)
+        onError?.(error)
+      }
+      break
     }
   }
 

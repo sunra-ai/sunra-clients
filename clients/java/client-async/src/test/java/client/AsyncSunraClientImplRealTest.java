@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 public class AsyncSunraClientImplRealTest {
 
     private AsyncSunraClientImpl asyncClient;
-    private String testEndpointId = "sunra/lcm/text-to-image";
+    private String testEndpointId = "black-forest-labs/flux-kontext-pro/text-to-image";
     // Recommended to store API Key in environment variables or config files
     private String apiKey = System.getenv("SUNRA_KEY");
 
@@ -36,7 +36,7 @@ public class AsyncSunraClientImplRealTest {
 
     @Test
     void testSubscribe() throws Exception {
-        Map<String, Object> input = Map.of("prompt", "a dog playing with a ball", "num_frames", 2);
+        Map<String, Object> input = Map.of("prompt", "a dog playing with a ball");
 
         AtomicInteger updateCount = new AtomicInteger(0);
         Consumer<QueueStatus.StatusUpdate> onUpdate = update -> {

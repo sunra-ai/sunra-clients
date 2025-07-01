@@ -7,7 +7,7 @@ const sunra = createSunraClient({
   proxyUrl: "/api/sunra/proxy",
 });
 
-const DEFAULT_ENDPOINT_ID = "sunra/lcm/text-to-image";
+const DEFAULT_ENDPOINT_ID = "black-forest-labs/flux-kontext-pro/text-to-image";
 const DEFAULT_INPUT = `{
   "prompt": "A beautiful sunset over the ocean"
 }`;

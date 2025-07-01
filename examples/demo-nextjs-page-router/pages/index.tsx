@@ -49,7 +49,7 @@ export function Index() {
     setLoading(true);
     const start = Date.now();
     try {
-      const result = await sunra.subscribe("sunra/lcm/text-to-image", {
+      const result = await sunra.subscribe("black-forest-labs/flux-kontext-pro/text-to-image", {
         input: {
           prompt,
         },
