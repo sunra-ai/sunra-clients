@@ -1,12 +1,12 @@
-# sunra JavaScript/TypeScript client library
+# sunra.ai JavaScript/TypeScript Client Library
 
 ![@sunra/client npm package](https://img.shields.io/npm/v/@sunra/client?color=%237527D7&label=%40sunra%2Fclient&style=flat-square)
 
 ## Introduction
 
-The [Sunra](https://sunra.ai) JavaScript Client Library provides a seamless way to interact with [Sunra](https://sunra.ai) endpoints from your JavaScript or TypeScript applications. With built-in support for various platforms, it ensures consistent behavior across web, Node.js, and React Native environments.
+The [sunra.ai](https://sunra.ai) JavaScript Client Library provides a seamless way to interact with [sunra.ai](https://sunra.ai) endpoints from your JavaScript or TypeScript applications. With built-in support for various platforms, it ensures consistent behavior across web, Node.js, and React Native environments.
 
-## Getting started
+## Getting Started
 
 Before diving into the client-specific features, ensure you've set up your credentials:
 
@@ -18,22 +18,24 @@ const sunra = createSunraClient({
 });
 ```
 
-**Note:** Ensure you've reviewed the [sunra getting started guide](https://docs.sunra.ai) to acquire your credentials and register your functions. Also, make sure your credentials are always protected. See the [../../server-proxy](../../server-proxy) package for a secure way to use the client in client-side applications.
+**Note:** Ensure you've reviewed the [sunra.ai getting started guide](https://docs.sunra.ai) to acquire your credentials and register your functions. Also, make sure your credentials are always protected. See the [../../server-proxy](../../server-proxy) package for a secure way to use the client in client-side applications.
 
-## Running functions without waiting for the result
+## Running Functions Without Waiting for the Result
 
 ```typescript
 const { request_id } = await sunra.queue.submit(
-  "black-forest-labs/flux-kontext-pro/text-to-image", {
-  input: {
-    prompt: "A glass teapot with blooming flower tea inside, placed on a wooden table by a sunlit window with gentle morning light."
-  },
-});
+  "black-forest-labs/flux-kontext-pro/text-to-image",
+  {
+    input: {
+      prompt: "A glass teapot with blooming flower tea inside, placed on a wooden table by a sunlit window with gentle morning light."
+    },
+  }
+);
 ```
 
-## Long-running functions with `sunra.subscribe`
+## Long-running Functions with `sunra.subscribe`
 
-The `sunra.subscribe` method offers a powerful way to rely on the queue system to execute long-running functions. It returns the result once it's done like any other async function, so your don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
+The `sunra.subscribe` method offers a powerful way to rely on the queue system to execute long-running functions. It returns the result once it's done like any other async function, so you don't have to deal with queue status updates yourself. However, it does support queue events, in case you want to listen and react to them:
 
 ```typescript
 const result = await sunra.subscribe(
@@ -51,16 +53,42 @@ const result = await sunra.subscribe(
 );
 ```
 
-## More features
+## Error Handling
 
-The client library offers a plethora of features designed to simplify your journey with `sunra`. Dive into the [official documentation](https://docs.sunra.ai) for a comprehensive guide.
+The client provides proper error handling for common scenarios:
+
+```typescript
+import { createSunraClient } from "@sunra/client";
+
+const sunra = createSunraClient({
+  credentials: process.env.SUNRA_KEY,
+});
+
+try {
+  const result = await sunra.subscribe(
+    "black-forest-labs/flux-kontext-pro/text-to-image",
+    {
+      input: {
+        prompt: "A cute cat, realistic, orange"
+      }
+    }
+  );
+  console.log(result.images[0]?.url);
+} catch (error) {
+  console.error("Error:", error.message);
+}
+```
+
+## More Features
+
+The client library offers a plethora of features designed to simplify your journey with sunra.ai. Dive into the [official documentation](https://docs.sunra.ai) for a comprehensive guide.
 
 ## Credits
 
-This project is derived from
+This project is derived from:
 
 - [fal-ai/fal-js](https://github.com/fal-ai/fal-js)
 - [fal-ai/fal-java](https://github.com/fal-ai/fal-java)
 - [fal-ai/fal](https://github.com/fal-ai/fal/tree/main/projects/fal_client)
 
-and adapted to work with sunra.ai. The original project is licensed under the MIT/Apache2.0 License. We extend our gratitude to the original authors for their contributions.
+and adapted to work with sunra.ai. The original projects are licensed under the MIT/Apache 2.0 License. We extend our gratitude to the original authors for their contributions.
