@@ -10,13 +10,16 @@ branch=$(git branch --show-current)
 # check if the corresponding remote branch exists in the origin remote
 # remotes/origin/<branch>
 
-filter='*'
+filter='*'  # default to all packages
 
-remoteBranchExists=$(git show-ref --verify --quiet refs/remotes/origin/$branch)
-
-if [ -z "$remoteBranchExists" ]; then
+# Check if remote branch exists by testing the exit code
+if git show-ref --verify --quiet refs/remotes/origin/$branch; then
+  # Remote branch exists - only build changed packages
   filter="...[origin/$branch]"
+else
+  # Remote branch doesn't exist (new branch) - build all packages
+  filter="*"
 fi
 
 # cross-env NEXT_DIST_DIR=.next_pre_push turbo build && reset
-cross-env NEXT_DIST_DIR=.next_pre_push pnpm run --filter "$filter" -r build
+cross-env NEXT_DIST_DIR=.next_pre_push FAST_BUILD=true pnpm run --filter "$filter" -r build
