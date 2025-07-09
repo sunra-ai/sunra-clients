@@ -1,96 +1,133 @@
-# The sunra.ai JS client
+# sunra.ai Client Libraries
 
-![@sunra/client npm package](https://img.shields.io/npm/v/@sunra/client?color=%237527D7&label=client&style=flat-square)
-![@sunra/server-proxy npm package](https://img.shields.io/npm/v/@sunra/server-proxy?color=%237527D7&label=proxy&style=flat-square)
 ![Build](https://img.shields.io/github/actions/workflow/status/sunra-ai/sunra-clients/build.yml?style=flat-square)
 ![License](https://img.shields.io/github/license/sunra-ai/sunra-clients?style=flat-square)
+![@sunra/client npm package](https://img.shields.io/npm/v/@sunra/client?color=%237527D7&label=JavaScript&style=flat-square)
 
 ## About the Project
 
-The sunra JavaScript/TypeScript Client is a robust and user-friendly library designed for seamless integration of sunra endpoints in Web, Node.js, and React Native applications. Developed in TypeScript, it provides developers with type safety right from the start.
+This repository contains the official client libraries for [sunra.ai](https://sunra.ai), a platform for deploying and running AI models. The libraries provide robust and user-friendly interfaces for integrating sunra.ai endpoints into your applications across multiple programming languages.
 
-## Getting Started
+## Available Client Libraries
 
-The `@sunra/client` library serves as a client for sunra apps hosted on sunra. For guidance on consuming and creating apps, refer to the [quickstart guide](https://docs.sunra.ai).
+### 🐍 Python Client
+- **Location**: [`clients/python/`](./clients/python/)
+- **Package**: `sunra-client` (PyPI)
+- **Features**: Synchronous and asynchronous support, streaming responses, file uploads
+- **Installation**: `pip install sunra-client`
 
-### Client Library
+### 🟨 JavaScript/TypeScript Client
+- **Location**: [`clients/javascript/`](./clients/javascript/)
+- **Package**: `@sunra/client` (npm)
+- **Features**: Works in Web, Node.js, and React Native environments
+- **Installation**: `npm install @sunra/client`
 
-This client library is crafted as a lightweight layer atop platform standards like `fetch`. This ensures a hassle-free integration into your existing codebase. Moreover, it addresses platform disparities, guaranteeing flawless operation across various JavaScript runtimes.
+### ☕ Java Client
+- **Location**: [`clients/java/`](./clients/java/)
+- **Package**: `ai.sunra.client:sunra-client` (Maven Central)
+- **Features**: Synchronous, asynchronous, and Kotlin coroutine support
+- **Installation**: `implementation "ai.sunra.client:sunra-client:0.1.4"`
 
-> **Note:**
-> Ensure you've reviewed the [getting started guide](https://docs.sunra.ai) to acquire your credentials, browser existing APIs, or create your custom functions.
+## Quick Start
 
-1. Install the client library
+Before using any client library, you'll need to:
 
-  ```sh
-  npm install --save @sunra/client
-  ```
+1. Sign up at [sunra.ai](https://sunra.ai)
+2. Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+3. Set your API key as an environment variable: `export SUNRA_KEY=your-api-key`
 
-2. Start by configuring your credentials:
+### Python Example
 
-  ```typescript
-  import { createSunraClient } from "@sunra/client";
+```python
+import sunra_client
 
-  const sunra = createSunraClient({
-    credentials: "SUNRA_KEY",
-  });
-  ```
+# Simple synchronous call
+result = sunra_client.subscribe(
+    "black-forest-labs/flux-kontext-pro/text-to-image",
+    arguments={"prompt": "a cute cat, realistic, orange"}
+)
+print(result["images"][0]["url"])
 
-3. Retrieve your function id and execute it:
+# Asynchronous call
+async def main():
+    result = await sunra_client.subscribe_async(
+        "black-forest-labs/flux-kontext-pro/text-to-image",
+        arguments={"prompt": "a cute cat, realistic, orange"}
+    )
+    print(result["images"][0]["url"])
+```
 
-  ```typescript
-  const result = await sunra.run("user/app-alias");
-  ```
+### JavaScript Example
 
-See the available [models](https://sunra.ai/models) for more details.
+```typescript
+import { createSunraClient } from "@sunra/client";
 
-### The sunra client proxy
+const sunra = createSunraClient({
+  credentials: process.env.SUNRA_KEY,
+});
 
-Although the sunra client is designed to work in any JS environment, including directly in your browser, **it is not recommended** to store your credentials in your client source code. The common practice is to use your own server to serve as a proxy to sunra APIs. Luckily sunra supports that out-of-the-box with plug-and-play proxy functions for the most common engines/frameworks.
+const result = await sunra.subscribe(
+  "black-forest-labs/flux-kontext-pro/text-to-image",
+  {
+    input: {
+      prompt: "a cute cat, realistic, orange"
+    }
+  }
+);
+console.log(result.images[0].url);
+```
 
-For example, if you are using Next.js, you can:
+### Java Example
 
-1. Instal the proxy library
-   ```sh
-   npm install --save @sunra/server-proxy
-   ```
-2. Add the proxy as an API endpoint of your app, see an example here in [pages/api/sunra/proxy.ts](https://github.com/sunra-ai/sunra-clients/blob/main/apps/demo-nextjs-page-router/pages/api/sunra/proxy.ts)
+```java
+import ai.sunra.client.*;
 
-  ```typescript
-  export { handler as default } from "@sunra/server-proxy/nextjs";
-  ```
+var sunra = SunraClient.withEnvCredentials();
 
-3. Configure the client to use the proxy:
+var result = sunra.subscribe(
+    "black-forest-labs/flux-kontext-pro/text-to-image",
+    SubscribeOptions.<JsonObject>builder()
+        .input(Map.of("prompt", "a cute cat, realistic, orange"))
+        .resultType(JsonObject.class)
+        .build()
+);
+System.out.println(result.getData());
+```
 
-  ```typescript
-  import { createSunraClient } from "@sunra/client";
+## Server Proxy
 
-  const sunra = createSunraClient({
-    proxyUrl: "/api/sunra/proxy",
-  });
-  ```
+For client-side applications, we provide a server proxy to securely handle API calls without exposing your credentials. Available for popular frameworks:
 
-4. Make sure your server has `SUNRA_KEY` as environment variable with a valid API Key. That's it! Now your client calls will route through your server proxy, so your credentials are protected.
+- **Location**: [`server-proxy/`](./server-proxy/)
+- **Package**: `@sunra/server-proxy` (npm)
+- **Supports**: Next.js, Express, Hono, Remix, SvelteKit
 
-See [server-proxy](./server-proxy/) for more details.
+## Examples
 
-### The example Next.js app
+The repository includes comprehensive examples for different frameworks and use cases:
 
-You can find a minimal Next.js + sunra application examples in [examples/demo-nextjs-app-router/](https://github.com/sunra-ai/sunra-clients/blob/main/examples/demo-nextjs-app-router).
+- **Next.js Apps**: [`examples/demo-nextjs-app-router/`](./examples/demo-nextjs-app-router/) and [`examples/demo-nextjs-page-router/`](./examples/demo-nextjs-page-router/)
+- **Node.js**: [`examples/demo-nodejs/`](./examples/demo-nodejs/)
+- **Express**: [`examples/demo-express-app/`](./examples/demo-express-app/)
+- **Java**: [`examples/demo-java/`](./examples/demo-java/)
+- **Java Async**: [`examples/demo-java-async/`](./examples/demo-java-async/)
+- **Kotlin**: [`examples/demo-kotlin/`](./examples/demo-kotlin/)
+- **Python**: [`examples/demo-python/`](./examples/demo-python/)
 
-1. Run `npm install` on the repository root.
-2. Create a `.env.local` file and add your API Key as `SUNRA_KEY` environment variable (or export it any other way your prefer).
-3. Run `serve demo-nextjs-app-router` to start the Next.js app (`demo-nextjs-page-router` is also available if you're interested in the page router version).
+## Development
 
-## Roadmap
+To set up the development environment:
 
-See the [open feature requests](https://github.com/sunra-ai/sunra-clients/labels/enhancement) for a list of proposed features and join the discussion.
+1. Clone the repository
+2. Install dependencies: `pnpm i -r`
+3. Set up your API key: `export SUNRA_KEY=your-api-key`
+4. Run examples or tests as needed
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-1. Make sure you read our [Code of Conduct](https://github.com/sunra-ai/sunra-clients/blob/main/CODE_OF_CONDUCT.md)
+1. Make sure you read our [Code of Conduct](./CODE_OF_CONDUCT.md)
 2. Fork the project and clone your fork
 3. Setup the local environment with `npm install`
 4. Create a feature branch (`git checkout -b feat/add-cool-thing`) or a bugfix branch (`git checkout -b fix/smash-that-bug`)
@@ -102,14 +139,14 @@ Check the [good first issue queue](https://github.com/sunra-ai/sunra-clients/lab
 
 ## License
 
-Distributed under the Apache 2.0 License. See [LICENSE](https://github.com/sunra-ai/sunra-clients/blob/main/LICENSE) for more information.
+Distributed under the Apache 2.0 License. See [LICENSE](./LICENSE) for more information.
 
 ## Credits
 
-This project is derived from
+This project is derived from:
 
 - [fal-ai/fal-js](https://github.com/fal-ai/fal-js)
 - [fal-ai/fal-java](https://github.com/fal-ai/fal-java)
 - [fal-ai/fal](https://github.com/fal-ai/fal/tree/main/projects/fal_client)
 
-and adapted to work with sunra.ai. The original project is licensed under the MIT/Apache2.0 License. We extend our gratitude to the original authors for their contributions.
+and adapted to work with sunra.ai. The original projects are licensed under the MIT/Apache 2.0 License. We extend our gratitude to the original authors for their contributions.

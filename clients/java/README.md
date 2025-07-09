@@ -1,14 +1,14 @@
-## The sunra.ai JVM Client for Java and Kotlin
+# The sunra.ai JVM Client for Java and Kotlin
 
 ![License](https://img.shields.io/badge/license-Apache%20License%202.0-blue)
 
 ## About the Project
 
-The `SunraClient` is a robust and user-friendly Java implementation of the [sunra.ai](https://sunra.ai) client.
+The `SunraClient` is a robust and user-friendly Java implementation of the [sunra.ai](https://sunra.ai) client library.
 
 ## Getting Started
 
-The `SunraClient` library serves as a client for sunra serverless Python functions. Before using this library, ensure you've got your sunra key from [our dashboard](https://sunra.ai/dashboard/keys).
+The `SunraClient` library serves as a client for sunra.ai applications and AI models. Before using this library, ensure you've got your sunra key from [our dashboard](https://sunra.ai/dashboard/keys).
 
 The client is available on Maven Central. There are three different modules:
 
@@ -16,19 +16,17 @@ The client is available on Maven Central. There are three different modules:
 - `sunra-client-async`: The asynchronous version of the client library, implemented in Java.
 - `sunra-client-kotlin`: The Kotlin version of the client library, with coroutines support, implemented on top of the `sunra-client-async` module.
 
-The
+## Client Library
 
-### Client Library
+### Synchronous
 
-#### Synchronous
-
-##### Install
+#### Install
 
 ```groovy
 implementation "ai.sunra.client:sunra-client:0.1.0"
 ```
 
-##### Call the API
+#### Call the API
 
 ```java
 import ai.sunra.client.*;
@@ -51,15 +49,15 @@ System.out.println(result.getRequestId());
 System.out.println(result.getData());
 ```
 
-#### Asynchronous
+### Asynchronous
 
-##### Install
+#### Install
 
 ```groovy
 implementation "ai.sunra.client:sunra-client-async:0.1.0"
 ```
 
-##### Call the API
+#### Call the API
 
 ```java
 import ai.sunra.client.*;
@@ -84,15 +82,15 @@ future.thenAccept(result -> {
 });
 ```
 
-#### Kotlin
+### Kotlin
 
-##### Install
+#### Install
 
 ```groovy
 implementation "ai.sunra.client:sunra-client-kotlin:0.1.0"
 ```
 
-##### Call the API
+#### Call the API
 
 ```kotlin
 import ai.sunra.client.kt.*
@@ -110,8 +108,18 @@ print(result.data)
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make to the Kotlin version of the client are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/sunra-ai/serverless-client-swift/blob/main/LICENSE) for more information.
+Distributed under the Apache License 2.0. See [LICENSE](../../LICENSE) for more information.
+
+## Credits
+
+This project is derived from:
+
+- [fal-ai/fal-js](https://github.com/fal-ai/fal-js)
+- [fal-ai/fal-java](https://github.com/fal-ai/fal-java)
+- [fal-ai/fal](https://github.com/fal-ai/fal/tree/main/projects/fal_client)
+
+and adapted to work with sunra.ai. The original projects are licensed under the MIT/Apache 2.0 License. We extend our gratitude to the original authors for their contributions.
