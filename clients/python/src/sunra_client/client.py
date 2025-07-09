@@ -473,6 +473,16 @@ class AsyncClient:
             image.save(buffer, format=format)
             return await self.upload(buffer.getvalue(), f"image/{format}")
 
+    async def upload_file(self, path: os.PathLike) -> str:
+        """Upload a file from the local filesystem to the CDN and return the access URL."""
+        mime_type, _ = mimetypes.guess_type(path)
+        if mime_type is None:
+            mime_type = "application/octet-stream"
+
+        with open(path, "rb") as file:
+            file_name = os.path.basename(path)
+            return await self.upload(file.read(), mime_type, file_name)
+
 
 
 
@@ -657,6 +667,16 @@ class SyncClient:
         with io.BytesIO() as buffer:
             image.save(buffer, format=format)
             return self.upload(buffer.getvalue(), f"image/{format}")
+
+    def upload_file(self, path: os.PathLike) -> str:
+        """Upload a file from the local filesystem to the CDN and return the access URL."""
+        mime_type, _ = mimetypes.guess_type(path)
+        if mime_type is None:
+            mime_type = "application/octet-stream"
+
+        with open(path, "rb") as file:
+            file_name = os.path.basename(path)
+            return self.upload(file.read(), mime_type, file_name)
 
 
 def encode(data: str | bytes, content_type: str) -> str:
