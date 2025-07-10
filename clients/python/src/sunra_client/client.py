@@ -96,33 +96,12 @@ class _BaseRequestHandle:
 
 APP_NAMESPACES = ["workflows", "comfy"]
 
-
-def _ensure_app_id_format(id: str) -> str:
-    import re
-
-    # if id is empty, return it
-    if not id:
-        return id
-
-    parts = id.split("/")
-    if len(parts) > 1:
-        return id
-
-    match = re.match(r"^([0-9]+)-([a-zA-Z0-9-]+)$", id)
-    if match:
-        app_owner, app_id = match.groups()
-        return f"{app_owner}/{app_id}"
-
-    raise ValueError(f"Invalid app id: {id}. Must be in the format <appOwner>/<appId>")
-
-
 def _request(
     client: httpx.Client, method: str, url: str, **kwargs: Any
 ) -> httpx.Response:
     response = client.request(method, url, **kwargs)
     _raise_for_status(response)
     return response
-
 
 async def _async_request(
     client: httpx.AsyncClient, method: str, url: str, **kwargs: Any
@@ -139,7 +118,6 @@ def _should_retry(status_code: int) -> bool:
 
 
 MAX_RETRIES = 3
-
 
 def _maybe_retry_request(
     client: httpx.Client, method: str, url: str, **kwargs: Any
@@ -482,9 +460,6 @@ class AsyncClient:
         with open(path, "rb") as file:
             file_name = os.path.basename(path)
             return await self.upload(file.read(), mime_type, file_name)
-
-
-
 
 @dataclass(frozen=True)
 class SyncClient:
