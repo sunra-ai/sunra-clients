@@ -10,11 +10,48 @@ To install the client, run:
 pip install sunra-client
 ```
 
-To use the client, you need to have an API key. You can get one by signing up at [sunra.ai](https://sunra.ai). Once you have it, set it as an environment variable:
+To use the client, you need to have an API key. You can get one by signing up at [sunra.ai](https://sunra.ai). 
+
+## Configuration
+
+There are two ways to configure your API key:
+
+### Method 1: Global Configuration (Recommended)
+
+```python
+import sunra_client
+
+# Configure the client with your API key
+sunra_client.config(credentials="your-api-key")
+
+# Now you can use the client without passing the key explicitly
+response = sunra_client.subscribe(
+    "black-forest-labs/flux-kontext-pro/text-to-image",
+    arguments={"prompt": "a cute cat, realistic, orange"}
+)
+```
+
+### Method 2: Environment Variable
+
+Set your API key as an environment variable:
 
 ```bash
 export SUNRA_KEY=your-api-key
 ```
+
+### Method 3: Explicit Client Configuration
+
+```python
+import sunra_client
+
+# Create a client with explicit API key
+client = sunra_client.SyncClient(key="your-api-key")
+
+# Or for async client
+async_client = sunra_client.AsyncClient(key="your-api-key")
+```
+
+## Usage Examples
 
 Now you can use the client to interact with your models. Here's an example of how to use it:
 
