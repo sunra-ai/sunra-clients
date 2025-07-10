@@ -24,8 +24,11 @@ import sunra_client
 response = sunra_client.subscribe(
     "black-forest-labs/flux-kontext-pro/text-to-image",
     arguments={
-        "prompt": "a cute cat, realistic, orange"
-    }
+      "prompt": "a cute cat, realistic, orange"
+    },
+    with_logs=True,
+    on_enqueue=print,
+    on_queue_update=print
 )
 print(response["images"][0]["url"])
 ```
@@ -56,6 +59,9 @@ async def main():
     response = await sunra_client.subscribe_async(
         "black-forest-labs/flux-kontext-pro/text-to-image",
         arguments={"prompt": "a cute cat, realistic, orange"}
+        with_logs=True,
+        on_enqueue=print,
+        on_queue_update=print
     )
     print(response["images"][0]["url"])
 
@@ -125,7 +131,10 @@ from sunra_client.client import SunraClientError
 try:
     response = sunra_client.subscribe(
         "black-forest-labs/flux-kontext-pro/text-to-image",
-        arguments={"prompt": "a cute cat, realistic, orange"}
+        arguments={"prompt": "a cute cat, realistic, orange"},
+        with_logs=True,
+        on_enqueue=print,
+        on_queue_update=print
     )
     print(response["images"][0]["url"])
 except SunraClientError as e:
