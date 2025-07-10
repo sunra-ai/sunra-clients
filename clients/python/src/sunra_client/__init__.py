@@ -1,18 +1,20 @@
+from sunra_client.auth import config
 from sunra_client.client import (
     AsyncClient,
-    SyncClient,
-    Status,
-    Queued,
-    InProgress,
-    Completed,
-    SyncRequestHandle,
     AsyncRequestHandle,
+    Completed,
+    InProgress,
+    Queued,
+    Status,
+    SyncClient,
+    SyncRequestHandle,
     encode,
     encode_file,
     encode_image,
 )
 
 __all__ = [
+    "config",
     "SyncClient",
     "AsyncClient",
     "Status",

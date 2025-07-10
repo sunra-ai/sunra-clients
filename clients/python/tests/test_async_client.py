@@ -1,14 +1,17 @@
 import io
-import httpx
-import pytest
-import sunra_client
-from PIL import Image
+
 from dotenv import load_dotenv
+import httpx
+from PIL import Image
+import pytest
+
+import sunra_client
 from sunra_client.client import SunraClientError
 
 load_dotenv()
 
 pytestmark = pytest.mark.asyncio
+
 
 @pytest.fixture
 async def client() -> sunra_client.AsyncClient:
@@ -21,7 +24,6 @@ async def client() -> sunra_client.AsyncClient:
 
 
 async def test_sunra_client(client: sunra_client.AsyncClient):
-
     handle = await client.submit(
         "black-forest-labs/flux-kontext-pro/text-to-image",
         arguments={
@@ -31,10 +33,7 @@ async def test_sunra_client(client: sunra_client.AsyncClient):
 
     result = await handle.get()
 
-    assert (
-        await client.result(handle.request_id)
-        == result
-    )
+    assert await client.result(handle.request_id) == result
 
     status = await handle.status()
     assert isinstance(status, sunra_client.Completed)
@@ -63,8 +62,8 @@ async def test_sunra_client_streaming(client: sunra_client.AsyncClient):
             "prompt": "an orange cat",
         },
     ):
-      events.append(event)
-      print(event)
+        events.append(event)
+        print(event)
 
     assert len(events) >= 2
     assert events[-1].get("status") == "COMPLETED"
