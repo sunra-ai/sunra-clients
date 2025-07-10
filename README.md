@@ -17,7 +17,7 @@ This repository contains the official client libraries for [sunra.ai](https://su
 - **Features**: Synchronous and asynchronous support, streaming responses, file uploads
 - **Installation**: `pip install sunra-client`
 
-### 🟨 JavaScript/TypeScript Client
+### 📦 JavaScript/TypeScript Client
 - **Location**: [`clients/javascript/`](./clients/javascript/)
 - **Package**: `@sunra/client` (npm)
 - **Features**: Works in Web, Node.js, and React Native environments

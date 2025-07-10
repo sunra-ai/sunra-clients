@@ -7,8 +7,6 @@ export const DEFAULT_PROXY_ROUTE = '/api/sunra/proxy'
 export const SUNRA_TOKEN_HEADER_KEY = 'x-sunra-token'
 
 const SUNRA_KEY = process.env.SUNRA_KEY
-const SUNRA_KEY_ID = process.env.SUNRA_KEY_ID
-const SUNRA_KEY_SECRET = process.env.SUNRA_KEY_SECRET
 
 export type HeaderValue = string | string[] | undefined | null;
 
@@ -53,13 +51,7 @@ function singleHeaderValue(value: HeaderValue): string | undefined {
 }
 
 function getSunraKey(): string | undefined {
-  if (SUNRA_KEY) {
-    return SUNRA_KEY
-  }
-  if (SUNRA_KEY_ID && SUNRA_KEY_SECRET) {
-    return `${SUNRA_KEY_ID}:${SUNRA_KEY_SECRET}`
-  }
-  return undefined
+  return SUNRA_KEY
 }
 
 const EXCLUDED_HEADERS = ['content-length', 'content-encoding']

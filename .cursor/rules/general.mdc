@@ -121,7 +121,6 @@ Required environment variables:
 - `SUNRA_KEY`: API authentication key
 - `SUNRA_QUEUE_DOMAIN`: Queue service domain
 - `SUNRA_API_ENDPOINT`: API endpoint URL
-- `SUNRA_KEY_ID` & `SUNRA_KEY_SECRET`: Alternative authentication
 
 ### 12. Commit Conventions
 
