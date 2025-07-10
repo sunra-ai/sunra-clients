@@ -22,3 +22,19 @@ html:
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 docs: apidoc html
+
+.PHONY: test
+test:
+	python -m pytest tests/
+
+.PHONY: lint
+lint:
+	ruff check .
+
+.PHONY: format
+format:
+	ruff format .
+
+.PHONY: lint-fix
+lint-fix:
+	ruff check --fix .

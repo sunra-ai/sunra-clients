@@ -1,5 +1,7 @@
 """Authentication utilities for the Sunra client."""
+
 import os
+
 
 class MissingCredentialsError(Exception):
     """Raised when the Sunra API key is not found in environment variables."""
@@ -13,6 +15,4 @@ def fetch_credentials() -> str:
     if key := os.getenv("SUNRA_KEY"):
         return key
     else:
-        raise MissingCredentialsError(
-            "Please set the SUNRA_KEY environment variable to your API key."
-        )
+        raise MissingCredentialsError("Please set the SUNRA_KEY environment variable to your API key.")

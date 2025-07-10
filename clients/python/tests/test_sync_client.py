@@ -1,9 +1,11 @@
 import io
-import pytest
-import sunra_client
+
+from dotenv import load_dotenv
 import httpx
 from PIL import Image
-from dotenv import load_dotenv
+import pytest
+
+import sunra_client
 from sunra_client.client import SunraClientError
 
 load_dotenv()
@@ -29,14 +31,10 @@ def test_sunra_client(client: sunra_client.SyncClient):
 
     result = handle.get()
 
-    assert (
-        client.result(handle.request_id)
-        == result
-    )
+    assert client.result(handle.request_id) == result
 
     status = handle.status()
     assert isinstance(status, sunra_client.Completed)
-
 
     output = client.subscribe(
         "black-forest-labs/flux-kontext-pro/text-to-image",
@@ -54,8 +52,6 @@ def test_sunra_client(client: sunra_client.SyncClient):
     assert "url" in output["images"][0]
 
 
-
-
 def test_sunra_client_streaming(client: sunra_client.SyncClient):
     events = []
     for event in client.stream(
@@ -64,12 +60,11 @@ def test_sunra_client_streaming(client: sunra_client.SyncClient):
             "prompt": "an orange cat",
         },
     ):
-      events.append(event)
-      print(event)
+        events.append(event)
+        print(event)
 
     assert len(events) >= 2
     assert events[-1].get("status") == "COMPLETED"
-
 
 
 def test_sunra_client_upload(
@@ -196,4 +191,3 @@ def test_sunra_client_upload_file_no_extension(client: sunra_client.SyncClient, 
         client.upload_file(test_file)
 
     assert "Invalid filename" in str(exc_info.value)
-

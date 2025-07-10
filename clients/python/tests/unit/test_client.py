@@ -1,6 +1,6 @@
 import pytest
 
-from sunra_client.client import Queued, InProgress, Completed, _BaseRequestHandle
+from sunra_client.client import Completed, InProgress, Queued, _BaseRequestHandle
 
 
 @pytest.mark.parametrize(
@@ -27,9 +27,7 @@ from sunra_client.client import Queued, InProgress, Completed, _BaseRequestHandl
                 "logs": [{"msg": "foo"}, {"msg": "bar"}],
                 "metrics": {"m1": "v1", "m2": "v2"},
             },
-            Completed(
-                logs=[{"msg": "foo"}, {"msg": "bar"}], metrics={"m1": "v1", "m2": "v2"}
-            ),
+            Completed(logs=[{"msg": "foo"}, {"msg": "bar"}], metrics={"m1": "v1", "m2": "v2"}),
             False,
         ),
         (

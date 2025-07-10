@@ -1,21 +1,22 @@
 from __future__ import annotations
 
-import io
-import os
-import mimetypes
 import asyncio
-import time
 import base64
-import logging
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Any, AsyncIterator, Dict, Iterator, TYPE_CHECKING, Optional, Callable
+import io
+import logging
+import mimetypes
+import os
+import time
+from typing import TYPE_CHECKING, Any, AsyncIterator, Callable, Dict, Iterator
 from urllib.parse import urlencode
 
-import httpx
-import requests
-from httpx_sse import aconnect_sse, connect_sse
 import anyio
+import httpx
+from httpx_sse import aconnect_sse, connect_sse
+import requests
+
 from sunra_client.auth import SUNRA_HOST, fetch_credentials
 
 logger = logging.getLogger(__name__)
@@ -96,16 +97,14 @@ class _BaseRequestHandle:
 
 APP_NAMESPACES = ["workflows", "comfy"]
 
-def _request(
-    client: httpx.Client, method: str, url: str, **kwargs: Any
-) -> httpx.Response:
+
+def _request(client: httpx.Client, method: str, url: str, **kwargs: Any) -> httpx.Response:
     response = client.request(method, url, **kwargs)
     _raise_for_status(response)
     return response
 
-async def _async_request(
-    client: httpx.AsyncClient, method: str, url: str, **kwargs: Any
-) -> httpx.Response:
+
+async def _async_request(client: httpx.AsyncClient, method: str, url: str, **kwargs: Any) -> httpx.Response:
     response = await client.request(method, url, **kwargs)
     _raise_for_status(response)
     return response
@@ -119,35 +118,28 @@ def _should_retry(status_code: int) -> bool:
 
 MAX_RETRIES = 3
 
-def _maybe_retry_request(
-    client: httpx.Client, method: str, url: str, **kwargs: Any
-) -> httpx.Response:
+
+def _maybe_retry_request(client: httpx.Client, method: str, url: str, **kwargs: Any) -> httpx.Response:
     retries = MAX_RETRIES
     while retries > 0:
         try:
             return _request(client, method, url, **kwargs)
         except httpx.HTTPStatusError as exc:
             if _should_retry(exc.response.status_code):
-                logger.debug(
-                    f"Retrying request to {url} due to {exc} ({retries} retries left)"
-                )
+                logger.debug(f"Retrying request to {url} due to {exc} ({retries} retries left)")
                 retries -= 1
                 continue
             raise
 
 
-async def _async_maybe_retry_request(
-    client: httpx.AsyncClient, method: str, url: str, **kwargs: Any
-) -> httpx.Response:
+async def _async_maybe_retry_request(client: httpx.AsyncClient, method: str, url: str, **kwargs: Any) -> httpx.Response:
     retries = MAX_RETRIES
     while retries > 0:
         try:
             return await _async_request(client, method, url, **kwargs)
         except httpx.HTTPStatusError as exc:
             if _should_retry(exc.response.status_code):
-                logger.debug(
-                    f"Retrying request to {url} due to {exc} ({retries} retries left)"
-                )
+                logger.debug(f"Retrying request to {url} due to {exc} ({retries} retries left)")
                 retries -= 1
                 continue
             raise
@@ -158,9 +150,7 @@ class SyncRequestHandle(_BaseRequestHandle):
     client: httpx.Client = field(repr=False)
 
     @classmethod
-    def from_request_id(
-        cls, client: httpx.Client, request_id: str
-    ) -> SyncRequestHandle:
+    def from_request_id(cls, client: httpx.Client, request_id: str) -> SyncRequestHandle:
         base_url = f"{QUEUE_URL_FORMAT}/requests/{request_id}"
         return cls(
             request_id=request_id,
@@ -183,9 +173,7 @@ class SyncRequestHandle(_BaseRequestHandle):
 
         return self._parse_status(response.json())
 
-    def iter_events(
-        self, *, interval: float = 0.1
-    ) -> Iterator[Status]:
+    def iter_events(self, *, interval: float = 0.1) -> Iterator[Status]:
         """Continuously poll for the status of the request and yield it at each interval till
         the request is completed."""
 
@@ -217,9 +205,7 @@ class AsyncRequestHandle(_BaseRequestHandle):
     client: httpx.AsyncClient = field(repr=False)
 
     @classmethod
-    def from_request_id(
-        cls, client: httpx.AsyncClient, request_id: str
-    ) -> AsyncRequestHandle:
+    def from_request_id(cls, client: httpx.AsyncClient, request_id: str) -> AsyncRequestHandle:
         base_url = f"{QUEUE_URL_FORMAT}/requests/{request_id}"
         return cls(
             request_id=request_id,
@@ -242,9 +228,7 @@ class AsyncRequestHandle(_BaseRequestHandle):
 
         return self._parse_status(response.json())
 
-    async def iter_events(
-        self, *, interval: float = 0.1
-    ) -> AsyncIterator[Status]:
+    async def iter_events(self, *, interval: float = 0.1) -> AsyncIterator[Status]:
         """Continuously poll for the status of the request and yield it at each interval till
         the request is completed."""
 
@@ -261,9 +245,7 @@ class AsyncRequestHandle(_BaseRequestHandle):
             if isinstance(status, Completed):
                 break
 
-        response = await _async_maybe_retry_request(
-            self.client, "GET", self.response_url
-        )
+        response = await _async_maybe_retry_request(self.client, "GET", self.response_url)
         _raise_for_status(response)
         return response.json()
 
@@ -303,9 +285,11 @@ class AsyncClient:
         webhook_url: str | None = None,
         with_logs: bool = True,
     ) -> AsyncRequestHandle:
-        """Submit an application with the given arguments (which will be JSON serialized). The path parameter can be used to
-        specify a subpath when applicable. This method will return a handle to the request that can be used to check the status
-        and retrieve the result of the inference call when it is done."""
+        """Submit an application with the given arguments (which will be JSON serialized).
+
+        The path parameter can be used to specify a subpath when applicable. This method will return a handle to the
+        request that can be used to check the status and retrieve the result of the inference call when it is done.
+        """
 
         url = QUEUE_URL_FORMAT + application
         if path:
@@ -343,9 +327,9 @@ class AsyncClient:
         arguments: AnyJSON,
         *,
         path: str = "",
-        on_enqueue: Optional[Callable[[Queued], None]] = None,
+        on_enqueue: Callable[[Queued], None] | None = None,
         with_logs: bool = True,
-        on_queue_update: Optional[Callable[[Status], None]] = None,
+        on_queue_update: Callable[[Status], None] | None = None,
     ) -> AnyJSON:
         handle = await self.submit(
             application,
@@ -367,7 +351,8 @@ class AsyncClient:
         return AsyncRequestHandle.from_request_id(self._client, request_id)
 
     async def status(
-        self, request_id: str,
+        self,
+        request_id: str,
     ) -> Status:
         handle = self.get_handle(request_id)
         return await handle.status()
@@ -389,9 +374,9 @@ class AsyncClient:
         timeout: float | None = None,
     ) -> AsyncIterator[dict[str, Any]]:
         handle = await self.submit(
-          application,
-          arguments,
-          path=path,
+            application,
+            arguments,
+            path=path,
         )
         url = f"https://api.{SUNRA_HOST}/v1/queue/requests/{handle.request_id}/status/stream"
         async with aconnect_sse(
@@ -406,9 +391,7 @@ class AsyncClient:
                 if data.get("status") in ("COMPLETED", "FAILED", "CANCELLED"):
                     break
 
-    async def upload(
-        self, data: str | bytes, content_type: str, file_name: str | None = None
-    ) -> str:
+    async def upload(self, data: str | bytes, content_type: str, file_name: str | None = None) -> str:
         if isinstance(data, str):
             data = data.encode("utf-8")
 
@@ -418,10 +401,7 @@ class AsyncClient:
         # Get upload URLs
         init_response = await self._client.post(
             f"https://api.{SUNRA_HOST}/v1/storage/upload/initiate",
-            json={
-                "content_type": content_type,
-                "file_name": file_name
-            }
+            json={"content_type": content_type, "file_name": file_name},
         )
         _raise_for_status(init_response)
         upload_data = init_response.json()
@@ -435,7 +415,7 @@ class AsyncClient:
                 data=data,
                 headers={
                     "Content-Type": content_type,
-                }
+                },
             )
             response.raise_for_status()
             return response
@@ -444,12 +424,12 @@ class AsyncClient:
 
         return file_url
 
-    async def upload_image(self, image: Image.Image, format: str = "jpeg") -> str:
+    async def upload_image(self, image: Image.Image, image_format: str = "jpeg") -> str:
         """Upload a pillow image object"""
 
         with io.BytesIO() as buffer:
-            image.save(buffer, format=format)
-            return await self.upload(buffer.getvalue(), f"image/{format}")
+            image.save(buffer, format=image_format)
+            return await self.upload(buffer.getvalue(), f"image/{image_format}")
 
     async def upload_file(self, path: os.PathLike) -> str:
         """Upload a file from the local filesystem to the CDN and return the access URL."""
@@ -460,6 +440,7 @@ class AsyncClient:
         with open(path, "rb") as file:
             file_name = os.path.basename(path)
             return await self.upload(file.read(), mime_type, file_name)
+
 
 @dataclass(frozen=True)
 class SyncClient:
@@ -492,9 +473,11 @@ class SyncClient:
         webhook_url: str | None = None,
         with_logs: bool = True,
     ) -> SyncRequestHandle:
-        """Submit an application with the given arguments (which will be JSON serialized). The path parameter can be used to
-        specify a subpath when applicable. This method will return a handle to the request that can be used to check the status
-        and retrieve the result of the inference call when it is done."""
+        """Submit an application with the given arguments (which will be JSON serialized).
+
+        The path parameter can be used to specify a subpath when applicable. This method will return a handle to the
+        request that can be used to check the status and retrieve the result of the inference call when it is done.
+        """
 
         url = QUEUE_URL_FORMAT + application
         if path:
@@ -532,9 +515,9 @@ class SyncClient:
         arguments: AnyJSON,
         *,
         path: str = "",
-        on_enqueue: Optional[Callable[[Queued], None]] = None,
+        on_enqueue: Callable[[Queued], None] | None = None,
         with_logs: bool = True,
-        on_queue_update: Optional[Callable[[Status], None]] = None,
+        on_queue_update: Callable[[Status], None] | None = None,
     ) -> AnyJSON:
         handle = self.submit(
             application,
@@ -556,7 +539,8 @@ class SyncClient:
         return SyncRequestHandle.from_request_id(self._client, request_id)
 
     def status(
-        self, request_id: str,
+        self,
+        request_id: str,
     ) -> Status:
         handle = self.get_handle(request_id)
         return handle.status()
@@ -579,9 +563,9 @@ class SyncClient:
     ) -> Iterator[dict[str, Any]]:
         """Stream the status updates of a request by request_id. Each yielded item is a status event from the server."""
         handle = self.submit(
-          application,
-          arguments,
-          path=path,
+            application,
+            arguments,
+            path=path,
         )
         url = f"https://api.{SUNRA_HOST}/v1/queue/requests/{handle.request_id}/status/stream"
         with connect_sse(
@@ -596,9 +580,7 @@ class SyncClient:
                 if data.get("status") in ("COMPLETED", "FAILED", "CANCELLED"):
                     break
 
-    def upload(
-        self, data: str | bytes, content_type: str, file_name: str | None = None
-    ) -> str:
+    def upload(self, data: str | bytes, content_type: str, file_name: str | None = None) -> str:
         if isinstance(data, str):
             data = data.encode("utf-8")
 
@@ -608,10 +590,7 @@ class SyncClient:
         # Get upload URLs
         init_response = self._client.post(
             f"https://api.{SUNRA_HOST}/v1/storage/upload/initiate",
-            json={
-                "content_type": content_type,
-                "file_name": file_name
-            }
+            json={"content_type": content_type, "file_name": file_name},
         )
         _raise_for_status(init_response)
         upload_data = init_response.json()
@@ -629,19 +608,18 @@ class SyncClient:
             data=data,
             headers={
                 "Content-Type": content_type,
-            }
+            },
         )
         response.raise_for_status()
 
         return file_url
 
-
-    def upload_image(self, image: Image.Image, format: str = "jpeg") -> str:
+    def upload_image(self, image: Image.Image, image_format: str = "jpeg") -> str:
         """Upload a pillow image object to the CDN and return the access URL."""
 
         with io.BytesIO() as buffer:
-            image.save(buffer, format=format)
-            return self.upload(buffer.getvalue(), f"image/{format}")
+            image.save(buffer, format=image_format)
+            return self.upload(buffer.getvalue(), f"image/{image_format}")
 
     def upload_file(self, path: os.PathLike) -> str:
         """Upload a file from the local filesystem to the CDN and return the access URL."""
@@ -672,8 +650,8 @@ def encode_file(path: os.PathLike) -> str:
         return encode(file.read(), mime_type)
 
 
-def encode_image(image: Image.Image, format: str = "jpeg") -> str:
+def encode_image(image: Image.Image, image_format: str = "jpeg") -> str:
     """Encode a pillow image object to a data URL with the specified format."""
     with io.BytesIO() as buffer:
-        image.save(buffer, format=format)
-        return encode(buffer.getvalue(), f"image/{format}")
+        image.save(buffer, format=image_format)
+        return encode(buffer.getvalue(), f"image/{image_format}")
