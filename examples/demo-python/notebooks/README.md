@@ -49,15 +49,6 @@ Welcome to the Sunra AI Python SDK Jupyter Notebooks! This collection of interac
 - Custom callback functions
 - Production-ready setups
 
-### 06-complete-workflows.ipynb
-**End-to-End AI Workflows**
-- Multi-modal AI pipelines
-- Content creation workflows
-- Automated processing chains
-- Real-world use cases
-- Performance optimization
-- Error handling in complex workflows
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -111,8 +102,7 @@ Welcome to the Sunra AI Python SDK Jupyter Notebooks! This collection of interac
 
 ### Advanced Path
 1. Complete all previous notebooks
-2. **06-complete-workflows.ipynb** - Build complex AI pipelines
-3. Experiment with your own use cases
+2. Experiment with your own use cases
 
 ## 🎯 Use Cases by Notebook
 
