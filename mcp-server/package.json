@@ -1,0 +1,40 @@
+{
+  "name": "@sunra/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Sunra.ai API integration",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "inspect2": "npx @modelcontextprotocol/inspector",
+    "inspect": "npx fastmcp inspect src/index.ts",
+    "test": "vitest run",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch"
+  },
+  "keywords": [
+    "mcp",
+    "sunra",
+    "ai",
+    "sunra ai",
+    "mcp server"
+  ],
+  "author": "Yudu <yudu@sunra.ai>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.16.1",
+    "@types/node": "^22.10.1",
+    "@vitest/coverage-v8": "^2.1.5",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.5"
+  },
+  "dependencies": {
+    "@sunra/client": "workspace:*",
+    "fastmcp": "^3.8.4",
+    "zod": "^3.23.8"
+  }
+}

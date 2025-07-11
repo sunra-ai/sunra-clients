@@ -4,3 +4,4 @@ packages:
   - "clients/*"
   - "examples/*"
   - "server-proxy"
+  - "mcp-server"
