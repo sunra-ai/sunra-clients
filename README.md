@@ -1,9 +1,9 @@
 # sunra.ai Client Libraries
 
-![License](https://img.shields.io/github/license/sunra-ai/sunra-clients?style=flat-square)
-![@sunra/client npm package](https://img.shields.io/npm/v/@sunra/client?color=%237527D7&label=JavaScript&style=flat-square)
-![PyPI - Version](https://img.shields.io/pypi/v/sunra_client)
-![Maven Central Version](https://img.shields.io/maven-central/v/ai.sunra.client/sunra-client)
+[![License](https://img.shields.io/github/license/sunra-ai/sunra-clients?style=flat-square)](./LICENSE)
+[![@sunra/client npm package](https://img.shields.io/npm/v/@sunra/client?color=%237527D7&label=JavaScript&style=flat-square)](https://www.npmjs.com/package/@sunra/client)
+[![PyPI - Version](https://img.shields.io/pypi/v/sunra_client)](https://pypi.org/project/sunra_client)
+[![Maven Central Version](https://img.shields.io/maven-central/v/ai.sunra.client/sunra-client)](https://search.maven.org/artifact/ai.sunra.client/sunra-client)
 
 ## About the Project
 
