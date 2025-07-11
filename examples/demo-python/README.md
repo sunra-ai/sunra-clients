@@ -11,7 +11,11 @@ Before running any examples, make sure you have:
    pip install sunra-client
    ```
 
-2. Set your API key as an environment variable:
+2. Get your API key:
+   - Sign up at [sunra.ai](https://sunra.ai)
+   - Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+
+3. Set your API key as an environment variable:
    ```bash
    export SUNRA_KEY=your-api-key-here
    ```

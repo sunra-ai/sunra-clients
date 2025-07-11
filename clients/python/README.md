@@ -10,7 +10,11 @@ To install the client, run:
 pip install sunra-client
 ```
 
-To use the client, you need to have an API key. You can get one by signing up at [sunra.ai](https://sunra.ai). 
+Before using the client, you'll need to:
+
+1. Sign up at [sunra.ai](https://sunra.ai)
+2. Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+3. Set your API key as an environment variable: `export SUNRA_KEY=your-api-key` 
 
 ## Configuration
 

@@ -8,7 +8,11 @@ The `SunraClient` is a robust and user-friendly Java implementation of the [sunr
 
 ## Getting Started
 
-The `SunraClient` library serves as a client for sunra.ai applications and AI models. Before using this library, ensure you've got your sunra key from [our dashboard](https://sunra.ai/dashboard/keys).
+The `SunraClient` library serves as a client for sunra.ai applications and AI models. Before using this library, you'll need to:
+
+1. Sign up at [sunra.ai](https://sunra.ai)
+2. Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+3. Set your API key as an environment variable: `export SUNRA_KEY=your-api-key`
 
 The client is available on Maven Central. There are three different modules:
 

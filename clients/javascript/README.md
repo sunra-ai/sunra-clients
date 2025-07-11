@@ -8,17 +8,28 @@ The [sunra.ai](https://sunra.ai) JavaScript Client Library provides a seamless w
 
 ## Getting Started
 
-Before diving into the client-specific features, ensure you've set up your credentials:
+Before using the client, you'll need to:
+
+1. Sign up at [sunra.ai](https://sunra.ai)
+2. Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+3. Set your API key as an environment variable: `export SUNRA_KEY=your-api-key`
+
+Then set up your credentials:
 
 ```typescript
 import { createSunraClient } from "@sunra/client";
 
 const sunra = createSunraClient({
-  credentials: "SUNRA_KEY",
+  credentials: process.env.SUNRA_KEY,
 });
 ```
 
-**Note:** Ensure you've reviewed the [sunra.ai getting started guide](https://docs.sunra.ai) to acquire your credentials and register your functions. Also, make sure your credentials are always protected. See the [../../server-proxy](../../server-proxy) package for a secure way to use the client in client-side applications.
+or directly import the builtin client
+```typescript
+import { sunra } from '@sunra/client' // use process.env.SUNRA_KEY as credentials by default
+```
+
+**Note:** Make sure your credentials are always protected. See the [../../server-proxy](../../server-proxy) package for a secure way to use the client in client-side applications.
 
 ## Running Functions Without Waiting for the Result
 

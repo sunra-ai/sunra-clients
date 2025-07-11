@@ -4,7 +4,12 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, set up your environment variables:
+First, get your API key:
+
+1. Sign up at [sunra.ai](https://sunra.ai)
+2. Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+
+Then set up your environment variables:
 
 ```bash
 cp .env.example .env.local

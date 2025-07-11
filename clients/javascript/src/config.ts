@@ -12,7 +12,7 @@ export type SunraClientConfig = {
    * By default it tries to use the `SUNRA_KEY` environment variable, when
    * `process.env` is defined.
    *
-   * @see https://docs.sunra.ai/model-endpoints/server-side
+   * @see https://docs.sunra.ai/model-endpoint-api/server-side-integration
    * @see #suppressLocalCredentialsWarning
    */
   credentials?: undefined | string | CredentialsResolver;
