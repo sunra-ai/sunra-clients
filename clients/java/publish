@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# This script is used to build and publish the sunra-client library to Maven Central.
+
+# build the libraries and publish to sonatype
+./gradlew :sunra-client:build && \
+./gradlew :sunra-client-async:build && \
+./gradlew :sunra-client-kotlin:build && \
+./gradlew :sunra-client:publishToSonatype && \
+./gradlew :sunra-client-async:publishToSonatype && \
+./gradlew :sunra-client-kotlin:publishToSonatype
