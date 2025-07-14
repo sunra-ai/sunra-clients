@@ -1,3 +1,194 @@
+---
+alwaysApply: true
+---
+
+# Cursor Rules for sunra.ai Client Libraries
+
+## Project Overview
+
+This is a monorepo containing client SDKs for sunra.ai, a platform for deploying and running AI models. The repository includes:
+
+- **Client Libraries**: JavaScript/TypeScript, Python, and Java clients
+- **Server Proxy**: Framework adapters for secure API calls
+- **Examples**: Demo applications for various frameworks
+- **Packages**: Shared configurations and utilities
+
+## Repository Structure
+
+```
+sunra-clients/
+├── clients/           # Client SDKs
+│   ├── javascript/    # TypeScript/JavaScript client
+│   ├── python/        # Python client
+│   └── java/          # Java/Kotlin client
+├── server-proxy/      # Framework proxy adapters
+├── examples/          # Demo applications
+├── packages/          # Shared configurations
+└── apps/             # Internal applications
+```
+
+## Development Guidelines
+
+### 1. Monorepo Management
+
+- Use **pnpm** as the package manager (specified in `packageManager`)
+- Follow **Turbo** build system patterns for task orchestration
+- Use **Changesets** for versioning and publishing
+- Maintain workspace dependencies with `workspace:*` references
+
+### 2. Code Quality Standards
+
+- **TypeScript**: Use strict mode, prefer explicit types over `any`
+- **Python**: Follow PEP 8, use type hints, maintain `py.typed` files
+- **Java**: Follow Google Java Style Guide, use proper annotations
+- **Testing**: Write comprehensive tests for all client functionality
+- **Linting**: Use ESLint for JS/TS, flake8 for Python, Checkstyle for Java
+
+### 3. Client Library Patterns
+
+#### JavaScript/TypeScript Client
+- Use **axios** for HTTP requests
+- Implement **EventSource** for streaming
+- Support both **CommonJS** and **ESM** exports
+- Provide **TypeScript** definitions
+- Use **vitest** for testing
+
+#### Python Client
+- Use **httpx** for HTTP requests with async support
+- Implement **Server-Sent Events** for streaming
+- Support both **sync** and **async** APIs
+- Use **pytest** with **pytest-asyncio** for testing
+- Maintain **py.typed** for type checking
+
+#### Java Client
+- Use **OkHttp** or **Apache HttpClient** for HTTP requests
+- Support **synchronous** and **asynchronous** operations
+- Provide **Kotlin coroutines** support
+- Use **JUnit 5** for testing
+- Follow **Maven Central** publishing standards
+
+### 4. API Design Principles
+
+- **Consistency**: Maintain similar APIs across all client languages
+- **Error Handling**: Provide meaningful error messages and proper exception types
+- **Streaming**: Support real-time updates for long-running operations
+- **File Upload**: Implement secure file upload capabilities
+- **Authentication**: Use Bearer token authentication with environment variable support
+
+### 5. Documentation Standards
+
+- **README Files**: Include installation, usage examples, and API references
+- **Code Comments**: Document complex logic and public APIs
+- **Type Definitions**: Provide comprehensive TypeScript definitions
+- **Examples**: Include working examples for common use cases
+
+### 6. Testing Requirements
+
+- **Unit Tests**: Test individual functions and classes
+- **Integration Tests**: Test API interactions with mock servers
+- **Error Scenarios**: Test error handling and edge cases
+- **Cross-Platform**: Ensure tests work across different environments
+
+### 7. Publishing Guidelines
+
+- **Version Management**: Use semantic versioning with Changesets
+- **Package Names**: Follow `@sunra/*` pattern for npm packages
+- **License**: Use Apache 2.0 License consistently
+- **Registry**: Publish to npm (JavaScript), PyPI (Python), Maven Central (Java)
+
+### 8. Security Considerations
+
+- **API Keys**: Never hardcode credentials, use environment variables
+- **Server Proxy**: Provide secure proxy solutions for client-side applications
+- **Input Validation**: Validate all user inputs
+- **HTTPS**: Always use HTTPS for API communications
+
+### 9. Performance Guidelines
+
+- **Connection Pooling**: Reuse HTTP connections where possible
+- **Streaming**: Implement streaming for large responses
+- **Caching**: Consider appropriate caching strategies
+- **Memory Management**: Handle large file uploads efficiently
+
+### 10. Framework Integration
+
+#### Server Proxy Support
+- **Next.js**: Both app router and page router
+- **Express**: Middleware integration
+- **Hono**: Lightweight framework support
+- **Remix**: Full-stack framework integration
+- **SvelteKit**: Svelte framework support
+
+### 11. Environment Configuration
+
+Required environment variables:
+- `SUNRA_KEY`: API authentication key
+- `SUNRA_QUEUE_DOMAIN`: Queue service domain
+- `SUNRA_API_ENDPOINT`: API endpoint URL
+
+### 12. Commit Conventions
+
+Follow conventional commits:
+- `feat:` New features
+- `fix:` Bug fixes
+- `docs:` Documentation changes
+- `style:` Code style changes
+- `refactor:` Code refactoring
+- `test:` Test additions/changes
+- `chore:` Build/tooling changes
+
+### 13. Example Patterns
+
+When creating examples:
+- Include **environment setup** instructions
+- Provide **working code snippets**
+- Show **error handling** patterns
+- Demonstrate **streaming** capabilities
+- Include **file upload** examples
+
+### 14. Cross-Language Consistency
+
+Maintain consistent patterns across all client libraries:
+- Similar method names and signatures
+- Consistent error handling approaches
+- Unified streaming interfaces
+- Standardized configuration options
+
+## Quick Reference
+
+### Common Commands
+```bash
+# Install dependencies
+pnpm install
+
+# Build all packages
+pnpm build
+
+# Run tests
+pnpm test
+
+# Lint code
+pnpm lint
+
+# Format code
+pnpm format
+
+# Publish packages
+pnpm publish-packages
+```
+
+### File Naming Conventions
+- **TypeScript**: `.ts` for source, `.d.ts` for declarations
+- **Python**: `snake_case` for files and functions
+- **Java**: `PascalCase` for classes, `camelCase` for methods
+- **Tests**: `*.test.ts`, `test_*.py`, `*Test.java`
+
+### Import Patterns
+- **JavaScript**: Use ES6 imports, prefer named exports
+- **Python**: Use absolute imports, avoid wildcard imports
+- **Java**: Use explicit imports, organize with static imports
+
+This rule set ensures consistent development practices across the entire sunra.ai client ecosystem while maintaining high code quality and developer experience.
 # Cursor Rules for sunra.ai Client Libraries
 
 ## Project Overview
