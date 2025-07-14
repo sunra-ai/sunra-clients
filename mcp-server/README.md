@@ -1,157 +1,159 @@
 # Sunra MCP Server
 
-A Model Context Protocol (MCP) server for integrating with Sunra.ai's API, built with FastMCP.
+A Model Context Protocol (MCP) server that provides tools for interacting with Sunra.ai services.
 
 ## Features
 
-This MCP server provides the following tools for interacting with Sunra.ai:
+- **Base Tools**: Submit, status, result, cancel, subscribe operations
+- **Model Management**: List, search, and get schema information for AI models
+- **File Management**: Upload files to Sunra.ai
+- **Authentication**: Secure API key management
 
-- **submit** - Submit a request to the Sunra queue for processing
-- **status** - Check the status of a request in the Sunra queue
-- **result** - Retrieve the result of a completed request from the Sunra queue
-- **cancel** - Cancel a request in the Sunra queue
-- **subscribe** - Submit a request to the Sunra queue and wait for completion
-- **set-sunra-key** - Set the Sunra API key for authentication
+## Tools
 
-## Installation
+### Base Operations
 
-1. Clone the repository and navigate to the mcp-server directory
-2. Install dependencies:
+- `submit` - Submit a request to a model endpoint
+- `status` - Check the status of a request
+- `result` - Get the result of a completed request
+- `cancel` - Cancel a pending request
+- `subscribe` - Submit and wait for completion
+
+### Model Management
+
+- `list-models` - List all available models
+- `search-models` - Search for models by name or description
+- `model-schema` - Get input and output schemas for a specific model endpoint
+
+### File Management
+
+- `upload` - Upload files to Sunra.ai storage
+
+### Authentication
+
+- `set-sunra-key` - Configure your Sunra.ai API key
+
+## Usage Examples
+
+### Model Schema Tool
+
+The `model-schema` tool now accepts a model slug in the format `owner/model/endpoint` and returns only the input and output schemas:
 
 ```bash
-npm install
+# Get schema for a specific model endpoint
+model-schema --modelSlug "black-forest-labs/flux-kontext-max/text-to-image"
+```
+
+#### Reference Resolution
+
+The tool automatically resolves OpenAPI `$ref` references to provide fully expanded schemas. For example, if the original OpenAPI schema contains:
+
+```json
+{
+  "schema": {
+    "$ref": "#/components/schemas/TextToVideoInput"
+  }
+}
+```
+
+The tool will resolve this reference and return the actual schema definition:
+
+```json
+{
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "description": "Text prompt for video generation"
+      },
+      "duration": {
+        "type": "integer",
+        "enum": [5, 10],
+        "description": "Duration of the video in seconds"
+      }
+    },
+    "required": ["prompt"]
+  }
+}
+```
+
+The tool handles:
+- ✅ Simple references (`#/components/schemas/SchemaName`)
+- ✅ Nested references within objects and arrays
+- ✅ Circular references (marked with `$circular: true`)
+- ✅ Missing references (graceful fallback to original `$ref`)
+
+#### Response Format
+
+Response format:
+```json
+{
+  "success": true,
+  "modelSlug": "black-forest-labs/flux-kontext-max/text-to-image",
+  "owner": "black-forest-labs",
+  "model": "flux-kontext-max",
+  "endpoint": "text-to-image",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "description": "Text prompt for image generation"
+      }
+    },
+    "required": ["prompt"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Request ID"
+      },
+      "status": {
+        "type": "string",
+        "description": "Request status"
+      },
+      "output": {
+        "type": "object",
+        "description": "Generated output"
+      }
+    }
+  }
+}
+```
+
+## Development
+
+### Running Tests
+
+```bash
+npm test
+```
+
+### Building
+
+```bash
+npm run build
+```
+
+### Starting the Server
+
+```bash
+npm start
 ```
 
 ## Configuration
 
-### Setting up your Sunra API Key
-
-You have two options to configure your Sunra API key:
-
-#### Option 1: Environment Variable
-Set the `SUNRA_KEY` environment variable:
+Set your Sunra.ai API key as an environment variable:
 
 ```bash
-export SUNRA_KEY="your-sunra-api-key-here"
+export SUNRA_KEY="your-api-key-here"
 ```
 
-#### Option 2: Use the set-sunra-key tool
-After the server is running, use the `set-sunra-key` tool to configure your API key.
-
-## Usage
-
-### Development Mode
-To run the server in development mode with auto-reload:
-
-```bash
-npm run dev
-```
-
-### Production Mode
-To build and run the server in production:
-
-```bash
-npm run build
-npm start
-```
-
-### Testing with FastMCP CLI
-You can test the server using the FastMCP development tools:
-
-```bash
-# Test the server
-npx fastmcp dev src/index.ts
-
-# Inspect the server with web UI
-npx fastmcp inspect src/index.ts
-```
-
-## Connecting to Claude Desktop
-
-To use this MCP server with Claude Desktop, add the following configuration to your `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "sunra-mcp-server": {
-      "command": "node",
-      "args": ["path/to/mcp-server/dist/index.js"],
-      "env": {
-        "SUNRA_KEY": "your-sunra-api-key-here"
-      }
-    }
-  }
-}
-```
-
-Or for development:
-
-```json
-{
-  "mcpServers": {
-    "sunra-mcp-server": {
-      "command": "npm",
-      "args": ["run", "dev"],
-      "cwd": "path/to/mcp-server",
-      "env": {
-        "SUNRA_KEY": "your-sunra-api-key-here"
-      }
-    }
-  }
-}
-```
+Or use the `set-sunra-key` tool at runtime.
 
 ## API Reference
 
-### submit
-Submit a request to the Sunra queue for processing.
-
-**Parameters:**
-- `endpointId` (string): The ID of the API endpoint to submit to
-- `input` (any, optional): The input data to send to the endpoint
-- `webhookUrl` (string, optional): Optional webhook URL to receive completion notifications
-
-### status
-Check the status of a request in the Sunra queue.
-
-**Parameters:**
-- `requestId` (string): The unique identifier for the request
-- `logs` (boolean, optional): Whether to include logs in the response (default: false)
-
-### result
-Retrieve the result of a completed request from the Sunra queue.
-
-**Parameters:**
-- `requestId` (string): The unique identifier for the request
-
-### cancel
-Cancel a request in the Sunra queue.
-
-**Parameters:**
-- `requestId` (string): The unique identifier for the request to cancel
-
-### subscribe
-Submit a request to the Sunra queue and wait for completion.
-
-**Parameters:**
-- `endpointId` (string): The ID of the API endpoint to submit to
-- `input` (any, optional): The input data to send to the endpoint
-- `mode` (string, optional): The mode to use for subscribing ('polling' or 'streaming', default: 'polling')
-- `pollInterval` (number, optional): The interval in milliseconds for polling (default: 1000)
-- `timeout` (number, optional): The timeout in milliseconds for the request
-- `logs` (boolean, optional): Whether to include logs in the response (default: false)
-- `webhookUrl` (string, optional): Optional webhook URL to receive completion notifications
-
-### set-sunra-key
-Set the Sunra API key for authenticating with the Sunra.ai service.
-
-**Parameters:**
-- `apiKey` (string): The Sunra API key to configure
-
-## License
-
-Apache-2.0
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. 
+For detailed API documentation, see the [Sunra.ai API documentation](https://docs.sunra.ai/). 

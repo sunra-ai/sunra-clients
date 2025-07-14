@@ -17,7 +17,7 @@ describe('modelSchemaTool', () => {
     });
 
     it('should have description', () => {
-      expect(modelSchemaTool.description).toBe('Get the JSON schema for a specific AI model from its OpenAPI specification URL');
+      expect(modelSchemaTool.description).toBe('Get the input and output JSON schemas for a specific AI model endpoint from its OpenAPI specification');
     });
 
     it('should have parameters schema', () => {
@@ -29,36 +29,177 @@ describe('modelSchemaTool', () => {
     const mockModels = [
       {
         id: 'gpt-4',
-        name: 'GPT-4',
+        name: 'gpt-4',
         description: 'Advanced language model',
         provider: 'OpenAI',
+        owner: { name: 'openai' },
+        endpoints: [
+          {
+            name: 'text-completion',
+            path: 'openai/gpt-4/text-completion'
+          }
+        ],
         openapi: 'https://api.openai.com/v1/models/gpt-4/openapi.json',
       },
       {
         id: 'dall-e-2',
-        name: 'DALL·E 2',
+        name: 'dall-e-2',
         description: 'AI image generation model',
         provider: 'OpenAI',
+        owner: { name: 'openai' },
+        endpoints: [
+          {
+            name: 'text-to-image',
+            path: 'openai/dall-e-2/text-to-image'
+          }
+        ],
         openapi: 'https://api.openai.com/v1/models/dall-e-2/openapi.json',
       },
     ];
 
-    const mockSchema = {
-      type: 'object',
-      properties: {
-        prompt: {
-          type: 'string',
-          description: 'The input prompt',
+    const mockOpenAPIDoc = {
+      paths: {
+        '/openai/gpt-4/text-completion': {
+          post: {
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      prompt: {
+                        type: 'string',
+                        description: 'The input prompt',
+                      },
+                      max_tokens: {
+                        type: 'integer',
+                        description: 'Maximum tokens to generate',
+                      },
+                    },
+                    required: ['prompt'],
+                  }
+                }
+              }
+            }
+          }
         },
-        max_tokens: {
-          type: 'integer',
-          description: 'Maximum tokens to generate',
-        },
-      },
-      required: ['prompt'],
+        '/requests/{request_id}': {
+          get: {
+            responses: {
+              '200': {
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        id: {
+                          type: 'string',
+                          description: 'Request ID',
+                        },
+                        status: {
+                          type: 'string',
+                          description: 'Request status',
+                        },
+                        output: {
+                          type: 'object',
+                          description: 'Generated output',
+                        },
+                      },
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     };
 
-    it('should fetch schema for existing model', async () => {
+    const mockOpenAPIDocWithReferences = {
+      paths: {
+        '/openai/gpt-4/text-completion': {
+          post: {
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/TextCompletionInput'
+                  }
+                }
+              }
+            }
+          }
+        },
+        '/requests/{request_id}': {
+          get: {
+            responses: {
+              '200': {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: '#/components/schemas/RequestResponse'
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      components: {
+        schemas: {
+          TextCompletionInput: {
+            type: 'object',
+            properties: {
+              prompt: {
+                type: 'string',
+                description: 'The input prompt',
+              },
+              max_tokens: {
+                type: 'integer',
+                description: 'Maximum tokens to generate',
+              },
+              settings: {
+                $ref: '#/components/schemas/CompletionSettings'
+              }
+            },
+            required: ['prompt'],
+          },
+          CompletionSettings: {
+            type: 'object',
+            properties: {
+              temperature: {
+                type: 'number',
+                description: 'Sampling temperature',
+              },
+              top_p: {
+                type: 'number',
+                description: 'Top-p sampling',
+              }
+            }
+          },
+          RequestResponse: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'Request ID',
+              },
+              status: {
+                type: 'string',
+                description: 'Request status',
+              },
+              output: {
+                type: 'object',
+                description: 'Generated output',
+              },
+            },
+          }
+        }
+      }
+    };
+
+    it('should fetch schema for existing model endpoint', async () => {
       mockFetch
         .mockResolvedValueOnce({
           ok: true,
@@ -66,10 +207,10 @@ describe('modelSchemaTool', () => {
         })
         .mockResolvedValueOnce({
           ok: true,
-          json: () => Promise.resolve(mockSchema),
+          json: () => Promise.resolve(mockOpenAPIDoc),
         });
 
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
       expect(mockFetch).toHaveBeenCalledTimes(2);
       expect(mockFetch).toHaveBeenNthCalledWith(
@@ -101,38 +242,161 @@ describe('modelSchemaTool', () => {
 
       const parsedResponse = JSON.parse(result.content[0].text);
       expect(parsedResponse.success).toBe(true);
-      expect(parsedResponse.modelId).toBe('gpt-4');
-      expect(parsedResponse.schema).toEqual(mockSchema);
+      expect(parsedResponse.modelSlug).toBe('openai/gpt-4/text-completion');
+      expect(parsedResponse.owner).toBe('openai');
+      expect(parsedResponse.model).toBe('gpt-4');
+      expect(parsedResponse.endpoint).toBe('text-completion');
+      expect(parsedResponse.inputSchema).toEqual(mockOpenAPIDoc.paths['/openai/gpt-4/text-completion'].post.requestBody.content['application/json'].schema);
+      expect(parsedResponse.outputSchema).toEqual(mockOpenAPIDoc.paths['/requests/{request_id}'].get.responses['200'].content['application/json'].schema);
     });
 
-    it('should use model ID as name when name is not available', async () => {
-      const modelsWithoutName = [
-        {
-          id: 'test-model',
-          openapi: 'https://example.com/test-schema.json',
-        },
-      ];
+    it('should resolve $ref references in schemas', async () => {
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve(mockModels),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve(mockOpenAPIDocWithReferences),
+        });
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(modelsWithoutName),
-      });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockSchema),
-      });
-
-      const result = await modelSchemaTool.execute({ modelId: 'test-model' });
+      expect(result.content).toHaveLength(1);
+      expect(result.content[0].type).toBe('text');
+      expect(result.isError).toBeUndefined();
 
       const parsedResponse = JSON.parse(result.content[0].text);
       expect(parsedResponse.success).toBe(true);
-      expect(parsedResponse.modelName).toBe('test-model');
+
+      // Verify that references have been resolved
+      expect(parsedResponse.inputSchema).toEqual({
+        type: 'object',
+        properties: {
+          prompt: {
+            type: 'string',
+            description: 'The input prompt',
+          },
+          max_tokens: {
+            type: 'integer',
+            description: 'Maximum tokens to generate',
+          },
+          settings: {
+            type: 'object',
+            properties: {
+              temperature: {
+                type: 'number',
+                description: 'Sampling temperature',
+              },
+              top_p: {
+                type: 'number',
+                description: 'Top-p sampling',
+              }
+            }
+          }
+        },
+        required: ['prompt'],
+      });
+
+      expect(parsedResponse.outputSchema).toEqual({
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            description: 'Request ID',
+          },
+          status: {
+            type: 'string',
+            description: 'Request status',
+          },
+          output: {
+            type: 'object',
+            description: 'Generated output',
+          },
+        },
+      });
+    });
+
+    it('should handle circular references', async () => {
+      const mockOpenAPIDocWithCircularRef = {
+        paths: {
+          '/openai/gpt-4/text-completion': {
+            post: {
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: '#/components/schemas/CircularSchema'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '/requests/{request_id}': {
+            get: {
+              responses: {
+                '200': {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          id: { type: 'string' }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        components: {
+          schemas: {
+            CircularSchema: {
+              type: 'object',
+              properties: {
+                name: { type: 'string' },
+                children: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/CircularSchema'
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve(mockModels),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve(mockOpenAPIDocWithCircularRef),
+        });
+
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
+
+      expect(result.content).toHaveLength(1);
+      expect(result.content[0].type).toBe('text');
+      expect(result.isError).toBeUndefined();
+
+      const parsedResponse = JSON.parse(result.content[0].text);
+      expect(parsedResponse.success).toBe(true);
+
+      // Verify that circular reference is handled
+      expect(parsedResponse.inputSchema.properties.children.items).toHaveProperty('$circular', true);
     });
 
     it('should handle models wrapped in response object', async () => {
       const mockResponse = {
-        models: mockModels,
+        data: mockModels,
         total: mockModels.length,
       };
 
@@ -143,38 +407,28 @@ describe('modelSchemaTool', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockSchema),
+        json: () => Promise.resolve(mockOpenAPIDoc),
       });
 
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
       const parsedResponse = JSON.parse(result.content[0].text);
       expect(parsedResponse.success).toBe(true);
-      expect(parsedResponse.modelId).toBe('gpt-4');
+      expect(parsedResponse.modelSlug).toBe('openai/gpt-4/text-completion');
     });
 
-    it('should handle complex schema structures', async () => {
-      const complexSchema = {
-        openapi: '3.0.0',
-        info: { title: 'Complex API', version: '2.0.0' },
-        components: {
-          schemas: {
-            ComplexType: {
-              type: 'object',
-              properties: {
-                nested: {
-                  type: 'object',
-                  properties: {
-                    array: {
-                      type: 'array',
-                      items: { $ref: '#/components/schemas/Reference' },
-                    },
-                  },
-                },
-              },
-            },
+    it('should handle missing input or output schemas', async () => {
+      const incompleteOpenAPIDoc = {
+        paths: {
+          '/openai/gpt-4/text-completion': {
+            post: {
+              // Missing requestBody
+            }
           },
-        },
+          '/requests/{request_id}': {
+            // Missing get method
+          }
+        }
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -184,22 +438,41 @@ describe('modelSchemaTool', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(complexSchema),
+        json: () => Promise.resolve(incompleteOpenAPIDoc),
       });
 
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
       const parsedResponse = JSON.parse(result.content[0].text);
       expect(parsedResponse.success).toBe(true);
-      expect(parsedResponse.schema).toEqual(complexSchema);
+      expect(parsedResponse.inputSchema).toBeNull();
+      expect(parsedResponse.outputSchema).toBeNull();
     });
   });
 
   describe('error handling', () => {
 
+    it('should handle invalid model slug format', async () => {
+      const result = await modelSchemaTool.execute({ modelSlug: 'invalid-format' });
+
+      expect(result.content).toHaveLength(1);
+      expect(result.isError).toBe(true);
+
+      const parsedResponse = JSON.parse(result.content[0].text);
+      expect(parsedResponse.success).toBe(false);
+      expect(parsedResponse.error).toBe('Invalid model slug format. Expected "owner/model/endpoint", got "invalid-format"');
+      expect(parsedResponse.code).toBe('INVALID_MODEL_SLUG');
+    });
+
     it('should handle model not found', async () => {
       const mockModels = [
-        { id: 'other-model', openapi: 'https://example.com/other.json' },
+        {
+          id: 'other-model',
+          name: 'other-model',
+          owner: { name: 'other' },
+          endpoints: [{ name: 'endpoint' }],
+          openapi: 'https://example.com/other.json'
+        },
       ];
 
       mockFetch.mockResolvedValue({
@@ -207,20 +480,53 @@ describe('modelSchemaTool', () => {
         json: () => Promise.resolve(mockModels),
       });
 
-      const result = await modelSchemaTool.execute({ modelId: 'nonexistent-model' });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
       expect(result.content).toHaveLength(1);
       expect(result.isError).toBe(true);
 
       const parsedResponse = JSON.parse(result.content[0].text);
       expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.error).toBe("Model with ID 'nonexistent-model' not found");
+      expect(parsedResponse.error).toBe("Model with slug 'openai/gpt-4' not found");
       expect(parsedResponse.code).toBe('MODEL_NOT_FOUND');
+    });
+
+    it('should handle endpoint not found', async () => {
+      const mockModels = [
+        {
+          id: 'gpt-4',
+          name: 'gpt-4',
+          owner: { name: 'openai' },
+          endpoints: [{ name: 'different-endpoint' }],
+          openapi: 'https://api.openai.com/v1/models/gpt-4/openapi.json',
+        },
+      ];
+
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockModels),
+      });
+
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
+
+      expect(result.content).toHaveLength(1);
+      expect(result.isError).toBe(true);
+
+      const parsedResponse = JSON.parse(result.content[0].text);
+      expect(parsedResponse.success).toBe(false);
+      expect(parsedResponse.error).toBe("Endpoint 'text-completion' not found for model 'openai/gpt-4'");
+      expect(parsedResponse.code).toBe('ENDPOINT_NOT_FOUND');
     });
 
     it('should handle model without OpenAPI URL', async () => {
       const mockModels = [
-        { id: 'gpt-4', name: 'GPT-4' }, // No openapi field
+        {
+          id: 'gpt-4',
+          name: 'gpt-4',
+          owner: { name: 'openai' },
+          endpoints: [{ name: 'text-completion' }],
+          // No openapi field
+        },
       ];
 
       mockFetch.mockResolvedValue({
@@ -228,14 +534,14 @@ describe('modelSchemaTool', () => {
         json: () => Promise.resolve(mockModels),
       });
 
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
       expect(result.content).toHaveLength(1);
       expect(result.isError).toBe(true);
 
       const parsedResponse = JSON.parse(result.content[0].text);
       expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.error).toBe("Model 'gpt-4' does not have an OpenAPI specification URL");
+      expect(parsedResponse.error).toBe("Model 'openai/gpt-4' does not have an OpenAPI specification URL");
       expect(parsedResponse.code).toBe('NO_OPENAPI_URL');
     });
 
@@ -246,7 +552,7 @@ describe('modelSchemaTool', () => {
         statusText: 'Unauthorized',
       });
 
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
       expect(result.content).toHaveLength(1);
       expect(result.isError).toBe(true);
@@ -259,7 +565,13 @@ describe('modelSchemaTool', () => {
 
     it('should handle HTTP error when fetching schema', async () => {
       const mockModels = [
-        { id: 'gpt-4', openapi: 'https://example.com/gpt-4-schema.json' },
+        {
+          id: 'gpt-4',
+          name: 'gpt-4',
+          owner: { name: 'openai' },
+          endpoints: [{ name: 'text-completion' }],
+          openapi: 'https://api.openai.com/v1/models/gpt-4/openapi.json',
+        },
       ];
 
       mockFetch.mockResolvedValueOnce({
@@ -273,7 +585,7 @@ describe('modelSchemaTool', () => {
         statusText: 'Not Found',
       });
 
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
       expect(result.content).toHaveLength(1);
       expect(result.isError).toBe(true);
@@ -284,161 +596,54 @@ describe('modelSchemaTool', () => {
       expect(parsedResponse.code).toBe('UNKNOWN_ERROR');
     });
 
-    it('should handle network errors', async () => {
-      mockFetch.mockRejectedValue(new Error('Network error'));
-
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.isError).toBe(true);
-
-      const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.error).toBe('Network error');
-      expect(parsedResponse.code).toBe('UNKNOWN_ERROR');
-    });
-
-    it('should handle JSON parsing errors in models response', async () => {
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: () => Promise.reject(new Error('Invalid JSON in models')),
-      });
-
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.isError).toBe(true);
-
-      const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.error).toBe('Invalid JSON in models');
-    });
-
-    it('should handle JSON parsing errors in schema response', async () => {
+    it('should handle missing reference in schema', async () => {
       const mockModels = [
-        { id: 'gpt-4', openapi: 'https://example.com/gpt-4-schema.json' },
+        {
+          id: 'gpt-4',
+          name: 'gpt-4',
+          owner: { name: 'openai' },
+          endpoints: [{ name: 'text-completion' }],
+          openapi: 'https://api.openai.com/v1/models/gpt-4/openapi.json',
+        },
       ];
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockModels),
-      });
-
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.reject(new Error('Invalid JSON in schema')),
-      });
-
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.isError).toBe(true);
-
-      const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.error).toBe('Invalid JSON in schema');
-    });
-
-    it('should handle network errors', async () => {
-      mockFetch.mockRejectedValue(new Error('Network error'));
-
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.isError).toBe(true);
-
-      const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.error).toBe('Network error');
-      expect(parsedResponse.code).toBe('UNKNOWN_ERROR');
-    });
-
-    it('should handle unknown error types', async () => {
-      mockFetch.mockRejectedValue('String error');
-
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.isError).toBe(true);
-
-      const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.error).toBe('Unknown error occurred');
-      expect(parsedResponse.code).toBe('UNKNOWN_ERROR');
-    });
-  });
-
-  describe('edge cases', () => {
-    it('should handle empty models array', async () => {
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve([]),
-      });
-
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.isError).toBe(true);
-
-      const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.error).toBe("Model with ID 'gpt-4' not found");
-      expect(parsedResponse.code).toBe('MODEL_NOT_FOUND');
-    });
-
-    it('should handle models with null openapi field', async () => {
-      const mockModels = [
-        { id: 'gpt-4', name: 'GPT-4', openapi: null },
-      ];
-
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve(mockModels),
-      });
-
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.isError).toBe(true);
-
-      const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.code).toBe('NO_OPENAPI_URL');
-    });
-
-    it('should handle models with empty string openapi field', async () => {
-      const mockModels = [
-        { id: 'gpt-4', name: 'GPT-4', openapi: '' },
-      ];
-
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve(mockModels),
-      });
-
-      const result = await modelSchemaTool.execute({ modelId: 'gpt-4' });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.isError).toBe(true);
-
-      const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(false);
-      expect(parsedResponse.code).toBe('NO_OPENAPI_URL');
-    });
-
-    it('should handle very large schema documents', async () => {
-      const mockModels = [
-        { id: 'large-model', openapi: 'https://example.com/large-schema.json' },
-      ];
-
-      const largeSchema = {
-        openapi: '3.0.0',
-        paths: Object.fromEntries(
-          Array.from({ length: 1000 }, (_, i) => [
-            `/endpoint${i}`,
-            { get: { summary: `Endpoint ${i}` } },
-          ])
-        ),
+      const mockOpenAPIDocWithMissingRef = {
+        paths: {
+          '/openai/gpt-4/text-completion': {
+            post: {
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: '#/components/schemas/NonExistentSchema'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '/requests/{request_id}': {
+            get: {
+              responses: {
+                '200': {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: { id: { type: 'string' } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        components: {
+          schemas: {
+            // NonExistentSchema is missing
+          }
+        }
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -448,36 +653,49 @@ describe('modelSchemaTool', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(largeSchema),
+        json: () => Promise.resolve(mockOpenAPIDocWithMissingRef),
       });
 
-      const result = await modelSchemaTool.execute({ modelId: 'large-model' });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
+
+      expect(result.content).toHaveLength(1);
+      expect(result.content[0].type).toBe('text');
+      expect(result.isError).toBeUndefined();
 
       const parsedResponse = JSON.parse(result.content[0].text);
       expect(parsedResponse.success).toBe(true);
-      expect(Object.keys(parsedResponse.schema.paths)).toHaveLength(1000);
+      // Should fall back to raw schema when reference resolution fails
+      expect(parsedResponse.inputSchema).toEqual({
+        $ref: '#/components/schemas/NonExistentSchema'
+      });
     });
 
-    it('should handle special characters in model ID', async () => {
-      const mockModels = [
-        { id: 'model-with-special-chars_123', openapi: 'https://example.com/schema.json' },
-      ];
+    it('should handle network errors', async () => {
+      mockFetch.mockRejectedValue(new Error('Network error'));
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockModels),
-      });
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ openapi: '3.0.0' }),
-      });
-
-      const result = await modelSchemaTool.execute({ modelId: 'model-with-special-chars_123' });
+      expect(result.content).toHaveLength(1);
+      expect(result.isError).toBe(true);
 
       const parsedResponse = JSON.parse(result.content[0].text);
-      expect(parsedResponse.success).toBe(true);
-      expect(parsedResponse.modelId).toBe('model-with-special-chars_123');
+      expect(parsedResponse.success).toBe(false);
+      expect(parsedResponse.error).toBe('Network error');
+      expect(parsedResponse.code).toBe('UNKNOWN_ERROR');
+    });
+
+    it('should handle generic errors', async () => {
+      mockFetch.mockRejectedValue('Generic error');
+
+      const result = await modelSchemaTool.execute({ modelSlug: 'openai/gpt-4/text-completion' });
+
+      expect(result.content).toHaveLength(1);
+      expect(result.isError).toBe(true);
+
+      const parsedResponse = JSON.parse(result.content[0].text);
+      expect(parsedResponse.success).toBe(false);
+      expect(parsedResponse.error).toBe('Unknown error occurred');
+      expect(parsedResponse.code).toBe('UNKNOWN_ERROR');
     });
   });
 });
