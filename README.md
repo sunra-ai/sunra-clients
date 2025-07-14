@@ -103,6 +103,59 @@ For client-side applications, we provide a server proxy to securely handle API c
 - **Package**: `@sunra/server-proxy` (npm)
 - **Supports**: Next.js, Express, Hono, Remix, SvelteKit
 
+## MCP Server (Model Context Protocol)
+
+The MCP server provides a universal interface for AI model tools, enabling seamless integration with modern code assistants and IDEs such as Cursor and Claude Desktop. It acts as a bridge between Sunra.ai and your development environment, exposing Sunra's models and tools via the [Model Context Protocol](https://github.com/modelcontextprotocol).
+
+**Why use the MCP server?**
+- Enables code assistants (like Cursor, Claude, etc.) to access Sunra models and tools directly from your editor
+- Supports listing models, fetching schemas, submitting jobs, streaming results, and more
+- Secure: API keys are managed via environment variables or runtime configuration
+- No need to write glue code—just run the server and connect your tool
+
+### Quick Start
+
+#### 1. Install & Run (no local build needed)
+
+```bash
+npx @sunra/mcp-server --transport http --port 3925
+```
+
+#### 2. For Cursor IDE
+- Add to your `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "sunra-mcp-server": {
+      "url": "http://localhost:3925/sse"
+    }
+  }
+}
+```
+- Set your API key:
+  ```bash
+  export SUNRA_KEY="your-api-key-here"
+  ```
+- In Cursor, select the `sunra-mcp-server` and use tools like `list-models`, `model-schema`, etc.
+
+#### 3. For Claude Desktop (Anthropic)
+- Start the server in stdio mode (default):
+  ```bash
+  npx @sunra/mcp-server
+  ```
+- In Claude Desktop settings, add a new MCP server:
+  - **Type:** Local executable
+  - **Command:** `npx @sunra/mcp-server`
+  - **Environment Variables:**
+    ```
+    SUNRA_KEY=your-api-key-here
+    ```
+- In Claude, select the `sunra-mcp-server` and use the available tools.
+
+#### 4. Advanced Usage & Documentation
+- See [`mcp-server/README.md`](./mcp-server/README.md) for full tool list, development, and troubleshooting.
+
 ## Examples
 
 The repository includes comprehensive examples for different frameworks and use cases:
