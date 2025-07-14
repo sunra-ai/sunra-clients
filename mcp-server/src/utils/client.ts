@@ -1,5 +1,5 @@
 import { sunra, SunraClient } from '@sunra/client';
-import { MCPError } from '../types';
+import { MCPError } from '../types/index.js';
 
 let currentApiKey: string | null = null;
 

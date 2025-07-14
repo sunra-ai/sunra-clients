@@ -2,12 +2,85 @@
 
 A Model Context Protocol (MCP) server that provides tools for interacting with Sunra.ai services.
 
+## Installation
+
+### From npm (Recommended)
+
+```bash
+npx @sunra/mcp-server --help
+```
+
+### Local Development
+
+```bash
+git clone https://github.com/sunra-ai/sunra-clients.git
+cd sunra-clients/mcp-server
+npm install
+npm run build
+```
+
+## Usage
+
+### Command Line Options
+
+```bash
+sunra-mcp-server [options]
+
+Options:
+  -t, --transport <type>   Transport type: 'stdio' or 'http' (default: stdio)
+  -p, --port <number>      Port for HTTP transport (default: 3000)
+  -h, --host <string>      Host for HTTP transport (default: localhost)
+  --help                   Show this help message
+
+Examples:
+  sunra-mcp-server                           # Start with stdio transport
+  sunra-mcp-server --transport http          # Start with HTTP transport on port 3000
+  sunra-mcp-server -t http -p 8080           # Start with HTTP transport on port 8080
+```
+
+### For Cursor IDE
+
+To use with Cursor, create or edit `.cursor/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "sunra-mcp-server": {
+      "command": "npx",
+      "args": ["@sunra/mcp-server", "--transport", "http", "--port", "3000"],
+      "env": {
+        "SUNRA_KEY": "your-sunra-api-key-here"
+      }
+    }
+  }
+}
+```
+
+### For Claude Desktop
+
+For Claude Desktop (stdio transport), add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "sunra-mcp-server": {
+      "command": "npx",
+      "args": ["@sunra/mcp-server"],
+      "env": {
+        "SUNRA_KEY": "your-sunra-api-key-here"
+      }
+    }
+  }
+}
+```
+
 ## Features
 
 - **Base Tools**: Submit, status, result, cancel, subscribe operations
 - **Model Management**: List, search, and get schema information for AI models
 - **File Management**: Upload files to Sunra.ai
 - **Authentication**: Secure API key management
+- **Multiple Transports**: Supports both stdio (for Claude Desktop) and HTTP (for Cursor)
 
 ## Tools
 
@@ -153,6 +226,15 @@ export SUNRA_KEY="your-api-key-here"
 ```
 
 Or use the `set-sunra-key` tool at runtime.
+
+## Publishing
+
+To publish to npm:
+
+```bash
+npm run build
+npm publish
+```
 
 ## API Reference
 

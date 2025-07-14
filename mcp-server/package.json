@@ -1,9 +1,17 @@
 {
   "name": "@sunra/mcp-server",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "MCP server for Sunra.ai API integration",
   "main": "dist/index.js",
+  "bin": {
+    "sunra-mcp-server": "dist/index.js"
+  },
   "type": "module",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
@@ -13,17 +21,35 @@
     "test": "vitest run",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",
     "sunra",
     "ai",
     "sunra ai",
-    "mcp server"
+    "mcp server",
+    "model context protocol"
   ],
   "author": "Yudu <yudu@sunra.ai>",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sunra-ai/sunra-clients.git",
+    "directory": "mcp-server"
+  },
+  "homepage": "https://github.com/sunra-ai/sunra-clients/tree/main/mcp-server",
+  "bugs": {
+    "url": "https://github.com/sunra-ai/sunra-clients/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "devDependencies": {
     "@modelcontextprotocol/inspector": "^0.16.1",
     "@types/node": "^22.10.1",
