@@ -3,6 +3,9 @@
  * This is only a minimal backend to get started.
  */
 
+// get your API key from https://sunra.ai/dashboard/api-tokens
+// sunra client reads the credentials from the environment variable SUNRA_KEY by default
+
 import { createSunraClient } from '@sunra/client'
 import * as sunraProxy from '@sunra/server-proxy/express'
 import cors from 'cors'
@@ -36,6 +39,7 @@ app.get('/api', (req, res) => {
 })
 
 app.get('/sunra-on-server', async (req, res) => {
+  // find more models here: https://sunra.ai/models
   const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/text-to-image', {
     input: {
       prompt:
@@ -52,6 +56,7 @@ app.post('/sunra-upload-demo', upload.single('file'), async (req, res) => {
   const buffer = await fs.readFile(file.path)
   const blob = new Blob([buffer], { type: file.mimetype })
 
+  // find more models here: https://sunra.ai/models
   // TODO: change the default model id
   const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/image-to-image', {
     input: {

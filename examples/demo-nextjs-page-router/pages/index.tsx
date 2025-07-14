@@ -1,3 +1,6 @@
+// get your API key from https://sunra.ai/dashboard/api-tokens
+// sunra client reads the credentials from the environment variable SUNRA_KEY by default
+
 import { createSunraClient } from "@sunra/client";
 import { useState } from "react";
 
@@ -49,6 +52,7 @@ export function Index() {
     setLoading(true);
     const start = Date.now();
     try {
+      // find more models here: https://sunra.ai/models
       const result = await sunra.subscribe("black-forest-labs/flux-kontext-pro/text-to-image", {
         input: {
           prompt,

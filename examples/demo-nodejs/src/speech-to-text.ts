@@ -16,6 +16,8 @@ const main = async () => {
   try {
 
     console.log(chalk.green('Subscribing to the queue...'))
+
+    // find more models here: https://sunra.ai/models
     const result = await sunra.subscribe('elevenlabs/scribe-v1/speech-to-text', {
       input: {
         audio: 'https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-0.mp3'

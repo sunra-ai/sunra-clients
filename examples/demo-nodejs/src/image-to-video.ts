@@ -1,6 +1,7 @@
 import { sunra } from '@sunra/client'
 import chalk from 'chalk'
 
+// get your API key from https://sunra.ai/dashboard/api-tokens
 const apiKey = process.env.SUNRA_KEY || ''
 if (!apiKey) {
   console.error(chalk.red('SUNRA_KEY is not set'))
@@ -15,6 +16,8 @@ if (!apiKey) {
 const main = async () => {
   try {
     console.log(chalk.green('Subscribing to the queue...'))
+
+    // find more models here: https://sunra.ai/models
     const result = await sunra.subscribe('kling/kling-v2-master/image-to-video', {
       input: {
         prompt: 'A cute hamster lies leisurely on a lifebuoy, wearing fashionable sunglasses, and drifts with the gentle waves on the shimmering sea surface. The hamster reclines comfortably, enjoying a peaceful and pleasant time. Cartoon style, the camera follows the subject moving, with a heartwarming and high picture quality.',

@@ -15,6 +15,8 @@ if (!apiKey) {
 const main = async () => {
   try {
     console.log(chalk.green('Subscribing to the queue...'))
+
+    // find more models here: https://sunra.ai/models
     const result = await sunra.subscribe('kling/kling-v2-master/text-to-video', {
       input: {
         prompt: 'A pole bear playing violin in the snow.',

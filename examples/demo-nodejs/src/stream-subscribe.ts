@@ -15,6 +15,8 @@ if (!apiKey) {
 const main = async () => {
   try {
     console.log(chalk.green('Sumitting to the queue...'))
+
+    // find more models here: https://sunra.ai/models
     const res = await sunra.subscribe('black-forest-labs/flux-kontext-pro/text-to-image', {
       input: {
         prompt: 'a bedroom with messy goods on the bed and floor',
