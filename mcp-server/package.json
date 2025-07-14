@@ -1,6 +1,6 @@
 {
   "name": "@sunra/mcp-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "MCP server for Sunra.ai API integration",
   "main": "dist/index.js",
   "bin": {
@@ -59,7 +59,7 @@
     "vitest": "^2.1.5"
   },
   "dependencies": {
-    "@sunra/client": "workspace:*",
+    "@sunra/client": "^0.3.6",
     "fastmcp": "^3.8.4",
     "zod": "^3.23.8"
   }

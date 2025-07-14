@@ -233,8 +233,8 @@ importers:
   mcp-server:
     dependencies:
       '@sunra/client':
-        specifier: workspace:*
-        version: link:../clients/javascript
+        specifier: ^0.3.6
+        version: 0.3.6
       fastmcp:
         specifier: ^3.8.4
         version: 3.8.4
@@ -2170,6 +2170,10 @@ packages:
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
+
+  '@sunra/client@0.3.6':
+    resolution: {integrity: sha512-HARNq1pOS2iHYIV/BQd14D8KHwPzBXzYvimo5N4T5daOJLx9ucgefiS1k5xDVKZSoYot+9074uEt2koWh8yK0Q==}
+    engines: {node: '>=18.0.0'}
 
   '@sveltejs/kit@2.17.2':
     resolution: {integrity: sha512-Vypk02baf7qd3SOB1uUwUC/3Oka+srPo2J0a8YN3EfJypRshDkNx9HzNKjSmhOnGWwT+SSO06+N0mAb8iVTmTQ==}
@@ -8241,6 +8245,16 @@ snapshots:
   '@sindresorhus/merge-streams@4.0.0': {}
 
   '@standard-schema/spec@1.0.0': {}
+
+  '@sunra/client@0.3.6':
+    dependencies:
+      '@msgpack/msgpack': 3.1.2
+      axios: 1.9.0(debug@4.4.0)
+      debug: 4.4.0
+      eventsource-parser: 3.0.3
+      lodash.isplainobject: 4.0.6
+    transitivePeerDependencies:
+      - supports-color
 
   '@sveltejs/kit@2.17.2(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.20.4)(vite@5.4.14(@types/node@22.13.5)(less@4.1.3)(sass@1.85.1)(stylus@0.59.0)(terser@5.39.0)))(svelte@5.20.4)(vite@5.4.14(@types/node@22.13.5)(less@4.1.3)(sass@1.85.1)(stylus@0.59.0)(terser@5.39.0))':
     dependencies:
