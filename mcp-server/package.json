@@ -15,6 +15,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
+    "dev:http": "tsx src/index.ts --transport http --port 3925",
     "start": "node dist/index.js",
     "inspect2": "npx @modelcontextprotocol/inspector",
     "inspect": "npx fastmcp inspect src/index.ts",
