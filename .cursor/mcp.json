@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "sunra-mcp-server": {
+      "url": "http://localhost:3925/sse"
+    }
+  }
+}

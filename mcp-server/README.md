@@ -40,35 +40,19 @@ Examples:
 
 ### For Cursor IDE
 
-To use with Cursor, create or edit `.cursor/mcp.json` in your project root:
+Run the sunra mcp server
 
-```json
-{
-  "mcpServers": {
-    "sunra-mcp-server": {
-      "command": "npx",
-      "args": ["@sunra/mcp-server", "--transport", "http", "--port", "3000"],
-      "env": {
-        "SUNRA_KEY": "your-sunra-api-key-here"
-      }
-    }
-  }
-}
+```bash
+npx @sunra/mcp-server --transport http --port 3925
 ```
 
-### For Claude Desktop
-
-For Claude Desktop (stdio transport), add to your `claude_desktop_config.json`:
+Then add the following to your `.cursor/mcp.json` file:
 
 ```json
 {
   "mcpServers": {
     "sunra-mcp-server": {
-      "command": "npx",
-      "args": ["@sunra/mcp-server"],
-      "env": {
-        "SUNRA_KEY": "your-sunra-api-key-here"
-      }
+      "url": "http://localhost:3925/sse"
     }
   }
 }
