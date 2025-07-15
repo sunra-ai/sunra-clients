@@ -1,0 +1,1001 @@
+---
+description: This document defines the role and responsibilities of a JavaScript/TypeScript SDK Developer for the Sunra Clients project. The JavaScript SDK provides a comprehensive TypeScript-first client library for interacting with Sunra.ai services, supporting both Node.js and browser environments.
+globs:
+alwaysApply: false
+---
+# Sunra Clients - JavaScript/TypeScript SDK Developer Role Document
+
+## Overview
+This document defines the role and responsibilities of a JavaScript/TypeScript SDK Developer for the Sunra Clients project. The JavaScript SDK provides a comprehensive TypeScript-first client library for interacting with Sunra.ai services, supporting both Node.js and browser environments.
+
+## Project Structure
+The JavaScript SDK is organized as follows:
+- **src/**: Main source directory
+  - **client.ts**: Main client implementation
+  - **config.ts**: Configuration management
+  - **queue.ts**: Queue operations
+  - **request.ts**: HTTP request handling
+  - **storage.ts**: File storage operations
+  - **types.ts**: TypeScript type definitions
+  - **utils.ts**: Utility functions
+  - **index.ts**: Public API exports
+
+## Development Guidelines
+
+### 1. Code Style and Standards
+
+#### TypeScript Style Guide
+- Use **strict TypeScript** configuration
+- Use **2 spaces** for indentation (as per user preference)
+- Maximum line length: **120 characters**
+- Use **camelCase** for functions and variables: `submitRequest`, `getStatus`
+- Use **PascalCase** for classes and interfaces: `SunraClient`, `QueueClient`
+- Use **UPPER_SNAKE_CASE** for constants: `DEFAULT_TIMEOUT`, `MAX_RETRIES`
+
+#### Type Safety
+- Prefer **explicit types** over `any`
+- Use **union types** and **literal types** for better type safety
+- Implement **generic types** for reusable components
+- Use **type guards** for runtime type checking
+
+#### Import/Export Patterns
+```typescript
+// Use ES6 imports
+import { SunraClient } from './client'
+import type { QueueStatus, SubscribeOptions } from './types'
+
+// Prefer named exports
+export { SunraClient }
+export type { QueueStatus, SubscribeOptions }
+
+// Use barrel exports in index.ts
+export * from './client'
+export * from './types'
+```
+
+### 2. Architecture Patterns
+
+#### Client Architecture
+```typescript
+export interface SunraClientConfig {
+  credentials?: string
+  proxyUrl?: string
+  apiEndpoint?: string
+  queueDomain?: string
+  timeout?: number
+}
+
+export class SunraClient {
+  private readonly config: Required<SunraClientConfig>
+  private readonly httpClient: HttpClient
+  public readonly queue: QueueClient
+  public readonly storage: StorageClient
+
+  constructor(config: SunraClientConfig = {}) {
+    this.config = {
+      credentials: config.credentials ?? process.env.SUNRA_KEY ?? '',
+      proxyUrl: config.proxyUrl ?? '',
+      apiEndpoint: config.apiEndpoint ?? process.env.SUNRA_API_ENDPOINT ?? '',
+      queueDomain: config.queueDomain ?? process.env.SUNRA_QUEUE_DOMAIN ?? '',
+      timeout: config.timeout ?? 300000,
+    }
+
+    this.httpClient = new HttpClient(this.config)
+    this.queue = new QueueClient(this.httpClient)
+    this.storage = new StorageClient(this.httpClient)
+  }
+}
+```
+
+#### Factory Pattern
+```typescript
+// Factory function for easier instantiation
+export function createSunraClient(config?: SunraClientConfig): SunraClient {
+  return new SunraClient(config)
+}
+
+// Default instance
+export const sunra = createSunraClient()
+```
+
+### 3. Type System Design
+
+#### Core Types
+```typescript
+// Base types
+export interface RequestId {
+  readonly value: string
+}
+
+export interface QueueStatus {
+  readonly status: 'IN_QUEUE' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'CANCELLED'
+  readonly requestId: string
+  readonly queuePosition?: number
+  readonly logs?: string
+  readonly error?: string
+}
+
+export interface SubscribeOptions<T = any> {
+  readonly input: T
+  readonly logs?: boolean
+  readonly mode?: 'polling' | 'streaming'
+  readonly pollInterval?: number
+  readonly timeout?: number
+  readonly webhookUrl?: string
+  readonly onEnqueue?: (requestId: string) => void
+  readonly onQueueUpdate?: (status: QueueStatus) => void
+}
+
+// Generic result type
+export interface RequestResult<T = any> {
+  readonly requestId: string
+  readonly data: T
+  readonly metadata?: Record<string, any>
+}
+```
+
+#### Advanced Types
+```typescript
+// Conditional types for different modes
+export type SubscribeResult<T, M extends 'polling' | 'streaming'> =
+  M extends 'streaming'
+    ? AsyncGenerator<QueueStatus, RequestResult<T>, unknown>
+    : Promise<RequestResult<T>>
+
+// Utility types
+export type DeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P]
+}
+
+export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+```
+
+### 4. Error Handling
+
+#### Error Hierarchy
+```typescript
+export abstract class SunraError extends Error {
+  abstract readonly code: string
+  abstract readonly details: Record<string, any>
+
+  constructor(message: string, cause?: Error) {
+    super(message)
+    this.name = this.constructor.name
+    this.cause = cause
+  }
+}
+
+export class SunraValidationError extends SunraError {
+  readonly code = 'VALIDATION_ERROR'
+
+  constructor(
+    message: string,
+    public readonly details: Record<string, any> = {},
+    cause?: Error
+  ) {
+    super(message, cause)
+  }
+}
+
+export class SunraApiError extends SunraError {
+  readonly code = 'API_ERROR'
+
+  constructor(
+    message: string,
+    public readonly statusCode: number,
+    public readonly details: Record<string, any> = {},
+    cause?: Error
+  ) {
+    super(message, cause)
+  }
+}
+
+export class SunraTimeoutError extends SunraError {
+  readonly code = 'TIMEOUT_ERROR'
+  readonly details = {}
+
+  constructor(message: string, cause?: Error) {
+    super(message, cause)
+  }
+}
+```
+
+#### Error Handling Patterns
+```typescript
+// Result pattern for error handling
+export type Result<T, E = SunraError> =
+  | { success: true; data: T }
+  | { success: false; error: E }
+
+export function wrapAsync<T>(
+  promise: Promise<T>
+): Promise<Result<T>> {
+  return promise
+    .then(data => ({ success: true as const, data }))
+    .catch(error => ({ success: false as const, error }))
+}
+
+// Error boundary for async operations
+export async function handleApiCall<T>(
+  operation: () => Promise<T>,
+  context: string
+): Promise<T> {
+  try {
+    return await operation()
+  } catch (error) {
+    if (error instanceof SunraError) {
+      throw error
+    }
+
+    if (error instanceof Error) {
+      throw new SunraApiError(
+        `${context} failed: ${error.message}`,
+        0,
+        { originalError: error.message }
+      )
+    }
+
+    throw new SunraApiError(
+      `${context} failed with unknown error`,
+      0,
+      { originalError: String(error) }
+    )
+  }
+}
+```
+
+### 5. HTTP Client Implementation
+
+#### Axios Integration
+```typescript
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+
+export class HttpClient {
+  private readonly axiosInstance: AxiosInstance
+
+  constructor(private readonly config: SunraClientConfig) {
+    this.axiosInstance = axios.create({
+      timeout: config.timeout,
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': `sunra-js-client/${VERSION}`,
+        ...(config.credentials && { 'Authorization': `Bearer ${config.credentials}` }),
+      },
+    })
+
+    this.setupInterceptors()
+  }
+
+  private setupInterceptors(): void {
+    // Request interceptor
+    this.axiosInstance.interceptors.request.use(
+      (config) => {
+        // Add proxy URL if configured
+        if (this.config.proxyUrl && !config.url?.startsWith('http')) {
+          config.url = `${this.config.proxyUrl}${config.url}`
+        }
+        return config
+      },
+      (error) => Promise.reject(error)
+    )
+
+    // Response interceptor
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response) {
+          throw new SunraApiError(
+            `API request failed: ${error.response.statusText}`,
+            error.response.status,
+            error.response.data
+          )
+        } else if (error.request) {
+          throw new SunraTimeoutError('Request timeout or network error')
+        } else {
+          throw new SunraApiError('Request setup error', 0, { message: error.message })
+        }
+      }
+    )
+  }
+
+  async request<T = any>(config: AxiosRequestConfig): Promise<T> {
+    const response: AxiosResponse<T> = await this.axiosInstance.request(config)
+    return response.data
+  }
+}
+```
+
+#### Request Utilities
+```typescript
+// Type-safe request methods
+export class TypedHttpClient extends HttpClient {
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>({ ...config, method: 'GET', url })
+  }
+
+  async post<T, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>({ ...config, method: 'POST', url, data })
+  }
+
+  async put<T, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>({ ...config, method: 'PUT', url, data })
+  }
+
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>({ ...config, method: 'DELETE', url })
+  }
+}
+```
+
+### 6. Queue Operations
+
+#### Queue Client Implementation
+```typescript
+export class QueueClient {
+  constructor(private readonly httpClient: HttpClient) {}
+
+  async submit<T = any>(
+    endpointId: string,
+    options: Omit<SubscribeOptions<T>, 'onEnqueue' | 'onQueueUpdate'>
+  ): Promise<{ requestId: string; status: string; queuePosition?: number }> {
+    return this.httpClient.request({
+      method: 'POST',
+      url: '/queue/submit',
+      data: {
+        endpoint_id: endpointId,
+        input: options.input,
+        webhook_url: options.webhookUrl,
+      },
+    })
+  }
+
+  async status(requestId: string, includeLogs = false): Promise<QueueStatus> {
+    return this.httpClient.request({
+      method: 'GET',
+      url: '/queue/status',
+      params: {
+        request_id: requestId,
+        logs: includeLogs,
+      },
+    })
+  }
+
+  async result<T = any>(requestId: string): Promise<RequestResult<T>> {
+    return this.httpClient.request({
+      method: 'GET',
+      url: '/queue/result',
+      params: { request_id: requestId },
+    })
+  }
+
+  async cancel(requestId: string): Promise<void> {
+    await this.httpClient.request({
+      method: 'POST',
+      url: '/queue/cancel',
+      data: { request_id: requestId },
+    })
+  }
+
+  async subscribe<T = any>(
+    endpointId: string,
+    options: SubscribeOptions<T>
+  ): Promise<RequestResult<T>> {
+    // Submit request
+    const submitResult = await this.submit(endpointId, options)
+
+    // Call onEnqueue callback
+    options.onEnqueue?.(submitResult.requestId)
+
+    // Poll for completion
+    return this.pollForCompletion(submitResult.requestId, options)
+  }
+
+  private async pollForCompletion<T>(
+    requestId: string,
+    options: SubscribeOptions<T>
+  ): Promise<RequestResult<T>> {
+    const startTime = Date.now()
+    const timeout = options.timeout ?? 300000
+    const pollInterval = options.pollInterval ?? 1000
+
+    while (Date.now() - startTime < timeout) {
+      const status = await this.status(requestId, options.logs)
+
+      // Call onQueueUpdate callback
+      options.onQueueUpdate?.(status)
+
+      switch (status.status) {
+        case 'COMPLETED':
+          return this.result<T>(requestId)
+        case 'FAILED':
+        case 'CANCELLED':
+          throw new SunraApiError(
+            `Request ${status.status.toLowerCase()}: ${status.error ?? 'Unknown error'}`,
+            0,
+            { requestId, status: status.status }
+          )
+        default:
+          // Continue polling
+          await new Promise(resolve => setTimeout(resolve, pollInterval))
+      }
+    }
+
+    throw new SunraTimeoutError(`Request ${requestId} timed out after ${timeout}ms`)
+  }
+}
+```
+
+### 7. Streaming Support
+
+#### EventSource Implementation
+```typescript
+export class StreamingQueueClient extends QueueClient {
+  async *subscribeStream<T = any>(
+    endpointId: string,
+    options: SubscribeOptions<T>
+  ): AsyncGenerator<QueueStatus, RequestResult<T>, unknown> {
+    const submitResult = await this.submit(endpointId, options)
+    options.onEnqueue?.(submitResult.requestId)
+
+    // Use EventSource for streaming
+    const eventSource = new EventSource(
+      `${this.config.apiEndpoint}/queue/stream?request_id=${submitResult.requestId}`
+    )
+
+    try {
+      while (true) {
+        const status = await this.waitForNextEvent(eventSource)
+
+        options.onQueueUpdate?.(status)
+        yield status
+
+        if (status.status === 'COMPLETED') {
+          const result = await this.result<T>(submitResult.requestId)
+          return result
+        } else if (status.status === 'FAILED' || status.status === 'CANCELLED') {
+          throw new SunraApiError(
+            `Request ${status.status.toLowerCase()}: ${status.error ?? 'Unknown error'}`,
+            0,
+            { requestId: submitResult.requestId, status: status.status }
+          )
+        }
+      }
+    } finally {
+      eventSource.close()
+    }
+  }
+
+  private waitForNextEvent(eventSource: EventSource): Promise<QueueStatus> {
+    return new Promise((resolve, reject) => {
+      const handleMessage = (event: MessageEvent) => {
+        try {
+          const status = JSON.parse(event.data) as QueueStatus
+          eventSource.removeEventListener('message', handleMessage)
+          eventSource.removeEventListener('error', handleError)
+          resolve(status)
+        } catch (error) {
+          reject(new SunraApiError('Failed to parse streaming response', 0, { error }))
+        }
+      }
+
+      const handleError = (error: Event) => {
+        eventSource.removeEventListener('message', handleMessage)
+        eventSource.removeEventListener('error', handleError)
+        reject(new SunraApiError('EventSource error', 0, { error }))
+      }
+
+      eventSource.addEventListener('message', handleMessage)
+      eventSource.addEventListener('error', handleError)
+    })
+  }
+}
+```
+
+### 8. Configuration Management
+
+#### Configuration System
+```typescript
+export interface SunraClientConfig {
+  credentials?: string
+  proxyUrl?: string
+  apiEndpoint?: string
+  queueDomain?: string
+  timeout?: number
+  retryAttempts?: number
+  retryDelay?: number
+  debug?: boolean
+}
+
+export class ConfigManager {
+  private static instance: ConfigManager
+  private config: Required<SunraClientConfig>
+
+  private constructor(initialConfig: SunraClientConfig = {}) {
+    this.config = this.mergeWithDefaults(initialConfig)
+  }
+
+  static getInstance(config?: SunraClientConfig): ConfigManager {
+    if (!ConfigManager.instance) {
+      ConfigManager.instance = new ConfigManager(config)
+    }
+    return ConfigManager.instance
+  }
+
+  private mergeWithDefaults(config: SunraClientConfig): Required<SunraClientConfig> {
+    return {
+      credentials: config.credentials ?? process.env.SUNRA_KEY ?? '',
+      proxyUrl: config.proxyUrl ?? '',
+      apiEndpoint: config.apiEndpoint ?? process.env.SUNRA_API_ENDPOINT ?? 'https://api.sunra.ai',
+      queueDomain: config.queueDomain ?? process.env.SUNRA_QUEUE_DOMAIN ?? 'queue.sunra.ai',
+      timeout: config.timeout ?? 300000,
+      retryAttempts: config.retryAttempts ?? 3,
+      retryDelay: config.retryDelay ?? 1000,
+      debug: config.debug ?? false,
+    }
+  }
+
+  get<K extends keyof SunraClientConfig>(key: K): Required<SunraClientConfig>[K] {
+    return this.config[key]
+  }
+
+  update(updates: Partial<SunraClientConfig>): void {
+    this.config = { ...this.config, ...updates }
+  }
+
+  validate(): void {
+    if (!this.config.credentials) {
+      throw new SunraValidationError(
+        'SUNRA_KEY is required. Get your API key from https://sunra.ai/dashboard/api-tokens'
+      )
+    }
+  }
+}
+```
+
+### 9. Testing Standards
+
+#### Testing Framework Setup
+```typescript
+// vitest.config.ts
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  test: {
+    environment: 'node',
+    globals: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'dist/',
+        '**/*.d.ts',
+        '**/*.test.ts',
+        '**/*.spec.ts',
+      ],
+    },
+  },
+})
+```
+
+#### Test Structure
+```typescript
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { SunraClient } from '../src/client'
+import { SunraApiError, SunraValidationError } from '../src/errors'
+
+describe('SunraClient', () => {
+  let client: SunraClient
+
+  beforeEach(() => {
+    client = new SunraClient({ credentials: 'test-key' })
+  })
+
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
+  describe('constructor', () => {
+    it('should initialize with default config', () => {
+      const defaultClient = new SunraClient()
+      expect(defaultClient).toBeInstanceOf(SunraClient)
+    })
+
+    it('should throw validation error without credentials', () => {
+      expect(() => {
+        new SunraClient().queue.submit('test', { input: {} })
+      }).toThrow(SunraValidationError)
+    })
+  })
+
+  describe('subscribe', () => {
+    it('should successfully submit and poll for completion', async () => {
+      const mockResponse = {
+        requestId: 'test-123',
+        data: { result: 'success' },
+      }
+
+      vi.spyOn(client.queue, 'submit').mockResolvedValue({
+        requestId: 'test-123',
+        status: 'IN_QUEUE',
+      })
+
+      vi.spyOn(client.queue, 'status').mockResolvedValue({
+        status: 'COMPLETED',
+        requestId: 'test-123',
+      })
+
+      vi.spyOn(client.queue, 'result').mockResolvedValue(mockResponse)
+
+      const result = await client.subscribe('test-endpoint', {
+        input: { prompt: 'test' },
+      })
+
+      expect(result).toEqual(mockResponse)
+    })
+
+    it('should handle API errors', async () => {
+      vi.spyOn(client.queue, 'submit').mockRejectedValue(
+        new SunraApiError('API Error', 400)
+      )
+
+      await expect(
+        client.subscribe('test-endpoint', { input: {} })
+      ).rejects.toThrow(SunraApiError)
+    })
+  })
+})
+```
+
+#### Integration Testing
+```typescript
+import { describe, it, expect, beforeAll } from 'vitest'
+import { SunraClient } from '../src/client'
+
+describe('Integration Tests', () => {
+  let client: SunraClient
+
+  beforeAll(() => {
+    const apiKey = process.env.SUNRA_KEY
+    if (!apiKey) {
+      throw new Error('SUNRA_KEY environment variable is required for integration tests')
+    }
+    client = new SunraClient({ credentials: apiKey })
+  })
+
+  it('should successfully call real API', async () => {
+    const result = await client.subscribe('test-endpoint', {
+      input: { prompt: 'integration test' },
+      timeout: 60000,
+    })
+
+    expect(result).toHaveProperty('requestId')
+    expect(result).toHaveProperty('data')
+  }, 60000)
+})
+```
+
+### 10. Build and Package Management
+
+#### Package.json Configuration
+```json
+{
+  "name": "@sunra/client",
+  "version": "0.1.0",
+  "description": "JavaScript/TypeScript client for Sunra.ai API",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write src/**/*.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "sunra",
+    "ai",
+    "api",
+    "client",
+    "typescript",
+    "javascript"
+  ],
+  "author": "Sunra Team <support@sunra.ai>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sunra-ai/sunra-clients.git",
+    "directory": "clients/javascript"
+  },
+  "homepage": "https://github.com/sunra-ai/sunra-clients/tree/main/clients/javascript",
+  "bugs": {
+    "url": "https://github.com/sunra-ai/sunra-clients/issues"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "@vitest/coverage-v8": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
+```
+
+#### TypeScript Configuration
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM"],
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
+}
+```
+
+### 11. Documentation Standards
+
+#### TSDoc Documentation
+```typescript
+/**
+ * Submit a request to the Sunra queue and wait for completion.
+ *
+ * @param endpointId - The ID of the API endpoint to submit to
+ * @param options - Configuration options for the request
+ * @returns Promise that resolves to the completed request result
+ *
+ * @throws {@link SunraValidationError} When input parameters are invalid
+ * @throws {@link SunraApiError} When the API request fails
+ * @throws {@link SunraTimeoutError} When the request times out
+ *
+ * @example
+ * ```typescript
+ * const client = new SunraClient({ credentials: 'your-api-key' })
+ *
+ * const result = await client.subscribe('text-to-image', {
+ *   input: { prompt: 'A beautiful sunset' },
+ *   logs: true,
+ *   onQueueUpdate: (status) => console.log('Status:', status.status)
+ * })
+ *
+ * console.log('Image URL:', result.data.image_url)
+ * ```
+ *
+ * @since 1.0.0
+ */
+async subscribe<T = any>(
+  endpointId: string,
+  options: SubscribeOptions<T>
+): Promise<RequestResult<T>> {
+  // Implementation
+}
+```
+
+### 12. Performance Optimization
+
+#### Connection Pooling
+```typescript
+import { Agent } from 'https'
+
+export class OptimizedHttpClient extends HttpClient {
+  private static readonly httpsAgent = new Agent({
+    keepAlive: true,
+    maxSockets: 50,
+    maxFreeSockets: 10,
+    timeout: 60000,
+  })
+
+  constructor(config: SunraClientConfig) {
+    super(config)
+
+    // Use connection pooling
+    this.axiosInstance.defaults.httpsAgent = OptimizedHttpClient.httpsAgent
+  }
+}
+```
+
+#### Request Batching
+```typescript
+export class BatchingClient {
+  private requestQueue: Array<{ request: any; resolve: Function; reject: Function }> = []
+  private batchTimer: NodeJS.Timeout | null = null
+
+  async batchRequest<T>(request: any): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.requestQueue.push({ request, resolve, reject })
+
+      if (!this.batchTimer) {
+        this.batchTimer = setTimeout(() => {
+          this.processBatch()
+        }, 100) // 100ms batch window
+      }
+    })
+  }
+
+  private async processBatch(): Promise<void> {
+    const batch = this.requestQueue.splice(0)
+    this.batchTimer = null
+
+    if (batch.length === 0) return
+
+    try {
+      const results = await this.httpClient.request({
+        method: 'POST',
+        url: '/batch',
+        data: { requests: batch.map(b => b.request) },
+      })
+
+      batch.forEach((item, index) => {
+        item.resolve(results[index])
+      })
+    } catch (error) {
+      batch.forEach(item => item.reject(error))
+    }
+  }
+}
+```
+
+### 13. Security Best Practices
+
+#### Credential Management
+```typescript
+export class SecureCredentialManager {
+  private static readonly CREDENTIAL_REGEX = /^[a-zA-Z0-9_-]+$/
+
+  static validateCredentials(credentials: string): boolean {
+    if (!credentials || credentials.length < 10) {
+      return false
+    }
+
+    return this.CREDENTIAL_REGEX.test(credentials)
+  }
+
+  static maskCredentials(credentials: string): string {
+    if (credentials.length <= 8) {
+      return '***'
+    }
+
+    return credentials.slice(0, 4) + '***' + credentials.slice(-4)
+  }
+
+  static sanitizeForLogging(data: any): any {
+    const sanitized = { ...data }
+
+    // Remove sensitive fields
+    const sensitiveFields = ['credentials', 'authorization', 'token', 'key']
+    sensitiveFields.forEach(field => {
+      if (sanitized[field]) {
+        sanitized[field] = this.maskCredentials(sanitized[field])
+      }
+    })
+
+    return sanitized
+  }
+}
+```
+
+### 14. Browser Compatibility
+
+#### Environment Detection
+```typescript
+export const Environment = {
+  isNode: typeof process !== 'undefined' && process.versions?.node,
+  isBrowser: typeof window !== 'undefined',
+  isWebWorker: typeof importScripts === 'function',
+
+  getEnvironmentInfo(): string {
+    if (this.isNode) return `Node.js ${process.version}`
+    if (this.isBrowser) return `Browser ${navigator.userAgent}`
+    if (this.isWebWorker) return 'Web Worker'
+    return 'Unknown'
+  }
+}
+
+// Environment-specific implementations
+export class UniversalHttpClient {
+  private createClient(): AxiosInstance {
+    const config: AxiosRequestConfig = {
+      timeout: this.config.timeout,
+      headers: this.getHeaders(),
+    }
+
+    if (Environment.isNode) {
+      // Node.js specific configuration
+      config.httpsAgent = new Agent({ keepAlive: true })
+    } else if (Environment.isBrowser) {
+      // Browser specific configuration
+      config.withCredentials = false
+    }
+
+    return axios.create(config)
+  }
+}
+```
+
+### 15. Development Tools
+
+#### ESLint Configuration
+```json
+{
+  "extends": [
+    "@typescript-eslint/recommended",
+    "@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/no-floating-promises": "error",
+    "prefer-const": "error",
+    "no-var": "error"
+  }
+}
+```
+
+#### Prettier Configuration
+```json
+{
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 120,
+  "arrowParens": "avoid"
+}
+```

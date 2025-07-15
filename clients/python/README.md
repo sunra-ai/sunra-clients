@@ -161,6 +161,10 @@ data_url = client.upload(
 )
 ```
 
+**File Upload Limits:**
+- Maximum file size: **100MB**
+- Supported formats: Images, videos, audio, documents, and other file types as supported by the specific model
+
 ## Error Handling
 
 The client provides proper error handling for common scenarios:

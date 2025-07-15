@@ -34,7 +34,8 @@ export const config = [
     rules: {
       quotes: ['error', 'single'],
       semi: ['error', 'never'],
-      '@typescript-eslint/no-explicit-any': 'off'
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^(_|demo)', varsIgnorePattern: '^_|whisper' }],
     }
   }
 ]

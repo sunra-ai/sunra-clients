@@ -108,6 +108,8 @@ export class SunraStorageClientImpl implements SunraStorageClient {
   }
 
   async transformInput(input: any): Promise<any> {
+    const dataUriRegex = /^data:[^;]+;base64,/
+
     if (Array.isArray(input)) {
       return Promise.all(input.map((item) => this.transformInput(item)))
     } else if (input instanceof Blob) {
@@ -115,6 +117,15 @@ export class SunraStorageClientImpl implements SunraStorageClient {
     } else if (typeof input === 'string' && input.startsWith('blob:')) {
       const blob = await fetch(input).then(r => r.blob())
       return await this.upload(blob)
+    } else if (typeof input === 'string' && dataUriRegex.test(input)) {
+      try {
+        const blob = await fetch(input).then(r => r.blob())
+        const url = await this.upload(blob)
+        return url
+      } catch {
+        // if the input is a data URI, but it's not a valid blob URL, return the input as is
+        return input
+      }
     } else if (isPlainObject(input)) {
       const inputObject = input as Record<string, any>
       const promises = Object.entries(inputObject).map(
