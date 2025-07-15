@@ -5,8 +5,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sunra/sunra-clients.git",
-    "directory": "libs/proxy"
+    "url": "https://github.com/sunra-ai/sunra-clients.git",
+    "directory": "server-proxy"
   },
   "files": [
     "dist"
