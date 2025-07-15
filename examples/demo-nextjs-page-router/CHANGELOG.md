@@ -5,4 +5,4 @@
 ### Patch Changes
 
 - Updated dependencies [40c8307]
-  - @sunra/client@0.3.8
+  - @sunra/client@0.3.7

@@ -236,8 +236,8 @@ importers:
   mcp-server:
     dependencies:
       '@sunra/client':
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.7
+        version: 0.3.7
       fastmcp:
         specifier: ^3.8.4
         version: 3.8.4
@@ -2174,8 +2174,8 @@ packages:
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
-  '@sunra/client@0.3.6':
-    resolution: {integrity: sha512-HARNq1pOS2iHYIV/BQd14D8KHwPzBXzYvimo5N4T5daOJLx9ucgefiS1k5xDVKZSoYot+9074uEt2koWh8yK0Q==}
+  '@sunra/client@0.3.7':
+    resolution: {integrity: sha512-Uftaw8v6wU2i3kwCv8/T/7sDU+AO5ChZ45uJ/PBU5NDP0xtsVz8y4kOs7KuY6GXDm2OIMFISaY7u5VhoFyBs4A==}
     engines: {node: '>=18.0.0'}
 
   '@sveltejs/kit@2.17.2':
@@ -8249,7 +8249,7 @@ snapshots:
 
   '@standard-schema/spec@1.0.0': {}
 
-  '@sunra/client@0.3.6':
+  '@sunra/client@0.3.7':
     dependencies:
       '@msgpack/msgpack': 3.1.2
       axios: 1.9.0(debug@4.4.0)

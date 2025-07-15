@@ -11,4 +11,4 @@
   - Improved client connection reliability and setup process
 
 - Updated dependencies [40c8307]
-  - @sunra/client@0.3.8
+  - @sunra/client@0.3.7
