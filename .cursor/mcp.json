@@ -2,7 +2,10 @@
   "mcpServers": {
     "sunra-mcp-server": {
       "command": "npx",
-      "args": ["@sunra/mcp-server"]
+      "args": ["@sunra/mcp-server"],
+      "env": {
+        "SUNRA_KEY": "sk-api-xxxx. optional if you set the SUNRA_KEY environment variable system wide"
+      }
     }
   }
 }
