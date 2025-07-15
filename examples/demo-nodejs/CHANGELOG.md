@@ -1,5 +1,12 @@
 # demo-nodejs
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @sunra/client@0.3.8
+
 ## 1.0.1
 
 ### Patch Changes

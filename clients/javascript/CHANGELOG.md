@@ -1,5 +1,11 @@
 # @sunra/client
 
+## 0.3.8
+
+### Patch Changes
+
+- Fix error handling in transformInput function to properly throw exceptions when captured
+
 ## 0.3.7
 
 ### Patch Changes

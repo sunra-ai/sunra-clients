@@ -1,5 +1,12 @@
 # demo-nextjs-app-router
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @sunra/client@0.3.8
+
 ## 0.1.1
 
 ### Patch Changes
