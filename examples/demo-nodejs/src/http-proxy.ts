@@ -27,9 +27,14 @@ sunra.config({
   axios: myAwesomeAxios
 })
 
-// sunra reads the credentials from the environment variable SUNRA_KEY by default, you can also set the credentials in the config
+// you can also set the credentials in the config
+// const proxyAxios = axios.create({
+//   httpsAgent: new HttpsProxyAgent(process.env.HTTPS_PROXY || 'http://127.0.0.1:7890'),
+//   timeout: 30000, // 30 seconds timeout
+// })
 // sunra.config({
-//   credentials: apiKey
+//   axios: proxyAxios,
+//   credentials: process.env.SUNRA_KEY // Optional: set credentials here too
 // })
 
 const main = async () => {
