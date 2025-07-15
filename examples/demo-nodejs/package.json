@@ -1,6 +1,7 @@
 {
   "name": "demo-nodejs",
   "version": "1.0.2",
+  "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {

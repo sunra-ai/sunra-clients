@@ -1,6 +1,7 @@
 {
   "name": "demo-express-app",
   "version": "0.1.2",
+  "private": true,
   "description": "",
   "main": "dist/main.js",
   "scripts": {

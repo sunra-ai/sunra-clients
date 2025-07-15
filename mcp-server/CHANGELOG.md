@@ -1,5 +1,11 @@
 # @sunra/mcp-server
 
+## 0.1.0
+
+### Minor Changes
+
+- Bump mcp-server to v0.1.0 for stable release
+
 ## 0.0.3
 
 ### Patch Changes
