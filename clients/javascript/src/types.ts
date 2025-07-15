@@ -45,6 +45,13 @@ export interface SunraCompletedQueueStatus extends SunraBaseQueueStatus {
   response_url: string;
   logs?: string;
   metrics?: SunraMetrics;
+  success: boolean;
+  error: null | {
+    code: string;
+    message: string;
+    details?: string
+    timestamp: string
+  };
 }
 
 export type SunraQueueStatus =
