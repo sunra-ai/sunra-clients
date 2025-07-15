@@ -1,6 +1,6 @@
 import { RequiredConfig } from './config'
 import { dispatchRequest } from './request'
-import { getRestApiUrl } from './utils'
+import { getRestApiUrl, whisper } from './utils'
 import isPlainObject from 'lodash.isplainobject'
 
 /**
@@ -122,9 +122,10 @@ export class SunraStorageClientImpl implements SunraStorageClient {
         const blob = await fetch(input).then(r => r.blob())
         const url = await this.upload(blob)
         return url
-      } catch {
+      } catch (error: unknown) {
         // if the input is a data URI, but it's not a valid blob URL, return the input as is
-        return input
+        whisper('upload failed in transformInput: ', error)
+        throw error
       }
     } else if (isPlainObject(input)) {
       const inputObject = input as Record<string, any>
