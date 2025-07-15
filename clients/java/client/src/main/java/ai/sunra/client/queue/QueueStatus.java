@@ -87,6 +87,13 @@ public interface QueueStatus {
         @Nullable
         @SerializedName("logs")
         private String logs;
+
+        @SerializedName("success")
+        private boolean success = true;
+
+        @Nullable
+        @SerializedName("error")
+        private JsonObject error;
     }
 
     @Data

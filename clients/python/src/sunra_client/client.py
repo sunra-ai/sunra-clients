@@ -74,6 +74,8 @@ class Completed(Status):
 
     logs: str | None = field(default=None)
     metrics: dict[str, Any] = field(default_factory=dict)
+    success: bool = field(default=True)
+    error: dict[str, Any] | None = field(default=None)
 
 
 @dataclass(frozen=True)
@@ -90,7 +92,9 @@ class _BaseRequestHandle:
             return InProgress(logs=data.get("logs", ""))
         elif data.get("status") == "COMPLETED":
             metrics = data.get("metrics", {})
-            return Completed(logs=data.get("logs", ""), metrics=metrics)
+            success = data.get("success", True)
+            error = data.get("error")
+            return Completed(logs=data.get("logs", ""), metrics=metrics, success=success, error=error)
         else:
             raise ValueError(f"Unknown status: {data.get('status')}")
 
@@ -186,9 +190,17 @@ class SyncRequestHandle(_BaseRequestHandle):
 
     def get(self) -> AnyJSON:
         """Wait till the request is completed and return the result of the inference call."""
+        final_status = None
         for status in self.iter_events():
             if isinstance(status, Completed):
+                final_status = status
                 break
+
+        if final_status and not final_status.success:
+            error_message = "Request failed"
+            if final_status.error and "message" in final_status.error:
+                error_message = final_status.error["message"]
+            raise SunraClientError(error_message)
 
         response = _maybe_retry_request(self.client, "GET", self.response_url)
         _raise_for_status(response)
@@ -241,9 +253,17 @@ class AsyncRequestHandle(_BaseRequestHandle):
 
     async def get(self) -> AnyJSON:
         """Wait till the request is completed and return the result."""
+        final_status = None
         async for status in self.iter_events():
             if isinstance(status, Completed):
+                final_status = status
                 break
+
+        if final_status and not final_status.success:
+            error_message = "Request failed"
+            if final_status.error and "message" in final_status.error:
+                error_message = final_status.error["message"]
+            raise SunraClientError(error_message)
 
         response = await _async_maybe_retry_request(self.client, "GET", self.response_url)
         _raise_for_status(response)

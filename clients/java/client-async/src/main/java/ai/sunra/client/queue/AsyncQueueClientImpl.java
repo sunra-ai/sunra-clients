@@ -87,7 +87,17 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                 }
                 this.currentStatus = status;
                 if (currentStatus != null && currentStatus instanceof QueueStatus.Completed) {
-                    future.complete((QueueStatus.Completed) currentStatus);
+                    final var completed = (QueueStatus.Completed) currentStatus;
+                    if (!completed.isSuccess()) {
+                        String errorMessage = "Request failed";
+                        if (completed.getError() != null && completed.getError().has("message")) {
+                            errorMessage = completed.getError().get("message").getAsString();
+                        }
+                        future.completeExceptionally(new SunraException(errorMessage, options.getRequestId()));
+                        eventSource.cancel();
+                        return;
+                    }
+                    future.complete(completed);
                     eventSource.cancel();
                 }
             }
@@ -95,7 +105,16 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
             @Override
             public void onClosed(@Nonnull EventSource eventSource) {
                 if (currentStatus != null && currentStatus instanceof QueueStatus.Completed) {
-                    future.complete((QueueStatus.Completed) currentStatus);
+                    final var completed = (QueueStatus.Completed) currentStatus;
+                    if (!completed.isSuccess()) {
+                        String errorMessage = "Request failed";
+                        if (completed.getError() != null && completed.getError().has("message")) {
+                            errorMessage = completed.getError().get("message").getAsString();
+                        }
+                        future.completeExceptionally(new SunraException(errorMessage, options.getRequestId()));
+                        return;
+                    }
+                    future.complete(completed);
                     return;
                 }
                 future.completeExceptionally(new SunraException(
