@@ -216,6 +216,9 @@ importers:
       axios:
         specifier: ^1.9.0
         version: 1.9.0(debug@4.4.0)
+      https-proxy-agent:
+        specifier: ^7.0.6
+        version: 7.0.6
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*

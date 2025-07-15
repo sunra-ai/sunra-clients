@@ -6,6 +6,7 @@
   "scripts": {
     "base64": "tsx src/base64.ts",
     "customize-axios": "tsx src/customize-axios.ts",
+    "http-proxy": "tsx src/http-proxy.ts",
     "speech-to-text": "tsx src/speech-to-text.ts",
     "text-to-video": "tsx src/text-to-video.ts",
     "image-to-image": "tsx src/image-to-image.ts",
@@ -19,7 +20,8 @@
   "license": "ISC",
   "dependencies": {
     "@sunra/client": "workspace:*",
-    "axios": "^1.9.0"
+    "axios": "^1.9.0",
+    "https-proxy-agent": "^7.0.6"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

@@ -1,6 +1,8 @@
 import { sunra } from '@sunra/client'
 import chalk from 'chalk'
 import axios from 'axios'
+import { HttpsProxyAgent } from 'https-proxy-agent'
+
 
 const apiKey = process.env.SUNRA_KEY || ''
 if (!apiKey) {
@@ -8,7 +10,10 @@ if (!apiKey) {
   process.exit(1)
 }
 
-const myAwesomeAxios = axios.create()
+const myAwesomeAxios = axios.create({
+  // set the proxy for the axios client
+  httpsAgent: new HttpsProxyAgent(process.env.HTTPS_PROXY || 'http://127.0.0.1:7890')
+})
 
 myAwesomeAxios.interceptors.request.use((config) => {
   config.headers = config.headers || {}
