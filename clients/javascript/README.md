@@ -90,6 +90,29 @@ try {
 }
 ```
 
+## File Upload
+
+The client supports file uploads for models that accept file inputs. Files can be uploaded using the storage client:
+
+```typescript
+import { sunra } from '@sunra/client'
+
+// Upload a file
+const fileUrl = await sunra.storage.upload(file)
+
+// Use the uploaded file URL in your request
+const result = await sunra.subscribe('model-endpoint', {
+  input: {
+    image: fileUrl,
+    prompt: 'Process this image'
+  }
+})
+```
+
+**File Upload Limits:**
+- Maximum file size: **100MB**
+- Supported formats: Images, videos, audio, documents, and other file types as supported by the specific model
+
 ## More Features
 
 The client library offers a plethora of features designed to simplify your journey with sunra.ai. Dive into the [official documentation](https://docs.sunra.ai) for a comprehensive guide.
