@@ -63,8 +63,6 @@ const main = async () => {
         code: errorCode,
         message: errorMessage,
       })
-
-      console.error(chalk.red('Error:'), data)
     } else {
       console.error(chalk.red('Error:'), error)
     }
