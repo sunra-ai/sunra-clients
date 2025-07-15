@@ -1,7 +1,8 @@
 {
   "mcpServers": {
     "sunra-mcp-server": {
-      "url": "http://localhost:3925/sse"
+      "command": "npx",
+      "args": ["@sunra/mcp-server"]
     }
   }
 }
