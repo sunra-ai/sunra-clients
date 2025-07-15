@@ -90,6 +90,67 @@ try {
 }
 ```
 
+## HTTP Proxy Configuration
+
+The client supports HTTP proxy configuration through custom Axios instances. This is useful when you need to route requests through a corporate proxy or for development purposes.
+
+### Basic Proxy Setup
+
+```typescript
+import { sunra } from '@sunra/client'
+import axios from 'axios'
+import { HttpsProxyAgent } from 'https-proxy-agent'
+
+// Create a custom Axios instance with proxy configuration
+const proxyAxios = axios.create({
+  httpsAgent: new HttpsProxyAgent(process.env.HTTPS_PROXY || 'http://127.0.0.1:7890')
+})
+
+// Configure the sunra client to use your custom Axios instance
+sunra.config({
+  axios: proxyAxios
+})
+
+// Now all sunra requests will use the proxy
+const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/text-to-image', {
+  input: {
+    prompt: 'a bedroom with messy goods on the bed and floor',
+    aspect_ratio: '16:9'
+  }
+})
+```
+
+### Advanced Proxy Configuration
+
+For more advanced proxy setups, you can customize the Axios instance further:
+
+```typescript
+import { sunra } from '@sunra/client'
+import axios from 'axios'
+import { HttpsProxyAgent } from 'https-proxy-agent'
+
+const proxyAxios = axios.create({
+  httpsAgent: new HttpsProxyAgent(process.env.HTTPS_PROXY || 'http://127.0.0.1:7890'),
+  timeout: 30000, // 30 seconds timeout
+})
+
+// Add custom headers or authentication
+proxyAxios.interceptors.request.use((config) => {
+  config.headers = config.headers || {}
+  config.headers['User-Agent'] = 'my-custom-client'
+  return config
+})
+
+sunra.config({
+  axios: proxyAxios,
+  credentials: process.env.SUNRA_KEY // Optional: set credentials here too
+})
+```
+
+**Requirements:**
+- Install the `https-proxy-agent` package: `npm install https-proxy-agent`
+- Set the `HTTPS_PROXY` environment variable to your proxy URL
+
 ## File Upload
 
 The client supports file uploads for models that accept file inputs. Files can be uploaded using the storage client:
