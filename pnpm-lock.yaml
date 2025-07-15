@@ -213,6 +213,9 @@ importers:
       '@sunra/client':
         specifier: workspace:*
         version: link:../../clients/javascript
+      axios:
+        specifier: ^1.9.0
+        version: 1.9.0(debug@4.4.0)
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
