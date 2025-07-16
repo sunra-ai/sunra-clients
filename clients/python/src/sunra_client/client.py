@@ -31,7 +31,32 @@ USER_AGENT = "sunra-client/0.1.0 (python)"
 
 
 class SunraClientError(Exception):
-    pass
+    """Exception raised when Sunra API operations fail."""
+
+    def __init__(
+        self,
+        message: str,
+        code: str | None = None,
+        details: str | None = None,
+        timestamp: str | None = None,
+    ):
+        super().__init__(message)
+        self.message = message
+        self.code = code
+        self.details = details
+        self.timestamp = timestamp
+
+    def __str__(self) -> str:
+        parts = []
+        if self.code:
+            parts.append(self.code)
+        if self.message:
+            parts.append(self.message)
+        if self.details and self.details != self.message:
+            parts.append(f"Details: {self.details}")
+        if self.timestamp:
+            parts.append(f"Timestamp: {self.timestamp}")
+        return " | ".join(parts)
 
 
 def _raise_for_status(response: httpx.Response) -> None:
@@ -39,11 +64,34 @@ def _raise_for_status(response: httpx.Response) -> None:
         response.raise_for_status()
     except httpx.HTTPStatusError as exc:
         try:
-            msg = response.json()["detail"]
-        except (ValueError, KeyError):
-            msg = response.text
+            error_data = response.json()
 
-        raise SunraClientError(msg) from exc
+            # Check if there's a nested error object (common API pattern)
+            if "error" in error_data and isinstance(error_data["error"], dict):
+                error_obj = error_data["error"]
+                message = error_obj.get("message", "")
+                code = error_obj.get("code", str(response.status_code))
+                details = error_obj.get("details", "")
+                timestamp = error_obj.get("timestamp")
+            else:
+                # Fallback to top-level fields
+                message = error_data.get("detail", response.text)
+                code = error_data.get("code", str(response.status_code))
+                details = error_data.get("details", response.text)
+                timestamp = error_data.get("timestamp")
+
+        except (ValueError, KeyError):
+            message = response.text
+            code = str(response.status_code)
+            details = response.text
+            timestamp = None
+
+        raise SunraClientError(
+            message=message,
+            code=code,
+            details=details,
+            timestamp=timestamp
+        ) from exc
 
 
 @dataclass
@@ -198,9 +246,22 @@ class SyncRequestHandle(_BaseRequestHandle):
 
         if final_status and not final_status.success:
             error_message = "Request failed"
-            if final_status.error and "message" in final_status.error:
-                error_message = final_status.error["message"]
-            raise SunraClientError(error_message)
+            code = None
+            details = None
+            timestamp = None
+
+            if final_status.error:
+                error_message = final_status.error.get("message", error_message)
+                code = final_status.error.get("code")
+                details = final_status.error.get("details")
+                timestamp = final_status.error.get("timestamp")
+
+            raise SunraClientError(
+                message=error_message,
+                code=code,
+                details=details,
+                timestamp=timestamp
+            )
 
         response = _maybe_retry_request(self.client, "GET", self.response_url)
         _raise_for_status(response)
@@ -261,9 +322,22 @@ class AsyncRequestHandle(_BaseRequestHandle):
 
         if final_status and not final_status.success:
             error_message = "Request failed"
-            if final_status.error and "message" in final_status.error:
-                error_message = final_status.error["message"]
-            raise SunraClientError(error_message)
+            code = None
+            details = None
+            timestamp = None
+
+            if final_status.error:
+                error_message = final_status.error.get("message", error_message)
+                code = final_status.error.get("code")
+                details = final_status.error.get("details")
+                timestamp = final_status.error.get("timestamp")
+
+            raise SunraClientError(
+                message=error_message,
+                code=code,
+                details=details,
+                timestamp=timestamp
+            )
 
         response = await _async_maybe_retry_request(self.client, "GET", self.response_url)
         _raise_for_status(response)
