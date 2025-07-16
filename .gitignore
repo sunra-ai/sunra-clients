@@ -49,3 +49,5 @@ docs
 venv/
 .idea/
 __pycache__/
+
+private-*.*

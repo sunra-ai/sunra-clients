@@ -6,8 +6,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sunra/sunra-clients.git",
-    "directory": "libs/client"
+    "url": "https://github.com/sunra-ai/sunra-clients.git",
+    "directory": "clients/javascript"
   },
   "files": [
     "dist"

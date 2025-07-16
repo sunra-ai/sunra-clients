@@ -167,23 +167,76 @@ data_url = client.upload(
 
 ## Error Handling
 
-The client provides proper error handling for common scenarios:
+The client provides comprehensive error handling with detailed error information:
 
 ```python
 import sunra_client
-from sunra_client.client import SunraClientError
 
 try:
     response = sunra_client.subscribe(
         "black-forest-labs/flux-kontext-pro/text-to-image",
-        arguments={"prompt": "a cute cat, realistic, orange"},
+        arguments={
+            "prompt": "a cute cat, realistic, orange",
+            "seed": -2  # Invalid seed (should be >= 0)
+        },
         with_logs=True,
         on_enqueue=print,
         on_queue_update=print
     )
     print(response["images"][0]["url"])
-except SunraClientError as e:
+    
+except sunra_client.SunraClientError as e:
     print(f"Error: {e}")
+    
+    # Access detailed error information
+    print(f"Error Code: {e.code}")           # e.g., "invalid_input"
+    print(f"Error Message: {e.message}")     # e.g., "Validation error: seed must be >= 0"
+    print(f"Error Details: {e.details}")     # Additional error details
+    print(f"Timestamp: {e.timestamp}")       # When the error occurred
+```
+
+### Error Types
+
+The client handles different types of errors:
+
+**Validation Errors** (from model processing):
+```python
+try:
+    response = sunra_client.subscribe(
+        "black-forest-labs/flux-kontext-pro/text-to-image",
+        arguments={"prompt": "test", "seed": -1}  # Invalid seed
+    )
+except sunra_client.SunraClientError as e:
+    # e.code: "invalid_input"
+    # e.message: "Validation error: seed must be >= 0"
+    pass
+```
+
+**HTTP Errors** (from API requests):
+```python
+try:
+    response = sunra_client.subscribe(
+        "non-existent-model/endpoint",
+        arguments={"prompt": "test"}
+    )
+except sunra_client.SunraClientError as e:
+    # e.code: "Bad Request"
+    # e.message: "Model endpoint is required"
+    # e.timestamp: "2025-01-16T12:00:00.000Z"
+    pass
+```
+
+**Conditional Error Handling**:
+```python
+try:
+    response = sunra_client.subscribe("model/endpoint", arguments={})
+except sunra_client.SunraClientError as e:
+    if e.code == "invalid_input":
+        print("Please check your input parameters")
+    elif e.code == "Bad Request":
+        print("Invalid API request")
+    else:
+        print(f"Unexpected error: {e}")
 ```
 
 ## Credits

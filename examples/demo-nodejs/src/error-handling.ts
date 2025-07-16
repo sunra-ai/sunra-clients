@@ -36,7 +36,7 @@ const main = async () => {
     })
     console.log(result)
   } catch (error) {
-    const data = (error as any).response?.data
+    const data = (error as any).response?.data ?? error
     // check if this is an axios error
     if (data) {
       // demo error response

@@ -1,0 +1,17 @@
+{
+  "name": "sunra_client",
+  "version": "0.2.0",
+  "description": "Sunra.ai Python Client SDK",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sunra-ai/sunra-clients.git",
+    "directory": "clients/python"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "python -m build",
+    "test": "pytest",
+    "publish": "python -m twine upload dist/*"
+  }
+}

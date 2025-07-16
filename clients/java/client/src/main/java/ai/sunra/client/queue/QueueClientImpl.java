@@ -87,7 +87,34 @@ public class QueueClientImpl implements QueueClient {
                 }
                 this.currentStatus = status;
                 if (currentStatus != null && currentStatus instanceof Completed) {
-                    future.complete((Completed) currentStatus);
+                    final var completed = (Completed) currentStatus;
+                    if (!completed.isSuccess()) {
+                        String errorMessage = "Request failed";
+                        String code = null;
+                        String details = null;
+                        String timestamp = null;
+
+                        if (completed.getError() != null) {
+                            if (completed.getError().has("message")) {
+                                errorMessage = completed.getError().get("message").getAsString();
+                            }
+                            if (completed.getError().has("code")) {
+                                code = completed.getError().get("code").getAsString();
+                            }
+                            if (completed.getError().has("details")) {
+                                details = completed.getError().get("details").getAsString();
+                            }
+                            if (completed.getError().has("timestamp")) {
+                                timestamp = completed.getError().get("timestamp").getAsString();
+                            }
+                        }
+
+                        future.completeExceptionally(new SunraException(
+                            errorMessage, code, details, timestamp, options.getRequestId()));
+                        eventSource.cancel();
+                        return;
+                    }
+                    future.complete(completed);
                     eventSource.cancel();
                 }
             }
@@ -95,7 +122,33 @@ public class QueueClientImpl implements QueueClient {
             @Override
             public void onClosed(@Nonnull EventSource eventSource) {
                 if (currentStatus != null && currentStatus instanceof Completed) {
-                    future.complete((Completed) currentStatus);
+                    final var completed = (Completed) currentStatus;
+                    if (!completed.isSuccess()) {
+                        String errorMessage = "Request failed";
+                        String code = null;
+                        String details = null;
+                        String timestamp = null;
+
+                        if (completed.getError() != null) {
+                            if (completed.getError().has("message")) {
+                                errorMessage = completed.getError().get("message").getAsString();
+                            }
+                            if (completed.getError().has("code")) {
+                                code = completed.getError().get("code").getAsString();
+                            }
+                            if (completed.getError().has("details")) {
+                                details = completed.getError().get("details").getAsString();
+                            }
+                            if (completed.getError().has("timestamp")) {
+                                timestamp = completed.getError().get("timestamp").getAsString();
+                            }
+                        }
+
+                        future.completeExceptionally(new SunraException(
+                            errorMessage, code, details, timestamp, options.getRequestId()));
+                        return;
+                    }
+                    future.complete(completed);
                     return;
                 }
                 future.completeExceptionally(new SunraException(

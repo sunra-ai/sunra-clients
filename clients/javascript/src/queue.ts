@@ -276,6 +276,10 @@ export class SunraQueueClientImpl implements SunraQueueClient {
           }
           if (requestStatus.status === 'COMPLETED') {
             clearScheduledTasks()
+            if (!requestStatus.success) {
+              reject(requestStatus)
+              return
+            }
             resolve(requestStatus)
             return
           }

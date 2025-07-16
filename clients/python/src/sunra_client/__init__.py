@@ -11,6 +11,7 @@ from sunra_client.client import (
     encode,
     encode_file,
     encode_image,
+    SunraClientError,
 )
 
 __all__ = [
@@ -38,6 +39,7 @@ __all__ = [
     "encode",
     "encode_file",
     "encode_image",
+    "SunraClientError",
 ]
 
 sync_client = SyncClient()

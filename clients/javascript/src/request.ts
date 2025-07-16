@@ -105,9 +105,15 @@ export async function dispatchRequestWithStream<Input, Output>(
 
       onData?.(eventData)
 
-      if (eventData.status === 'COMPLETED' || eventData.status === 'FAILED' || eventData.status === 'CANCELLED') {
+      if (eventData.status === 'COMPLETED') {
         isDone = true
         controller.abort()
+
+        if (eventData.success) {
+          onEnd?.()
+        } else {
+          onError?.(eventData)
+        }
       }
     } catch (e) {
       onError?.(e)
@@ -133,7 +139,7 @@ export async function dispatchRequestWithStream<Input, Output>(
       parser.feed(chunk)
     } catch (error) {
       if ((error instanceof Error && error.name === 'CanceledError') || isDone || axios.isCancel(error)) {
-        onEnd?.()
+        // do nothing
       } else {
         whisper('error is: ', error)
         onError?.(error)
