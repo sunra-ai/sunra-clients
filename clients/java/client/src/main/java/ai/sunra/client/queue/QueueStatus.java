@@ -1,5 +1,6 @@
 package ai.sunra.client.queue;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import jakarta.annotation.Nonnull;
@@ -93,7 +94,7 @@ public interface QueueStatus {
 
         @Nullable
         @SerializedName("error")
-        private JsonObject error;
+        private JsonElement error;
     }
 
     @Data

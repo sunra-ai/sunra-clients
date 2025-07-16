@@ -116,12 +116,14 @@ public class HttpClient {
             if (body != null) {
                 try {
                     final var json = gson.fromJson(body.charStream(), JsonElement.class);
-                    if (json != null && json.isJsonObject()) {
+                    if (json != null && json.isJsonObject() && !json.isJsonNull()) {
                         final var jsonObject = json.getAsJsonObject();
 
                         // Check if there's a nested error object (common API pattern)
-                        if (jsonObject.has("error") && jsonObject.get("error").isJsonObject()) {
-                            final var errorObject = jsonObject.get("error").getAsJsonObject();
+                        if (jsonObject.has("error")) {
+                            final var errorElement = jsonObject.get("error");
+                            if (errorElement != null && !errorElement.isJsonNull() && errorElement.isJsonObject()) {
+                                final var errorObject = errorElement.getAsJsonObject();
 
                             if (errorObject.has("message")) {
                                 message = errorObject.get("message").getAsString();
@@ -134,6 +136,7 @@ public class HttpClient {
                             }
                             if (errorObject.has("timestamp")) {
                                 timestamp = errorObject.get("timestamp").getAsString();
+                            }
                             }
                         } else {
                             // Fallback to top-level fields

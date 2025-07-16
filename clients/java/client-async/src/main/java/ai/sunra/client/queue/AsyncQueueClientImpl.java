@@ -94,18 +94,19 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                         String details = null;
                         String timestamp = null;
 
-                        if (completed.getError() != null) {
-                            if (completed.getError().has("message")) {
-                                errorMessage = completed.getError().get("message").getAsString();
+                        if (completed.getError() != null && !completed.getError().isJsonNull() && completed.getError().isJsonObject()) {
+                            final var errorObject = completed.getError().getAsJsonObject();
+                            if (errorObject.has("message")) {
+                                errorMessage = errorObject.get("message").getAsString();
                             }
-                            if (completed.getError().has("code")) {
-                                code = completed.getError().get("code").getAsString();
+                            if (errorObject.has("code")) {
+                                code = errorObject.get("code").getAsString();
                             }
-                            if (completed.getError().has("details")) {
-                                details = completed.getError().get("details").getAsString();
+                            if (errorObject.has("details")) {
+                                details = errorObject.get("details").getAsString();
                             }
-                            if (completed.getError().has("timestamp")) {
-                                timestamp = completed.getError().get("timestamp").getAsString();
+                            if (errorObject.has("timestamp")) {
+                                timestamp = errorObject.get("timestamp").getAsString();
                             }
                         }
 
@@ -129,18 +130,19 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                         String details = null;
                         String timestamp = null;
 
-                        if (completed.getError() != null) {
-                            if (completed.getError().has("message")) {
-                                errorMessage = completed.getError().get("message").getAsString();
+                        if (completed.getError() != null && !completed.getError().isJsonNull() && completed.getError().isJsonObject()) {
+                            final var errorObject = completed.getError().getAsJsonObject();
+                            if (errorObject.has("message")) {
+                                errorMessage = errorObject.get("message").getAsString();
                             }
-                            if (completed.getError().has("code")) {
-                                code = completed.getError().get("code").getAsString();
+                            if (errorObject.has("code")) {
+                                code = errorObject.get("code").getAsString();
                             }
-                            if (completed.getError().has("details")) {
-                                details = completed.getError().get("details").getAsString();
+                            if (errorObject.has("details")) {
+                                details = errorObject.get("details").getAsString();
                             }
-                            if (completed.getError().has("timestamp")) {
-                                timestamp = completed.getError().get("timestamp").getAsString();
+                            if (errorObject.has("timestamp")) {
+                                timestamp = errorObject.get("timestamp").getAsString();
                             }
                         }
 

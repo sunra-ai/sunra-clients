@@ -22,10 +22,14 @@ public class SunraClientTest {
      */
     @Test
     void testRealApiCall() {
-        // Create ClientConfig with hardcoded API Key
-        // Note: In real projects, avoid hardcoding API keys, this is just a test example
+        // Create ClientConfig with API Key from environment
         String apiKey = System.getenv("SUNRA_KEY");
-        ; // Replace with actual API Key
+
+        // Skip test if no API key is provided
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            System.out.println("Skipping testRealApiCall: SUNRA_KEY environment variable not set");
+            return;
+        }
 
         try {
             // Create client instance using Config approach
@@ -75,9 +79,14 @@ public class SunraClientTest {
      */
     @Test
     void testRealSubscribe() {
-        // Create ClientConfig with hardcoded API Key
+        // Create ClientConfig with API Key from environment
         String apiKey = System.getenv("SUNRA_KEY");
-        ;
+
+        // Skip test if no API key is provided
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            System.out.println("Skipping testRealSubscribe: SUNRA_KEY environment variable not set");
+            return;
+        }
 
         try {
             // Set connection timeout configuration
