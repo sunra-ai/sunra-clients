@@ -518,7 +518,7 @@ class AsyncClient:
 
         return file_url
 
-    async def upload_image(self, image: Image.Image, image_format: str = "jpeg") -> str:
+    async def upload_image(self, image: Image.Image, image_format: str = "png") -> str:
         """Upload a pillow image object"""
 
         with io.BytesIO() as buffer:
@@ -708,7 +708,7 @@ class SyncClient:
 
         return file_url
 
-    def upload_image(self, image: Image.Image, image_format: str = "jpeg") -> str:
+    def upload_image(self, image: Image.Image, image_format: str = "png") -> str:
         """Upload a pillow image object to the CDN and return the access URL."""
 
         with io.BytesIO() as buffer:
@@ -744,7 +744,7 @@ def encode_file(path: os.PathLike) -> str:
         return encode(file.read(), mime_type)
 
 
-def encode_image(image: Image.Image, image_format: str = "jpeg") -> str:
+def encode_image(image: Image.Image, image_format: str = "png") -> str:
     """Encode a pillow image object to a data URL with the specified format."""
     with io.BytesIO() as buffer:
         image.save(buffer, format=image_format)
