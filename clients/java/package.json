@@ -1,6 +1,6 @@
 {
   "name": "ai.sunra.client:sunra-client",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Sunra.ai Java Client SDK",
   "private": true,
   "repository": {

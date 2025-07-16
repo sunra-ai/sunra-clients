@@ -1,5 +1,11 @@
 # ai.sunra.client:sunra-client
 
+## 0.1.8
+
+### Patch Changes
+
+- Fix the unit tests in the java sdk
+
 ## 0.1.7
 
 ### Patch Changes
