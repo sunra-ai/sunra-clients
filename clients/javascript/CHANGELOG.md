@@ -1,5 +1,11 @@
 # @sunra/client
 
+## 0.3.9
+
+### Patch Changes
+
+- 7ef151c: Update the error handling
+
 ## 0.3.8
 
 ### Patch Changes
