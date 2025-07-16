@@ -105,14 +105,71 @@ public class HttpClient {
     public SunraException responseToException(Response response) {
         final var requestId = response.header(HEADER_REQUEST_ID);
         final var contentType = response.header("content-type");
+
+        String message = "Request failed with code: " + response.code();
+        String code = String.valueOf(response.code());
+        String details = null;
+        String timestamp = null;
+
         if (contentType != null && contentType.contains("application/json")) {
             final var body = response.body();
             if (body != null) {
-                final var json = gson.fromJson(body.charStream(), JsonElement.class);
+                try {
+                    final var json = gson.fromJson(body.charStream(), JsonElement.class);
+                    if (json != null && json.isJsonObject()) {
+                        final var jsonObject = json.getAsJsonObject();
+
+                        // Check if there's a nested error object (common API pattern)
+                        if (jsonObject.has("error") && jsonObject.get("error").isJsonObject()) {
+                            final var errorObject = jsonObject.get("error").getAsJsonObject();
+
+                            if (errorObject.has("message")) {
+                                message = errorObject.get("message").getAsString();
+                            }
+                            if (errorObject.has("code")) {
+                                code = errorObject.get("code").getAsString();
+                            }
+                            if (errorObject.has("details")) {
+                                details = errorObject.get("details").getAsString();
+                            }
+                            if (errorObject.has("timestamp")) {
+                                timestamp = errorObject.get("timestamp").getAsString();
+                            }
+                        } else {
+                            // Fallback to top-level fields
+                            if (jsonObject.has("detail")) {
+                                message = jsonObject.get("detail").getAsString();
+                            }
+                            if (jsonObject.has("code")) {
+                                code = jsonObject.get("code").getAsString();
+                            }
+                            if (jsonObject.has("details")) {
+                                details = jsonObject.get("details").getAsString();
+                            }
+                        }
+
+                        // Always check for top-level timestamp
+                        if (jsonObject.has("timestamp")) {
+                            timestamp = jsonObject.get("timestamp").getAsString();
+                        }
+
+                        // If details is still null, use the full JSON as details for debugging
+                        if (details == null) {
+                            details = json.toString();
+                        }
+                    }
+                } catch (Exception e) {
+                    // If JSON parsing fails, use the raw response text
+                    try {
+                        details = body.string();
+                    } catch (Exception ignored) {
+                        // Use default values
+                    }
+                }
             }
         }
 
-        return new SunraException("Request failed with code: " + response.code(), requestId);
+        return new SunraException(message, code, details, timestamp, requestId);
     }
 
     public <T> Output<T> wrapInResult(Response response, Class<T> resultType) {

@@ -27,7 +27,7 @@ The client is available on Maven Central. There are three different modules:
 #### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client:0.1.0"
+implementation "ai.sunra.client:sunra-client:0.1.6"
 ```
 
 #### Call the API
@@ -58,7 +58,7 @@ System.out.println(result.getData());
 #### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client-async:0.1.0"
+implementation "ai.sunra.client:sunra-client-async:0.1.6"
 ```
 
 #### Call the API
@@ -91,7 +91,7 @@ future.thenAccept(result -> {
 #### Install
 
 ```groovy
-implementation "ai.sunra.client:sunra-client-kotlin:0.1.0"
+implementation "ai.sunra.client:sunra-client-kotlin:0.1.6"
 ```
 
 #### Call the API

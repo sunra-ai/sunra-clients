@@ -27,7 +27,7 @@ This repository contains the official client libraries for [sunra.ai](https://su
 - **Location**: [`clients/java/`](./clients/java/)
 - **Package**: `ai.sunra.client:sunra-client` (Maven Central)
 - **Features**: Synchronous, asynchronous, and Kotlin coroutine support
-- **Installation**: `implementation "ai.sunra.client:sunra-client:0.1.4"`
+- **Installation**: `implementation "ai.sunra.client:sunra-client:0.1.6"`
 
 ## Quick Start
 

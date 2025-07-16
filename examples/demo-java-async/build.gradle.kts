@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation("ai.sunra.client:sunra-client-async:0.1.4")
+    implementation("ai.sunra.client:sunra-client-async:0.1.6")
 }
 
 application {

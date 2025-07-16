@@ -90,10 +90,27 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                     final var completed = (QueueStatus.Completed) currentStatus;
                     if (!completed.isSuccess()) {
                         String errorMessage = "Request failed";
-                        if (completed.getError() != null && completed.getError().has("message")) {
-                            errorMessage = completed.getError().get("message").getAsString();
+                        String code = null;
+                        String details = null;
+                        String timestamp = null;
+
+                        if (completed.getError() != null) {
+                            if (completed.getError().has("message")) {
+                                errorMessage = completed.getError().get("message").getAsString();
+                            }
+                            if (completed.getError().has("code")) {
+                                code = completed.getError().get("code").getAsString();
+                            }
+                            if (completed.getError().has("details")) {
+                                details = completed.getError().get("details").getAsString();
+                            }
+                            if (completed.getError().has("timestamp")) {
+                                timestamp = completed.getError().get("timestamp").getAsString();
+                            }
                         }
-                        future.completeExceptionally(new SunraException(errorMessage, options.getRequestId()));
+
+                        future.completeExceptionally(new SunraException(
+                            errorMessage, code, details, timestamp, options.getRequestId()));
                         eventSource.cancel();
                         return;
                     }
@@ -108,10 +125,27 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                     final var completed = (QueueStatus.Completed) currentStatus;
                     if (!completed.isSuccess()) {
                         String errorMessage = "Request failed";
-                        if (completed.getError() != null && completed.getError().has("message")) {
-                            errorMessage = completed.getError().get("message").getAsString();
+                        String code = null;
+                        String details = null;
+                        String timestamp = null;
+
+                        if (completed.getError() != null) {
+                            if (completed.getError().has("message")) {
+                                errorMessage = completed.getError().get("message").getAsString();
+                            }
+                            if (completed.getError().has("code")) {
+                                code = completed.getError().get("code").getAsString();
+                            }
+                            if (completed.getError().has("details")) {
+                                details = completed.getError().get("details").getAsString();
+                            }
+                            if (completed.getError().has("timestamp")) {
+                                timestamp = completed.getError().get("timestamp").getAsString();
+                            }
                         }
-                        future.completeExceptionally(new SunraException(errorMessage, options.getRequestId()));
+
+                        future.completeExceptionally(new SunraException(
+                            errorMessage, code, details, timestamp, options.getRequestId()));
                         return;
                     }
                     future.complete(completed);
