@@ -9,7 +9,7 @@ tag_regex = "^sunra_client_v(?P<version>.*)$"
 
 [project]
 name = "sunra_client"
-version = "0.2.1"
+version = "0.2.2"
 description = "Python client for sunra.ai"
 readme = "README.md"
 authors = [{ name = "Features & Labels <support@sunra.ai>" }]
