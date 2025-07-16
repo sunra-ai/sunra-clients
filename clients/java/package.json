@@ -1,0 +1,17 @@
+{
+  "name": "ai.sunra.client:sunra-client",
+  "version": "0.1.6",
+  "description": "Sunra.ai Java Client SDK",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sunra-ai/sunra-clients.git",
+    "directory": "clients/java"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "gradle build",
+    "test": "gradle test",
+    "publish": "./publish"
+  }
+}
