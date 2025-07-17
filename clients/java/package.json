@@ -12,6 +12,7 @@
   "scripts": {
     "build": "gradle build",
     "test": "gradle test",
-    "publish": "./publish"
+    "publish": "./publish",
+    "version": "node sync-version.js"
   }
 }
