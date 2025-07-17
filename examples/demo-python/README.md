@@ -30,6 +30,48 @@ Before running any examples, make sure you have:
 - **`image-to-video.py`** - Image-to-video transformation
 - **`speech-to-text.py`** - Speech-to-text conversion
 
+### Transform Input Examples
+
+The following examples demonstrate the automatic file upload and transformation functionality:
+
+- **`transform-input-example.py`** - Comprehensive demo of automatic file/image transformation
+- **`transform-base64-input.py`** - Real working example using base64 data URIs that get automatically uploaded
+
+#### Transform Input Features
+
+The Python SDK automatically uploads and transforms various input types when you call `submit()` or `subscribe()`:
+
+- **PIL Image objects** → Uploaded to CDN, replaced with URLs
+- **Base64 data URIs** → Decoded, uploaded, replaced with URLs  
+- **File paths** → File contents uploaded, replaced with URLs
+- **File-like objects** → Contents uploaded, replaced with URLs
+- **Nested structures** → Recursively processes lists and dictionaries
+
+#### Usage Example
+
+```python
+import sunra_client
+from PIL import Image
+
+# Create or load an image
+image = Image.open("photo.jpg")
+
+# Base64 data URI
+base64_image = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA..."
+
+# Just pass them directly - automatic upload and transformation!
+result = sunra_client.subscribe(
+    "black-forest-labs/flux-kontext-pro/image-to-image",
+    arguments={
+        "prompt": "Make it artistic",
+        "image": image,  # ← PIL Image automatically uploaded!
+        "reference": base64_image,  # ← Data URI automatically uploaded!
+    }
+)
+```
+
+**No manual upload steps required!** The SDK handles everything automatically.
+
 ### Configuration Examples
 
 The following examples demonstrate the new `config()` function for setting API credentials:

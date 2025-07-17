@@ -8,8 +8,9 @@ import io
 import logging
 import mimetypes
 import os
+import re
 import time
-from typing import TYPE_CHECKING, Any, AsyncIterator, Callable, Dict, Iterator
+from typing import TYPE_CHECKING, Any, AsyncIterator, Callable, Dict, Iterator, Union
 from urllib.parse import urlencode
 
 import anyio
@@ -28,6 +29,9 @@ AnyJSON = Dict[str, Any]
 
 QUEUE_URL_FORMAT = f"https://api.{SUNRA_HOST}/v1/queue/"
 USER_AGENT = "sunra-client/0.1.0 (python)"
+
+# Regex pattern for data URIs
+DATA_URI_PATTERN = re.compile(r'^data:[^;]+;base64,')
 
 
 class SunraClientError(Exception):
@@ -370,6 +374,100 @@ class AsyncClient:
             timeout=self.default_timeout,
         )
 
+    async def transform_input(self, input_data: Any) -> Any:
+        """Transform input data by uploading files, images, and base64 data URIs.
+
+        This method recursively processes the input and:
+        - Uploads PIL Image objects and returns their URLs
+        - Decodes and uploads base64 data URIs and returns their URLs
+        - Uploads file paths and returns their URLs
+        - Uploads file-like objects (with read method) and returns their URLs
+        - Recursively processes dictionaries and lists
+        - Returns other values unchanged
+
+        Args:
+            input_data: The input data to transform
+
+        Returns:
+            The transformed input with uploaded URLs replacing file objects
+        """
+        # Handle lists recursively
+        if isinstance(input_data, list):
+            return [await self.transform_input(item) for item in input_data]
+
+        # Handle dictionaries recursively
+        elif isinstance(input_data, dict):
+            result = {}
+            for key, value in input_data.items():
+                result[key] = await self.transform_input(value)
+            return result
+
+        # Handle PIL Image objects
+        elif hasattr(input_data, 'save') and hasattr(input_data, 'mode') and hasattr(input_data, 'format'):
+            # This is likely a PIL Image - check if it has the expected PIL Image interface
+            try:
+                # Try to check if it's actually a PIL Image
+                if hasattr(input_data, '__class__') and 'PIL' in str(type(input_data)):
+                    return await self.upload_image(input_data)
+                # Fallback: if it has save/mode/format, assume it's PIL-like
+                elif all(hasattr(input_data, attr) for attr in ['save', 'mode', 'format']):
+                    return await self.upload_image(input_data)
+            except Exception as e:
+                logger.warning(f"Failed to upload image: {e}")
+                raise
+
+        # Handle base64 data URIs
+        elif isinstance(input_data, str) and DATA_URI_PATTERN.match(input_data):
+            try:
+                # Extract content type and data
+                header, encoded_data = input_data.split(',', 1)
+                content_type = header.split(';')[0].split(':')[1]
+
+                # Decode base64 data
+                data = base64.b64decode(encoded_data)
+
+                # Upload the data
+                return await self.upload(data, content_type)
+            except Exception as e:
+                logger.warning(f"Failed to upload base64 data URI: {e}")
+                raise
+
+        # Handle file paths (strings that represent valid file paths)
+        elif isinstance(input_data, (str, os.PathLike)) and os.path.isfile(input_data):
+            try:
+                return await self.upload_file(input_data)
+            except Exception as e:
+                logger.warning(f"Failed to upload file: {e}")
+                raise
+
+        # Handle file-like objects (objects with read method)
+        elif hasattr(input_data, 'read'):
+            try:
+                data = input_data.read()
+                if hasattr(input_data, 'seek'):
+                    input_data.seek(0)  # Reset file pointer
+
+                # Try to determine content type
+                content_type = getattr(input_data, 'content_type', None)
+                if not content_type:
+                    # Try to get name and guess from extension
+                    name = getattr(input_data, 'name', 'upload.bin')
+                    content_type, _ = mimetypes.guess_type(name)
+                    if not content_type:
+                        content_type = 'application/octet-stream'
+
+                file_name = getattr(input_data, 'name', None)
+                if file_name:
+                    file_name = os.path.basename(file_name)
+
+                return await self.upload(data, content_type, file_name)
+            except Exception as e:
+                logger.warning(f"Failed to upload file-like object: {e}")
+                raise
+
+        # Return unchanged for other types
+        return input_data
+
     async def submit(
         self,
         application: str,
@@ -384,6 +482,9 @@ class AsyncClient:
         The path parameter can be used to specify a subpath when applicable. This method will return a handle to the
         request that can be used to check the status and retrieve the result of the inference call when it is done.
         """
+
+        # Transform input to upload files automatically
+        transformed_arguments = await self.transform_input(arguments)
 
         url = QUEUE_URL_FORMAT + application
         if path:
@@ -401,7 +502,7 @@ class AsyncClient:
             self._client,
             "POST",
             url,
-            json=arguments,
+            json=transformed_arguments,
             timeout=self.default_timeout,
         )
         _raise_for_status(response)
@@ -558,6 +659,100 @@ class SyncClient:
             follow_redirects=True,
         )
 
+    def transform_input(self, input_data: Any) -> Any:
+        """Transform input data by uploading files, images, and base64 data URIs.
+
+        This method recursively processes the input and:
+        - Uploads PIL Image objects and returns their URLs
+        - Decodes and uploads base64 data URIs and returns their URLs
+        - Uploads file paths and returns their URLs
+        - Uploads file-like objects (with read method) and returns their URLs
+        - Recursively processes dictionaries and lists
+        - Returns other values unchanged
+
+        Args:
+            input_data: The input data to transform
+
+        Returns:
+            The transformed input with uploaded URLs replacing file objects
+        """
+        # Handle lists recursively
+        if isinstance(input_data, list):
+            return [self.transform_input(item) for item in input_data]
+
+        # Handle dictionaries recursively
+        elif isinstance(input_data, dict):
+            result = {}
+            for key, value in input_data.items():
+                result[key] = self.transform_input(value)
+            return result
+
+        # Handle PIL Image objects
+        elif hasattr(input_data, 'save') and hasattr(input_data, 'mode') and hasattr(input_data, 'format'):
+            # This is likely a PIL Image - check if it has the expected PIL Image interface
+            try:
+                # Try to check if it's actually a PIL Image
+                if hasattr(input_data, '__class__') and 'PIL' in str(type(input_data)):
+                    return self.upload_image(input_data)
+                # Fallback: if it has save/mode/format, assume it's PIL-like
+                elif all(hasattr(input_data, attr) for attr in ['save', 'mode', 'format']):
+                    return self.upload_image(input_data)
+            except Exception as e:
+                logger.warning(f"Failed to upload image: {e}")
+                raise
+
+        # Handle base64 data URIs
+        elif isinstance(input_data, str) and DATA_URI_PATTERN.match(input_data):
+            try:
+                # Extract content type and data
+                header, encoded_data = input_data.split(',', 1)
+                content_type = header.split(';')[0].split(':')[1]
+
+                # Decode base64 data
+                data = base64.b64decode(encoded_data)
+
+                # Upload the data
+                return self.upload(data, content_type)
+            except Exception as e:
+                logger.warning(f"Failed to upload base64 data URI: {e}")
+                raise
+
+        # Handle file paths (strings that represent valid file paths)
+        elif isinstance(input_data, (str, os.PathLike)) and os.path.isfile(input_data):
+            try:
+                return self.upload_file(input_data)
+            except Exception as e:
+                logger.warning(f"Failed to upload file: {e}")
+                raise
+
+        # Handle file-like objects (objects with read method)
+        elif hasattr(input_data, 'read'):
+            try:
+                data = input_data.read()
+                if hasattr(input_data, 'seek'):
+                    input_data.seek(0)  # Reset file pointer
+
+                # Try to determine content type
+                content_type = getattr(input_data, 'content_type', None)
+                if not content_type:
+                    # Try to get name and guess from extension
+                    name = getattr(input_data, 'name', 'upload.bin')
+                    content_type, _ = mimetypes.guess_type(name)
+                    if not content_type:
+                        content_type = 'application/octet-stream'
+
+                file_name = getattr(input_data, 'name', None)
+                if file_name:
+                    file_name = os.path.basename(file_name)
+
+                return self.upload(data, content_type, file_name)
+            except Exception as e:
+                logger.warning(f"Failed to upload file-like object: {e}")
+                raise
+
+        # Return unchanged for other types
+        return input_data
+
     def submit(
         self,
         application: str,
@@ -572,6 +767,9 @@ class SyncClient:
         The path parameter can be used to specify a subpath when applicable. This method will return a handle to the
         request that can be used to check the status and retrieve the result of the inference call when it is done.
         """
+
+        # Transform input to upload files automatically
+        transformed_arguments = self.transform_input(arguments)
 
         url = QUEUE_URL_FORMAT + application
         if path:
@@ -589,7 +787,7 @@ class SyncClient:
             self._client,
             "POST",
             url,
-            json=arguments,
+            json=transformed_arguments,
             timeout=self.default_timeout,
         )
         _raise_for_status(response)
@@ -690,13 +888,8 @@ class SyncClient:
         upload_data = init_response.json()
         upload_url = upload_data.get("upload_url", "")
         file_url = upload_data.get("file_url", "")
-        print(f"[upload] upload_url: {upload_url}, file_url: {file_url}")
 
         # Upload data using signed URL
-        print(f"[upload] Request URL: {upload_url}")
-        print(f"[upload] Request content length: {len(data)}")
-        print(f"[upload] Request content type: {content_type}")
-
         response = requests.put(
             upload_url,
             data=data,

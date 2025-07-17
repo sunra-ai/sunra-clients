@@ -12,6 +12,7 @@
   "scripts": {
     "build": "python -m build",
     "test": "pytest",
-    "publish": "python -m twine upload dist/*"
+    "publish": "python -m twine upload dist/*",
+    "version": "node sync-version.js"
   }
 }

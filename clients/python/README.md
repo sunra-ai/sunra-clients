@@ -165,6 +165,81 @@ data_url = client.upload(
 - Maximum file size: **100MB**
 - Supported formats: Images, videos, audio, documents, and other file types as supported by the specific model
 
+## Automatic Input Transformation
+
+The Python SDK automatically transforms file inputs when you call `submit()` or `subscribe()`. This means you can pass various file types directly in your input arguments, and they will be automatically uploaded and replaced with URLs.
+
+### Supported Input Types
+
+The SDK automatically handles:
+
+- **PIL Image objects** - Automatically uploaded as images
+- **Base64 data URIs** - Decoded and uploaded with appropriate content type  
+- **File paths** - Local files uploaded to CDN
+- **File-like objects** - Objects with `read()` method (e.g., `io.BytesIO`, open file handles)
+
+### Automatic Transformation Example
+
+```python
+import sunra_client
+from PIL import Image
+import io
+
+client = sunra_client.SyncClient()
+
+# Create a PIL image
+image = Image.new("RGB", (100, 100), color="blue")
+
+# You can pass the image directly - it will be automatically uploaded
+response = client.subscribe(
+    "black-forest-labs/flux-kontext-pro/image-to-image", 
+    arguments={
+        "prompt": "Make this image more artistic",
+        "image": image,  # PIL Image - automatically uploaded
+        "reference": "path/to/reference.jpg",  # File path - automatically uploaded
+        "mask": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",  # Data URI - automatically uploaded
+    }
+)
+```
+
+### Manual Input Transformation
+
+You can also manually transform inputs if needed:
+
+```python
+# For async client
+transformed = await async_client.transform_input({
+    "image": pil_image,
+    "files": ["file1.txt", "file2.jpg"],
+    "data": data_uri,
+    "metadata": {"nested": {"file": "path/to/file.pdf"}}
+})
+
+# For sync client  
+transformed = sync_client.transform_input({
+    "image": pil_image,
+    "document": "path/to/document.pdf"
+})
+```
+
+### Nested Object Support
+
+The transformation works recursively on nested objects and arrays:
+
+```python
+input_data = {
+    "prompt": "Process these images",
+    "images": [image1, image2, image3],  # All PIL images will be uploaded
+    "settings": {
+        "reference": "path/to/reference.jpg",  # Nested file path will be uploaded
+        "masks": [mask1_data_uri, mask2_data_uri]  # Nested data URIs will be uploaded
+    }
+}
+
+# All file inputs will be automatically transformed when submitted
+response = client.subscribe("some-endpoint", arguments=input_data)
+```
+
 ## Error Handling
 
 The client provides comprehensive error handling with detailed error information:
