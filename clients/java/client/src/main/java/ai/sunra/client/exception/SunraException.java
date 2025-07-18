@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Exception thrown when Sunra API operations fail.
@@ -18,10 +20,16 @@ public class SunraException extends RuntimeException {
     private final String code;
 
     @Nullable
-    private final String details;
+    private final String type;
+
+    @Nullable
+    private final Object details;
 
     @Nullable
     private final String timestamp;
+
+    @Nullable
+    private final RateLimitInfo rateLimit;
 
     /**
      * Create a new SunraException with basic message and request ID.
@@ -33,8 +41,10 @@ public class SunraException extends RuntimeException {
         super(requireNonNull(message));
         this.requestId = requestId;
         this.code = null;
+        this.type = null;
         this.details = null;
         this.timestamp = null;
+        this.rateLimit = null;
     }
 
     /**
@@ -45,7 +55,9 @@ public class SunraException extends RuntimeException {
      * @param details Additional error details
      * @param timestamp The timestamp when the error occurred
      * @param requestId The request ID associated with the error
+     * @deprecated Use the enhanced constructor with type and rate limit info
      */
+    @Deprecated
     public SunraException(
             @Nonnull String message,
             @Nullable String code,
@@ -55,8 +67,38 @@ public class SunraException extends RuntimeException {
         super(requireNonNull(message));
         this.requestId = requestId;
         this.code = code;
+        this.type = null;
         this.details = details;
         this.timestamp = timestamp;
+        this.rateLimit = null;
+    }
+
+    /**
+     * Create a new SunraException with enhanced error information.
+     *
+     * @param message The error message
+     * @param code The error code
+     * @param type The error type
+     * @param details Additional error details
+     * @param timestamp The timestamp when the error occurred
+     * @param requestId The request ID associated with the error
+     * @param rateLimit Rate limit information
+     */
+    public SunraException(
+            @Nonnull String message,
+            @Nullable String code,
+            @Nullable String type,
+            @Nullable Object details,
+            @Nullable String timestamp,
+            @Nullable String requestId,
+            @Nullable RateLimitInfo rateLimit) {
+        super(requireNonNull(message));
+        this.requestId = requestId;
+        this.code = code;
+        this.type = type;
+        this.details = details;
+        this.timestamp = timestamp;
+        this.rateLimit = rateLimit;
     }
 
     /**
@@ -70,8 +112,10 @@ public class SunraException extends RuntimeException {
         super(requireNonNull(message), cause);
         this.requestId = requestId;
         this.code = null;
+        this.type = null;
         this.details = null;
         this.timestamp = null;
+        this.rateLimit = null;
     }
 
     /**
@@ -83,7 +127,9 @@ public class SunraException extends RuntimeException {
      * @param timestamp The timestamp when the error occurred
      * @param cause The underlying cause
      * @param requestId The request ID associated with the error
+     * @deprecated Use the enhanced constructor with type and rate limit info
      */
+    @Deprecated
     public SunraException(
             @Nonnull String message,
             @Nullable String code,
@@ -94,8 +140,10 @@ public class SunraException extends RuntimeException {
         super(requireNonNull(message), cause);
         this.requestId = requestId;
         this.code = code;
+        this.type = null;
         this.details = details;
         this.timestamp = timestamp;
+        this.rateLimit = null;
     }
 
     /**
@@ -107,8 +155,10 @@ public class SunraException extends RuntimeException {
         super(cause);
         this.requestId = null;
         this.code = null;
+        this.type = null;
         this.details = null;
         this.timestamp = null;
+        this.rateLimit = null;
     }
 
     /**
@@ -137,8 +187,30 @@ public class SunraException extends RuntimeException {
      * @return Additional error details, or null if not available
      */
     @Nullable
-    public String getDetails() {
+    public Object getDetailsObject() {
         return this.details;
+    }
+
+    /**
+     * Get additional error details as string (legacy method).
+     *
+     * @return Additional error details as string, or null if not available
+     * @deprecated Use getDetailsObject() instead
+     */
+    @Deprecated
+    @Nullable
+    public String getDetails() {
+        return this.details != null ? this.details.toString() : null;
+    }
+
+    /**
+     * Get the error type.
+     *
+     * @return The error type, or null if not available
+     */
+    @Nullable
+    public String getType() {
+        return this.type;
     }
 
     /**
@@ -151,6 +223,37 @@ public class SunraException extends RuntimeException {
         return this.timestamp;
     }
 
+    /**
+     * Get the rate limit information.
+     *
+     * @return The rate limit info, or null if not available
+     */
+    @Nullable
+    public RateLimitInfo getRateLimit() {
+        return this.rateLimit;
+    }
+
+    /**
+     * Convert error to map format matching API response structure.
+     *
+     * @return Map representation of the error
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> error = new HashMap<>();
+        error.put("code", code != null ? code : "UNKNOWN_ERROR");
+        error.put("message", getMessage());
+        if (type != null) error.put("type", type);
+        if (details != null) error.put("details", details);
+        result.put("error", error);
+
+        if (timestamp != null) result.put("timestamp", timestamp);
+        if (requestId != null) result.put("request_id", requestId);
+        if (rateLimit != null) result.put("rate_limit", rateLimit.toMap());
+
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -158,6 +261,10 @@ public class SunraException extends RuntimeException {
 
         if (code != null) {
             sb.append(" | Code: ").append(code);
+        }
+
+        if (type != null) {
+            sb.append(" | Type: ").append(type);
         }
 
         if (details != null && !details.equals(getMessage())) {
@@ -173,5 +280,32 @@ public class SunraException extends RuntimeException {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Rate limit information extracted from response headers.
+     */
+    public static class RateLimitInfo {
+        private final int limit;
+        private final int remaining;
+        private final int reset;
+
+        public RateLimitInfo(int limit, int remaining, int reset) {
+            this.limit = limit;
+            this.remaining = remaining;
+            this.reset = reset;
+        }
+
+        public int getLimit() { return limit; }
+        public int getRemaining() { return remaining; }
+        public int getReset() { return reset; }
+
+        public Map<String, Integer> toMap() {
+            Map<String, Integer> map = new HashMap<>();
+            map.put("limit", limit);
+            map.put("remaining", remaining);
+            map.put("reset", reset);
+            return map;
+        }
     }
 }

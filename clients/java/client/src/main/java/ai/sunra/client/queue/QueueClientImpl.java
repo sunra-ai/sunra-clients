@@ -91,7 +91,8 @@ public class QueueClientImpl implements QueueClient {
                     if (!completed.isSuccess()) {
                         String errorMessage = "Request failed";
                         String code = null;
-                        String details = null;
+                        String errorType = null;
+                        Object details = null;
                         String timestamp = null;
 
                         if (completed.getError() != null && !completed.getError().isJsonNull() && completed.getError().isJsonObject()) {
@@ -102,8 +103,11 @@ public class QueueClientImpl implements QueueClient {
                             if (errorObject.has("code")) {
                                 code = errorObject.get("code").getAsString();
                             }
+                            if (errorObject.has("type")) {
+                                errorType = errorObject.get("type").getAsString();
+                            }
                             if (errorObject.has("details")) {
-                                details = errorObject.get("details").getAsString();
+                                details = httpClient.fromJson(errorObject.get("details"), Object.class);
                             }
                             if (errorObject.has("timestamp")) {
                                 timestamp = errorObject.get("timestamp").getAsString();
@@ -111,7 +115,7 @@ public class QueueClientImpl implements QueueClient {
                         }
 
                         future.completeExceptionally(new SunraException(
-                            errorMessage, code, details, timestamp, options.getRequestId()));
+                            errorMessage, code, errorType, details, timestamp, options.getRequestId(), null));
                         eventSource.cancel();
                         return;
                     }
@@ -127,7 +131,8 @@ public class QueueClientImpl implements QueueClient {
                     if (!completed.isSuccess()) {
                         String errorMessage = "Request failed";
                         String code = null;
-                        String details = null;
+                        String errorType = null;
+                        Object details = null;
                         String timestamp = null;
 
                         if (completed.getError() != null && !completed.getError().isJsonNull() && completed.getError().isJsonObject()) {
@@ -138,8 +143,11 @@ public class QueueClientImpl implements QueueClient {
                             if (errorObject.has("code")) {
                                 code = errorObject.get("code").getAsString();
                             }
+                            if (errorObject.has("type")) {
+                                errorType = errorObject.get("type").getAsString();
+                            }
                             if (errorObject.has("details")) {
-                                details = errorObject.get("details").getAsString();
+                                details = httpClient.fromJson(errorObject.get("details"), Object.class);
                             }
                             if (errorObject.has("timestamp")) {
                                 timestamp = errorObject.get("timestamp").getAsString();
@@ -147,7 +155,7 @@ public class QueueClientImpl implements QueueClient {
                         }
 
                         future.completeExceptionally(new SunraException(
-                            errorMessage, code, details, timestamp, options.getRequestId()));
+                            errorMessage, code, errorType, details, timestamp, options.getRequestId(), null));
                         return;
                     }
                     future.complete(completed);

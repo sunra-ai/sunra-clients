@@ -41,14 +41,43 @@ class SunraClientError(Exception):
         self,
         message: str,
         code: str | None = None,
-        details: str | None = None,
+        error_type: str | None = None,
+        details: dict[str, Any] | None = None,
         timestamp: str | None = None,
+        request_id: str | None = None,
+        rate_limit: dict[str, int] | None = None,
     ):
         super().__init__(message)
         self.message = message
         self.code = code
+        self.type = error_type
         self.details = details
         self.timestamp = timestamp
+        self.request_id = request_id
+        self.rate_limit = rate_limit
+
+    def to_dict(self) -> dict:
+        """Convert error to dictionary format matching API response structure."""
+        error_obj = {
+            "code": self.code or "UNKNOWN_ERROR",
+            "message": self.message
+        }
+
+        if self.type:
+            error_obj["type"] = self.type
+        if self.details:
+            error_obj["details"] = self.details
+
+        result = {"error": error_obj}
+
+        if self.timestamp:
+            result["timestamp"] = self.timestamp
+        if self.request_id:
+            result["request_id"] = self.request_id
+        if self.rate_limit:
+            result["rate_limit"] = self.rate_limit
+
+        return result
 
     def __str__(self) -> str:
         parts = []
@@ -56,45 +85,75 @@ class SunraClientError(Exception):
             parts.append(self.code)
         if self.message:
             parts.append(self.message)
-        if self.details and self.details != self.message:
+        if self.details:
             parts.append(f"Details: {self.details}")
         if self.timestamp:
             parts.append(f"Timestamp: {self.timestamp}")
+        if self.request_id:
+            parts.append(f"Request ID: {self.request_id}")
         return " | ".join(parts)
+
+
+def _extract_rate_limit_from_headers(headers) -> dict[str, int] | None:
+    """Extract rate limit information from response headers."""
+    try:
+        limit = headers.get('x-ratelimit-limit')
+        remaining = headers.get('x-ratelimit-remaining')
+        reset = headers.get('x-ratelimit-reset')
+
+        if limit is not None and remaining is not None and reset is not None:
+            return {
+                'limit': int(limit),
+                'remaining': int(remaining),
+                'reset': int(reset)
+            }
+    except (ValueError, TypeError):
+        pass
+
+    return None
 
 
 def _raise_for_status(response: httpx.Response) -> None:
     try:
         response.raise_for_status()
     except httpx.HTTPStatusError as exc:
+        request_id = response.headers.get('x-request-id')
+        rate_limit = _extract_rate_limit_from_headers(response.headers)
+
         try:
             error_data = response.json()
 
             # Check if there's a nested error object (common API pattern)
             if "error" in error_data and isinstance(error_data["error"], dict):
                 error_obj = error_data["error"]
-                message = error_obj.get("message", "")
+                message = error_obj.get("message", "Request failed")
                 code = error_obj.get("code", str(response.status_code))
-                details = error_obj.get("details", "")
-                timestamp = error_obj.get("timestamp")
+                error_type = error_obj.get("type")
+                details = error_obj.get("details")
+                timestamp = error_data.get("timestamp")
             else:
-                # Fallback to top-level fields
+                # Fallback to top-level fields for legacy responses
                 message = error_data.get("detail", response.text)
                 code = error_data.get("code", str(response.status_code))
-                details = error_data.get("details", response.text)
+                error_type = error_data.get("type")
+                details = error_data.get("details")
                 timestamp = error_data.get("timestamp")
 
         except (ValueError, KeyError):
-            message = response.text
+            message = response.text or f"HTTP {response.status_code}"
             code = str(response.status_code)
-            details = response.text
+            error_type = "network_error"
+            details = {"status_code": response.status_code, "response_text": response.text}
             timestamp = None
 
         raise SunraClientError(
             message=message,
             code=code,
+            error_type=error_type,
             details=details,
-            timestamp=timestamp
+            timestamp=timestamp,
+            request_id=request_id,
+            rate_limit=rate_limit
         ) from exc
 
 
@@ -525,22 +584,29 @@ class AsyncClient:
         on_enqueue: Callable[[Queued], None] | None = None,
         with_logs: bool = True,
         on_queue_update: Callable[[Status], None] | None = None,
-    ) -> AnyJSON:
-        handle = await self.submit(
-            application,
-            arguments,
-            path=path,
-            with_logs=with_logs,
-        )
+        on_error: Callable[[SunraClientError], None] | None = None,
+    ) -> AnyJSON | None:
+        try:
+            handle = await self.submit(
+                application,
+                arguments,
+                path=path,
+                with_logs=with_logs,
+            )
 
-        if on_enqueue is not None:
-            on_enqueue(handle.request_id)
+            if on_enqueue is not None:
+                on_enqueue(handle.request_id)
 
-        if on_queue_update is not None:
-            async for event in handle.iter_events():
-                on_queue_update(event)
+            if on_queue_update is not None:
+                async for event in handle.iter_events():
+                    on_queue_update(event)
 
-        return await handle.get()
+            return await handle.get()
+        except SunraClientError as e:
+            if on_error is not None:
+                on_error(e)
+                return None  # Don't raise if onError is provided
+            raise
 
     def get_handle(self, request_id: str) -> AsyncRequestHandle:
         return AsyncRequestHandle.from_request_id(self._client, request_id)
@@ -810,22 +876,29 @@ class SyncClient:
         on_enqueue: Callable[[Queued], None] | None = None,
         with_logs: bool = True,
         on_queue_update: Callable[[Status], None] | None = None,
-    ) -> AnyJSON:
-        handle = self.submit(
-            application,
-            arguments,
-            path=path,
-            with_logs=with_logs,
-        )
+        on_error: Callable[[SunraClientError], None] | None = None,
+    ) -> AnyJSON | None:
+        try:
+            handle = self.submit(
+                application,
+                arguments,
+                path=path,
+                with_logs=with_logs,
+            )
 
-        if on_enqueue is not None:
-            on_enqueue(handle.request_id)
+            if on_enqueue is not None:
+                on_enqueue(handle.request_id)
 
-        if on_queue_update is not None:
-            for event in handle.iter_events():
-                on_queue_update(event)
+            if on_queue_update is not None:
+                for event in handle.iter_events():
+                    on_queue_update(event)
 
-        return handle.get()
+            return handle.get()
+        except SunraClientError as e:
+            if on_error is not None:
+                on_error(e)
+                return None  # Don't raise if onError is provided
+            raise
 
     def get_handle(self, request_id: str) -> SyncRequestHandle:
         return SyncRequestHandle.from_request_id(self._client, request_id)

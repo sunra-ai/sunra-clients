@@ -1,10 +1,12 @@
 package ai.sunra.client;
 
+import ai.sunra.client.exception.SunraException;
 import ai.sunra.client.http.ClientProxyInterceptor;
 import ai.sunra.client.http.CredentialsInterceptor;
 import ai.sunra.client.http.HttpClient;
 import ai.sunra.client.queue.*;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import okhttp3.OkHttpClient;
 
 /**
@@ -41,30 +43,38 @@ public class SunraClientImpl implements SunraClient {
      *
      * @param endpointId The endpoint ID to subscribe to.
      * @param options The subscribe options.
-     * @return The output.
+     * @return The output, or null if onError callback is provided and an error occurs.
      */
     @Override
-    @Nonnull
+    @Nullable
     public <O> Output<O> subscribe(String endpointId, SubscribeOptions<O> options) {
-        final var enqueued = queueClient.submit(
-                endpointId,
-                QueueSubmitOptions.builder()
-                        .input(options.getInput())
-                        .webhookUrl(options.getWebhookUrl())
-                        .build());
+        try {
+            final var enqueued = queueClient.submit(
+                    endpointId,
+                    QueueSubmitOptions.builder()
+                            .input(options.getInput())
+                            .webhookUrl(options.getWebhookUrl())
+                            .build());
 
-        final var completed = queueClient.subscribeToStatus(
-                QueueSubscribeOptions.builder()
-                        .requestId(enqueued.getRequestId())
-                        .logs(options.getLogs())
-                        .onQueueUpdate(options.getOnQueueUpdate())
-                        .build());
+            final var completed = queueClient.subscribeToStatus(
+                    QueueSubscribeOptions.builder()
+                            .requestId(enqueued.getRequestId())
+                            .logs(options.getLogs())
+                            .onQueueUpdate(options.getOnQueueUpdate())
+                            .build());
 
-        return queueClient.result(
-                QueueResultOptions.<O>builder()
-                        .requestId(completed.getRequestId())
-                        .resultType(options.getResultType())
-                        .build());
+            return queueClient.result(
+                    QueueResultOptions.<O>builder()
+                            .requestId(completed.getRequestId())
+                            .resultType(options.getResultType())
+                            .build());
+        } catch (SunraException e) {
+            if (options.getOnError() != null) {
+                options.getOnError().accept(e);
+                return null; // Don't throw if onError is provided
+            }
+            throw e;
+        }
     }
 
     /**
