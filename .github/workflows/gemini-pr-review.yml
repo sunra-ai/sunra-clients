@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: Generate GitHub App Token
         id: generate_token
-        if: ${{ vars.APP_ID }}
+        if: ${{ vars.GEMINI_GH_APP_ID }}
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ vars.GEMINI_GH_APP_ID }}
