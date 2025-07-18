@@ -4,6 +4,7 @@ import { isBrowser, whisper } from './utils'
 import packageInfo from '../package.json'
 import axios from 'axios'
 import { createParser, EventSourceMessage } from 'eventsource-parser'
+import { extractSunraError } from './utils/error-handler'
 
 function getUserAgent(): string {
   return `${packageInfo.name}/${packageInfo.version}`
@@ -67,8 +68,12 @@ export async function dispatchRequest<Input, Output>(
   const axiosInstance = params?.config?.axios ?? axios
   const axiosConfig = getAxiosConfig(params)
 
-  const response = await axiosInstance.request(axiosConfig)
-  return response.data
+  try {
+    const response = await axiosInstance.request(axiosConfig)
+    return response.data
+  } catch (error) {
+    throw extractSunraError(error)
+  }
 }
 
 export async function dispatchRequestWithStream<Input, Output>(
@@ -116,7 +121,8 @@ export async function dispatchRequestWithStream<Input, Output>(
         }
       }
     } catch (e) {
-      onError?.(e)
+      const sunraError = extractSunraError(e)
+      onError?.(sunraError)
     }
   }
 
@@ -142,7 +148,8 @@ export async function dispatchRequestWithStream<Input, Output>(
         // do nothing
       } else {
         whisper('error is: ', error)
-        onError?.(error)
+        const sunraError = extractSunraError(error)
+        onError?.(sunraError)
       }
       break
     }

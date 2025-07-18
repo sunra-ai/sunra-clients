@@ -9,6 +9,7 @@ import {
   SunraResult,
   SunraRunOptions,
 } from './types'
+import { SunraError } from './errors'
 
 type QueueStatusSubscriptionOptions = QueueStatusOptions &
   Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'> & {
@@ -73,6 +74,12 @@ export type QueueSubscribeOptions = {
    * @see WebHookResponse
    */
   webhookUrl?: string;
+
+  /**
+   * Optional error callback. If provided, errors will be passed to this
+   * callback instead of being thrown as exceptions.
+   */
+  onError?: (error: SunraError) => void;
 }
 
 /**
