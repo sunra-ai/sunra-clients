@@ -1,5 +1,6 @@
 package ai.sunra.client;
 
+import ai.sunra.client.exception.SunraException;
 import ai.sunra.client.queue.QueueStatus;
 import com.google.gson.JsonObject;
 import jakarta.annotation.Nonnull;
@@ -41,6 +42,13 @@ public class SubscribeOptions<O> implements ApiOptions<O> {
      */
     @Nullable
     private final Consumer<QueueStatus.StatusUpdate> onQueueUpdate;
+
+    /**
+     * The error callback. If provided, errors will be passed to this
+     * callback instead of being thrown as exceptions.
+     */
+    @Nullable
+    private final Consumer<SunraException> onError;
 
     /**
      * Get the HTTP method.

@@ -2,6 +2,7 @@ package ai.sunra.client;
 
 import ai.sunra.client.queue.QueueClient;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * The main client interface for interacting with the sunra APIs.
@@ -20,9 +21,10 @@ public interface SunraClient {
      * @param <O> Output type.
      * @param endpointId The endpoint ID to subscribe to, e.g. `sunra/lcm`.
      * @param options The subscribe options.
-     * @return The result of the operation.
+     * @return The result of the operation, or null if onError callback is provided and an error occurs.
      * @see #queue()
      */
+    @Nullable
     <O> Output<O> subscribe(String endpointId, SubscribeOptions<O> options);
 
     /**
