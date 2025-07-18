@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -102,13 +103,35 @@ public class HttpClient {
         return gson.fromJson(body.charStream(), resultType);
     }
 
+    private SunraException.RateLimitInfo extractRateLimitFromHeaders(Response response) {
+        try {
+            String limit = response.header("x-ratelimit-limit");
+            String remaining = response.header("x-ratelimit-remaining");
+            String reset = response.header("x-ratelimit-reset");
+
+            if (limit != null && remaining != null && reset != null) {
+                return new SunraException.RateLimitInfo(
+                    Integer.parseInt(limit),
+                    Integer.parseInt(remaining),
+                    Integer.parseInt(reset)
+                );
+            }
+        } catch (NumberFormatException e) {
+            // Ignore parsing errors
+        }
+
+        return null;
+    }
+
     public SunraException responseToException(Response response) {
         final var requestId = response.header(HEADER_REQUEST_ID);
+        final var rateLimit = extractRateLimitFromHeaders(response);
         final var contentType = response.header("content-type");
 
         String message = "Request failed with code: " + response.code();
         String code = String.valueOf(response.code());
-        String details = null;
+        String type = null;
+        Object details = null;
         String timestamp = null;
 
         if (contentType != null && contentType.contains("application/json")) {
@@ -125,46 +148,54 @@ public class HttpClient {
                             if (errorElement != null && !errorElement.isJsonNull() && errorElement.isJsonObject()) {
                                 final var errorObject = errorElement.getAsJsonObject();
 
-                            if (errorObject.has("message")) {
-                                message = errorObject.get("message").getAsString();
-                            }
-                            if (errorObject.has("code")) {
-                                code = errorObject.get("code").getAsString();
-                            }
-                            if (errorObject.has("details")) {
-                                details = errorObject.get("details").getAsString();
-                            }
-                            if (errorObject.has("timestamp")) {
-                                timestamp = errorObject.get("timestamp").getAsString();
-                            }
+                                if (errorObject.has("message")) {
+                                    message = errorObject.get("message").getAsString();
+                                }
+                                if (errorObject.has("code")) {
+                                    code = errorObject.get("code").getAsString();
+                                }
+                                if (errorObject.has("type")) {
+                                    type = errorObject.get("type").getAsString();
+                                }
+                                if (errorObject.has("details")) {
+                                    details = gson.fromJson(errorObject.get("details"), Object.class);
+                                }
                             }
                         } else {
-                            // Fallback to top-level fields
+                            // Fallback to top-level fields for legacy responses
                             if (jsonObject.has("detail")) {
                                 message = jsonObject.get("detail").getAsString();
                             }
                             if (jsonObject.has("code")) {
                                 code = jsonObject.get("code").getAsString();
                             }
+                            if (jsonObject.has("type")) {
+                                type = jsonObject.get("type").getAsString();
+                            }
                             if (jsonObject.has("details")) {
-                                details = jsonObject.get("details").getAsString();
+                                details = gson.fromJson(jsonObject.get("details"), Object.class);
                             }
                         }
 
-                        // Always check for top-level timestamp
+                        // Extract top-level fields
                         if (jsonObject.has("timestamp")) {
                             timestamp = jsonObject.get("timestamp").getAsString();
                         }
 
-                        // If details is still null, use the full JSON as details for debugging
-                        if (details == null) {
-                            details = json.toString();
+                        // If details is still null for network errors, use the full JSON as details
+                        if (details == null && type == null) {
+                            details = gson.fromJson(json, Object.class);
+                            type = "network_error";
                         }
                     }
                 } catch (Exception e) {
                     // If JSON parsing fails, use the raw response text
                     try {
-                        details = body.string();
+                        Map<String, Object> errorDetails = new HashMap<>();
+                        errorDetails.put("raw_response", body.string());
+                        errorDetails.put("status_code", response.code());
+                        details = errorDetails;
+                        type = "network_error";
                     } catch (Exception ignored) {
                         // Use default values
                     }
@@ -172,7 +203,7 @@ public class HttpClient {
             }
         }
 
-        return new SunraException(message, code, details, timestamp, requestId);
+        return new SunraException(message, code, type, details, timestamp, requestId, rateLimit);
     }
 
     public <T> Output<T> wrapInResult(Response response, Class<T> resultType) {

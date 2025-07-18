@@ -9,6 +9,7 @@ import {
   SunraResult,
   SunraRunOptions,
 } from './types'
+import { SunraError } from './errors'
 
 type QueueStatusSubscriptionOptions = QueueStatusOptions &
   Omit<QueueSubscribeOptions, 'onEnqueue' | 'webhookUrl'> & {
@@ -73,6 +74,12 @@ export type QueueSubscribeOptions = {
    * @see WebHookResponse
    */
   webhookUrl?: string;
+
+  /**
+   * Optional error callback. If provided, errors will be passed to this
+   * callback instead of being thrown as exceptions.
+   */
+  onError?: (error: SunraError) => void;
 }
 
 /**
@@ -237,6 +244,13 @@ export class SunraQueueClientImpl implements SunraQueueClient {
     let retries = 0
 
     return new Promise<SunraCompletedQueueStatus>((resolve, reject) => {
+      const rejectSunraError = (status: SunraCompletedQueueStatus) => {
+        reject(new SunraError(status.error ?? {
+          code: 'prediction_failed',
+          message: ''
+        }))
+      }
+
       let pollingTimeoutId: TimeoutId
       const pollInterval =
         'pollInterval' in options && typeof options.pollInterval === 'number'
@@ -277,7 +291,8 @@ export class SunraQueueClientImpl implements SunraQueueClient {
           if (requestStatus.status === 'COMPLETED') {
             clearScheduledTasks()
             if (!requestStatus.success) {
-              reject(requestStatus)
+              // reject(requestStatus)
+              rejectSunraError(requestStatus)
               return
             }
             resolve(requestStatus)
@@ -307,7 +322,7 @@ export class SunraQueueClientImpl implements SunraQueueClient {
             const status = await this.status({ requestId })
             resolve(status as SunraCompletedQueueStatus)
           },
-          onError: reject,
+          onError: rejectSunraError,
         }).catch(reject)
       } else {
         poll().catch(reject)
