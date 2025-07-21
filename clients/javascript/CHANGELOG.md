@@ -1,5 +1,11 @@
 # @sunra/client
 
+## 0.4.0
+
+### Minor Changes
+
+- Add onError callback
+
 ## 0.3.9
 
 ### Patch Changes

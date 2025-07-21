@@ -1,5 +1,11 @@
 # sunra_client
 
+## 0.4.0
+
+### Minor Changes
+
+- Add onError callback
+
 ## 0.3.0
 
 ### Minor Changes
