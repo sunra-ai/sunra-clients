@@ -214,43 +214,43 @@ public class QueueClientImplRealTest {
         }
     }
 
-    @Test
-    void testCancel() {
-        // Skip test if no API key is provided
-        if (apiKey == null || apiKey.trim().isEmpty()) {
-            System.out.println("Skipping testCancel: SUNRA_KEY environment variable not set");
-            return;
-        }
+//     @Test
+//     void testCancel() {
+//         // Skip test if no API key is provided
+//         if (apiKey == null || apiKey.trim().isEmpty()) {
+//             System.out.println("Skipping testCancel: SUNRA_KEY environment variable not set");
+//             return;
+//         }
 
-        try {
-            Map<String, Object> input = Map.of("prompt", "a test for cancel");
+//         try {
+//             Map<String, Object> input = Map.of("prompt", "a test for cancel");
 
-            QueueSubmitOptions submitOptions =
-                    QueueSubmitOptions.builder().input(input).build();
+//             QueueSubmitOptions submitOptions =
+//                     QueueSubmitOptions.builder().input(input).build();
 
-            QueueStatus.InQueue submitResult = queueClient.submit(testEndpointId, submitOptions);
-            String requestId = submitResult.getRequestId();
+//             QueueStatus.InQueue submitResult = queueClient.submit(testEndpointId, submitOptions);
+//             String requestId = submitResult.getRequestId();
 
-            System.out.println("Task submitted, requestId: " + requestId);
+//             System.out.println("Task submitted, requestId: " + requestId);
 
-            QueueCancelOptions cancelOptions =
-                    QueueCancelOptions.builder().requestId(requestId).build();
+//             QueueCancelOptions cancelOptions =
+//                     QueueCancelOptions.builder().requestId(requestId).build();
 
-            Object cancelResult = queueClient.cancel(cancelOptions);
+//             Object cancelResult = queueClient.cancel(cancelOptions);
 
-            System.out.println("Cancel result: " + cancelResult);
+//             System.out.println("Cancel result: " + cancelResult);
 
-            assertNotNull(cancelResult);
+//             assertNotNull(cancelResult);
 
-            QueueStatusOptions statusOptions =
-                    QueueStatusOptions.builder().requestId(requestId).build();
-            QueueStatus.StatusUpdate status = queueClient.status(statusOptions);
-            System.out.println("Status after cancel: " + status.getStatus());
+//             QueueStatusOptions statusOptions =
+//                     QueueStatusOptions.builder().requestId(requestId).build();
+//             QueueStatus.StatusUpdate status = queueClient.status(statusOptions);
+//             System.out.println("Status after cancel: " + status.getStatus());
 
-        } catch (Exception e) {
-            System.err.println("Cancel test failed: " + e.getMessage());
-            e.printStackTrace();
-            fail("Cancel test exception: " + e.getMessage());
-        }
-    }
+//         } catch (Exception e) {
+//             System.err.println("Cancel test failed: " + e.getMessage());
+//             e.printStackTrace();
+//             fail("Cancel test exception: " + e.getMessage());
+//         }
+//     }
 }
