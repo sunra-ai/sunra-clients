@@ -1,3 +1,5 @@
+import { SunraError } from './errors'
+
 /**
  * Represents an API result, containing the data,
  *  the request ID and any other relevant information.
@@ -17,6 +19,12 @@ export type SunraRunOptions<Input> = {
    * or the body payload, depending on the `method`.
    */
   readonly input?: Input;
+
+  /**
+   * Optional error callback. If provided, errors will be passed to this
+   * callback instead of being thrown as exceptions.
+   */
+  readonly onError?: (error: SunraError) => void;
 };
 
 export type SunraMetrics = {
@@ -49,7 +57,7 @@ export interface SunraCompletedQueueStatus extends SunraBaseQueueStatus {
   error: null | {
     code: string;
     message: string;
-    details?: string
+    details?: Record<string, any>
     timestamp: string
   };
 }

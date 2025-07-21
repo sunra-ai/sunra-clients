@@ -2,6 +2,7 @@ import { SunraClientConfig, createConfig, credentialsFromEnv, RequiredConfig } f
 import { createQueueClient, SunraQueueClient, QueueSubscribeOptions } from './queue'
 import { createStorageClient, SunraStorageClient } from './storage'
 import { SunraResult, SunraRunOptions } from './types'
+import { extractSunraError } from './utils/error-handler'
 
 /**
  * The main client type, it provides access to simple API model usage,
@@ -31,9 +32,10 @@ export interface SunraClient {
    *
    * @param endpointId - The ID of the API endpoint.
    * @param options - Options to configure how the request is run and how updates are received.
-   * @returns A promise that resolves to the result of the request once it's completed.
+   * @returns A promise that resolves to the result of the request once it's completed,
+   *          or undefined if onError callback is provided and an error occurs.
    */
-  subscribe(endpointId: string, options: SunraRunOptions<any> & QueueSubscribeOptions): Promise<SunraResult<any>>;
+  subscribe(endpointId: string, options: SunraRunOptions<any> & QueueSubscribeOptions): Promise<SunraResult<any> | undefined>;
 }
 
 /**
@@ -54,13 +56,22 @@ export class SunraClientImpl implements SunraClient {
     this._config = createConfig(config)
   }
 
-  async subscribe(endpointId: string, options: SunraRunOptions<any> & QueueSubscribeOptions): Promise<SunraResult<any>> {
-    const { request_id: requestId } = await this.queue.submit(endpointId, options)
-    if (options.onEnqueue) {
-      options.onEnqueue(requestId)
+  async subscribe(endpointId: string, options: SunraRunOptions<any> & QueueSubscribeOptions): Promise<SunraResult<any> | undefined> {
+    try {
+      const { request_id: requestId } = await this.queue.submit(endpointId, options)
+      if (options.onEnqueue) {
+        options.onEnqueue(requestId)
+      }
+      await this.queue.subscribeToStatus({ requestId, ...options })
+      return this.queue.result({ requestId })
+    } catch (error) {
+      const sunraError = extractSunraError(error)
+      if (options.onError) {
+        options.onError(sunraError)
+        return undefined // Don't throw if onError is provided
+      }
+      throw sunraError
     }
-    await this.queue.subscribeToStatus({ requestId, ...options })
-    return this.queue.result({ requestId })
   }
 }
 
