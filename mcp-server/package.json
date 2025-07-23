@@ -1,6 +1,6 @@
 {
   "name": "@sunra/mcp-server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server for Sunra.ai API integration",
   "main": "dist/index.js",
   "bin": {
