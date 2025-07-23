@@ -48,7 +48,7 @@ Add the following to your Claude Desktop configuration file:
       "command": "npx",
       "args": ["@sunra/mcp-server"],
       "env": {
-        "SUNRA_KEY": "your-api-key-here"
+        "SUNRA_KEY": "${SUNRA_KEY}"
       }
     }
   }
@@ -64,7 +64,10 @@ Add the following to your `.cursor/mcp.json` file in your project root:
   "mcpServers": {
     "sunra-mcp-server": {
       "command": "npx",
-      "args": ["@sunra/mcp-server"]
+      "args": ["@sunra/mcp-server"],
+      "env": {
+        "SUNRA_KEY": "${SUNRA_KEY}"
+      }
     }
   }
 }
@@ -81,7 +84,7 @@ Add the following to your Continue configuration:
       "command": "npx",
       "args": ["@sunra/mcp-server"],
       "env": {
-        "SUNRA_KEY": "your-api-key-here"
+        "SUNRA_KEY": "${SUNRA_KEY}"
       }
     }
   }
@@ -99,7 +102,7 @@ For other MCP clients that support stdio transport:
       "command": "npx",
       "args": ["@sunra/mcp-server"],
       "env": {
-        "SUNRA_KEY": "your-api-key-here"
+        "SUNRA_KEY": "${SUNRA_KEY}"
       }
     }
   }

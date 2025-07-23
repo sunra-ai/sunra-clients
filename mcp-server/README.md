@@ -49,7 +49,7 @@ Add the following to your `.cursor/mcp.json` file:
       "command": "npx",
       "args": ["@sunra/mcp-server"],
       "env": {
-        "SUNRA_KEY": "your-api-key-here. optional if you set the SUNRA_KEY environment variable system wide"
+        "SUNRA_KEY": "${SUNRA_KEY}"
       }
     }
   }
@@ -70,7 +70,7 @@ Add the following to your Claude Desktop configuration file:
       "command": "npx",
       "args": ["@sunra/mcp-server"],
       "env": {
-        "SUNRA_KEY": "your-api-key-here. optional if you set the SUNRA_KEY environment variable system wide"
+        "SUNRA_KEY": "${SUNRA_KEY}"
       }
     }
   }
