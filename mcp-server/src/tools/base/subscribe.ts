@@ -40,8 +40,8 @@ export const subscribeTool = {
             type: 'text' as const,
             text: JSON.stringify({
               success: true,
-              requestId: result.requestId,
-              data: result.data,
+              requestId: result?.requestId,
+              data: result?.data,
             }, null, 2),
           },
         ],
