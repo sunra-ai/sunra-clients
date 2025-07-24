@@ -157,17 +157,32 @@ The client supports file uploads for models that accept file inputs. Files can b
 
 ```typescript
 import { sunra } from '@sunra/client'
+import { readFileSync } from 'fs';
 
-// Upload a file
-const fileUrl = await sunra.storage.upload(file)
+// Node.js: Upload a file from a local path by providing a Buffer
+const imageBuffer = readFileSync('path/to/your/image.jpg');
+const imageUrl = await sunra.storage.upload(imageBuffer);
 
-// Use the uploaded file URL in your request
-const result = await sunra.subscribe('model-endpoint', {
+/*
+// Browser: Upload a File object from an <input type="file"> element
+const fileInput = document.getElementById('file-input') as HTMLInputElement;
+const file = fileInput.files?.[0];
+
+if (file) {
+  const fileUrl = await sunra.storage.upload(file);
+}
+*/
+
+// Use the uploaded file URL in your request to an image-to-image model
+const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/image-to-image', {
   input: {
-    image: fileUrl,
-    prompt: 'Process this image'
+    // The model might expect a parameter named 'image_url', 'image_path' or similar
+    image: imageUrl,
+    prompt: 'Turn this into a Van Gogh-style painting'
   }
-})
+});
+
+console.log(result);
 ```
 
 **File Upload Limits:**

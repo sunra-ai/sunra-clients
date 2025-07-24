@@ -141,24 +141,36 @@ The client supports uploading files to sunra.ai:
 
 ```python
 import sunra_client
-from PIL import Image
+import io
 
-# Create a sync client
-client = sunra_client.SyncClient()
+# It is recommended to configure the client once,
+# possibly in a central part of your application.
+# This way you won't have to pass the key every time.
+sunra_client.config(credentials="your-api-key")
 
-# Upload an image file
-image = Image.new("RGB", (100, 100), color="red")
-image_url = client.upload_image(image)
 
-# Upload any file from local path
-file_url = client.upload_file("path/to/your/file.txt")
+# Upload a file from a local path
+# The content type will be inferred from the file extension
+file_url = sunra_client.upload_file("path/to/your/image.jpg")
 
-# Upload raw data
-data_url = client.upload(
-    data=b"Hello, World!",
-    content_type="text/plain",
-    file_name="hello.txt"
+# Upload raw binary data, e.g. from an in-memory image
+with open("path/to/your/image.png", "rb") as f:
+    image_data = f.read()
+
+data_url = sunra_client.upload(
+    data=image_data,
+    content_type="image/png",
 )
+
+# You can then use the returned URL as input to a model
+response = sunra_client.subscribe(
+    "black-forest-labs/flux-kontext-pro/image-to-image",
+    arguments={
+        "image": file_url,
+        "prompt": "a cat",
+    },
+)
+
 ```
 
 **File Upload Limits:**
@@ -185,19 +197,19 @@ import sunra_client
 from PIL import Image
 import io
 
-client = sunra_client.SyncClient()
+# It is recommended to configure the client once.
+sunra_client.config(credentials="your-api-key")
 
-# Create a PIL image
-image = Image.new("RGB", (100, 100), color="blue")
+# Create a sample PIL image
+image = Image.new("RGB", (1024, 1024), color="purple")
 
 # You can pass the image directly - it will be automatically uploaded
-response = client.subscribe(
-    "black-forest-labs/flux-kontext-pro/image-to-image", 
+# and the input will be updated with the returned URL.
+response = sunra_client.subscribe(
+    "black-forest-labs/flux-kontext-pro/image-to-image",
     arguments={
-        "prompt": "Make this image more artistic",
-        "image": image,  # PIL Image - automatically uploaded
-        "reference": "path/to/reference.jpg",  # File path - automatically uploaded
-        "mask": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",  # Data URI - automatically uploaded
+        "prompt": "A purple square",
+        "image": image,  # The SDK will upload this PIL Image
     }
 )
 ```
@@ -236,8 +248,29 @@ input_data = {
     }
 }
 
-# All file inputs will be automatically transformed when submitted
-response = client.subscribe("some-endpoint", arguments=input_data)
+# All file inputs will be automatically transformed when submitted.
+
+Example with an actual model:
+
+```python
+import sunra_client
+from PIL import Image
+
+sunra_client.config(credentials="your-api-key")
+
+# Create a sample PIL image
+image = Image.new("RGB", (512, 512), color = 'red')
+
+# All file-like inputs will be automatically transformed when submitted
+response = sunra_client.subscribe(
+    "black-forest-labs/flux-kontext-pro/image-to-image",
+    arguments={
+        "prompt": "A red square",
+        "image": image,
+    }
+)
+
+print(response)
 ```
 
 ## Error Handling
