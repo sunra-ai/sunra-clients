@@ -220,6 +220,7 @@ You can also manually transform inputs if needed:
 
 ```python
 # For async client
+async_client = sunra_client.AsyncClient()
 transformed = await async_client.transform_input({
     "image": pil_image,
     "files": ["file1.txt", "file2.jpg"],
@@ -227,7 +228,8 @@ transformed = await async_client.transform_input({
     "metadata": {"nested": {"file": "path/to/file.pdf"}}
 })
 
-# For sync client  
+# For sync client
+sync_client = sunra_client.SyncClient()
 transformed = sync_client.transform_input({
     "image": pil_image,
     "document": "path/to/document.pdf"
