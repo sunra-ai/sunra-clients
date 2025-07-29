@@ -6,6 +6,10 @@
 
 The [sunra.ai](https://sunra.ai) JavaScript Client Library provides a seamless way to interact with [sunra.ai](https://sunra.ai) endpoints from your JavaScript or TypeScript applications. With built-in support for various platforms, it ensures consistent behavior across web, Node.js, and React Native environments.
 
+## Community
+
+Join our [Discord community](https://discord.gg/W9F3tveq) to connect with other developers, get help, and stay updated with the latest features and announcements.
+
 ## Getting Started
 
 Before using the client, you'll need to:

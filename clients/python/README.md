@@ -2,6 +2,10 @@
 
 This is a Python client library for interacting with ML models deployed on [sunra.ai](https://sunra.ai).
 
+## Community
+
+Join our [Discord community](https://discord.gg/W9F3tveq) to connect with other developers, get help, and stay updated with the latest features and announcements.
+
 ## Getting Started
 
 To install the client, run:

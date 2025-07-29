@@ -6,6 +6,10 @@
 
 The `SunraClient` is a robust and user-friendly Java implementation of the [sunra.ai](https://sunra.ai) client library.
 
+## Community
+
+Join our [Discord community](https://discord.gg/W9F3tveq) to connect with other developers, get help, and stay updated with the latest features and announcements.
+
 ## Getting Started
 
 The `SunraClient` library serves as a client for sunra.ai applications and AI models. Before using this library, you'll need to:
