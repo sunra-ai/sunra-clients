@@ -10,7 +10,7 @@ public class SunraDemo {
 
     // find more models here: https://sunra.ai/models
     var response = client.subscribe(
-      "black-forest-labs/flux-kontext-pro/text-to-image",
+      "black-forest-labs/flux.1-schnell/text-to-image",
       SubscribeOptions.<JsonObject>builder()
         .input(Map.of("prompt", "a dog running in the park"))
         .resultType(JsonObject.class)

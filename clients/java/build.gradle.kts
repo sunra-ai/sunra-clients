@@ -15,7 +15,7 @@ catalog {
 object Meta {
     val COMPONENT_TYPE = "java" // "java" or "versionCatalog"
     val GROUP = "ai.sunra.client"
-    val VERSION = "0.2.0" // VERSION OF THE LIBRARY THAT WILL BE PUBLISHED TO REPO.
+    val VERSION = "0.2.1" // VERSION OF THE LIBRARY THAT WILL BE PUBLISHED TO REPO.
     val PUBLISHING_TYPE = "AUTOMATIC" // USER_MANAGED or AUTOMATIC
     val DESC = "Sunra Client Library"
     val LICENSE = "Apache-2.0"

@@ -2,7 +2,7 @@
   "name": "@sunra/client",
   "description": "The sunra client for JavaScript and TypeScript",
   "homepage": "https://sunra.ai",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,6 +10,9 @@
     "directory": "clients/javascript"
   },
   "files": [
+    "README.zh-CN.md",
+    "README.md",
+    "CHANGELOG.md",
     "dist"
   ],
   "publishConfig": {

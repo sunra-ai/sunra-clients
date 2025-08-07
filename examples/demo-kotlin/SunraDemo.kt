@@ -9,7 +9,7 @@ fun main() = runBlocking {
 
     // find more models here: https://sunra.ai/models
     val response = client.subscribe<JsonObject>(
-        endpointId = "black-forest-labs/flux-kontext-pro/text-to-image",
+        endpointId = "black-forest-labs/flux.1-schnell/text-to-image",
         input = mapOf("prompt" to "a dog running in the park"),
         options = ai.sunra.client.kt.SubscribeOptions(logs = true),
         onUpdate = { update ->

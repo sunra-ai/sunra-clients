@@ -40,7 +40,7 @@ app.get('/api', (req, res) => {
 
 app.get('/sunra-on-server', async (req, res) => {
   // find more models here: https://sunra.ai/models
-  const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/text-to-image', {
+  const result = await sunra.subscribe('black-forest-labs/flux.1-schnell/text-to-image', {
     input: {
       prompt:
         'a black cat with glowing eyes, cute, adorable, disney, pixar, highly detailed, 8k',
@@ -58,7 +58,7 @@ app.post('/sunra-upload-demo', upload.single('file'), async (req, res) => {
 
   // find more models here: https://sunra.ai/models
   // TODO: change the default model id
-  const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/image-to-image', {
+  const result = await sunra.subscribe('black-forest-labs/flux.1-schnell/text-to-image', {
     input: {
       prompt:
         'a black cat with glowing eyes, cute, adorable, disney, pixar, highly detailed, 8k',
