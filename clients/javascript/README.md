@@ -1,5 +1,7 @@
 # sunra.ai JavaScript/TypeScript Client Library
 
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
 ![@sunra/client npm package](https://img.shields.io/npm/v/@sunra/client?color=%237527D7&label=%40sunra%2Fclient&style=flat-square)
 
 ## Introduction

@@ -1,5 +1,7 @@
 # sunra.ai Client Libraries
 
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
 [![License](https://img.shields.io/github/license/sunra-ai/sunra-clients?style=flat-square)](./LICENSE)
 [![@sunra/client npm package](https://img.shields.io/npm/v/@sunra/client?color=%237527D7&label=JavaScript&style=flat-square)](https://www.npmjs.com/package/@sunra/client)
 [![PyPI - Version](https://img.shields.io/pypi/v/sunra_client)](https://pypi.org/project/sunra_client)
