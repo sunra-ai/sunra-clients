@@ -12,6 +12,7 @@ import re
 import time
 from typing import TYPE_CHECKING, Any, AsyncIterator, Callable, Dict, Iterator, Union
 from urllib.parse import urlencode
+from importlib import metadata
 
 import anyio
 import httpx
@@ -28,7 +29,16 @@ if TYPE_CHECKING:
 AnyJSON = Dict[str, Any]
 
 QUEUE_URL_FORMAT = f"https://api.{SUNRA_HOST}/v1/queue/"
-USER_AGENT = "sunra-client/0.1.0 (python)"
+
+def _get_version() -> str:
+    """Get the version of the sunra_client package."""
+    try:
+        return metadata.version("sunra_client")
+    except metadata.PackageNotFoundError:
+        # package is not installed
+        return "0.0.0"
+
+USER_AGENT = f"sunra-client/{_get_version()} (python)"
 
 # Regex pattern for data URIs
 DATA_URI_PATTERN = re.compile(r'^data:[^;]+;base64,')

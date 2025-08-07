@@ -4,6 +4,7 @@ import ai.sunra.client.ApiOptions;
 import ai.sunra.client.ClientConfig;
 import ai.sunra.client.Output;
 import ai.sunra.client.exception.SunraException;
+import ai.sunra.client.util.Version;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import jakarta.annotation.Nonnull;
@@ -27,6 +28,8 @@ public class HttpClient {
     private static final String APPLICATION_JSON = "application/json";
 
     private static final String HEADER_REQUEST_ID = "x-request-id";
+
+    private static final String USER_AGENT = "sunra-client/" + Version.get() + " (java)";
 
     private final ClientConfig config;
     private final OkHttpClient client;
@@ -58,6 +61,7 @@ public class HttpClient {
         return new Request.Builder()
                 .addHeader("content-type", "application/json")
                 .addHeader("accept", "application/json")
+                .addHeader("user-agent", USER_AGENT)
                 .method(
                         httpMethod,
                         !httpMethod.equalsIgnoreCase("GET") && body != null

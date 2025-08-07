@@ -40,7 +40,7 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // Choose an endpoint that actually exists
-            String realEndpointId = "black-forest-labs/flux-kontext-pro/text-to-image"; // Modify according to actual situation
+            String realEndpointId = "suno/suno-v4.5/text-to-lyrics"; // Modify according to actual situation
 
             // Prepare test input
             Map<String, Object> input = Map.of("prompt", "the cat is running");
@@ -54,7 +54,35 @@ public class SunraClientTest {
                     .resultType(JsonObject.class)
                     .build();
 
-            Output<JsonObject> result = realClient.subscribe(realEndpointId, options);
+            int maxRetries = 3;
+            int retryCount = 0;
+            Output<JsonObject> result = null;
+            Exception lastException = null;
+
+            while (retryCount < maxRetries) {
+                try {
+                    result = realClient.subscribe(realEndpointId, options);
+                    break;
+                } catch (Exception e) {
+                    lastException = e;
+                    retryCount++;
+                    System.err.println("API call attempt #" + retryCount + " failed: " + e.getMessage());
+                    if (retryCount < maxRetries) {
+                        try {
+                            Thread.sleep(1000 * retryCount);
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (result == null) {
+                fail("All API call attempts failed, last error: "
+                        + (lastException != null ? lastException.getMessage() : "Unknown error"));
+                return;
+            }
 
             // Print results
             System.out.println("\n========== API Response Results ==========");
@@ -101,7 +129,7 @@ public class SunraClientTest {
             SunraClient realClient = SunraClient.withConfig(config);
 
             // Choose an endpoint suitable for long-running tasks
-            String realEndpointId = "black-forest-labs/flux-kontext-pro/text-to-image";
+            String realEndpointId = "suno/suno-v4.5/text-to-lyrics";
 
             // Prepare input
             Map<String, Object> input = Map.of("prompt", "a dog running in the park");

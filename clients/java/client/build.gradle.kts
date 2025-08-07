@@ -38,6 +38,17 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+// Add a task to generate a properties file with the project version
+val generateVersionProperties by tasks.registering(WriteProperties::class) {
+    outputFile = file("$buildDir/resources/main/version.properties")
+    property("version", project.version)
+}
+
+// Make sure the processResources task depends on our new task
+tasks.processResources {
+    dependsOn(generateVersionProperties)
+}
+
 sonatypeCentralPublishExtension {
     artifactId.set("sunra-client")
 }
