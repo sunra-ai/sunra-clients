@@ -1,6 +1,9 @@
 # sunra.ai Server Proxy Library
 
-![@sunra/server-proxy npm package](https://img.shields.io/npm/v/@sunra/server-proxy?color=%237527D7&label=%40sunra%2Fserver-proxy&style=flat-square)
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+[![@sunra/server-proxy npm package](https://img.shields.io/npm/v/@sunra/server-proxy?color=%237527D7&label=%40sunra%2Fserver-proxy&style=flat-square)](https://www.npmjs.com/package/@sunra/server-proxy)
+[![Discord](https://img.shields.io/discord/897qCzvCcU?style=flat-square&logo=discord&label=Discord&color=5865F2)](https://discord.gg/897qCzvCcU)
 
 ## Introduction
 

@@ -1,5 +1,9 @@
 # Sunra AI Python SDK - Jupyter Notebooks
 
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+[![Discord](https://img.shields.io/discord/897qCzvCcU?style=flat-square&logo=discord&label=Discord&color=5865F2)](https://discord.gg/897qCzvCcU)
+
 Welcome to the Sunra AI Python SDK Jupyter Notebooks! This collection of interactive notebooks will guide you through all aspects of using the Sunra AI platform for your AI projects.
 
 ## 📚 Notebooks Overview

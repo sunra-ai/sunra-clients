@@ -1,23 +1,23 @@
 # `@sunra/eslint-config`
 
-[English](./README.md) | [简体中文](./README.zh-CN.md)
+[English](./README.md) | 简体中文
 
 [![npm package](https://img.shields.io/npm/v/@sunra/eslint-config?style=flat-square&color=%237527D7&label=npm)](https://www.npmjs.com/package/@sunra/eslint-config)
 [![Discord](https://img.shields.io/discord/897qCzvCcU?style=flat-square&logo=discord&label=Discord&color=5865F2)](https://discord.gg/897qCzvCcU)
 
-Collection of internal ESLint configurations for the sunra.ai client libraries.
+sunra.ai 客户端库的内部 ESLint 配置集合。
 
-## Usage
+## 用途
 
-This package contains ESLint configurations used across the sunra.ai client libraries to ensure consistent code quality and style.
+此包包含 sunra.ai 客户端库中使用的 ESLint 配置，以确保一致的代码质量和风格。
 
-## Available Configurations
+## 可用配置
 
-- `base.js` - Base ESLint configuration
-- `next.js` - Next.js specific configuration
-- `react-internal.js` - React internal configuration
+- `base.js` - 基础 ESLint 配置
+- `next.js` - Next.js 特定配置
+- `react-internal.js` - React 内部配置
 
-## Usage in ESLint Config
+## 在 ESLint 配置中使用
 
 ```javascript
 // eslint.config.mjs

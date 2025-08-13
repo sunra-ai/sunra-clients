@@ -1,5 +1,9 @@
 # sunra.ai Next.js App Router Example
 
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+[![Discord](https://img.shields.io/discord/897qCzvCcU?style=flat-square&logo=discord&label=Discord&color=5865F2)](https://discord.gg/897qCzvCcU)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) and integrated with the sunra.ai client library.
 
 ## Getting Started

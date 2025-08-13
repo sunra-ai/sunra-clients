@@ -6,6 +6,7 @@
 [![@sunra/client npm package](https://img.shields.io/npm/v/@sunra/client?color=%237527D7&label=JavaScript&style=flat-square)](https://www.npmjs.com/package/@sunra/client)
 [![PyPI - Version](https://img.shields.io/pypi/v/sunra_client)](https://pypi.org/project/sunra_client)
 [![Maven Central Version](https://img.shields.io/maven-central/v/ai.sunra.client/sunra-client)](https://search.maven.org/artifact/ai.sunra.client/sunra-client)
+[![Discord](https://img.shields.io/discord/897qCzvCcU?style=flat-square&logo=discord&label=Discord&color=5865F2)](https://discord.gg/897qCzvCcU)
 
 ## About the Project
 

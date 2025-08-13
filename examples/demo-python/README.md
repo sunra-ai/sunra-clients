@@ -1,5 +1,9 @@
 # Python Demo Examples
 
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+[![Discord](https://img.shields.io/discord/897qCzvCcU?style=flat-square&logo=discord&label=Discord&color=5865F2)](https://discord.gg/897qCzvCcU)
+
 This directory contains various examples demonstrating how to use the sunra-client Python library.
 
 ## Setup

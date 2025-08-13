@@ -1,5 +1,10 @@
 # Sunra MCP Server
 
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+[![npm package](https://img.shields.io/npm/v/@sunra/mcp-server?style=flat-square&color=%237527D7&label=npm)](https://www.npmjs.com/package/@sunra/mcp-server)
+[![Discord](https://img.shields.io/discord/897qCzvCcU?style=flat-square&logo=discord&label=Discord&color=5865F2)](https://discord.gg/897qCzvCcU)
+
 A Model Context Protocol (MCP) server that provides tools for interacting with Sunra.ai services.
 
 ## Installation
