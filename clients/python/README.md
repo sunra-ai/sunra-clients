@@ -61,6 +61,153 @@ client = sunra_client.SyncClient(key="your-api-key")
 async_client = sunra_client.AsyncClient(key="your-api-key")
 ```
 
+## Advanced Configuration
+
+### Custom HTTP Client Support
+
+The Python SDK supports custom HTTP clients, allowing you to configure proxies, timeouts, and other HTTP settings. This is useful for enterprise environments or when you need specific network configurations.
+
+#### Global HTTP Client Configuration
+
+You can configure HTTP clients globally using the `config` function:
+
+```python
+import httpx
+import sunra_client
+
+# Create custom HTTP clients with proxy settings
+proxy_url = "http://proxy.company.com:8080"
+
+sync_client = httpx.Client(
+    proxy=proxy_url,
+    timeout=30.0,
+    headers={'User-Agent': 'my-app/1.0'}
+)
+
+async_client = httpx.AsyncClient(
+    proxy=proxy_url,
+    timeout=30.0,
+    headers={'User-Agent': 'my-app/1.0'}
+)
+
+# Configure globally - affects all subsequent API calls
+sunra_client.config(
+    credentials="your-api-key",
+    http_client=sync_client,
+    async_http_client=async_client
+)
+
+# Now all calls will use the configured HTTP clients
+response = sunra_client.subscribe(
+    "black-forest-labs/flux-kontext-pro/text-to-image",
+    {"prompt": "a beautiful landscape"}
+)
+
+# Async calls will use the configured async client
+response = await sunra_client.subscribe_async(
+    "black-forest-labs/flux-kontext-pro/text-to-image",
+    {"prompt": "a beautiful landscape"}
+)
+```
+
+#### Per-Client HTTP Configuration
+
+You can also configure HTTP clients per individual client instance:
+
+```python
+import httpx
+import sunra_client
+
+# Create a custom HTTP client with specific settings
+custom_client = httpx.Client(
+    proxy="http://proxy.company.com:8080",
+    timeout=60.0,
+    verify="/path/to/cert.pem",  # Custom SSL certificate
+    headers={'User-Agent': 'my-app/1.0'}
+)
+
+# Create Sunra client with custom HTTP client
+client = sunra_client.SyncClient(
+    key="your-api-key",
+    http_client=custom_client
+)
+
+# For async clients
+async_custom_client = httpx.AsyncClient(
+    proxy="http://proxy.company.com:8080",
+    timeout=60.0,
+    verify="/path/to/cert.pem"
+)
+
+async_client = sunra_client.AsyncClient(
+    key="your-api-key", 
+    http_client=async_custom_client
+)
+```
+
+#### Common HTTP Client Configurations
+
+**Proxy Configuration:**
+```python
+import httpx
+
+# HTTP proxy
+client = httpx.Client(proxy="http://proxy.example.com:8080")
+
+# HTTPS proxy
+client = httpx.Client(proxy="https://proxy.example.com:8080")
+
+# SOCKS proxy
+client = httpx.Client(proxy="socks5://proxy.example.com:1080")
+```
+
+**Timeout Configuration:**
+```python
+import httpx
+
+# Set custom timeout (in seconds)
+client = httpx.Client(timeout=30.0)
+
+# More granular timeout control
+client = httpx.Client(
+    timeout=httpx.Timeout(
+        connect=5.0,    # Time to establish connection
+        read=30.0,      # Time to read response
+        write=10.0,     # Time to send request
+        pool=60.0       # Time to acquire connection from pool
+    )
+)
+```
+
+**SSL/TLS Configuration:**
+```python
+import httpx
+
+# Custom SSL certificate
+client = httpx.Client(verify="/path/to/cert.pem")
+
+# Disable SSL verification (not recommended for production)
+client = httpx.Client(verify=False)
+
+# Client certificate authentication
+client = httpx.Client(cert="/path/to/client-cert.pem")
+```
+
+**Connection Limits:**
+```python
+import httpx
+
+# Configure connection pool limits
+limits = httpx.Limits(
+    max_keepalive_connections=20,
+    max_connections=100
+)
+
+client = httpx.Client(limits=limits)
+```
+
+For more httpx configuration options, see the [httpx documentation](https://www.python-httpx.org/).
+
 ## Usage Examples
 
 Now you can use the client to interact with your models. Here's an example of how to use it:
