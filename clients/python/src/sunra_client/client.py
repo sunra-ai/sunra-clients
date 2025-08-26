@@ -426,6 +426,7 @@ class AsyncRequestHandle(_BaseRequestHandle):
 class AsyncClient:
     key: str | None = field(default=None, repr=False)
     default_timeout: float = 120.0
+    http_client: httpx.AsyncClient | None = field(default=None, repr=False)
 
     def _get_key(self) -> str:
         if self.key is None:
@@ -434,14 +435,27 @@ class AsyncClient:
 
     @cached_property
     def _client(self) -> httpx.AsyncClient:
-        key = self._get_key()
-        return httpx.AsyncClient(
-            headers={
+        if self.http_client is not None:
+            # Use the provided client, but ensure it has the required headers
+            key = self._get_key()
+            # Update headers on the existing client
+            required_headers = {
                 "Authorization": f"Bearer {key}",
                 "User-Agent": USER_AGENT,
-            },
-            timeout=self.default_timeout,
-        )
+            }
+            # Update the headers on the existing client
+            self.http_client.headers.update(required_headers)
+            return self.http_client
+        else:
+            # Use default client
+            key = self._get_key()
+            return httpx.AsyncClient(
+                headers={
+                    "Authorization": f"Bearer {key}",
+                    "User-Agent": USER_AGENT,
+                },
+                timeout=self.default_timeout,
+            )
 
     async def transform_input(self, input_data: Any) -> Any:
         """Transform input data by uploading files, images, and base64 data URIs.
@@ -717,6 +731,7 @@ class AsyncClient:
 class SyncClient:
     key: str | None = field(default=None, repr=False)
     default_timeout: float = 120.0
+    http_client: httpx.Client | None = field(default=None, repr=False)
 
     def _get_key(self) -> str:
         if self.key is None:
@@ -725,15 +740,28 @@ class SyncClient:
 
     @cached_property
     def _client(self) -> httpx.Client:
-        key = self._get_key()
-        return httpx.Client(
-            headers={
+        if self.http_client is not None:
+            # Use the provided client, but ensure it has the required headers
+            key = self._get_key()
+            # Update headers on the existing client
+            required_headers = {
                 "Authorization": f"Bearer {key}",
                 "User-Agent": USER_AGENT,
-            },
-            timeout=self.default_timeout,
-            follow_redirects=True,
-        )
+            }
+            # Update the headers on the existing client
+            self.http_client.headers.update(required_headers)
+            return self.http_client
+        else:
+            # Use default client
+            key = self._get_key()
+            return httpx.Client(
+                headers={
+                    "Authorization": f"Bearer {key}",
+                    "User-Agent": USER_AGENT,
+                },
+                timeout=self.default_timeout,
+                follow_redirects=True,
+            )
 
     def transform_input(self, input_data: Any) -> Any:
         """Transform input data by uploading files, images, and base64 data URIs.

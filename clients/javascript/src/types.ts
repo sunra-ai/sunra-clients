@@ -25,6 +25,13 @@ export type SunraRunOptions<Input> = {
    * callback instead of being thrown as exceptions.
    */
   readonly onError?: (error: SunraError) => void;
+
+  /**
+   * Optional provider configuration.
+   *
+   * @experimental this is a experimental feature
+   */
+  provider?: SunraProviderConfig;
 };
 
 export type SunraMetrics = {
@@ -95,3 +102,9 @@ export type SunraWebHookResponse<Payload = any> =
     /** The unique identifier for the request. */
     request_id: string;
   };
+
+export interface SunraProviderConfig {
+  allow_fallbacks?: boolean
+  sort?: 'price' | 'latency' | 'throughput'
+  order?: string[]
+}
