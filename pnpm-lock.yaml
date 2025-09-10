@@ -223,6 +223,12 @@ importers:
       https-proxy-agent:
         specifier: ^7.0.6
         version: 7.0.6
+      openai:
+        specifier: ^5.20.0
+        version: 5.20.0(ws@8.18.3)(zod@3.25.76)
+      undici:
+        specifier: ^7.16.0
+        version: 7.16.0
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -231,7 +237,7 @@ importers:
         specifier: ^24.0.1
         version: 24.0.1
       chalk:
-        specifier: ^5.3.0
+        specifier: ^5.4.1
         version: 5.4.1
       tsx:
         specifier: ^4.19.3
@@ -4801,6 +4807,18 @@ packages:
     resolution: {integrity: sha512-cxN6aIDPz6rm8hbebcP7vrQNhvRcveZoJU72Y7vskh4oIm+BZwBECnx5nTmrlres1Qapvx27Qo1Auukpf8PKXw==}
     engines: {node: '>=18'}
 
+  openai@5.20.0:
+    resolution: {integrity: sha512-Bmc2zLM/YWgFrDpXr9hwXqGGDdMmMpE9+qoZPsaHpn0Y/Qk1Vu26hNqXo7+nHdli+sLsXINvS1f8kR3NKhGKmA==}
+    hasBin: true
+    peerDependencies:
+      ws: ^8.18.0
+      zod: ^3.23.8
+    peerDependenciesMeta:
+      ws:
+        optional: true
+      zod:
+        optional: true
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -6000,6 +6018,10 @@ packages:
 
   undici@7.11.0:
     resolution: {integrity: sha512-heTSIac3iLhsmZhUCjyS3JQEkZELateufzZuBaVM5RHXdSBMb1LPMQf5x+FH7qjsZYDP0ttAc3nnVpUB+wYbOg==}
+    engines: {node: '>=20.18.1'}
+
+  undici@7.16.0:
+    resolution: {integrity: sha512-QEg3HPMll0o3t2ourKwOeUAZ159Kn9mx5pnzHRQO8+Wixmh88YdZRiIwat0iNzNNXn0yoEtXJqFpyW7eM8BV7g==}
     engines: {node: '>=20.18.1'}
 
   unicorn-magic@0.1.0:
@@ -11505,6 +11527,11 @@ snapshots:
       is-inside-container: 1.0.0
       is-wsl: 3.1.0
 
+  openai@5.20.0(ws@8.18.3)(zod@3.25.76):
+    optionalDependencies:
+      ws: 8.18.3
+      zod: 3.25.76
+
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -12891,6 +12918,8 @@ snapshots:
   undici@6.21.1: {}
 
   undici@7.11.0: {}
+
+  undici@7.16.0: {}
 
   unicorn-magic@0.1.0: {}
 
