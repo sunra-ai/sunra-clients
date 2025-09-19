@@ -34,7 +34,7 @@ const main = async () => {
 
     // Make a streaming chat completion request
     const stream = await client.chat.completions.create({
-      model: 'google/gemini-2.5-flash-lite', // You can use any llm model available on Sunra
+      model: 'google-deepmind/gemini-2.5-flash-lite', // You can use any llm model available on Sunra
       messages: [
         {
           'role': 'system',
