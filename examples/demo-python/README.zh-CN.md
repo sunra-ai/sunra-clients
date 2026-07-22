@@ -12,12 +12,12 @@
 
 1. 安装 sunra-client 库：
    ```bash
-   pip install sunra-client
+   pip install sunra-client openai
    ```
 
 2. 获取您的 API 密钥：
    - 在 [sunra.ai](https://sunra.ai) 注册
-   - 从[仪表板](https://sunra.ai/dashboard/keys)获取您的 API 密钥
+   - 从[仪表板](https://sunra.ai/dashboard/api-tokens)获取您的 API 密钥
 
 3. 将您的 API 密钥设置为环境变量：
    ```bash
@@ -33,6 +33,7 @@
 - **`text-to-video.py`** - 文本到视频生成
 - **`image-to-video.py`** - 图像到视频转换
 - **`speech-to-text.py`** - 语音到文本转换
+- **`demo-llm.py`** - 使用自动或显式 Provider 路由的 LLM 对话补全
 
 ### 输入转换示例
 

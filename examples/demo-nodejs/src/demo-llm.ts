@@ -2,6 +2,12 @@ import OpenAI from 'openai'
 import chalk from 'chalk'
 import { setGlobalDispatcher, ProxyAgent } from 'undici'
 
+type SunraChatCompletionParams = OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming & {
+  provider?: {
+    only?: string[];
+  };
+};
+
 const apiKey = process.env.SUNRA_KEY || ''
 if (!apiKey) {
   console.error(chalk.red('SUNRA_KEY is not set'))
@@ -24,30 +30,31 @@ const main = async () => {
       setGlobalDispatcher(new ProxyAgent(proxyUrl))
     }
 
-    // Initialize OpenAI client with Sunra endpoint (now proxy-aware!)
+    // Initialize the standard OpenAI client with Sunra's compatible endpoint.
     const client = new OpenAI({
       apiKey,
-      baseURL: 'http://api-llm.sunra.ai/v1'
+      baseURL: 'https://api-llm.sunra.ai/v1',
     })
 
     console.log(chalk.green('Sending streaming chat completion request...'))
 
-    // Make a streaming chat completion request
-    const stream = await client.chat.completions.create({
-      model: 'google/gemini-2.5-flash-lite', // You can use any llm model available on Sunra
+    const request: SunraChatCompletionParams = {
+      model: 'google/gemini-2.5-flash',
+      // Omit provider to use automatic routing.
+      provider: { only: ['google-vertexai'] },
       messages: [
         {
-          'role': 'system',
-          'content': 'You are an expert in AIGC, you can help me optimize the prompt for better results, especially for text to image models. I will give you a prompt, you can help me optimize it.'
-
+          role: 'system',
+          content: 'You are a helpful assistant.',
         },
         {
           role: 'user',
-          content: 'the original prompt is: "A scene from a high-quality animated film, like a work by Makoto Shinkai. In a deep midsummer forest, a train speeds down tracks showered in sunlight filtering through the trees (komorebi). The camera weaves through the trees, chasing the train to emphasize the sense of speed. A girl with her head out the window is bathed in the rapidly changing light and shadow, her hair fluttering in a wind that carries the scent of green. The trees in the background become a green afterimage, vividly highlighting her expression, full of liberation, from moment to moment. "'
-        }
+          content: 'Explain provider routing in two short sentences.',
+        },
       ],
-      stream: true
-    })
+      stream: true,
+    }
+    const stream = await client.chat.completions.create(request)
 
     console.log(chalk.blue('\n' + '='.repeat(50)))
     console.log(chalk.blue('Streaming Response:'))
@@ -65,8 +72,6 @@ const main = async () => {
     console.log(chalk.blue('\n' + '='.repeat(50)))
     console.log(chalk.green(`Full Response: ${fullResponse}`))
     console.log(chalk.blue('='.repeat(50)))
-
-
   } catch (error) {
     const data = (error as any).response?.data
     // Check if this is an axios/fetch error with response data

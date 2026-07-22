@@ -37,7 +37,7 @@ This repository contains the official client libraries for [sunra.ai](https://su
 Before using any client library, you'll need to:
 
 1. Sign up at [sunra.ai](https://sunra.ai)
-2. Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+2. Get your API key from the [dashboard](https://sunra.ai/dashboard/api-tokens)
 3. Set your API key as an environment variable: `export SUNRA_KEY=your-api-key`
 
 ### Python Example
@@ -80,6 +80,27 @@ const result = await sunra.subscribe(
 );
 console.log(result.images[0].url);
 ```
+
+## LLM APIs
+
+Sunra's LLM endpoints are compatible with the standard OpenAI and Anthropic API formats. Use the corresponding official SDK with `https://api-llm.sunra.ai/v1` as the base URL; a separate Sunra LLM package is not required.
+
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.SUNRA_KEY,
+  baseURL: "https://api-llm.sunra.ai/v1",
+});
+
+const completion = await client.chat.completions.create({
+  model: "google/gemini-2.5-flash",
+  messages: [{ role: "user", content: "Hello" }],
+  provider: { only: ["google-vertexai"] },
+});
+```
+
+Omit `provider` to use automatic routing. See the [LLM documentation](https://docs.sunra.ai/llm/llm-quickstart) and the runnable Node.js and Python examples in this repository.
 
 ### Java Example
 

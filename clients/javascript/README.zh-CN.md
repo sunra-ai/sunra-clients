@@ -17,7 +17,7 @@
 在使用客户端之前，您需要：
 
 1. 在 [sunra.ai](https://sunra.ai) 注册
-2. 从 [仪表板](https://sunra.ai/dashboard/keys) 获取您的 API 密钥
+2. 从 [仪表板](https://sunra.ai/dashboard/api-tokens) 获取您的 API 密钥
 3. 将您的 API 密钥设置为环境变量：`export SUNRA_KEY=your-api-key`
 
 然后设置您的凭据：

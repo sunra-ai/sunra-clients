@@ -37,7 +37,7 @@
 在使用任何客户端库之前，您需要：
 
 1. 在 [sunra.ai](https://sunra.ai) 注册
-2. 从 [仪表板](https://sunra.ai/dashboard/keys) 获取您的 API 密钥
+2. 从 [仪表板](https://sunra.ai/dashboard/api-tokens) 获取您的 API 密钥
 3. 将您的 API 密钥设置为环境变量：`export SUNRA_KEY=your-api-key`
 
 ### Python 示例
@@ -80,6 +80,27 @@ const result = await sunra.subscribe(
 );
 console.log(result.images[0].url);
 ```
+
+## LLM API
+
+Sunra 的 LLM 端点兼容标准 OpenAI 和 Anthropic API 格式。使用对应的官方 SDK，并将基础 URL 设置为 `https://api-llm.sunra.ai/v1`；无需安装单独的 Sunra LLM 包。
+
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.SUNRA_KEY,
+  baseURL: "https://api-llm.sunra.ai/v1",
+});
+
+const completion = await client.chat.completions.create({
+  model: "google/gemini-2.5-flash",
+  messages: [{ role: "user", content: "Hello" }],
+  provider: { only: ["google-vertexai"] },
+});
+```
+
+省略 `provider` 时使用自动路由。详细说明见 [LLM 文档](https://docs.sunra.ai/zh-Hans/llm/llm-quickstart)，本仓库也提供可运行的 Node.js 和 Python 示例。
 
 ### Java 示例
 
@@ -207,4 +228,3 @@ npx @sunra/mcp-server --transport http --port 3925
 - [fal-ai/fal](https://github.com/fal-ai/fal/tree/main/projects/fal_client)
 
 并已适配以与 sunra.ai 协同工作。原始项目根据 MIT/Apache 2.0 许可证授权。我们对原始作者的贡献表示感谢。
-

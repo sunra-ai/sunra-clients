@@ -74,7 +74,7 @@ Welcome to the Sunra AI Python SDK Jupyter Notebooks! This collection of interac
 
 3. **Get Your API Key**:
    - Sign up at [sunra.ai](https://sunra.ai)
-   - Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+   - Get your API key from the [dashboard](https://sunra.ai/dashboard/api-tokens)
 
 4. **Set Up Environment Variable**:
    ```bash

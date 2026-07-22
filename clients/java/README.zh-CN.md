@@ -17,7 +17,7 @@
 `SunraClient` 库用作 sunra.ai 应用程序和 AI 模型的客户端。在使用此库之前，您需要：
 
 1. 在 [sunra.ai](https://sunra.ai) 注册
-2. 从 [仪表板](https://sunra.ai/dashboard/keys) 获取您的 API 密钥
+2. 从 [仪表板](https://sunra.ai/dashboard/api-tokens) 获取您的 API 密钥
 3. 将您的 API 密钥设置为环境变量：`export SUNRA_KEY=your-api-key`
 
 该客户端可在 Maven Central 上获取。有三个不同的模块：

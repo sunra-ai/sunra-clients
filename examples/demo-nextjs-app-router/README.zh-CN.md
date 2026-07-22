@@ -11,7 +11,7 @@
 首先，获取您的 API 密钥：
 
 1. 在 [sunra.ai](https://sunra.ai) 注册
-2. 从[仪表板](https://sunra.ai/dashboard/keys)获取您的 API 密钥
+2. 从[仪表板](https://sunra.ai/dashboard/api-tokens)获取您的 API 密钥
 
 然后设置您的环境变量：
 

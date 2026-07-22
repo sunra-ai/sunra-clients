@@ -17,7 +17,7 @@ Join our [Discord community](https://discord.gg/W9F3tveq) to connect with other 
 Before using the client, you'll need to:
 
 1. Sign up at [sunra.ai](https://sunra.ai)
-2. Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+2. Get your API key from the [dashboard](https://sunra.ai/dashboard/api-tokens)
 3. Set your API key as an environment variable: `export SUNRA_KEY=your-api-key`
 
 Then set up your credentials:
