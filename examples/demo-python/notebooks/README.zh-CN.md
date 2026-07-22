@@ -74,7 +74,7 @@
 
 3. **获取 API 密钥**：
    - 在 [sunra.ai](https://sunra.ai) 注册
-   - 从[仪表板](https://sunra.ai/dashboard/keys)获取 API 密钥
+   - 从[仪表板](https://sunra.ai/dashboard/api-tokens)获取 API 密钥
 
 4. **设置环境变量**：
    ```bash

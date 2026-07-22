@@ -24,20 +24,21 @@ def main():
     try:
         print("Sending streaming chat completion request...")
 
-        # Make a streaming chat completion request
+        # Omit extra_body to use automatic provider routing.
         stream = client.chat.completions.create(
-            model="google/gemini-2.5-flash-lite",  # You can use any llm model available on Sunra
+            model="google/gemini-2.5-flash",
             messages=[
                 {
                   "role": "system",
-                  "content": "You are an expert in AIGC, you can help me optimize the prompt for better results, especially for text to image models. I will give you a prompt, you can help me optimize it."
+                  "content": "You are a helpful assistant."
                 },
                 {
                   "role": "user",
-                  "content": "the original prompt is: 'A scene from a high-quality animated film, like a work by Makoto Shinkai. In a deep midsummer forest, a train speeds down tracks showered in sunlight filtering through the trees (komorebi). The camera weaves through the trees, chasing the train to emphasize the sense of speed. A girl with her head out the window is bathed in the rapidly changing light and shadow, her hair fluttering in a wind that carries the scent of green. The trees in the background become a green afterimage, vividly highlighting her expression, full of liberation, from moment to moment. '"
+                  "content": "Explain provider routing in two short sentences."
                 }
             ],
-            stream=True
+            stream=True,
+            extra_body={"provider": {"only": ["google-vertexai"]}}
         )
 
         print("\n" + "="*50)

@@ -13,6 +13,7 @@
     "image-to-image": "tsx src/image-to-image.ts",
     "text-to-image": "tsx src/text-to-image.ts",
     "image-to-video": "tsx src/image-to-video.ts",
+    "llm": "tsx src/demo-llm.ts",
     "stream-status": "tsx src/stream-status.ts",
     "stream-subscribe": "tsx src/stream-subscribe.ts"
   },

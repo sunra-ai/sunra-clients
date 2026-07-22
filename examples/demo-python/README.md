@@ -12,12 +12,12 @@ Before running any examples, make sure you have:
 
 1. Installed the sunra-client library:
    ```bash
-   pip install sunra-client
+   pip install sunra-client openai
    ```
 
 2. Get your API key:
    - Sign up at [sunra.ai](https://sunra.ai)
-   - Get your API key from the [dashboard](https://sunra.ai/dashboard/keys)
+   - Get your API key from the [dashboard](https://sunra.ai/dashboard/api-tokens)
 
 3. Set your API key as an environment variable:
    ```bash
@@ -33,6 +33,7 @@ Before running any examples, make sure you have:
 - **`text-to-video.py`** - Text-to-video generation
 - **`image-to-video.py`** - Image-to-video transformation
 - **`speech-to-text.py`** - Speech-to-text conversion
+- **`demo-llm.py`** - LLM chat completion with automatic or explicit provider routing
 
 ### Transform Input Examples
 
