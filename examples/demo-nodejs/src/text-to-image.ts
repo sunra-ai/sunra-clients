@@ -17,14 +17,11 @@ const main = async () => {
     console.log(chalk.green('Subscribing to the queue...'))
 
     // find more models here: https://sunra.ai/models
-    const result = await sunra.subscribe('black-forest-labs/flux-kontext-pro/text-to-image', {
+    const result = await sunra.subscribe('openai/gpt-image-2/text-to-image', {
       input: {
         prompt: 'a bedroom with messy goods on the bed and floor',
-        prompt_enhancer: false,
-        seed: 0,
-        aspect_ratio: '16:9',
+        quality: 'high',
         output_format: 'jpeg',
-        safety_tolerance: 6
       },
       logs: true,
       onEnqueue: (requestId) => {

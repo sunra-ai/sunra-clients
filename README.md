@@ -47,16 +47,16 @@ import sunra_client
 
 # Simple synchronous call
 result = sunra_client.subscribe(
-    "black-forest-labs/flux-kontext-pro/text-to-image",
-    arguments={"prompt": "a cute cat, realistic, orange"}
+    "openai/gpt-image-2/text-to-image",
+    arguments={"prompt": "a cute cat, realistic, orange", "quality": "high"}
 )
 print(result["images"][0]["url"])
 
 # Asynchronous call
 async def main():
     result = await sunra_client.subscribe_async(
-        "black-forest-labs/flux-kontext-pro/text-to-image",
-        arguments={"prompt": "a cute cat, realistic, orange"}
+        "openai/gpt-image-2/text-to-image",
+        arguments={"prompt": "a cute cat, realistic, orange", "quality": "high"}
     )
     print(result["images"][0]["url"])
 ```
@@ -71,10 +71,11 @@ const sunra = createSunraClient({
 });
 
 const result = await sunra.subscribe(
-  "black-forest-labs/flux-kontext-pro/text-to-image",
+  "openai/gpt-image-2/text-to-image",
   {
     input: {
-      prompt: "a cute cat, realistic, orange"
+      prompt: "a cute cat, realistic, orange",
+      quality: "high"
     }
   }
 );
@@ -89,9 +90,12 @@ import ai.sunra.client.*;
 var sunra = SunraClient.withEnvCredentials();
 
 var result = sunra.subscribe(
-    "black-forest-labs/flux-kontext-pro/text-to-image",
+    "openai/gpt-image-2/text-to-image",
     SubscribeOptions.<JsonObject>builder()
-        .input(Map.of("prompt", "a cute cat, realistic, orange"))
+        .input(Map.of(
+            "prompt", "a cute cat, realistic, orange",
+            "quality", "high"
+        ))
         .resultType(JsonObject.class)
         .build()
 );
