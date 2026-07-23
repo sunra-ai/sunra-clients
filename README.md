@@ -15,18 +15,21 @@ This repository contains the official client libraries for [sunra.ai](https://su
 ## Available Client Libraries
 
 ### 🐍 Python Client
+
 - **Location**: [`clients/python/`](./clients/python/)
 - **Package**: `sunra-client` (PyPI)
 - **Features**: Synchronous and asynchronous support, streaming responses, file uploads
 - **Installation**: `pip install sunra-client`
 
 ### 📦 JavaScript/TypeScript Client
+
 - **Location**: [`clients/javascript/`](./clients/javascript/)
 - **Package**: `@sunra/client` (npm)
 - **Features**: Works in Web, Node.js, and React Native environments
 - **Installation**: `npm install @sunra/client`
 
 ### ☕ Java Client
+
 - **Location**: [`clients/java/`](./clients/java/)
 - **Package**: `ai.sunra.client:sunra-client` (Maven Central)
 - **Features**: Synchronous, asynchronous, and Kotlin coroutine support
@@ -70,15 +73,12 @@ const sunra = createSunraClient({
   credentials: process.env.SUNRA_KEY,
 });
 
-const result = await sunra.subscribe(
-  "openai/gpt-image-2/text-to-image",
-  {
-    input: {
-      prompt: "a cute cat, realistic, orange",
-      quality: "high"
-    }
-  }
-);
+const result = await sunra.subscribe("openai/gpt-image-2/text-to-image", {
+  input: {
+    prompt: "a cute cat, realistic, orange",
+    quality: "high",
+  },
+});
 console.log(result.images[0].url);
 ```
 
@@ -136,6 +136,7 @@ For client-side applications, we provide a server proxy to securely handle API c
 The MCP server provides a universal interface for AI model tools, enabling seamless integration with modern code assistants and IDEs such as Cursor and Claude Desktop. It acts as a bridge between Sunra.ai and your development environment, exposing Sunra's models and tools via the [Model Context Protocol](https://github.com/modelcontextprotocol).
 
 **Why use the MCP server?**
+
 - Enables code assistants (like Cursor, Claude, etc.) to access Sunra models and tools directly from your editor
 - Supports listing models, fetching schemas, submitting jobs, streaming results, and more
 - Secure: API keys are managed via environment variables or runtime configuration
@@ -150,6 +151,7 @@ npx @sunra/mcp-server --transport http --port 3925
 ```
 
 #### 2. For Cursor IDE
+
 - Add to your `.cursor/mcp.json`:
 
 ```json
@@ -161,6 +163,7 @@ npx @sunra/mcp-server --transport http --port 3925
   }
 }
 ```
+
 - Set your API key:
   ```bash
   export SUNRA_KEY="your-api-key-here"
@@ -168,6 +171,7 @@ npx @sunra/mcp-server --transport http --port 3925
 - In Cursor, select the `sunra-mcp-server` and use tools like `list-models`, `model-schema`, etc.
 
 #### 3. For Claude Desktop (Anthropic)
+
 - Start the server in stdio mode (default):
   ```bash
   npx @sunra/mcp-server
@@ -182,6 +186,7 @@ npx @sunra/mcp-server --transport http --port 3925
 - In Claude, select the `sunra-mcp-server` and use the available tools.
 
 #### 4. Advanced Usage & Documentation
+
 - See [`mcp-server/README.md`](./mcp-server/README.md) for full tool list, development, and troubleshooting.
 
 ## Examples
