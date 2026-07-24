@@ -12,6 +12,7 @@ import ai.sunra.client.queue.QueueSubscribeOptions as InternalSubscribeOptions
 
 data class SubmitOptions(
     val webhookUrl: String? = null,
+    val provider: Map<String, Any>? = null,
 )
 
 data class StatusOptions(
@@ -106,6 +107,7 @@ internal class QueueClientImpl(
             InternalSubmitOptions.builder()
                 .input(input)
                 .webhookUrl(options.webhookUrl)
+                .provider(options.provider)
                 .build(),
         ).await()
     }

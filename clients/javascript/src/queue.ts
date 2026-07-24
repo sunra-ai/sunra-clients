@@ -203,13 +203,16 @@ export class SunraQueueClientImpl implements SunraQueueClient {
       : undefined
 
     const provider = options?.provider
+    const requestInput = provider && input && typeof input === 'object'
+      ? { ...(input as Record<string, unknown>), provider }
+      : input
 
     const baseUrl = `${getRestApiUrl()}/queue/${endpointId}`
     const search = webhookUrl ? `?webhook=${webhookUrl}` : ''
     const url = `${baseUrl}${search}`
     return dispatchRequest<Input, SunraInQueueQueueStatus>({
       targetUrl: url,
-      input: input as Input,
+      input: requestInput as Input,
       config: this.config,
       headers: provider ? {
         'x-provider-settings': JSON.stringify(provider)

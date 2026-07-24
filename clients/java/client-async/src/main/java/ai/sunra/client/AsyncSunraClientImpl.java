@@ -28,6 +28,7 @@ public class AsyncSunraClientImpl implements AsyncSunraClient {
                         QueueSubmitOptions.builder()
                                 .input(options.getInput())
                                 .webhookUrl(options.getWebhookUrl())
+                                .provider(options.getProvider())
                                 .build())
                 .thenCompose((submitted) -> queueClient.subscribeToStatus(
                         QueueSubscribeOptions.builder()
