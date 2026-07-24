@@ -15,18 +15,21 @@
 ## 可用的客户端库
 
 ### 🐍 Python 客户端
+
 - **位置**: [`clients/python/`](./clients/python/)
 - **包**: `sunra-client` (PyPI)
 - **特性**: 同步和异步支持、流式响应、文件上传
 - **安装**: `pip install sunra-client`
 
 ### 📦 JavaScript/TypeScript 客户端
+
 - **位置**: [`clients/javascript/`](./clients/javascript/)
 - **包**: `@sunra/client` (npm)
 - **特性**: 可在 Web、Node.js 和 React Native 环境中工作
 - **安装**: `npm install @sunra/client`
 
 ### ☕ Java 客户端
+
 - **位置**: [`clients/java/`](./clients/java/)
 - **包**: `ai.sunra.client:sunra-client` (Maven Central)
 - **特性**: 同步、异步和 Kotlin 协程支持
@@ -47,16 +50,16 @@ import sunra_client
 
 # 简单同步调用
 result = sunra_client.subscribe(
-    "black-forest-labs/flux-kontext-pro/text-to-image",
-    arguments={"prompt": "a cute cat, realistic, orange"}
+    "openai/gpt-image-2/text-to-image",
+    arguments={"prompt": "a cute cat, realistic, orange", "quality": "high"}
 )
 print(result["images"][0]["url"])
 
 # 异步调用
 async def main():
     result = await sunra_client.subscribe_async(
-        "black-forest-labs/flux-kontext-pro/text-to-image",
-        arguments={"prompt": "a cute cat, realistic, orange"}
+        "openai/gpt-image-2/text-to-image",
+        arguments={"prompt": "a cute cat, realistic, orange", "quality": "high"}
     )
     print(result["images"][0]["url"])
 ```
@@ -70,14 +73,12 @@ const sunra = createSunraClient({
   credentials: process.env.SUNRA_KEY,
 });
 
-const result = await sunra.subscribe(
-  "black-forest-labs/flux-kontext-pro/text-to-image",
-  {
-    input: {
-      prompt: "a cute cat, realistic, orange"
-    }
-  }
-);
+const result = await sunra.subscribe("openai/gpt-image-2/text-to-image", {
+  input: {
+    prompt: "a cute cat, realistic, orange",
+    quality: "high",
+  },
+});
 console.log(result.images[0].url);
 ```
 
@@ -110,9 +111,12 @@ import ai.sunra.client.*;
 var sunra = SunraClient.withEnvCredentials();
 
 var result = sunra.subscribe(
-    "black-forest-labs/flux-kontext-pro/text-to-image",
+    "openai/gpt-image-2/text-to-image",
     SubscribeOptions.<JsonObject>builder()
-        .input(Map.of("prompt", "a cute cat, realistic, orange"))
+        .input(Map.of(
+            "prompt", "a cute cat, realistic, orange",
+            "quality", "high"
+        ))
         .resultType(JsonObject.class)
         .build()
 );
@@ -132,6 +136,7 @@ System.out.println(result.getData());
 MCP 服务器为 AI 模型工具提供了一个通用接口，实现了与现代代码助手和 IDE（如 Cursor 和 Claude Desktop）的无缝集成。它充当 sunra.ai 和您的开发环境之间的桥梁，通过[模型上下文协议](https://github.com/modelcontextprotocol)暴露 Sunra 的模型和工具。
 
 **为什么要使用 MCP 服务器？**
+
 - 使代码助手（如 Cursor、Claude 等）能够直接从您的编辑器访问 Sunra 模型和工具
 - 支持列出模型、获取模式、提交作业、流式传输结果等
 - 安全：API 密钥通过环境变量或运行时配置进行管理
@@ -146,6 +151,7 @@ npx @sunra/mcp-server --transport http --port 3925
 ```
 
 #### 2. 对于 Cursor IDE
+
 - 添加到您的 `.cursor/mcp.json`:
 
 ```json
@@ -157,6 +163,7 @@ npx @sunra/mcp-server --transport http --port 3925
   }
 }
 ```
+
 - 设置您的 API 密钥:
   ```bash
   export SUNRA_KEY="your-api-key-here"
@@ -164,6 +171,7 @@ npx @sunra/mcp-server --transport http --port 3925
 - 在 Cursor 中，选择 `sunra-mcp-server` 并使用 `list-models`、`model-schema` 等工具。
 
 #### 3. 对于 Claude Desktop (Anthropic)
+
 - 在 stdio 模式下启动服务器（默认）：
   ```bash
   npx @sunra/mcp-server
@@ -178,6 +186,7 @@ npx @sunra/mcp-server --transport http --port 3925
 - 在 Claude 中，选择 `sunra-mcp-server` 并使用可用的工具。
 
 #### 4. 高级用法和文档
+
 - 有关完整的工具列表、开发和故障排除，请参阅 [`mcp-server/README.md`](./mcp-server/README.md)。
 
 ## 示例
