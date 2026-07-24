@@ -1,6 +1,6 @@
 import os
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 import sunra_client
 from sunra_client.auth import _global_config, MissingCredentialsError
@@ -123,6 +123,35 @@ def test_sync_submit_writes_provider_into_canonical_request_body():
         patch("sunra_client.client._raise_for_status"),
     ):
         client.submit(
+            "google/gemini-2.5-flash-image/text-to-image",
+            {"prompt": "sunrise"},
+            provider={"only": ["fal"]},
+        )
+
+    assert request.call_args.kwargs["json"] == {
+        "prompt": "sunrise",
+        "provider": {"only": ["fal"]},
+    }
+
+
+async def test_async_submit_writes_provider_into_canonical_request_body():
+    client = sunra_client.AsyncClient(key="test-key")
+    response = Mock()
+    response.json.return_value = {
+        "request_id": "req_test",
+        "response_url": "/requests/req_test",
+        "status_url": "/requests/req_test/status",
+        "cancel_url": "/requests/req_test/cancel",
+    }
+
+    with (
+        patch(
+            "sunra_client.client._async_maybe_retry_request",
+            new=AsyncMock(return_value=response),
+        ) as request,
+        patch("sunra_client.client._raise_for_status"),
+    ):
+        await client.submit(
             "google/gemini-2.5-flash-image/text-to-image",
             {"prompt": "sunrise"},
             provider={"only": ["fal"]},
