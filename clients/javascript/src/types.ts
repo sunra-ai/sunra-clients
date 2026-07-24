@@ -27,9 +27,8 @@ export type SunraRunOptions<Input> = {
   readonly onError?: (error: SunraError) => void;
 
   /**
-   * Optional provider configuration.
-   *
-   * @experimental this is a experimental feature
+   * Optional provider routing preferences. Use `{ only: ['provider-id'] }`
+   * to require one provider. Omit this field for automatic routing.
    */
   provider?: SunraProviderConfig;
 };
@@ -107,4 +106,6 @@ export interface SunraProviderConfig {
   allow_fallbacks?: boolean
   sort?: 'price' | 'latency' | 'throughput'
   order?: string[]
+  only?: string[]
+  ignore?: string[]
 }

@@ -5,6 +5,7 @@ import ai.sunra.client.queue.QueueStatus;
 import com.google.gson.JsonObject;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import java.util.Map;
 import java.util.function.Consumer;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,12 @@ public class SubscribeOptions<O> implements ApiOptions<O> {
      */
     @Nullable
     private final String webhookUrl;
+
+    /**
+     * Optional provider routing preferences.
+     */
+    @Nullable
+    private final Map<String, Object> provider;
 
     /**
      * The result type.

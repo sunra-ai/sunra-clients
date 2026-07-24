@@ -559,6 +559,7 @@ class AsyncClient:
         path: str = "",
         webhook_url: str | None = None,
         with_logs: bool = True,
+        provider: dict[str, Any] | None = None,
     ) -> AsyncRequestHandle:
         """Submit an application with the given arguments (which will be JSON serialized).
 
@@ -568,6 +569,11 @@ class AsyncClient:
 
         # Transform input to upload files automatically
         transformed_arguments = await self.transform_input(arguments)
+        if provider is not None:
+            transformed_arguments = {
+                **transformed_arguments,
+                "provider": provider,
+            }
 
         url = QUEUE_URL_FORMAT + application
         if path:
@@ -609,6 +615,7 @@ class AsyncClient:
         with_logs: bool = True,
         on_queue_update: Callable[[Status], None] | None = None,
         on_error: Callable[[SunraClientError], None] | None = None,
+        provider: dict[str, Any] | None = None,
     ) -> AnyJSON | None:
         try:
             handle = await self.submit(
@@ -616,6 +623,7 @@ class AsyncClient:
                 arguments,
                 path=path,
                 with_logs=with_logs,
+                provider=provider,
             )
 
             if on_enqueue is not None:
@@ -865,6 +873,7 @@ class SyncClient:
         path: str = "",
         webhook_url: str | None = None,
         with_logs: bool = True,
+        provider: dict[str, Any] | None = None,
     ) -> SyncRequestHandle:
         """Submit an application with the given arguments (which will be JSON serialized).
 
@@ -874,6 +883,11 @@ class SyncClient:
 
         # Transform input to upload files automatically
         transformed_arguments = self.transform_input(arguments)
+        if provider is not None:
+            transformed_arguments = {
+                **transformed_arguments,
+                "provider": provider,
+            }
 
         url = QUEUE_URL_FORMAT + application
         if path:
@@ -915,6 +929,7 @@ class SyncClient:
         with_logs: bool = True,
         on_queue_update: Callable[[Status], None] | None = None,
         on_error: Callable[[SunraClientError], None] | None = None,
+        provider: dict[str, Any] | None = None,
     ) -> AnyJSON | None:
         try:
             handle = self.submit(
@@ -922,6 +937,7 @@ class SyncClient:
                 arguments,
                 path=path,
                 with_logs=with_logs,
+                provider=provider,
             )
 
             if on_enqueue is not None:

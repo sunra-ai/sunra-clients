@@ -54,6 +54,7 @@ public class SunraClientImpl implements SunraClient {
                     QueueSubmitOptions.builder()
                             .input(options.getInput())
                             .webhookUrl(options.getWebhookUrl())
+                            .provider(options.getProvider())
                             .build());
 
             final var completed = queueClient.subscribeToStatus(

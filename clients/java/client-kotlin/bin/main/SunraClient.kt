@@ -17,6 +17,7 @@ data class RunOptions(
 data class SubscribeOptions(
     val logs: Boolean = false,
     val webhookUrl: String? = null,
+    val provider: Map<String, Any>? = null,
 )
 
 /**
@@ -83,6 +84,7 @@ internal class SunraClientKotlinImpl(
                 .input(input)
                 .resultType(resultType.java)
                 .logs(options.logs)
+                .provider(options.provider)
                 .onQueueUpdate(onQueueUpdate)
                 .build()
         return client.subscribe(endpointId, internalOptions).thenConvertOutput().await()
