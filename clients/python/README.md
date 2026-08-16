@@ -454,8 +454,51 @@ except sunra_client.SunraClientError as e:
     # Access detailed error information
     print(f"Error Code: {e.code}")           # e.g., "invalid_input"
     print(f"Error Message: {e.message}")     # e.g., "Validation error: seed must be >= 0"
+    print(f"Reason: {e.reason}")             # e.g., "input_validation_failed", or None
+    print(f"Retryable: {e.retryable}")       # True / False, or None if the API gave no answer
     print(f"Error Details: {e.details}")     # Additional error details
-    print(f"Timestamp: {e.timestamp}")       # When the error occurred
+    print(f"Timestamp: {e.timestamp}")       # When the API responded
+```
+
+### Deciding whether to retry
+
+Read `e.retryable`. It answers exactly one question — *would submitting this
+identical request again have a different outcome?* — and it is independent of
+`e.code`: the same code can be retryable in one failure and not in another.
+
+```python
+except sunra_client.SunraClientError as e:
+    if e.retryable is True:
+        schedule_retry()
+    elif e.retryable is False:
+        report_to_user(e.message)   # retrying will not help; fix the input
+    else:
+        # The API published no verdict (an older prediction, or a failure it
+        # never classified). Fall back to the per-code default documented at
+        # https://platform.sunra.ai/platform/errors — never derive a verdict
+        # from `e.code` yourself.
+        fall_back_to_per_code_default(e.code)
+```
+
+`e.reason` names the specific cause behind `e.code`
+(`input_fetch_failed`, `moderation_blocked`, `provider_rate_limited`, …). Both
+`code` and `reason` are **open sets**: new values ship without a
+breaking-change announcement, so treat a `reason` you do not recognise as
+absent and an unknown `code` as `internal_server_error`, and log the raw value.
+
+### Two timestamps, two envelopes
+
+For a prediction that failed, `e.timestamp` is when the API produced the error
+response, while `e.prediction_error["timestamp"]` is when the prediction itself
+failed — for a prediction fetched days later, these are days apart. Read
+`e.prediction_error` whenever you mean the failure:
+
+```python
+except sunra_client.SunraClientError as e:
+    if e.prediction_error:
+        print(e.prediction_error["code"])       # "unsafe_content"
+        print(e.prediction_error["reason"])     # "moderation_blocked"
+        print(e.prediction_error["timestamp"])  # when the prediction failed
 ```
 
 ### Error Types
@@ -471,6 +514,8 @@ try:
     )
 except sunra_client.SunraClientError as e:
     # e.code: "invalid_input"
+    # e.reason: "input_validation_failed"
+    # e.retryable: False
     # e.message: "Validation error: seed must be >= 0"
     pass
 ```

@@ -9,6 +9,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import okhttp3.Response;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
@@ -89,33 +90,8 @@ public class QueueClientImpl implements QueueClient {
                 if (currentStatus != null && currentStatus instanceof Completed) {
                     final var completed = (Completed) currentStatus;
                     if (!completed.isSuccess()) {
-                        String errorMessage = "Request failed";
-                        String code = null;
-                        String errorType = null;
-                        Object details = null;
-                        String timestamp = null;
-
-                        if (completed.getError() != null && !completed.getError().isJsonNull() && completed.getError().isJsonObject()) {
-                            final var errorObject = completed.getError().getAsJsonObject();
-                            if (errorObject.has("message")) {
-                                errorMessage = errorObject.get("message").getAsString();
-                            }
-                            if (errorObject.has("code")) {
-                                code = errorObject.get("code").getAsString();
-                            }
-                            if (errorObject.has("type")) {
-                                errorType = errorObject.get("type").getAsString();
-                            }
-                            if (errorObject.has("details")) {
-                                details = httpClient.fromJson(errorObject.get("details"), Object.class);
-                            }
-                            if (errorObject.has("timestamp")) {
-                                timestamp = errorObject.get("timestamp").getAsString();
-                            }
-                        }
-
-                        future.completeExceptionally(new SunraException(
-                            errorMessage, code, errorType, details, timestamp, options.getRequestId(), null));
+                        future.completeExceptionally(
+                                QueueStatus.toException(completed, options.getRequestId()));
                         eventSource.cancel();
                         return;
                     }
@@ -129,33 +105,8 @@ public class QueueClientImpl implements QueueClient {
                 if (currentStatus != null && currentStatus instanceof Completed) {
                     final var completed = (Completed) currentStatus;
                     if (!completed.isSuccess()) {
-                        String errorMessage = "Request failed";
-                        String code = null;
-                        String errorType = null;
-                        Object details = null;
-                        String timestamp = null;
-
-                        if (completed.getError() != null && !completed.getError().isJsonNull() && completed.getError().isJsonObject()) {
-                            final var errorObject = completed.getError().getAsJsonObject();
-                            if (errorObject.has("message")) {
-                                errorMessage = errorObject.get("message").getAsString();
-                            }
-                            if (errorObject.has("code")) {
-                                code = errorObject.get("code").getAsString();
-                            }
-                            if (errorObject.has("type")) {
-                                errorType = errorObject.get("type").getAsString();
-                            }
-                            if (errorObject.has("details")) {
-                                details = httpClient.fromJson(errorObject.get("details"), Object.class);
-                            }
-                            if (errorObject.has("timestamp")) {
-                                timestamp = errorObject.get("timestamp").getAsString();
-                            }
-                        }
-
-                        future.completeExceptionally(new SunraException(
-                            errorMessage, code, errorType, details, timestamp, options.getRequestId(), null));
+                        future.completeExceptionally(
+                                QueueStatus.toException(completed, options.getRequestId()));
                         return;
                     }
                     future.complete(completed);
@@ -174,11 +125,26 @@ public class QueueClientImpl implements QueueClient {
         factory.newEventSource(request, listener);
         try {
             return future.get();
+        } catch (ExecutionException ex) {
+            // Unwrap: the listener above completes the future with a fully
+            // populated SunraException (code, reason, retryable, the prediction
+            // error envelope). Re-wrapping it in a bare
+            // `new SunraException(message, cause, requestId)` — as this did —
+            // threw every one of those fields away, so a caller could never see
+            // WHY the prediction failed on the synchronous path. Anything that
+            // is not already a SunraException still gets wrapped.
+            final var cause = ex.getCause();
+            if (cause instanceof SunraException) {
+                throw (SunraException) cause;
+            }
+            throw new SunraException(
+                    cause != null ? String.valueOf(cause.getMessage()) : String.valueOf(ex.getMessage()),
+                    cause != null ? cause : ex,
+                    options.getRequestId());
         } catch (Exception ex) {
-            throw new SunraException(ex.getMessage(), ex, options.getRequestId());
+            throw new SunraException(String.valueOf(ex.getMessage()), ex, options.getRequestId());
         }
     }
-
     @Nonnull
     @Override
     public <O> Output<O> result(@Nonnull QueueResultOptions<O> options) {

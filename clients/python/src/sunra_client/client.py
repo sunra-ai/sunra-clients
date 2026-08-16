@@ -10,6 +10,7 @@ import mimetypes
 import os
 import re
 import time
+import unicodedata
 from typing import TYPE_CHECKING, Any, AsyncIterator, Callable, Dict, Iterator, Union
 from urllib.parse import urlencode
 from importlib import metadata
@@ -44,8 +45,73 @@ USER_AGENT = f"sunra-client/{_get_version()} (python)"
 DATA_URI_PATTERN = re.compile(r'^data:[^;]+;base64,')
 
 
+#: Error code the queue result endpoint returns when the prediction it was asked
+#: for ended in ``status: "failed"`` (SUNRA-819 Phase 4). It is the only marker
+#: that says "``details`` is a prediction error object, not an opaque bag".
+PREDICTION_FAILED_CODE = "PREDICTION_FAILED"
+
+
+def _as_prediction_error(details: Any) -> dict[str, Any] | None:
+    """Recognise the v2 prediction error object inside ``error.details``.
+
+    A runtime guard rather than a cast: ``details`` is free-form on every other
+    error this API returns, so a malformed payload has to fall back to the
+    generic path rather than produce a half-built prediction error. ``code`` and
+    ``message`` must both be present strings; the optional fields are dropped
+    individually when wrongly typed. Nothing here coerces, and nothing is
+    invented — an absent ``retryable`` means the API declined to answer.
+    """
+    if not isinstance(details, dict):
+        return None
+
+    code = details.get("code")
+    message = details.get("message")
+    if not isinstance(code, str) or not isinstance(message, str):
+        return None
+
+    prediction_error: dict[str, Any] = {"code": code, "message": message}
+
+    reason = details.get("reason")
+    if isinstance(reason, str) and reason:
+        prediction_error["reason"] = reason
+
+    retryable = details.get("retryable")
+    if isinstance(retryable, bool):
+        prediction_error["retryable"] = retryable
+
+    timestamp = details.get("timestamp")
+    if isinstance(timestamp, str) and timestamp:
+        prediction_error["timestamp"] = timestamp
+
+    return prediction_error
+
+
+def _for_log_line(text: str) -> str:
+    """Collapse anything that could forge a log record or drive a terminal.
+
+    ``__str__`` is a human-readable, newline-delimited sink: a ``reason`` or
+    ``message`` carrying ``\n`` can append what looks like a second,
+    independent log entry, and ANSI escapes can rewrite what a reader sees.
+    Neither field is ours — ``message`` is upstream provider text and both
+    arrive over a connection the caller may have pointed at a proxy — so
+    neither is trusted here.
+
+    Display only: ``.message``, ``.reason`` and ``.prediction_error`` keep the
+    exact bytes the API sent, because they are the structured contract.
+    """
+    return "".join(" " if unicodedata.category(ch) == "Cc" else ch for ch in text)
+
+
 class SunraClientError(Exception):
-    """Exception raised when Sunra API operations fail."""
+    """Exception raised when Sunra API operations fail.
+
+    ``reason`` / ``retryable`` are the prediction error contract v2 additions
+    (SUNRA-819). Both are optional and both are **open**: tolerate a ``reason``
+    you do not recognise (treat it as absent), and never assume ``retryable``
+    can be derived from ``code`` — when it is ``None`` the API gave no
+    authoritative answer and you should fall back to the documented per-code
+    default. See https://platform.sunra.ai/platform/errors.
+    """
 
     def __init__(
         self,
@@ -56,15 +122,30 @@ class SunraClientError(Exception):
         timestamp: str | None = None,
         request_id: str | None = None,
         rate_limit: dict[str, int] | None = None,
+        reason: str | None = None,
+        retryable: bool | None = None,
+        prediction_error: dict[str, Any] | None = None,
     ):
         super().__init__(message)
         self.message = message
         self.code = code
         self.type = error_type
         self.details = details
+        #: Time of the API **response** envelope. For a failed prediction
+        #: fetched through ``result()`` this is when the HTTP error was
+        #: produced, NOT when the prediction failed — that one lives on
+        #: ``prediction_error["timestamp"]`` and can be days earlier. The two
+        #: envelopes are modelled separately on purpose.
         self.timestamp = timestamp
         self.request_id = request_id
         self.rate_limit = rate_limit
+        #: Fine-grained machine-readable cause of a prediction failure.
+        self.reason = reason
+        #: Whether replaying the same input unchanged could succeed.
+        self.retryable = retryable
+        #: The whole v2 prediction error, when this exception describes a
+        #: failed prediction. Carries its own ``timestamp`` (the failure time).
+        self.prediction_error = prediction_error
 
     def to_dict(self) -> dict:
         """Convert error to dictionary format matching API response structure."""
@@ -75,6 +156,12 @@ class SunraClientError(Exception):
 
         if self.type:
             error_obj["type"] = self.type
+        # `is not None`, not truthiness: `retryable=False` is a real answer and
+        # must serialize, while `None` means "the API said nothing".
+        if self.reason is not None:
+            error_obj["reason"] = self.reason
+        if self.retryable is not None:
+            error_obj["retryable"] = self.retryable
         if self.details:
             error_obj["details"] = self.details
 
@@ -93,15 +180,19 @@ class SunraClientError(Exception):
         parts = []
         if self.code:
             parts.append(self.code)
+        if self.reason:
+            parts.append(f"({self.reason})")
         if self.message:
             parts.append(self.message)
+        if self.retryable is not None:
+            parts.append("retryable" if self.retryable else "not retryable")
         if self.details:
             parts.append(f"Details: {self.details}")
         if self.timestamp:
             parts.append(f"Timestamp: {self.timestamp}")
         if self.request_id:
             parts.append(f"Request ID: {self.request_id}")
-        return " | ".join(parts)
+        return _for_log_line(" | ".join(parts))
 
 
 def _extract_rate_limit_from_headers(headers) -> dict[str, int] | None:
@@ -133,6 +224,10 @@ def _raise_for_status(response: httpx.Response) -> None:
         try:
             error_data = response.json()
 
+            reason = None
+            retryable = None
+            prediction_error = None
+
             # Check if there's a nested error object (common API pattern)
             if "error" in error_data and isinstance(error_data["error"], dict):
                 error_obj = error_data["error"]
@@ -141,6 +236,31 @@ def _raise_for_status(response: httpx.Response) -> None:
                 error_type = error_obj.get("type")
                 details = error_obj.get("details")
                 timestamp = error_data.get("timestamp")
+
+                # SUNRA-819 Phase 4: `GET /queue/requests/:id` on a FAILED
+                # prediction answers with code PREDICTION_FAILED and the v2
+                # prediction error in `details`. Left to the generic path it
+                # would arrive as an opaque dict under `.details` and the
+                # caller would have to dig for the actual cause — and
+                # `result()` would raise a different shape than `get()` does
+                # for the very same failure. Promote it instead, and keep the
+                # whole object too: both envelopes carry a `timestamp` and
+                # they are not the same instant (`timestamp` above is when the
+                # API answered; the failure time is inside `prediction_error`).
+                if code == PREDICTION_FAILED_CODE:
+                    prediction_error = _as_prediction_error(details)
+                    if prediction_error is not None:
+                        message = prediction_error["message"]
+                        code = prediction_error["code"]
+                        error_type = "prediction_failed"
+                        reason = prediction_error.get("reason")
+                        retryable = prediction_error.get("retryable")
+                else:
+                    # Forwarded, never synthesized.
+                    if isinstance(error_obj.get("reason"), str):
+                        reason = error_obj["reason"]
+                    if isinstance(error_obj.get("retryable"), bool):
+                        retryable = error_obj["retryable"]
             else:
                 # Fallback to top-level fields for legacy responses
                 message = error_data.get("detail", response.text)
@@ -155,6 +275,9 @@ def _raise_for_status(response: httpx.Response) -> None:
             error_type = "network_error"
             details = {"status_code": response.status_code, "response_text": response.text}
             timestamp = None
+            reason = None
+            retryable = None
+            prediction_error = None
 
         raise SunraClientError(
             message=message,
@@ -163,7 +286,10 @@ def _raise_for_status(response: httpx.Response) -> None:
             details=details,
             timestamp=timestamp,
             request_id=request_id,
-            rate_limit=rate_limit
+            rate_limit=rate_limit,
+            reason=reason,
+            retryable=retryable,
+            prediction_error=prediction_error
         ) from exc
 
 
@@ -320,20 +446,51 @@ class SyncRequestHandle(_BaseRequestHandle):
         if final_status and not final_status.success:
             error_message = "Request failed"
             code = None
+            error_type = None
             details = None
             timestamp = None
+            reason = None
+            retryable = None
+            prediction_error = None
 
             if final_status.error:
                 error_message = final_status.error.get("message", error_message)
                 code = final_status.error.get("code")
                 details = final_status.error.get("details")
-                timestamp = final_status.error.get("timestamp")
+                prediction_error = _as_prediction_error(final_status.error)
+                # SUNRA-819 v2: forwarded exactly as the API sent them, and read
+                # back out of the VALIDATED object rather than the raw dict.
+                # Reading the raw dict let a malformed `reason: 42` through here
+                # while the result-endpoint path dropped it — the two public
+                # paths disagreeing about the same failure, which is the defect
+                # this whole change exists to remove. `None` still means the API
+                # published no authoritative value; nothing is derived from
+                # `code`.
+                if prediction_error is not None:
+                    reason = prediction_error.get("reason")
+                    retryable = prediction_error.get("retryable")
+                    timestamp = prediction_error.get("timestamp")
+                    # Same `type` the result endpoint's PREDICTION_FAILED body
+                    # produces (see `_raise_for_status`). Without it, the two
+                    # ways of learning that a prediction failed would classify
+                    # differently for the very same failure.
+                    error_type = "prediction_failed"
+                else:
+                    # Not a v2 object, so there is nothing validated to read.
+                    # Take only what type-checks; never coerce.
+                    raw_timestamp = final_status.error.get("timestamp")
+                    if isinstance(raw_timestamp, str) and raw_timestamp:
+                        timestamp = raw_timestamp
 
             raise SunraClientError(
                 message=error_message,
                 code=code,
+                error_type=error_type,
                 details=details,
-                timestamp=timestamp
+                timestamp=timestamp,
+                reason=reason,
+                retryable=retryable,
+                prediction_error=prediction_error
             )
 
         response = _maybe_retry_request(self.client, "GET", self.response_url)
@@ -396,20 +553,51 @@ class AsyncRequestHandle(_BaseRequestHandle):
         if final_status and not final_status.success:
             error_message = "Request failed"
             code = None
+            error_type = None
             details = None
             timestamp = None
+            reason = None
+            retryable = None
+            prediction_error = None
 
             if final_status.error:
                 error_message = final_status.error.get("message", error_message)
                 code = final_status.error.get("code")
                 details = final_status.error.get("details")
-                timestamp = final_status.error.get("timestamp")
+                prediction_error = _as_prediction_error(final_status.error)
+                # SUNRA-819 v2: forwarded exactly as the API sent them, and read
+                # back out of the VALIDATED object rather than the raw dict.
+                # Reading the raw dict let a malformed `reason: 42` through here
+                # while the result-endpoint path dropped it — the two public
+                # paths disagreeing about the same failure, which is the defect
+                # this whole change exists to remove. `None` still means the API
+                # published no authoritative value; nothing is derived from
+                # `code`.
+                if prediction_error is not None:
+                    reason = prediction_error.get("reason")
+                    retryable = prediction_error.get("retryable")
+                    timestamp = prediction_error.get("timestamp")
+                    # Same `type` the result endpoint's PREDICTION_FAILED body
+                    # produces (see `_raise_for_status`). Without it, the two
+                    # ways of learning that a prediction failed would classify
+                    # differently for the very same failure.
+                    error_type = "prediction_failed"
+                else:
+                    # Not a v2 object, so there is nothing validated to read.
+                    # Take only what type-checks; never coerce.
+                    raw_timestamp = final_status.error.get("timestamp")
+                    if isinstance(raw_timestamp, str) and raw_timestamp:
+                        timestamp = raw_timestamp
 
             raise SunraClientError(
                 message=error_message,
                 code=code,
+                error_type=error_type,
                 details=details,
-                timestamp=timestamp
+                timestamp=timestamp,
+                reason=reason,
+                retryable=retryable,
+                prediction_error=prediction_error
             )
 
         response = await _async_maybe_retry_request(self.client, "GET", self.response_url)

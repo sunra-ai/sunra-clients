@@ -55,18 +55,60 @@ export interface SunraInProgressQueueStatus extends SunraBaseQueueStatus {
   logs?: string
 }
 
+/**
+ * Why a prediction ended in `status: "failed"` (Sunra prediction error contract
+ * v2, SUNRA-819). The same object appears on the queue status endpoint, on the
+ * SSE stream, on failed-prediction webhooks, and — since Phase 4 — inside
+ * `error.details` of the `PREDICTION_FAILED` body the queue result endpoint
+ * returns.
+ *
+ * `code` and `reason` are both **open sets**. New values ship without a
+ * breaking-change announcement, so never exhaustively switch on either: treat
+ * an unrecognised `reason` as absent, and an unrecognised `code` as
+ * `internal_server_error`. Sunra also emits the sentinel `unknown_error_code`
+ * for a failure it could recover no classification for.
+ *
+ * See https://platform.sunra.ai/platform/errors for the vocabulary.
+ */
+export interface SunraPredictionError {
+  /** Coarse classification. Open set; never string-match `message` instead. */
+  code: string;
+  /** Human-readable, and explicitly NOT parse-stable. Do not match on it. */
+  message: string;
+  /**
+   * Machine-readable fine-grained cause (`input_fetch_failed`,
+   * `moderation_blocked`, `provider_rate_limited`, …). Absent when the failure
+   * was never classified — absence carries no meaning of its own.
+   */
+  reason?: string;
+  /**
+   * Whether replaying the *same* input unchanged could succeed. Authoritative
+   * when present, and independent of `code`: the same `code` can be retryable
+   * in one failure and not in another. When absent, fall back to the
+   * documented per-code default.
+   */
+  retryable?: boolean;
+  /**
+   * When the prediction failed (ISO 8601). Optional: it is absent for rows
+   * that recorded no end time.
+   *
+   * Note this is a *different* envelope from `SunraError.timestamp`, which is
+   * the time of the HTTP error response that carried the failure. On a
+   * `result()` rejection the two can be months apart. See
+   * `SunraError.predictionError`.
+   */
+  timestamp?: string;
+  /** Reserved. No field is published here yet. */
+  details?: Record<string, any>;
+}
+
 export interface SunraCompletedQueueStatus extends SunraBaseQueueStatus {
   status: 'COMPLETED';
   response_url: string;
   logs?: string;
   metrics?: SunraMetrics;
   success: boolean;
-  error: null | {
-    code: string;
-    message: string;
-    details?: Record<string, any>
-    timestamp: string
-  };
+  error: null | SunraPredictionError;
 }
 
 export type SunraQueueStatus =

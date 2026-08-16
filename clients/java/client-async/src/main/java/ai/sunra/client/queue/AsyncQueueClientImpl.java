@@ -89,29 +89,8 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                 if (currentStatus != null && currentStatus instanceof QueueStatus.Completed) {
                     final var completed = (QueueStatus.Completed) currentStatus;
                     if (!completed.isSuccess()) {
-                        String errorMessage = "Request failed";
-                        String code = null;
-                        String details = null;
-                        String timestamp = null;
-
-                        if (completed.getError() != null && !completed.getError().isJsonNull() && completed.getError().isJsonObject()) {
-                            final var errorObject = completed.getError().getAsJsonObject();
-                            if (errorObject.has("message")) {
-                                errorMessage = errorObject.get("message").getAsString();
-                            }
-                            if (errorObject.has("code")) {
-                                code = errorObject.get("code").getAsString();
-                            }
-                            if (errorObject.has("details")) {
-                                details = errorObject.get("details").getAsString();
-                            }
-                            if (errorObject.has("timestamp")) {
-                                timestamp = errorObject.get("timestamp").getAsString();
-                            }
-                        }
-
-                        future.completeExceptionally(new SunraException(
-                            errorMessage, code, details, timestamp, options.getRequestId()));
+                        future.completeExceptionally(
+                                QueueStatus.toException(completed, options.getRequestId()));
                         eventSource.cancel();
                         return;
                     }
@@ -125,29 +104,8 @@ public class AsyncQueueClientImpl implements AsyncQueueClient {
                 if (currentStatus != null && currentStatus instanceof QueueStatus.Completed) {
                     final var completed = (QueueStatus.Completed) currentStatus;
                     if (!completed.isSuccess()) {
-                        String errorMessage = "Request failed";
-                        String code = null;
-                        String details = null;
-                        String timestamp = null;
-
-                        if (completed.getError() != null && !completed.getError().isJsonNull() && completed.getError().isJsonObject()) {
-                            final var errorObject = completed.getError().getAsJsonObject();
-                            if (errorObject.has("message")) {
-                                errorMessage = errorObject.get("message").getAsString();
-                            }
-                            if (errorObject.has("code")) {
-                                code = errorObject.get("code").getAsString();
-                            }
-                            if (errorObject.has("details")) {
-                                details = errorObject.get("details").getAsString();
-                            }
-                            if (errorObject.has("timestamp")) {
-                                timestamp = errorObject.get("timestamp").getAsString();
-                            }
-                        }
-
-                        future.completeExceptionally(new SunraException(
-                            errorMessage, code, details, timestamp, options.getRequestId()));
+                        future.completeExceptionally(
+                                QueueStatus.toException(completed, options.getRequestId()));
                         return;
                     }
                     future.complete(completed);

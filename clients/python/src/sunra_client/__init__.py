@@ -12,6 +12,7 @@ from sunra_client.client import (
     encode_file,
     encode_image,
     SunraClientError,
+    PREDICTION_FAILED_CODE,
 )
 
 __all__ = [
@@ -24,6 +25,7 @@ __all__ = [
     "Completed",
     "SyncRequestHandle",
     "AsyncRequestHandle",
+    "PREDICTION_FAILED_CODE",
     "subscribe_async",
     "subscribe",
     "submit",
