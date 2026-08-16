@@ -32,6 +32,33 @@ public class SunraException extends RuntimeException {
     private final RateLimitInfo rateLimit;
 
     /**
+     * Fine-grained machine-readable cause of a prediction failure (SUNRA-819).
+     * Open set — tolerate values you do not recognise.
+     */
+    @Nullable
+    private final String reason;
+
+    /**
+     * Whether replaying the same input unchanged could succeed. Authoritative
+     * when present and independent of {@code code}; {@code null} means the API
+     * published no answer and this SDK will not invent one.
+     */
+    @Nullable
+    private final Boolean retryable;
+
+    /**
+     * The prediction error as its own envelope, when this exception describes
+     * a failed prediction.
+     *
+     * <p>It lives alongside the promoted {@code code} / {@code reason} /
+     * {@code retryable} fields because the two envelopes each own a
+     * {@code timestamp} and they mean different things — see
+     * {@link #getTimestamp()}.
+     */
+    @Nullable
+    private final PredictionError predictionError;
+
+    /**
      * Create a new SunraException with basic message and request ID.
      *
      * @param message The error message
@@ -45,6 +72,9 @@ public class SunraException extends RuntimeException {
         this.details = null;
         this.timestamp = null;
         this.rateLimit = null;
+        this.reason = null;
+        this.retryable = null;
+        this.predictionError = null;
     }
 
     /**
@@ -71,6 +101,9 @@ public class SunraException extends RuntimeException {
         this.details = details;
         this.timestamp = timestamp;
         this.rateLimit = null;
+        this.reason = null;
+        this.retryable = null;
+        this.predictionError = null;
     }
 
     /**
@@ -99,6 +132,88 @@ public class SunraException extends RuntimeException {
         this.details = details;
         this.timestamp = timestamp;
         this.rateLimit = rateLimit;
+        this.reason = null;
+        this.retryable = null;
+        this.predictionError = null;
+    }
+
+    /**
+     * Create a new SunraException carrying the prediction error contract v2
+     * (SUNRA-819 Phase 4).
+     *
+     * <p>Used on the two paths that can learn <em>why a prediction failed</em>:
+     * the {@code PREDICTION_FAILED} body of the queue result endpoint, and a
+     * failed queue status arriving through {@code subscribeToStatus}. Both
+     * produce the same fields, so the two ways of finding out cannot disagree.
+     *
+     * @param message The error message
+     * @param code The error code
+     * @param type The error type
+     * @param details Additional error details
+     * @param timestamp The timestamp of the API RESPONSE envelope — not the
+     *     prediction failure time, which is on {@code predictionError}
+     * @param requestId The request ID associated with the error
+     * @param rateLimit Rate limit information
+     * @param reason The v2 fine-grained cause, or null when unclassified
+     * @param retryable The v2 retry verdict, or null when the API gave none
+     * @param predictionError The whole prediction error envelope, or null
+     */
+    public SunraException(
+            @Nonnull String message,
+            @Nullable String code,
+            @Nullable String type,
+            @Nullable Object details,
+            @Nullable String timestamp,
+            @Nullable String requestId,
+            @Nullable RateLimitInfo rateLimit,
+            @Nullable String reason,
+            @Nullable Boolean retryable,
+            @Nullable PredictionError predictionError) {
+        super(requireNonNull(message));
+        this.requestId = requestId;
+        this.code = code;
+        this.type = type;
+        this.details = details;
+        this.timestamp = timestamp;
+        this.rateLimit = rateLimit;
+        this.reason = reason;
+        this.retryable = retryable;
+        this.predictionError = predictionError;
+    }
+
+    /**
+     * Create a new SunraException from a prediction that ended in
+     * {@code status: "failed"}.
+     *
+     * <p>The v2 object's own fields become the exception's first-class fields
+     * (r4-B2), so a caller reads {@code getCode()} / {@code getReason()} /
+     * {@code getRetryable()} directly instead of digging through
+     * {@code getDetailsObject()} — and the whole object is kept too, because
+     * only it can say unambiguously when the prediction failed.
+     *
+     * @param predictionError The prediction error, never null
+     * @param requestId The request ID associated with the error
+     * @param responseTimestamp The API response envelope's timestamp, or null
+     *     when the error came from a status poll rather than an HTTP error
+     * @param rateLimit Rate limit information
+     */
+    public static SunraException fromPredictionError(
+            @Nonnull PredictionError predictionError,
+            @Nullable String requestId,
+            @Nullable String responseTimestamp,
+            @Nullable RateLimitInfo rateLimit) {
+        requireNonNull(predictionError);
+        return new SunraException(
+                predictionError.getMessage(),
+                predictionError.getCode(),
+                "prediction_failed",
+                predictionError.toMap(),
+                responseTimestamp,
+                requestId,
+                rateLimit,
+                predictionError.getReason(),
+                predictionError.getRetryable(),
+                predictionError);
     }
 
     /**
@@ -116,6 +231,9 @@ public class SunraException extends RuntimeException {
         this.details = null;
         this.timestamp = null;
         this.rateLimit = null;
+        this.reason = null;
+        this.retryable = null;
+        this.predictionError = null;
     }
 
     /**
@@ -144,6 +262,9 @@ public class SunraException extends RuntimeException {
         this.details = details;
         this.timestamp = timestamp;
         this.rateLimit = null;
+        this.reason = null;
+        this.retryable = null;
+        this.predictionError = null;
     }
 
     /**
@@ -159,6 +280,9 @@ public class SunraException extends RuntimeException {
         this.details = null;
         this.timestamp = null;
         this.rateLimit = null;
+        this.reason = null;
+        this.retryable = null;
+        this.predictionError = null;
     }
 
     /**
@@ -214,13 +338,63 @@ public class SunraException extends RuntimeException {
     }
 
     /**
-     * Get the timestamp when the error occurred.
+     * Get the timestamp of the API <strong>response</strong> envelope — the
+     * outer of the two envelopes.
+     *
+     * <p>For a failed prediction fetched through {@code result()} this is when
+     * the HTTP error was produced, NOT when the prediction failed; that one is
+     * {@code getPredictionError().getTimestamp()} and can be days earlier.
+     * (Exceptions built straight from a queue status carry the failure time
+     * here, because that path has no response envelope of its own — which is
+     * exactly why the unambiguous field exists.)
      *
      * @return The timestamp, or null if not available
      */
     @Nullable
     public String getTimestamp() {
         return this.timestamp;
+    }
+
+    /**
+     * Get the fine-grained machine-readable cause of a prediction failure.
+     *
+     * <p>Open set (SUNRA-819): treat a value you do not recognise as absent
+     * rather than rejecting the response.
+     *
+     * @return The reason, or null when the failure was never classified
+     */
+    @Nullable
+    public String getReason() {
+        return this.reason;
+    }
+
+    /**
+     * Get whether replaying the same input unchanged could succeed.
+     *
+     * <p>Authoritative when non-null and independent of {@link #getCode()}.
+     * {@code null} means the API published no answer — fall back to the
+     * documented per-code default rather than guessing.
+     *
+     * @return The retry verdict, or null when the API gave none
+     */
+    @Nullable
+    public Boolean getRetryable() {
+        return this.retryable;
+    }
+
+    /**
+     * Get the prediction error envelope, when this exception describes a
+     * failed prediction.
+     *
+     * <p>Read {@code getPredictionError().getTimestamp()} whenever you mean
+     * the time the prediction failed; {@link #getTimestamp()} is the response
+     * envelope's own time.
+     *
+     * @return The prediction error, or null if this is not a prediction failure
+     */
+    @Nullable
+    public PredictionError getPredictionError() {
+        return this.predictionError;
     }
 
     /**
@@ -244,6 +418,10 @@ public class SunraException extends RuntimeException {
         error.put("code", code != null ? code : "UNKNOWN_ERROR");
         error.put("message", getMessage());
         if (type != null) error.put("type", type);
+        // Null-checked, not truthiness: `retryable == false` is a real answer
+        // and must serialize; null means "the API said nothing".
+        if (reason != null) error.put("reason", reason);
+        if (retryable != null) error.put("retryable", retryable);
         if (details != null) error.put("details", details);
         result.put("error", error);
 
@@ -265,6 +443,14 @@ public class SunraException extends RuntimeException {
 
         if (type != null) {
             sb.append(" | Type: ").append(type);
+        }
+
+        if (reason != null) {
+            sb.append(" | Reason: ").append(reason);
+        }
+
+        if (retryable != null) {
+            sb.append(" | Retryable: ").append(retryable);
         }
 
         if (details != null && !details.equals(getMessage())) {

@@ -3,6 +3,7 @@ package ai.sunra.client.http;
 import ai.sunra.client.ApiOptions;
 import ai.sunra.client.ClientConfig;
 import ai.sunra.client.Output;
+import ai.sunra.client.exception.PredictionError;
 import ai.sunra.client.exception.SunraException;
 import ai.sunra.client.util.Version;
 import com.google.gson.Gson;
@@ -28,6 +29,14 @@ public class HttpClient {
     private static final String APPLICATION_JSON = "application/json";
 
     private static final String HEADER_REQUEST_ID = "x-request-id";
+
+    /**
+     * Error code the queue result endpoint returns when the prediction it was
+     * asked for ended in {@code status: "failed"} (SUNRA-819 Phase 4). The only
+     * marker that says "{@code details} is a prediction error object, not an
+     * opaque bag".
+     */
+    public static final String PREDICTION_FAILED_CODE = "PREDICTION_FAILED";
 
     private static final String USER_AGENT = "sunra-client/" + Version.get() + " (java)";
 
@@ -137,6 +146,7 @@ public class HttpClient {
         String type = null;
         Object details = null;
         String timestamp = null;
+        PredictionError predictionError = null;
 
         if (contentType != null && contentType.contains("application/json")) {
             final var body = response.body();
@@ -163,6 +173,22 @@ public class HttpClient {
                                 }
                                 if (errorObject.has("details")) {
                                     details = gson.fromJson(errorObject.get("details"), Object.class);
+                                }
+
+                                // SUNRA-819 Phase 4: GET /queue/requests/:id on a
+                                // FAILED prediction answers with code
+                                // PREDICTION_FAILED and the v2 prediction error in
+                                // `details`. Without this, `details` arrives as an
+                                // opaque Object and the caller gets
+                                // code=PREDICTION_FAILED — technically correct and
+                                // useless: they would have to cast and dig to learn
+                                // WHY, and result() would throw a different shape
+                                // than subscribeToStatus() does for the very same
+                                // failure. Promote it, and keep the whole object
+                                // too (r4-B2/r4-B3): both envelopes carry a
+                                // timestamp and they are not the same instant.
+                                if (PREDICTION_FAILED_CODE.equals(code)) {
+                                    predictionError = PredictionError.fromJson(errorObject.get("details"));
                                 }
                             }
                         } else {
@@ -205,6 +231,12 @@ public class HttpClient {
                     }
                 }
             }
+        }
+
+        if (predictionError != null) {
+            // `timestamp` stays the OUTER envelope's — when the API answered.
+            // The failure time is inside the prediction error.
+            return SunraException.fromPredictionError(predictionError, requestId, timestamp, rateLimit);
         }
 
         return new SunraException(message, code, type, details, timestamp, requestId, rateLimit);

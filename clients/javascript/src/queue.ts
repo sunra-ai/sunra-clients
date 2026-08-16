@@ -250,9 +250,20 @@ export class SunraQueueClientImpl implements SunraQueueClient {
 
     return new Promise<SunraCompletedQueueStatus>((resolve, reject) => {
       const rejectSunraError = (status: SunraCompletedQueueStatus) => {
-        reject(new SunraError(status.error ?? {
-          code: 'prediction_failed',
-          message: ''
+        const predictionError = status.error ?? undefined
+        // SUNRA-819 Phase 4: `reason` / `retryable` are carried through as
+        // first-class fields, and the whole v2 object is kept on
+        // `predictionError` — so an error from here and one from `result()`
+        // on the same failed prediction are the same shape, and
+        // `predictionError.timestamp` unambiguously means the failure time on
+        // both paths.
+        reject(new SunraError({
+          code: predictionError?.code ?? 'prediction_failed',
+          message: predictionError?.message ?? '',
+          reason: predictionError?.reason,
+          retryable: predictionError?.retryable,
+          timestamp: predictionError?.timestamp,
+          predictionError,
         }))
       }
 

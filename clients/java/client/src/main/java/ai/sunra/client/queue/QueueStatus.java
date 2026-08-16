@@ -1,5 +1,7 @@
 package ai.sunra.client.queue;
 
+import ai.sunra.client.exception.PredictionError;
+import ai.sunra.client.exception.SunraException;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
@@ -105,6 +107,37 @@ public interface QueueStatus {
         @Nullable
         @SerializedName("logs")
         private String logs;
+    }
+
+    /**
+     * Build the exception for a status that came back {@code success: false}
+     * (SUNRA-819 Phase 4).
+     *
+     * <p>ONE parser, called by both the synchronous and the asynchronous queue
+     * client. It replaces four hand-rolled copies of the same
+     * {@code errorObject.has("x")} ladder which had already drifted apart: the
+     * async pair read {@code details} with {@code getAsString()}, which throws
+     * on the object-valued details the API actually sends, and dropped
+     * {@code type} altogether.
+     *
+     * <p>The fields it produces are the same ones the queue result endpoint
+     * produces from a {@code PREDICTION_FAILED} body, so the two ways of
+     * learning that a prediction failed cannot disagree about what the failure
+     * was.
+     *
+     * @param completed the failed status update
+     * @param requestId the prediction's request id
+     * @return the exception to fail the caller with
+     */
+    static SunraException toException(@Nonnull Completed completed, @Nullable String requestId) {
+        final var predictionError = PredictionError.fromJson(completed.getError());
+        if (predictionError != null) {
+            // No response envelope on this path, hence no outer timestamp: the
+            // failure time lives on the prediction error, where it is
+            // unambiguous.
+            return SunraException.fromPredictionError(predictionError, requestId, null, null);
+        }
+        return new SunraException("Request failed", requestId);
     }
 
     static Class<? extends StatusUpdate> resolveType(JsonObject payload) {

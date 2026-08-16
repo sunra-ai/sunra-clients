@@ -1,3 +1,5 @@
+import type { SunraPredictionError } from './types'
+
 export interface SunraErrorDetails {
     [key: string]: any
 }
@@ -8,6 +10,11 @@ export interface SunraRateLimit {
     reset: number
 }
 
+// Type-only import: `types.ts` imports `SunraError` back for its `onError`
+// callback, so a value import here would be a runtime cycle. `import type` is
+// erased at compile time, so this one is not.
+export type { SunraPredictionError }
+
 /**
  * Standard error class for all Sunra API operations.
  * Provides consistent error structure across all SDKs.
@@ -16,9 +23,44 @@ export class SunraError extends Error {
     public readonly type?: string
     public readonly code: string
     public readonly details?: SunraErrorDetails
+    /**
+     * Time of the API **response** envelope that carried this error — the
+     * outer of the two envelopes. For a failed prediction retrieved through
+     * `result()`, this is when the HTTP error was produced, NOT when the
+     * prediction failed; the failure time is `predictionError.timestamp`, and
+     * on a prediction that failed days ago the two are days apart.
+     *
+     * (Errors built straight from a queue status carry the failure time here,
+     * because that path has no response envelope of its own. Read
+     * `predictionError.timestamp` whenever you mean the failure time — it is
+     * unambiguous on every path.)
+     */
     public readonly timestamp?: string
     public readonly requestId?: string
     public readonly rateLimit?: SunraRateLimit
+    /**
+     * Fine-grained machine-readable cause of a prediction failure. Open set —
+     * tolerate values you do not recognise (SUNRA-819).
+     */
+    public readonly reason?: string
+    /**
+     * Whether replaying the same input unchanged could succeed. Authoritative
+     * when present and independent of `code`; when absent, fall back to the
+     * documented per-code default. **Never derived by this SDK** — an absent
+     * value means the API declined to answer, and inventing one here would
+     * publish a guess as though it were the API's word.
+     */
+    public readonly retryable?: boolean
+    /**
+     * The prediction error object as its own envelope, whenever this error
+     * describes a failed prediction.
+     *
+     * It exists alongside the promoted `code` / `reason` / `retryable` fields
+     * because the two envelopes each own a `timestamp` and they mean different
+     * things (see `timestamp` above). Modelling them separately is what keeps
+     * a `result()` rejection honest about both.
+     */
+    public readonly predictionError?: SunraPredictionError
 
     constructor(options: {
         message: string
@@ -28,6 +70,9 @@ export class SunraError extends Error {
         timestamp?: string
         requestId?: string
         rateLimit?: SunraRateLimit
+        reason?: string
+        retryable?: boolean
+        predictionError?: SunraPredictionError
     }) {
         super(options.message)
         this.name = 'SunraError'
@@ -37,6 +82,9 @@ export class SunraError extends Error {
         this.timestamp = options.timestamp
         this.requestId = options.requestId
         this.rateLimit = options.rateLimit
+        this.reason = options.reason
+        this.retryable = options.retryable
+        this.predictionError = options.predictionError
 
         // Ensure proper prototype chain for instanceof checks
         Object.setPrototypeOf(this, SunraError.prototype)
@@ -51,6 +99,11 @@ export class SunraError extends Error {
                 ...(this.type && { type: this.type }),
                 code: this.code,
                 message: this.message,
+                // Only emitted when the API actually said so — `undefined` is
+                // a real answer here ("no authoritative value"), and must not
+                // be serialized as a key at all.
+                ...(this.reason !== undefined && { reason: this.reason }),
+                ...(this.retryable !== undefined && { retryable: this.retryable }),
                 ...(this.details && { details: this.details })
             }
         }
@@ -69,7 +122,11 @@ export class SunraError extends Error {
         const parts: string[] = []
 
         if (this.code) parts.push(`[${this.code}]`)
+        if (this.reason) parts.push(`(${this.reason})`)
         if (this.message) parts.push(this.message)
+        if (this.retryable !== undefined) {
+            parts.push(this.retryable ? '[retryable]' : '[not retryable]')
+        }
         if (this.requestId) parts.push(`(Request: ${this.requestId})`)
 
         return parts.join(' ')
