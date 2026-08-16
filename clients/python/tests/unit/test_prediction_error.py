@@ -244,6 +244,24 @@ class TestSerialization:
         assert "(input_fetch_failed)" in rendered
         assert "not retryable" in rendered
 
+    def test_str_cannot_be_used_to_forge_a_second_log_record(self):
+        # `__str__` is newline-delimited, so a `reason` or `message` carrying
+        # \n would append what reads as an independent entry, and ANSI escapes
+        # would rewrite what a terminal shows. Neither field is ours.
+        error = SunraClientError(
+            message="boom\r\n[authorization_error] Request: victim",
+            code="invalid_input",
+            reason="input_fetch_failed\n\x1b[31mERROR: payment approved",
+        )
+
+        rendered = str(error)
+        assert "\n" not in rendered
+        assert "\r" not in rendered
+        assert "\x1b" not in rendered
+        # ...and the structured fields still hold the exact bytes.
+        assert "\n" in error.reason
+        assert "\r\n" in error.message
+
     def test_an_error_without_a_timestamp_constructs(self):
         error = SunraClientError(message="Predict failed.", code="service_provider_error")
         assert error.timestamp is None
@@ -282,6 +300,41 @@ class TestHandleGetRaisesTheV2Error:
         assert excinfo.value.reason == "input_fetch_failed"
         assert excinfo.value.retryable is False
         assert excinfo.value.prediction_error == PROD_INPUT_FETCH_FAILED
+
+    def test_wrongly_typed_optionals_never_reach_the_exception(self):
+        # The status path used to read `reason` / `retryable` straight off the
+        # raw dict, so a malformed `reason: 42` survived here while the result
+        # endpoint dropped it — the two public paths disagreeing about the same
+        # failure. Both now read the validated object.
+        handle = self.handle_returning(
+            Completed(
+                success=False,
+                error={
+                    "code": "invalid_input",
+                    "message": "boom",
+                    "reason": 42,
+                    "retryable": "false",
+                    "timestamp": 0,
+                },
+            )
+        )
+
+        with pytest.raises(SunraClientError) as excinfo:
+            handle.get()
+
+        assert excinfo.value.reason is None
+        assert excinfo.value.retryable is None
+        assert excinfo.value.timestamp is None
+        assert "reason" not in excinfo.value.to_dict()["error"]
+
+    def test_carries_the_failure_time_from_the_status_path(self):
+        handle = self.handle_returning(
+            Completed(success=False, error=dict(PROD_INPUT_FETCH_FAILED))
+        )
+        with pytest.raises(SunraClientError) as excinfo:
+            handle.get()
+        # No response envelope on this path, so `timestamp` is the failure time.
+        assert excinfo.value.timestamp == "2026-08-14T18:22:33.179Z"
 
     def test_raises_without_inventing_them_for_a_pre_v2_row(self):
         handle = self.handle_returning(Completed(success=False, error=dict(PROD_PRE_V2)))

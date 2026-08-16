@@ -10,6 +10,7 @@ import mimetypes
 import os
 import re
 import time
+import unicodedata
 from typing import TYPE_CHECKING, Any, AsyncIterator, Callable, Dict, Iterator, Union
 from urllib.parse import urlencode
 from importlib import metadata
@@ -83,6 +84,22 @@ def _as_prediction_error(details: Any) -> dict[str, Any] | None:
         prediction_error["timestamp"] = timestamp
 
     return prediction_error
+
+
+def _for_log_line(text: str) -> str:
+    """Collapse anything that could forge a log record or drive a terminal.
+
+    ``__str__`` is a human-readable, newline-delimited sink: a ``reason`` or
+    ``message`` carrying ``\n`` can append what looks like a second,
+    independent log entry, and ANSI escapes can rewrite what a reader sees.
+    Neither field is ours — ``message`` is upstream provider text and both
+    arrive over a connection the caller may have pointed at a proxy — so
+    neither is trusted here.
+
+    Display only: ``.message``, ``.reason`` and ``.prediction_error`` keep the
+    exact bytes the API sent, because they are the structured contract.
+    """
+    return "".join(" " if unicodedata.category(ch) == "Cc" else ch for ch in text)
 
 
 class SunraClientError(Exception):
@@ -175,7 +192,7 @@ class SunraClientError(Exception):
             parts.append(f"Timestamp: {self.timestamp}")
         if self.request_id:
             parts.append(f"Request ID: {self.request_id}")
-        return " | ".join(parts)
+        return _for_log_line(" | ".join(parts))
 
 
 def _extract_rate_limit_from_headers(headers) -> dict[str, int] | None:
@@ -440,19 +457,30 @@ class SyncRequestHandle(_BaseRequestHandle):
                 error_message = final_status.error.get("message", error_message)
                 code = final_status.error.get("code")
                 details = final_status.error.get("details")
-                timestamp = final_status.error.get("timestamp")
-                # SUNRA-819 v2: forwarded exactly as the API sent them. `None`
-                # means the API published no authoritative value, and deriving
-                # one from `code` here would dress a guess up as its answer.
-                reason = final_status.error.get("reason")
-                retryable = final_status.error.get("retryable")
                 prediction_error = _as_prediction_error(final_status.error)
+                # SUNRA-819 v2: forwarded exactly as the API sent them, and read
+                # back out of the VALIDATED object rather than the raw dict.
+                # Reading the raw dict let a malformed `reason: 42` through here
+                # while the result-endpoint path dropped it — the two public
+                # paths disagreeing about the same failure, which is the defect
+                # this whole change exists to remove. `None` still means the API
+                # published no authoritative value; nothing is derived from
+                # `code`.
                 if prediction_error is not None:
+                    reason = prediction_error.get("reason")
+                    retryable = prediction_error.get("retryable")
+                    timestamp = prediction_error.get("timestamp")
                     # Same `type` the result endpoint's PREDICTION_FAILED body
                     # produces (see `_raise_for_status`). Without it, the two
                     # ways of learning that a prediction failed would classify
                     # differently for the very same failure.
                     error_type = "prediction_failed"
+                else:
+                    # Not a v2 object, so there is nothing validated to read.
+                    # Take only what type-checks; never coerce.
+                    raw_timestamp = final_status.error.get("timestamp")
+                    if isinstance(raw_timestamp, str) and raw_timestamp:
+                        timestamp = raw_timestamp
 
             raise SunraClientError(
                 message=error_message,
@@ -536,19 +564,30 @@ class AsyncRequestHandle(_BaseRequestHandle):
                 error_message = final_status.error.get("message", error_message)
                 code = final_status.error.get("code")
                 details = final_status.error.get("details")
-                timestamp = final_status.error.get("timestamp")
-                # SUNRA-819 v2: forwarded exactly as the API sent them. `None`
-                # means the API published no authoritative value, and deriving
-                # one from `code` here would dress a guess up as its answer.
-                reason = final_status.error.get("reason")
-                retryable = final_status.error.get("retryable")
                 prediction_error = _as_prediction_error(final_status.error)
+                # SUNRA-819 v2: forwarded exactly as the API sent them, and read
+                # back out of the VALIDATED object rather than the raw dict.
+                # Reading the raw dict let a malformed `reason: 42` through here
+                # while the result-endpoint path dropped it — the two public
+                # paths disagreeing about the same failure, which is the defect
+                # this whole change exists to remove. `None` still means the API
+                # published no authoritative value; nothing is derived from
+                # `code`.
                 if prediction_error is not None:
+                    reason = prediction_error.get("reason")
+                    retryable = prediction_error.get("retryable")
+                    timestamp = prediction_error.get("timestamp")
                     # Same `type` the result endpoint's PREDICTION_FAILED body
                     # produces (see `_raise_for_status`). Without it, the two
                     # ways of learning that a prediction failed would classify
                     # differently for the very same failure.
                     error_type = "prediction_failed"
+                else:
+                    # Not a v2 object, so there is nothing validated to read.
+                    # Take only what type-checks; never coerce.
+                    raw_timestamp = final_status.error.get("timestamp")
+                    if isinstance(raw_timestamp, str) and raw_timestamp:
+                        timestamp = raw_timestamp
 
             raise SunraClientError(
                 message=error_message,

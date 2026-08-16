@@ -132,10 +132,13 @@ public interface QueueStatus {
     static SunraException toException(@Nonnull Completed completed, @Nullable String requestId) {
         final var predictionError = PredictionError.fromJson(completed.getError());
         if (predictionError != null) {
-            // No response envelope on this path, hence no outer timestamp: the
-            // failure time lives on the prediction error, where it is
-            // unambiguous.
-            return SunraException.fromPredictionError(predictionError, requestId, null, null);
+            // There is no response envelope on this path, so `getTimestamp()`
+            // carries the failure time — which is what its javadoc promises and
+            // what the JS and Python SDKs already do on their status paths.
+            // Passing null here would make Java the odd one out and contradict
+            // our own documentation, while the API had handed us the time.
+            return SunraException.fromPredictionError(
+                    predictionError, requestId, predictionError.getTimestamp(), null);
         }
         return new SunraException("Request failed", requestId);
     }

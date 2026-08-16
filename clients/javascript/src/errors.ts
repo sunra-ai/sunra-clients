@@ -16,6 +16,23 @@ export interface SunraRateLimit {
 export type { SunraPredictionError }
 
 /**
+ * Collapse anything that could forge a log record or drive a terminal.
+ *
+ * `toString()` is a human-readable, newline-delimited sink: a `reason` or
+ * `message` carrying `\n` can append what looks like a second, independent log
+ * entry, and ANSI escapes can rewrite what a reader sees. Neither field is ours
+ * — `message` is upstream provider text and both arrive over a connection the
+ * caller may have pointed at a proxy — so neither is trusted here.
+ *
+ * Display only: `.message`, `.reason` and `.predictionError` keep the exact
+ * bytes the API sent, because they are the structured contract.
+ */
+function forLogLine(text: string): string {
+    // eslint-disable-next-line no-control-regex
+    return text.replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+}
+
+/**
  * Standard error class for all Sunra API operations.
  * Provides consistent error structure across all SDKs.
  */
@@ -129,7 +146,7 @@ export class SunraError extends Error {
         }
         if (this.requestId) parts.push(`(Request: ${this.requestId})`)
 
-        return parts.join(' ')
+        return forLogLine(parts.join(' '))
     }
 }
 

@@ -235,6 +235,27 @@ describe('SunraError — the v2 fields survive serialization', () => {
     )
   })
 
+  it('cannot be used to forge a second log record', () => {
+    // `toString()` is newline-delimited, so a `reason` or `message` carrying
+    // \n would append what reads as an independent entry — and ANSI escapes
+    // would rewrite what a terminal shows. Neither field is ours: `message` is
+    // upstream provider text, and both arrive over a connection the caller may
+    // have pointed at a proxy.
+    const error = new SunraError({
+      code: 'invalid_input',
+      message: 'boom\r\n[authorization_error] Request: victim',
+      reason: 'input_fetch_failed\n\u001b[31mERROR: payment approved',
+    })
+
+    const rendered = error.toString()
+    expect(rendered).not.toContain('\n')
+    expect(rendered).not.toContain('\r')
+    expect(rendered).not.toContain('\u001b')
+    // ...and the structured fields still hold the exact bytes the API sent.
+    expect(error.reason).toContain('\n')
+    expect(error.message).toContain('\r\n')
+  })
+
   it('accepts a prediction error with no timestamp at all', () => {
     // `timestamp` used to be required on the status type while the API never
     // sent one. It is optional now, and an error without it must construct.

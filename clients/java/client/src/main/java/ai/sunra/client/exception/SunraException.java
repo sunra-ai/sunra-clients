@@ -465,7 +465,30 @@ public class SunraException extends RuntimeException {
             sb.append(" | Request ID: ").append(requestId);
         }
 
-        return sb.toString();
+        return forLogLine(sb.toString());
+    }
+
+    /**
+     * Collapse anything that could forge a log record or drive a terminal.
+     *
+     * <p>{@code toString()} is a human-readable, newline-delimited sink: a
+     * {@code reason} or {@code message} carrying a newline can append what
+     * looks like a second, independent log entry, and ANSI escapes can rewrite
+     * what a reader sees. Neither field is ours — {@code message} is upstream
+     * provider text and both arrive over a connection the caller may have
+     * pointed at a proxy — so neither is trusted here.
+     *
+     * <p>Display only: {@link #getMessage()}, {@link #getReason()} and
+     * {@link #getPredictionError()} keep the exact bytes the API sent, because
+     * they are the structured contract.
+     */
+    private static String forLogLine(String text) {
+        final var out = new StringBuilder(text.length());
+        for (int i = 0; i < text.length(); i++) {
+            final char c = text.charAt(i);
+            out.append(Character.getType(c) == Character.CONTROL ? ' ' : c);
+        }
+        return out.toString();
     }
 
     /**

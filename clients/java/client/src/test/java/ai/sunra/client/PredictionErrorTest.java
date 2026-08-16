@@ -318,9 +318,10 @@ class PredictionErrorTest {
             assertEquals("unsafe_content", thrown.getCode());
             assertEquals("moderation_blocked", thrown.getReason());
             assertEquals(Boolean.FALSE, thrown.getRetryable());
-            // No response envelope on this path — so no outer timestamp, and
-            // the failure time is on the unambiguous field.
-            assertNull(thrown.getTimestamp());
+            // No response envelope on this path, so getTimestamp() carries the
+            // failure time — matching its javadoc and the JS/Python SDKs, which
+            // both do this on their status paths.
+            assertEquals("2026-08-14T17:51:47.206Z", thrown.getTimestamp());
             assertEquals("2026-08-14T17:51:47.206Z", thrown.getPredictionError().getTimestamp());
         }
 
@@ -358,6 +359,28 @@ class PredictionErrorTest {
 
             assertTrue(rendered.contains("Reason: input_fetch_failed"));
             assertTrue(rendered.contains("Retryable: false"));
+        }
+
+        @Test
+        void toStringCannotBeUsedToForgeASecondLogRecord() {
+            // toString() is a newline-delimited sink, so a reason or message
+            // carrying a newline would append what reads as an independent log
+            // entry, and ANSI escapes would rewrite what a terminal shows.
+            // Neither field is ours: message is upstream provider text, and
+            // both arrive over a connection the caller may have proxied.
+            final var error = PredictionError.fromJson(json(
+                    "{\"code\":\"invalid_input\","
+                            + "\"message\":\"boom\\r\\n[authorization_error] Request: victim\","
+                            + "\"reason\":\"input_fetch_failed\\n\\u001b[31mERROR: payment approved\"}"));
+            final var rendered =
+                    SunraException.fromPredictionError(error, "req_1", null, null).toString();
+
+            assertFalse(rendered.contains("\n"));
+            assertFalse(rendered.contains("\r"));
+            assertFalse(rendered.contains("\u001b"));
+            // ...and the structured fields still hold the exact bytes.
+            assertTrue(error.getReason().contains("\n"));
+            assertTrue(error.getMessage().contains("\r\n"));
         }
 
         @Test
