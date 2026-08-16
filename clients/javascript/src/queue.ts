@@ -258,6 +258,11 @@ export class SunraQueueClientImpl implements SunraQueueClient {
         // `predictionError.timestamp` unambiguously means the failure time on
         // both paths.
         reject(new SunraError({
+          // Same `type` the result endpoint's PREDICTION_FAILED body produces
+          // (see utils/error-handler.ts). Without it, the two ways of learning
+          // that a prediction failed would classify differently — `undefined`
+          // here, `'prediction_failed'` there — for the very same failure.
+          type: 'prediction_failed',
           code: predictionError?.code ?? 'prediction_failed',
           message: predictionError?.message ?? '',
           reason: predictionError?.reason,

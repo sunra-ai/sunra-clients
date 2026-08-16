@@ -288,6 +288,7 @@ describe('result() on a failed prediction rejects with the failure (r4-B2)', () 
       error: PROD_MODERATION_BLOCKED,
     }
     const fromSubscribe = new SunraError({
+      type: 'prediction_failed',
       code: completed.error!.code,
       message: completed.error!.message,
       reason: completed.error!.reason,
@@ -301,6 +302,29 @@ describe('result() on a failed prediction rejects with the failure (r4-B2)', () 
     expect(fromResult.retryable).toBe(fromSubscribe.retryable)
     expect(fromResult.message).toBe(fromSubscribe.message)
     expect(fromResult.predictionError).toEqual(fromSubscribe.predictionError)
+    // `type` was the one field this comparison originally omitted, and it was
+    // the one field that had actually drifted (the subscribe path left it
+    // undefined). Asserted explicitly so the gap cannot reopen.
+    expect(fromResult.type).toBe(fromSubscribe.type)
+  })
+
+  it('classifies a subscribe-path failure as prediction_failed', async () => {
+    // Built the way `subscribeToStatus`'s `rejectSunraError` builds it.
+    const completed: SunraCompletedQueueStatus = {
+      status: 'COMPLETED',
+      request_id: 'pd_a839exsaLNmVZzWvDaxAuapS',
+      response_url: 'https://api.sunra.ai/v1/queue/requests/pd_a839exsaLNmVZzWvDaxAuapS',
+      success: false,
+      error: PROD_MODERATION_BLOCKED,
+    }
+    const error = new SunraError({
+      type: 'prediction_failed',
+      code: completed.error!.code,
+      message: completed.error!.message,
+      predictionError: completed.error!,
+    })
+    expect(error.type).toBe('prediction_failed')
+    expect(error.toJSON().error.type).toBe('prediction_failed')
   })
 
   it('still resolves with the output when the prediction succeeded', async () => {

@@ -310,3 +310,18 @@ class TestHandleGetRaisesTheV2Error:
         assert from_status.retryable == from_result.retryable
         assert from_status.message == from_result.message
         assert from_status.prediction_error == from_result.prediction_error
+        # `type` was the one field this comparison originally omitted, and it
+        # was the one field that had actually drifted (the status path left it
+        # None). Asserted explicitly so the gap cannot reopen.
+        assert from_status.type == from_result.type == "prediction_failed"
+
+    def test_a_pre_v2_status_failure_gets_no_invented_type(self):
+        # No v2 object means nothing to classify: the type stays None rather
+        # than being asserted on a failure we could not parse.
+        handle = self.handle_returning(Completed(success=False, error=None))
+
+        with pytest.raises(SunraClientError) as excinfo:
+            handle.get()
+
+        assert excinfo.value.type is None
+        assert excinfo.value.prediction_error is None

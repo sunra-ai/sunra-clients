@@ -429,6 +429,7 @@ class SyncRequestHandle(_BaseRequestHandle):
         if final_status and not final_status.success:
             error_message = "Request failed"
             code = None
+            error_type = None
             details = None
             timestamp = None
             reason = None
@@ -446,10 +447,17 @@ class SyncRequestHandle(_BaseRequestHandle):
                 reason = final_status.error.get("reason")
                 retryable = final_status.error.get("retryable")
                 prediction_error = _as_prediction_error(final_status.error)
+                if prediction_error is not None:
+                    # Same `type` the result endpoint's PREDICTION_FAILED body
+                    # produces (see `_raise_for_status`). Without it, the two
+                    # ways of learning that a prediction failed would classify
+                    # differently for the very same failure.
+                    error_type = "prediction_failed"
 
             raise SunraClientError(
                 message=error_message,
                 code=code,
+                error_type=error_type,
                 details=details,
                 timestamp=timestamp,
                 reason=reason,
@@ -517,6 +525,7 @@ class AsyncRequestHandle(_BaseRequestHandle):
         if final_status and not final_status.success:
             error_message = "Request failed"
             code = None
+            error_type = None
             details = None
             timestamp = None
             reason = None
@@ -534,10 +543,17 @@ class AsyncRequestHandle(_BaseRequestHandle):
                 reason = final_status.error.get("reason")
                 retryable = final_status.error.get("retryable")
                 prediction_error = _as_prediction_error(final_status.error)
+                if prediction_error is not None:
+                    # Same `type` the result endpoint's PREDICTION_FAILED body
+                    # produces (see `_raise_for_status`). Without it, the two
+                    # ways of learning that a prediction failed would classify
+                    # differently for the very same failure.
+                    error_type = "prediction_failed"
 
             raise SunraClientError(
                 message=error_message,
                 code=code,
+                error_type=error_type,
                 details=details,
                 timestamp=timestamp,
                 reason=reason,
