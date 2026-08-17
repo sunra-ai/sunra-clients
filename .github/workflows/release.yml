@@ -44,8 +44,11 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Build, lint, test (workspace)
-        run: pnpm turbo run build lint test --filter='!demo-*'
+      - name: Build, lint, test (JS workspace)
+        # the python/java version-sync stubs delegate to pytest/gradle, which
+        # this runner does not provision — their real suites run in their own
+        # toolchains before merge; this gate protects the npm artifacts
+        run: pnpm turbo run build lint test --filter='!demo-*' --filter='!sunra_client' --filter='!ai.sunra.client:sunra-client'
 
       - name: Version packages (changesets + stub sync)
         run: |
