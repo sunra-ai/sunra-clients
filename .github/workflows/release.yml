@@ -57,12 +57,14 @@ jobs:
           (cd clients/java && node sync-version.js)
 
       - name: Commit version bump
+        env:
+          HUSKY: "0"
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if ! git diff --quiet; then
             git add -A
-            git commit -m "chore(release): version packages"
+            git commit --no-verify -m "chore(release): version packages"
             git push origin HEAD:main
           else
             echo "no version changes to commit"
