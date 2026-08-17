@@ -1,0 +1,86 @@
+name: Release SDKs
+
+# Manual, secrets-driven release for the three client SDKs (SUNRA-849 Phase 4a).
+# npm publishes via changesets; Python syncs its version from the workspace stub
+# and uploads with twine; Java is wired but stays off until Maven signing
+# secrets exist (OSSRH_* alone cannot sign artifacts for Central).
+on:
+  workflow_dispatch:
+    inputs:
+      publish_npm:
+        description: "Publish JS packages to npm (changeset version + publish)"
+        type: boolean
+        default: true
+      publish_pypi:
+        description: "Publish sunra-client to PyPI (requires PYPI_API_TOKEN secret)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # push of the version commit must trigger nothing and carry the bot identity
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build, lint, test (workspace)
+        run: pnpm turbo run build lint test --filter='!demo-*'
+
+      - name: Version packages (changesets + stub sync)
+        run: |
+          pnpm changeset version
+          (cd clients/python && node sync-version.js)
+          (cd clients/java && node sync-version.js)
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add -A
+            git commit -m "chore(release): version packages"
+            git push origin HEAD:main
+          else
+            echo "no version changes to commit"
+          fi
+
+      - name: Publish to npm
+        if: ${{ inputs.publish_npm }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          pnpm changeset publish
+          git push origin --tags
+
+      - name: Publish to PyPI
+        if: ${{ inputs.publish_pypi }}
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          test -n "$TWINE_PASSWORD" || { echo "PYPI_API_TOKEN secret is missing"; exit 1; }
+          cd clients/python
+          python3 -m pip install --quiet build twine
+          python3 -m build
+          python3 -m twine upload dist/*
