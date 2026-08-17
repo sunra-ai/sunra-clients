@@ -26,6 +26,8 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      HUSKY: "0"
     steps:
       - uses: actions/checkout@v4
         with:
