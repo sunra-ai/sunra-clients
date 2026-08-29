@@ -63,9 +63,15 @@ jobs:
           echo "pr_data=$PR_DATA" >> "$GITHUB_OUTPUT"
           # Get file changes
           CHANGED_FILES=$(gh pr diff "$PR_NUMBER" --name-only)
-          echo "changed_files<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$CHANGED_FILES" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          # SUNRA-867: random per-run delimiter — a contributor-controlled file
+          # literally named "EOF" would otherwise terminate the heredoc early and
+          # let the remaining lines forge arbitrary step outputs.
+          DELIM="EOF_$(openssl rand -hex 16)"
+          {
+            echo "changed_files<<$DELIM"
+            echo "$CHANGED_FILES"
+            echo "$DELIM"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Run Gemini PR Review
         uses: google-gemini/gemini-cli-action@main
